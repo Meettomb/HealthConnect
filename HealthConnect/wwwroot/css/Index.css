@@ -1,0 +1,692 @@
+@import 'Variable.css';
+
+* {
+    margin: 0;
+    padding: 0;
+}
+
+
+
+
+.error_message {
+    color: red;
+    font-size: 14px;
+    font-weight: 700;
+    margin: 10px 0px;
+    text-align: center;
+    position: absolute;
+    top: 15px;
+    right: 15px;
+    background-color: #f8d7da;
+    padding: 10px 20px;
+    border-radius: 5px;
+    animation: shake 3s;
+    opacity: 0;
+}
+
+@keyframes shake {
+    0% {
+        transform: translateX(0);
+        opacity: 0.2;
+        display: block;
+    }
+
+    10% {
+        transform: translateX(-10px);
+        opacity: 0.5;
+    }
+
+    20% {
+        transform: translateX(10px);
+        opacity: 1;
+    }
+
+    30% {
+        transform: translateX(-10px);
+        opacity: 1;
+    }
+
+    40% {
+        transform: translateX(10px);
+        opacity: 1;
+    }
+
+    50% {
+        transform: translateX(-10px);
+        opacity: 1;
+    }
+
+    60% {
+        transform: translateX(10px);
+        opacity: 1;
+    }
+
+    70% {
+        transform: translateX(-10px);
+        opacity: 1;
+    }
+
+    80% {
+        transform: translateX(10px);
+        opacity: 0.5;
+    }
+
+    90% {
+        transform: translateX(-10px);
+        opacity: 0.2;
+    }
+
+    100% {
+        transform: translateX(0);
+        opacity: 0;
+    }
+}
+
+.success_message {
+    color: green;
+    font-size: 14px;
+    font-weight: 700;
+    margin: 10px 0px;
+    text-align: center;
+    position: absolute;
+    top: 15px;
+    right: 15px;
+    background-color: #d4edda;
+    padding: 10px 20px;
+    border-radius: 5px;
+    animation: shake 3s;
+    opacity: 0;
+}
+
+
+
+
+body {
+    width: 100%;
+    font-family: 'Roboto', sans-serif;
+    background-color: var(--body-bg-color);
+}
+
+header {
+    width: 100%;
+    height: auto;
+    padding: 10px 0px;
+    background-color: #F5F5F5;
+    color: var(--header-text-color);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 10px;
+    transition: background-color 0.3s ease;
+    z-index: 1000;
+}
+
+#header.scrolled {
+    background-color: #F5F5F5;
+    color: var(--header-text-color);
+    transition: 0.5s;
+    position: fixed;
+    z-index: 1000;
+}
+
+header img {
+    width: 140px;
+    height: 55px;
+    cursor: pointer;
+}
+
+header nav {
+    width: 95%;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    z-index: 1000;
+}
+
+.header_drop_down {
+    display: flex;
+    gap: 30px;
+    align-items: center;
+    position: relative;
+    /*    z-index: 1000;*/
+}
+
+    .header_drop_down p {
+        cursor: pointer;
+        font-weight: 600;
+    }
+
+
+        .header_drop_down p:hover {
+            color: var(--header-text-hover-color);
+        }
+
+.Search_by_Speciality {
+    display: none;
+    position: absolute;
+    top: 30px;
+    background-color: #f9f9f9;
+    border: 1px solid #ccc;
+    padding: 10px;
+    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
+}
+
+    .Search_by_Speciality ul {
+        list-style-type: none;
+        display: flex;
+        flex-direction: column;
+        row-gap: 20px;
+        font-weight: 500;
+        font-size: 14px;
+    }
+
+.Search_by_Condition {
+    display: none;
+    position: absolute;
+    top: 30px;
+    background-color: #f9f9f9;
+    border: 1px solid #ccc;
+    padding: 10px;
+    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
+}
+
+    .Search_by_Condition ul {
+        list-style-type: none;
+        display: flex;
+        flex-direction: column;
+        row-gap: 20px;
+        font-weight: 500;
+        font-size: 14px;
+    }
+
+.Search_by_city {
+    display: none;
+    position: absolute;
+    top: 30px;
+    background-color: #f9f9f9;
+    border: 1px solid #ccc;
+    padding: 10px;
+    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
+}
+
+    .Search_by_city ul {
+        list-style-type: none;
+        display: flex;
+        flex-direction: column;
+        row-gap: 20px;
+        font-weight: 500;
+        font-size: 14px;
+    }
+
+
+.header_user_services {
+    display: none;
+    position: absolute;
+    top: 40px;
+    right: 0px;
+    background-color: #f9f9f9;
+    border: 1px solid #ccc;
+    padding: 10px;
+    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
+    width: 20%;
+}
+
+    .header_user_services section {
+        list-style-type: none;
+        display: flex;
+        flex-direction: column;
+        row-gap: 20px;
+        font-weight: 500;
+        font-size: 14px;
+    }
+
+        .header_user_services section a {
+            -webkit-text-decoration: inherit;
+            text-decoration: inherit;
+            width: 100%;
+            color: var(--header-text-color);
+        }
+
+.header_user_icon_drop_down {
+    border: 2px solid #048077;
+    padding: 5px 7px;
+    border-radius: 50%;
+    cursor: pointer;
+}
+
+.header_login_button {
+    background-color: #048077;
+    color: white;
+    padding: 5px 12px;
+    border-radius: 5px;
+    cursor: pointer;
+    -webkit-text-decoration: inherit;
+    text-decoration: inherit;
+}
+
+
+
+
+
+/*--------------------------------------------------------------------------------------------------------------*/
+/*--------------------------------------------------------------------------------------------------------------*/
+/*--------------------------------------------------------------------------------------------------------------*/
+/*--------------------------------------------------------------------------------------------------------------*/
+/*--------------------------------------------------------------------------------------------------------------*/
+/*                                                 Login                                                        */
+/*--------------------------------------------------------------------------------------------------------------*/
+/*--------------------------------------------------------------------------------------------------------------*/
+/*--------------------------------------------------------------------------------------------------------------*/
+/*--------------------------------------------------------------------------------------------------------------*/
+/*--------------------------------------------------------------------------------------------------------------*/
+
+.back_button i {
+    background-color: #048077;
+    color: var(--button-font-color);
+    padding: 10px 12px;
+    border-radius: 5px;
+    cursor: pointer;
+    -webkit-text-decoration: inherit;
+    text-decoration: inherit;
+    margin: 30px 0px 0px 50px;
+    z-index: 1000;
+    position: absolute;
+    top: 0;
+}
+
+.loging_container {
+    width: 100%;
+    height: auto;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-top: 8%;
+}
+
+    .loging_container .form_container {
+        width: 95%;
+        display: flex;
+        -webkit-justify-content: center;
+        justify-content: center;
+    }
+
+    .loging_container form {
+        border: 1px solid black;
+        max-width: 90%;
+        min-width: 30%;
+        border-radius: 10px;
+        padding: 20px;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        backdrop-filter: blur(1px);
+    }
+
+        .loging_container form .from_heading {
+            font-size: 30px;
+            font-weight: 600;
+            color: darkslategrey;
+            text-align: center;
+            margin: 30px 0 70px 0;
+        }
+
+        .loging_container form .user_input_box {
+            width: 100%;
+            padding: 10px 20px;
+            position: relative;
+            display: flex;
+            justify-content: center;
+        }
+
+            .loging_container form .user_input_box input {
+                width: 90%;
+                padding: 10px 15px;
+                border: none;
+                border-bottom: 2px solid #ccc;
+                background-color: #F5F5F5;
+                font-size: 16px;
+            }
+
+            .loging_container form .user_input_box label {
+                position: absolute;
+                top: 35%;
+                left: 9%;
+                transition: all 0.3s ease;
+            }
+
+            .loging_container form .user_input_box input:focus {
+                outline: none;
+                border-bottom: 2px solid #048077;
+            }
+
+        .loging_container form p {
+            color: red;
+            margin: 10px 0 10px 10px;
+            font-size: 14px;
+            font-weight: 500;
+            align-self: flex-start;
+            display: block;
+        }
+
+        .loging_container form .user_input_box i {
+            position: absolute;
+            top: 35%;
+            right: 10%;
+            font-size: 20px;
+            color: #048077;
+        }
+
+        .loging_container form .user_input_box input:focus + label,
+        .loging_container form .user_input_box input + label {
+            top: -10px;
+            font-size: 14px;
+            color: #048077;
+            font-weight: 600;
+        }
+
+.login_button button {
+    background-color: #048077;
+    color: white;
+    padding: 10px 100px;
+    border-radius: 5px;
+    cursor: pointer;
+    -webkit-text-decoration: inherit;
+    text-decoration: inherit;
+    margin: 15px 0px 20px 0px;
+    border: none;
+    font-size: 16px;
+}
+
+.loging_container form a {
+    color: #048077;
+    text-decoration: none;
+    font-weight: 600;
+    font-size: 14px;
+    margin: 5px 0px 20px 0px;
+    &:hover
+
+{
+    color: #3784b1;
+    text-decoration: underline;
+}
+
+}
+
+
+
+
+/*--------------------------------------------------------------------------------------------------------------*/
+/*--------------------------------------------------------------------------------------------------------------*/
+/*--------------------------------------------------------------------------------------------------------------*/
+/*--------------------------------------------------------------------------------------------------------------*/
+/*--------------------------------------------------------------------------------------------------------------*/
+/*                                                 Register                                                     */
+/*--------------------------------------------------------------------------------------------------------------*/
+/*--------------------------------------------------------------------------------------------------------------*/
+/*--------------------------------------------------------------------------------------------------------------*/
+/*--------------------------------------------------------------------------------------------------------------*/
+/*--------------------------------------------------------------------------------------------------------------*/
+.regi_form_container {
+    width: 100%;
+    height: 90vh;
+    justify-content: space-evenly;
+/*    margin-top: 50%;*/
+/*overflow: scroll;*/
+}
+
+.user_filsd_wrep {
+    display: flex;
+    margin: 30px 0;
+    position:relative;
+}
+
+    .user_filsd_wrep .user_input_box input {
+        padding: 10px 1px;
+    }
+
+        .user_filsd_wrep .user_input_box input[type=date] {
+            padding: 10px 50px;
+        }
+
+
+@media (max-width: 683px) {
+    .user_filsd_wrep .user_input_box input[type=date] {
+        padding: 10px 40px;
+    }
+
+    .user_filsd_wrep {
+        flex-wrap: wrap;
+        margin: 10px 0;
+    }
+
+    .back_button i {
+        margin: 5px;
+    }
+}
+
+.regi_form_container .form_container {
+    width: 95%;
+    display: flex;
+    justify-content: center;
+}
+
+.regi_form_container form {
+    max-width: 100%;
+    min-width: 30%;
+    border-radius: 10px;
+    padding: 20px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+    .regi_form_container form .from_heading {
+        font-size: 30px;
+        font-weight: 600;
+        color: darkslategrey;
+        text-align: center;
+        margin: 30px 0 70px 0;
+    }
+
+    .regi_form_container form .user_input_box {
+        width: 100%;
+        padding: 10px 20px;
+        position: relative;
+        display: flex;
+        justify-content: center;
+    }
+
+        .regi_form_container form .user_input_box input {
+            width: 90%;
+            padding: 10px 15px;
+            border: none;
+            border-bottom: 2px solid #ccc;
+            background-color: #F5F5F5;
+            font-size: 16px;
+        }
+
+        .regi_form_container form .user_input_box select {
+            width: 100%;
+            padding: 10px 0px 10px 0px;
+            border: none;
+            border-bottom: 2px solid #ccc;
+            background-color: #F5F5F5;
+            font-size: 16px;
+        }
+
+
+        .regi_form_container form .user_input_box label {
+            position: absolute;
+            top: 35%;
+            left: 9%;
+            transition: all 0.3s ease;
+        }
+
+        .regi_form_container form .user_input_box input:focus {
+            outline: none;
+            border-bottom: 2px solid #048077;
+        }
+
+    .regi_form_container form p {
+        color: red;
+        margin: 10px 0 10px 10px;
+        font-size: 14px;
+        font-weight: 500;
+        align-self: flex-start;
+    }
+
+    .regi_form_container form .user_input_box i {
+        position: absolute;
+        top: 35%;
+        right: 10%;
+        font-size: 20px;
+        color: #048077;
+    }
+
+    .regi_form_container form .user_input_box input:focus + label,
+    .regi_form_container form .user_input_box input + label {
+        top: -10px;
+        font-size: 14px;
+        color: #048077;
+        font-weight: 600;
+    }
+
+.regi_form_container button {
+    background-color: #048077;
+    color: white;
+    padding: 10px 100px;
+    border-radius: 5px;
+    cursor: pointer;
+    -webkit-text-decoration: inherit;
+    text-decoration: inherit;
+    margin: 15px 0px 20px 0px;
+    border: none;
+    font-size: 16px;
+}
+
+.regi_form_container form a {
+    color: #048077;
+    text-decoration: none;
+    font-weight: 600;
+    font-size: 14px;
+    margin: 5px 0px 20px 0px;
+    &:hover
+
+{
+    color: #3784b1;
+    text-decoration: underline;
+}
+
+}
+
+.user_filsd_wrep .radio {
+    display: flex;
+    justify-content: center;
+    gap: 180px;
+    margin-left: -33px;
+}
+
+.regi_form_container form .male_radio::after {
+    content: 'Male';
+    padding: 15px 20px;
+    background-color: white;
+    margin: 10px 0px 10px 0px;
+    border: 1px dashed #048077;
+    cursor: pointer;
+}
+
+.regi_form_container form .female_radio::after {
+    content: 'Female';
+    padding: 15px 6px;
+    background-color: white;
+    margin: 10px 0px 10px 0px;
+    border: 1px dashed #048077;
+    cursor: pointer;
+}
+
+.regi_form_container form .patient_radio::after {
+    content: 'Patient';
+    padding: 15px 13px;
+    background-color: white;
+    margin: 10px 0px 10px 0px;
+    border: 1px dashed #048077;
+    cursor: pointer;
+}
+
+.regi_form_container form .doctor_radio::after {
+    content: 'Doctor';
+    padding: 15px 10px;
+    background-color: white;
+    margin: 10px 0px 10px 0px;
+    border: 1px dashed #048077;
+    cursor: pointer;
+}
+.user_filsd_wrep .user_input_box select {
+    max-width: 100%;
+    min-width: 100%;
+    outline: 1px solid var(--header-text-hover-color);
+    background-color: red;
+    border-radius:5px;
+    border-bottom: none;
+}
+
+    .user_filsd_wrep .user_input_box select option {
+        background-color: #F5F5F5;
+        color: black;
+        font-weight: 500;
+        font-size: 15px;
+    }
+
+
+
+
+
+
+
+
+.index_section_1 {
+    display: flex;
+    position: relative;
+}
+
+.slider_div {
+    width: 100%;
+    height: 600px;
+    background-image: linear-gradient(to bottom, #F5F5F5, #048077);
+    display: flex;
+    align-items: center;
+}
+
+    .slider_div img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+        z-index: 0;
+    }
+
+.slider_div_shade {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    /*    background-color: rgba(0, 0, 0, 0.5);*/
+    background-image: linear-gradient(to bottom, rgba(0, 0, 0, 0.5),rgba(0, 0, 0, 0.5), #F5F5F5);
+    z-index: 1;
+}
+
+.index_section_1 p {
+    position: absolute;
+    top: 25%;
+    left: 10%;
+    font-size: 60px;
+    font-weight: 800;
+    color: #3784b1;
+    width: 30%;
+    z-index: 100;
+    backdrop-filter: blur(1px)
+}
+
+.index_section_2 {
+    height: 500px;
+}

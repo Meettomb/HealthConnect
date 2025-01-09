@@ -1,0 +1,240 @@
+﻿@page
+@model HealthConnect.Pages.User.Doctor_sign_upModel
+@{
+    Layout = null;
+    ViewData["Title"] = "Doctor Sign up";
+}
+
+
+
+<!DOCTYPE html>
+<html>
+<head>
+    <meta name="viewport" content="width=device-width" />
+    <title>@ViewBag.Title</title>
+    <link rel="stylesheet" href="/css/Doctor_Sign_up.css">
+    <link href="/images/HealthConnectTabLogo.png" rel="icon" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css">
+
+</head>
+<body class="login_body">
+    <div class="back_button" onclick="history.back()"><i class="fa-solid fa-arrow-left"></i></div>
+
+  
+
+
+
+    <div class="regi_form_container">
+        <form id="doctor-signup-form" method="post" enctype="multipart/form-data">
+            <div class="from_heading">
+                <h4>Continue yor Registration process</h4>
+            </div>
+            <div class="user_filsd_wrep">
+                <!-- Profile Picture Input -->
+                <div class="user_input_box">
+                    <input type="file" id="profilePicInput" name="profile_pic" accept="image/*" required>
+                </div>
+                <p class="error"></p>
+
+                <!-- Medical License Input -->
+                <div class="user_input_box">
+                    <input type="file" id="licensePhotoInput" name="doctore_medical_license_photo" accept="image/*" required>
+                </div>
+                <p class="error"></p>
+            </div>
+            <div class="pic_view">
+                <div id="profilePicPreview" class="file-preview"></div>
+                <div id="licensePhotoPreview" class="file-preview"></div>
+            </div>
+
+
+
+            <div class="user_filsd_wrep">
+                <div class="user_input_box">
+                    <select id="StateMedicalCouncil" name="state_medical_council" required>
+                        <option value="" disabled selected>Select your medical council</option>
+                        <option value="Chattisgarh Medical Council">Chattisgarh Medical Council</option>
+                        <option value="Other">Other</option>
+                    </select>
+                </div>
+                <p class="error"></p>
+
+                <div class="user_input_box">
+                    <select id="YearOfRegistration" name="year_of_registration" required>
+                        <option value="" disabled selected>Select Year of Registration</option>
+                        @for (int yearOption = DateTime.Now.Year; yearOption >= 1900; yearOption--)
+                        {
+                            <option value="@yearOption">@yearOption</option>
+                        }
+                    </select>
+                </div>
+                <p class="error"></p>
+            </div>
+
+
+
+            <div class="user_filsd_wrep">
+                <div class="user_input_box">
+                    <input type="text" name="medical_registration_no" placeholder="Medical Registration No" required>
+                    <label>Medical Registration No</label>
+                </div>
+                <p class="error"></p>
+
+                <div class="user_input_box">
+                    <input type="text" name="doctore_experience" placeholder="5 Years" required>
+                    <label>Doctore experience</label>
+                </div>
+                <p class="error"></p>
+            </div>
+
+
+            <div class="user_filsd_wrep">
+                <div class="user_input_box">
+                    <select name="hospital_or_clinic" required>
+                        <option value="" disabled selected>Select Hospital or Clinic</option>
+                        <option value="Clinic">Clinic</option>
+                        <option value="Hospital">Hospital</option>
+                    </select>
+                </div>
+                <p class="error"></p>
+                <div class="user_input_box">
+                    <select name="doctor_qualifications" required>
+                        <option value="" disabled selected>Select your Qualifications</option>
+                        <option value="MBBS (Bachelor of Medicine, Bachelor of Surgery)">MBBS (Bachelor of Medicine, Bachelor of Surgery)</option>
+                        <option value="MD (Doctor of Medicine)">MD (Doctor of Medicine)</option>
+                        <option value="DO (Doctor of Osteopathic Medicine)">DO (Doctor of Osteopathic Medicine)</option>
+                        <option value="MS (Master of Surgery)">MS (Master of Surgery)</option>
+                        <option value="DM (Doctorate of Medicine)">DM (Doctorate of Medicine)</option>
+                        <option value="MCh (Magister Chirurgiae)">MCh (Magister Chirurgiae)</option>
+                    </select>
+                </div>
+                <p class="error"></p>
+            </div>
+
+            <div class="user_filsd_wrep">
+                <!-- Doctor Type Selection -->
+                <div class="user_input_box">
+                    <select id="doctorTypeSelect" name="doctor_type" multiple required>
+                        <option value="General Physician">General Physician</option>
+                        <option value="Family Doctor">Family Doctor</option>
+                        <option value="Internal Medicine">Internal Medicine</option>
+                        <option value="Pediatrics">Pediatrics</option>
+                        <option value="Psychiatry">Psychiatry</option>
+                    </select>
+                </div>
+                <div id="doctorTypeTags" class="tags-container"></div>
+
+
+            </div>
+
+            <div class="user_filsd_wrep">
+                <!-- Languages Spoken Selection -->
+                <div class="user_input_box">
+                    <select id="languagesSpokenSelect" name="languages_spoken" multiple required>
+                        <option value="English">English</option>
+                        <option value="Hindi">Hindi</option>
+                        <option value="Bengali">Bengali</option>
+                        <option value="Telugu">Telugu</option>
+                        <option value="Marathi">Marathi</option>
+                        <option value="Tamil">Tamil</option>
+                        <option value="Urdu">Urdu</option>
+                        <option value="Gujarati">Gujarati</option>
+                    </select>
+                </div>
+                <div id="languagesSpokenTags" class="tags-container"></div>
+            </div>
+
+            <div class="user_filsd_wrep">
+                <div class="user_input_box">
+                    <input type="text" name="clinic_or_hospital_address" placeholder="Doctor Address" required>
+                    <label>Doctor Clinic or Hospital Address</label>
+                </div>
+                <p class="error"></p>
+
+                <div class="user_input_box">
+                    <input type="text" name="consultation_fee" placeholder="150" required>
+                    <label>Consultation Fee</label>
+                </div>
+                <p class="error"></p>
+            </div>
+
+            <div class="login_button">
+                <button type="submit" id="submitButton">Verify Doctor</button>
+            </div>
+            <div class="user_input_box">
+                <a href="/User/Sign_in">Already have an account? Sign in</a>
+            </div>
+        </form>
+    </div>
+
+
+
+    <div id="error-message" style="color: red; display: none;"></div>
+    <div id="success-message" style="color: green; display: none;"></div>
+
+
+    <script>
+              function handleSelection(selectElementId, tagsContainerId) {
+            const selectElement = document.getElementById(selectElementId);
+            const tagsContainer = document.getElementById(tagsContainerId);
+
+            selectElement.addEventListener('change', function () {
+                tagsContainer.innerHTML = '';  // Clear current tags
+
+                Array.from(this.selectedOptions).forEach(option => {
+                    const tag = document.createElement('div');
+                    tag.className = 'tag';
+                    tag.textContent = option.text;
+
+                    const removeBtn = document.createElement('span');
+                    removeBtn.textContent = '✖';  // Cancel symbol
+                    removeBtn.onclick = () => {
+                        // Deselect the option
+                        option.selected = false;
+                        tag.remove();
+                    };
+
+                    tag.appendChild(removeBtn);
+                    tagsContainer.appendChild(tag);
+                });
+            });
+        }
+
+        // Initialize the function for both dropdowns
+        handleSelection('doctorTypeSelect', 'doctorTypeTags');
+        handleSelection('languagesSpokenSelect', 'languagesSpokenTags');
+
+
+    </script>
+
+    <script>
+                function previewFile(inputElementId, previewContainerId) {
+            const inputElement = document.getElementById(inputElementId);
+            const previewContainer = document.getElementById(previewContainerId);
+
+            inputElement.addEventListener('change', function () {
+                previewContainer.innerHTML = '';  // Clear existing preview
+                const file = this.files[0];
+
+                if (file) {
+                    const reader = new FileReader();
+
+                    reader.onload = function (e) {
+                        const img = document.createElement('img');
+                        img.src = e.target.result;
+                        img.alt = 'Selected Image Preview';
+                        previewContainer.appendChild(img);
+                    };
+
+                    reader.readAsDataURL(file);
+                }
+            });
+        }
+
+        // Initialize preview for both input fields
+        previewFile('profilePicInput', 'profilePicPreview');
+        previewFile('licensePhotoInput', 'licensePhotoPreview');
+
+    </script>
+</body>
+</html>

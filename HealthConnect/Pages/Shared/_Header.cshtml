@@ -1,0 +1,157 @@
+﻿<!DOCTYPE html>
+
+<html>
+<head>
+    <meta name="viewport" content="width=device-width" />
+    <title>@ViewBag.Title</title>
+    <link rel="stylesheet" href="/css/Index.css">
+    <link href="/images/HealthConnectTabLogo.png" rel="icon" />
+
+
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css">
+
+</head>
+<body>
+    <header id="header">
+        <nav>
+            <img class="logo" src="~/images/HealthConnectLogo.png" alt="Alternate Text" />
+
+            <div class="header_drop_down">
+
+                <p>Home</p>
+                <p>About</p>
+
+                <div class="Speciality_drop_down">
+                    <p>Search by Speciality <i class="fa-solid fa-angle-down toggle-icon1"></i></p>
+                    <div class="Search_by_Speciality">
+                        <ul>
+                            <li>Cardiology</li>
+                            <li>Neurology</li>
+                            <li>Orthopedics</li>
+                            <li>Urology</li>
+                            <li>ENT</li>
+                            <li>General Physician</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <div class="Condition_drop_down">
+                    <p>Search by Condition <i class="fa-solid fa-angle-down toggle-icon1"></i></p>
+                    <div class="Search_by_Condition">
+                        <ul>
+                            <li>Cardiology</li>
+                            <li>Neurology</li>
+                            <li>Orthopedics</li>
+                            <li>Urology</li>
+                            <li>ENT</li>
+                            <li>General Physician</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <div class="City_drop_down">
+                    <p>Search by City <i class="fa-solid fa-angle-down toggle-icon1"></i></p>
+                    <div class="Search_by_city">
+                        <ul>
+                            <li>Cardiology</li>
+                            <li>Neurology</li>
+                            <li>Orthopedics</li>
+                            <li>Urology</li>
+                            <li>ENT</li>
+                            <li>General Physician</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <a class="header_login_button" href="/User/Sign_in">Login</a>
+
+                <div class="header_user_icon_drop_down">
+                    <div class="header_user_icon">
+                        <i class="fa-solid fa-user"></i>
+                    </div>
+                    <div class="header_user_services">
+                        <section>
+                            <a href="#">
+                                Setting
+                            </a>
+                        </section>
+                    </div>
+                </div>
+
+            </div>
+
+        </nav>
+    </header>
+
+
+    <div>
+        @RenderBody()
+    </div>
+
+    <script src="/js/Script.js"></script>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script>
+               $(document).ready(function () {
+            // Toggle Search by Speciality
+            $(".Speciality_drop_down p").on("click", function () {
+                $(".Search_by_Speciality").slideToggle();
+                const icon = $(this).find(".toggle-icon1");
+                const currentRotation = icon.data("rotation") || 0;
+                const newRotation = (currentRotation + 180) % 360; // Toggle between 0 and 180 degrees
+                icon.css("transform", `rotate(${newRotation}deg)`);
+                icon.data("rotation", newRotation);
+
+                // Close other dropdowns
+                $(".Search_by_Condition, .Search_by_city").slideUp();
+            });
+
+            // Toggle Search by Condition
+            $(".Condition_drop_down p").on("click", function () {
+                $(".Search_by_Condition").slideToggle();
+                const icon = $(this).find(".toggle-icon2");
+                const currentRotation = icon.data("rotation") || 0;
+                const newRotation = (currentRotation + 180) % 360;
+                icon.css("transform", `rotate(${newRotation}deg)`);
+                icon.data("rotation", newRotation);
+
+                // Close other dropdowns
+                $(".Search_by_Speciality, .Search_by_city").slideUp();
+            });
+
+            // Toggle Search by City
+            $(".City_drop_down p").on("click", function () {
+                $(".Search_by_city").slideToggle();
+                const icon = $(this).find(".toggle-icon3");
+                const currentRotation = icon.data("rotation") || 0;
+                const newRotation = (currentRotation + 180) % 360;
+                icon.css("transform", `rotate(${newRotation}deg)`);
+                icon.data("rotation", newRotation);
+
+                // Close other dropdowns
+                $(".Search_by_Speciality, .Search_by_Condition").slideUp();
+            });
+
+            // Toggle header_user_services
+            $(".header_user_icon").on("click", function () {
+                $(".header_user_services").slideToggle();
+
+                // Close other dropdowns
+                $(".Search_by_Speciality, .Search_by_Condition, .Search_by_city").slideUp();
+            });
+
+            // Close dropdowns if clicked outside
+            $(document).on("click", function (e) {
+                if (!$(e.target).closest(".header_drop_down").length) {
+                    $(".Search_by_Speciality, .Search_by_Condition, .Search_by_city, .header_user_services").slideUp();
+                    $(".toggle-icon").css("transform", "rotate(0deg)").data("rotation", 0);
+                }
+            });
+        });
+
+    </script>
+
+
+
+
+</body>
+</html>

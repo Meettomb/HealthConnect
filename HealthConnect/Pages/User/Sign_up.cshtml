@@ -1,0 +1,266 @@
+﻿@page
+@model HealthConnect.Pages.User.Sign_upModel
+@{
+    Layout = "";
+    ViewData["Title"] = "Sign up";
+}
+
+<!DOCTYPE html>
+
+<html>
+<head>
+    <meta name="viewport" content="width=device-width" />
+    <title>@ViewBag.Title</title>
+    <link rel="stylesheet" href="/css/Index.css">
+    <link href="/images/HealthConnectTabLogo.png" rel="icon"/>
+
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css">
+
+</head>
+<body class="login_body">
+
+    <div class="back_button" onclick="history.back()"><i class="fa-solid fa-arrow-left"></i></div>
+
+    <div class="regi_form_container">
+        <form method="post" novalidate>
+            <div class="from_heading">
+                <h1>Register</h1>
+            </div>
+
+            <div class="user_filsd_wrep">
+                <div class="user_input_box">
+                    <input type="text" name="first_name" placeholder="First Name" required>
+                    <label>First Name</label>
+                </div>
+                <p class="error"></p>
+
+                <div class="user_input_box">
+                    <input type="text" name="last_name" placeholder="Last Name" required>
+                    <label>Last Name</label>
+                </div>
+                <p class="error"></p>
+            </div>
+
+            <div class="user_filsd_wrep">
+                <div class="user_input_box">
+                    <input type="email" name="email" placeholder="Email" required>
+                    <label>Email</label>
+                </div>
+                <p class="error"></p>
+
+                <div class="user_input_box">
+                    <input type="text" name="mobil_no" placeholder="Mobil Number" required>
+                    <label>Mobil Number</label>
+                </div>
+                <p class="error"></p>
+            </div>
+
+            <div class="user_filsd_wrep">
+                <div class="user_input_box">
+                    <input type="date" name="dob" placeholder="Date of Birth" required>
+                    <label>Date of Birth</label>
+                </div>
+                <p class="error"></p>
+                <div class="user_input_box">
+                    <input type="text" name="House_number_and_Street_name" placeholder="Address" required>
+                    <label>House number & Street name</label>
+                </div>
+                <p class="error"></p>
+
+            </div>
+
+            <div class="user_filsd_wrep">
+                <div class="user_input_box">
+                    <input type="text" name="country" placeholder="Country" required>
+                    <label>Country</label>
+                </div>
+                <p class="error"></p>
+
+                <div class="user_input_box">
+                    <input type="text" name="city" placeholder="City" required>
+                    <label>City</label>
+                </div>
+                <p class="error"></p>
+            </div>
+
+            <div class="user_filsd_wrep">
+                <div class="user_input_box">
+                    <input type="text" name="state" placeholder="State" required>
+                    <label>State</label>
+                </div>
+                <p class="error"></p>
+
+                <div class="user_input_box">
+                    <input type="text" name="pincode" placeholder="Pincode" required>
+                    <label>Pincode</label>
+                </div>
+                <p class="error"></p>
+            </div>
+
+            <div>Gender</div>
+            <div class="user_filsd_wrep">
+                <div class="user_input_box radio">
+                    <input class="male_radio" type="radio" name="gender" value="Male" required />
+                    <input class="female_radio" type="radio" name="gender" value="Female" required />
+                </div>
+                <p class="error"></p>
+
+            </div>
+
+            <div>Role</div>
+             <div class="user_filsd_wrep"> 
+                <div class="user_input_box radio">
+                    <input class="patient_radio" type="radio" name="role" value="Patient" required />
+                    <input class="doctor_radio" type="radio" name="role" value="Doctor" required />
+                </div>
+                <p class="error"></p>
+            </div>
+
+
+            <div class="user_filsd_wrep">
+                <div class="user_input_box">
+                    <input type="password" name="password" placeholder="Password" required>
+                    <label>Password</label>
+                    <i class="fa-regular fa-eye"></i>
+                </div>
+                <p class="error"></p>
+
+                <div class="user_input_box">
+                    <input type="password" name="confirm_password" placeholder="Confirm Password" required>
+                    <label>Confirm Password</label>
+                    <i class="fa-regular fa-eye"></i>
+                </div>
+                <p class="error"></p>
+            </div>
+
+
+            <div class="login_button">
+                <button type="submit" name="submit">Sign in</button>
+            </div>
+            <a href="/User/Sign_in">All ready have an account? Sign in</a>
+        </form>
+
+    </div>
+    @if (!string.IsNullOrEmpty(Model.ErrorMessage))
+    {
+        <p class="error_message">@Model.ErrorMessage</p>
+    }
+
+
+    <script>
+        document.querySelector('form').addEventListener('submit', function(event) {
+            let isValid = true;
+
+            // Clear previous error messages
+            document.querySelectorAll('.error').forEach(function(errorElement) {
+                errorElement.textContent = '';
+            });
+
+            // Validate First Name
+            const firstName = document.querySelector('[name="first_name"]').value.trim();
+            if (firstName === '') {
+                document.querySelector('[name="first_name"]').parentElement.nextElementSibling.textContent = 'First name is required.';
+                isValid = false;
+            }
+
+            // Validate Last Name
+            const lastName = document.querySelector('[name="last_name"]').value.trim();
+            if (lastName === '') {
+                document.querySelector('[name="last_name"]').parentElement.nextElementSibling.textContent = 'Last name is required.';
+                isValid = false;
+            }
+
+
+
+            // Validate Email
+            const emailAddress = document.querySelector('[name="email"]').value.trim();
+            if (emailAddress === '') {
+                document.querySelector('[name="email"]').parentElement.nextElementSibling.textContent = 'Please enter a valid email address.';
+                isValid = false;
+            }
+
+            // Validate Mobile Number
+            const mobileNumber = document.querySelector('[name="mobil_no"]').value.trim();
+            if (mobileNumber === '' || isNaN(mobileNumber)) {
+                document.querySelector('[name="mobil_no"]').parentElement.nextElementSibling.textContent = 'Please enter a valid mobile number.';
+                isValid = false;
+            }
+
+            // Validate Date of Birth
+            const dob = document.querySelector('[name="dob"]').value.trim();
+            if (dob === '') {
+                document.querySelector('[name="dob"]').parentElement.nextElementSibling.textContent = 'Date of birth is required.';
+                isValid = false;
+            }
+
+            // Validate Address
+            const address = document.querySelector('[name="House_number_and_Street_name"]').value.trim();
+            if (address === '') {
+                document.querySelector('[name="House_number_and_Street_name"]').parentElement.nextElementSibling.textContent = 'Address is required.';
+                isValid = false;
+            }
+
+            // Validate Country
+            const country = document.querySelector('[name="country"]').value.trim();
+            if (country === '') {
+                document.querySelector('[name="country"]').parentElement.nextElementSibling.textContent = 'Country is required.';
+                isValid = false;
+            }
+
+            // Validate City
+            const city = document.querySelector('[name="city"]').value.trim();
+            if (city === '') {
+                document.querySelector('[name="city"]').parentElement.nextElementSibling.textContent = 'City is required.';
+                isValid = false;
+            }
+
+            // Validate State
+            const state = document.querySelector('[name="state"]').value.trim();
+            if (state === '') {
+                document.querySelector('[name="state"]').parentElement.nextElementSibling.textContent = 'State is required.';
+                isValid = false;
+            }
+
+            // Validate Pincode
+            const pincode = document.querySelector('[name="pincode"]').value.trim();
+            if (pincode === '' || isNaN(pincode)) {
+                document.querySelector('[name="pincode"]').parentElement.nextElementSibling.textContent = 'Please enter a valid pincode.';
+                isValid = false;
+            }
+
+            // Validate Gender
+            const gender = document.querySelector('[name="gender"]:checked');
+            if (!gender) {
+                document.querySelector('[name="gender"]').closest('.user_filsd_wrep').querySelector('.error').textContent = 'Please select a gender.';
+                isValid = false;
+            }
+
+            // Validate Role
+            const role = document.querySelector('[name="role"]:checked');
+            if (!role) {
+                document.querySelector('[name="role"]').closest('.user_filsd_wrep').querySelector('.error').textContent = 'Please select a role.';
+                isValid = false;
+            }
+
+            // Validate Password
+            const password = document.querySelector('[name="password"]').value;
+            const confirmPassword = document.querySelector('[name="confirm_password"]').value;
+            if (password.length < 6) {
+                document.querySelector('[name="password"]').parentElement.nextElementSibling.textContent = 'Password must be at least 6 characters long.';
+                isValid = false;
+            }
+            if (password !== confirmPassword) {
+                document.querySelector('[name="confirm_password"]').parentElement.nextElementSibling.textContent = 'Passwords do not match.';
+                isValid = false;
+            }
+
+            if (!isValid) {
+                event.preventDefault();
+            }
+        });
+    </script>
+
+
+
+</body>
+</html>
