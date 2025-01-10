@@ -127,12 +127,14 @@ namespace HealthConnect.Pages.Admin.UserData
                         consultation_fee = reader.IsDBNull(25) ? null : reader.GetString(25),
                         account_approve = true,
                         account_create_date = DateTime.Now,
-                        isactive = true
+                        isactive = true,
+                        block = false,
+                        mobail_verifie =false
                     };
                     reader.Close();
 
                     // Insert into User_Table
-                    var insertCommand = new SqlCommand("INSERT INTO User_Table (first_name, last_name, email, mobil_no, dob, House_number_and_Street_name, country, city, state, pincode, gender, role, password, profile_pic, doctore_medical_license_photo, medical_registration_no, state_medical_council, year_of_registration, doctore_experience, hospital_or_clinic, doctor_qualifications, doctor_type, languages_spoken, clinic_or_hospital_address, consultation_fee, account_approve, account_create_date, isactive) VALUES (@FirstName, @LastName, @Email, @MobileNo, @Dob, @Address, @Country, @City, @State, @Pincode, @Gender, @Role, @Password, @ProfilePic, @MedicalLicensePhoto, @MedicalRegNo, @StateMedicalCouncil, @YearOfRegistration, @Experience, @HospitalClinic, @Qualifications, @DoctorType, @Languages, @ClinicAddress, @Fee, @Approve, @CreateDate, @IsActive)", connection);
+                    var insertCommand = new SqlCommand("INSERT INTO User_Table (first_name, last_name, email, mobil_no, dob, House_number_and_Street_name, country, city, state, pincode, gender, role, password, profile_pic, doctore_medical_license_photo, medical_registration_no, state_medical_council, year_of_registration, doctore_experience, hospital_or_clinic, doctor_qualifications, doctor_type, languages_spoken, clinic_or_hospital_address, consultation_fee, account_approve, account_create_date, isactive, block, mobail_verifie) VALUES (@FirstName, @LastName, @Email, @MobileNo, @Dob, @Address, @Country, @City, @State, @Pincode, @Gender, @Role, @Password, @ProfilePic, @MedicalLicensePhoto, @MedicalRegNo, @StateMedicalCouncil, @YearOfRegistration, @Experience, @HospitalClinic, @Qualifications, @DoctorType, @Languages, @ClinicAddress, @Fee, @Approve, @CreateDate, @IsActive, @Block, @Mobail_verifie)", connection);
                     insertCommand.Parameters.AddWithValue("@FirstName", doctor.first_name);
                     insertCommand.Parameters.AddWithValue("@LastName", doctor.last_name);
                     insertCommand.Parameters.AddWithValue("@Email", doctor.email);
@@ -161,6 +163,8 @@ namespace HealthConnect.Pages.Admin.UserData
                     insertCommand.Parameters.AddWithValue("@Approve", doctor.account_approve);
                     insertCommand.Parameters.AddWithValue("@CreateDate", doctor.account_create_date);
                     insertCommand.Parameters.AddWithValue("@IsActive", doctor.isactive);
+                    insertCommand.Parameters.AddWithValue("@Block", doctor.block);
+                    insertCommand.Parameters.AddWithValue("@Mobail_verifie", doctor.mobail_verifie);
 
                     insertCommand.ExecuteNonQuery();
 
@@ -195,7 +199,6 @@ namespace HealthConnect.Pages.Admin.UserData
             return RedirectToPage("/Admin/UserData/Register_inquiry");
         }
 
-        // Example method to retrieve the doctor's email from the database
         private string GetDoctorEmail(int doctor_approvel_id)
         {
             using (var connection = new SqlConnection(_connectionString))

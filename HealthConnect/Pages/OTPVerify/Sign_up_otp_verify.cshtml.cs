@@ -132,8 +132,8 @@ namespace HealthConnect.Pages.OTPVerify
                 return Page();
             }
         }
-        
-        private void StoreUserInDatabase()
+
+        private async void StoreUserInDatabase()
         {
             var user = new User_Table
             {
@@ -149,17 +149,18 @@ namespace HealthConnect.Pages.OTPVerify
                 pincode = HttpContext.Session.GetString("Pincode"),
                 gender = HttpContext.Session.GetString("Gender"),
                 role = HttpContext.Session.GetString("Role"),
-                password = new PasswordHasher<User_Table>().HashPassword(null, HttpContext.Session.GetString("Password")), // Encrypt password
-
+                password = new PasswordHasher<User_Table>().HashPassword(null, HttpContext.Session.GetString("Password")),
                 account_approve = true,
-                isactive = true
+                isactive = true,
+                block = false,
+                mobail_verifie = false
             };
 
             using (SqlConnection connection = new SqlConnection(_connectionString))
             {
                 connection.Open();
-                string query = "INSERT INTO User_Table (first_name, last_name, email, mobil_no, dob, House_number_and_Street_name, country, city, state, pincode, gender, role, password, isactive, account_approve, Account_create_date) " +
-                               "VALUES (@first_name, @last_name, @email, @mobil_no, @dob, @House_number_and_Street_name, @country, @city, @state, @pincode, @gender, @role, @password, @isactive, @account_approve, @Account_create_date)";
+                string query = "INSERT INTO User_Table (first_name, last_name, email, mobil_no, dob, House_number_and_Street_name, country, city, state, pincode, gender, role, password, isactive, account_approve, Account_create_date, block, mobail_verifie) " +
+                               "VALUES (@first_name, @last_name, @email, @mobil_no, @dob, @House_number_and_Street_name, @country, @city, @state, @pincode, @gender, @role, @password, @isactive, @account_approve, @Account_create_date, @Block, @Mobail_verifie)";
 
                 using (SqlCommand command = new SqlCommand(query, connection))
                 {
@@ -178,7 +179,10 @@ namespace HealthConnect.Pages.OTPVerify
                     command.Parameters.AddWithValue("@password", user.password);
                     command.Parameters.AddWithValue("@account_approve", user.account_approve);
                     command.Parameters.AddWithValue("@isactive", user.isactive);
-                    var accountCreateDateString = HttpContext.Session.GetString("Account_create_date");
+                    command.Parameters.AddWithValue("@Block", user.block);
+                    command.Parameters.AddWithValue("@Mobail_verifie", user.mobail_verifie);
+
+                    string accountCreateDateString = HttpContext.Session.GetString("Account_create_date");
                     if (DateTime.TryParse(accountCreateDateString, out DateTime accountCreateDate))
                     {
                         command.Parameters.AddWithValue("@Account_create_date", accountCreateDate);
@@ -188,11 +192,17 @@ namespace HealthConnect.Pages.OTPVerify
                         command.Parameters.AddWithValue("@Account_create_date", DateTime.Now);
                     }
 
-
-
                     command.ExecuteNonQuery();
                 }
             }
+
+            // Send a confirmation email after saving to the database
+            string subject = "Registration Completed";
+            string body = "Your registration is successfully completed on HealthConnect.";
+            string combinedBody = $"{body}\n\nThank you for registering with HealthConnect!\n\nRegards,\nHealthConnect Team";
+
+            await _emailService.SendEmailAsync(user.email, subject, combinedBody);
         }
+
     }
 }

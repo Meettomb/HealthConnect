@@ -12,6 +12,20 @@
             column-gap: 30px;
             margin: 15px 0;
         }
+
+            .form_button button {
+                text-align: center;
+                padding: 10px 10px; 
+                border-radius: 5px;
+                border: none;
+                color: white;
+                cursor: pointer;
+            }
+
+            .form_button button i{
+                width: 100%;
+                    text-align: center;
+            }
     </style>
 </head>
 
@@ -24,12 +38,12 @@
                 <div class="form_button">
                     <form method="post" asp-page-handler="Approve">
                         <input type="hidden" name="doctor_approvel_id" value="@Model.Doctor_approvel.doctor_approvel_id" />
-                        <button class="btn btn-success">Approve</button>
+                        <button class="btn btn-success"><i class="fa-solid fa-check"></i></button>
                     </form>
 
                     <form method="post" asp-page-handler="Reject">
                         <input type="hidden" name="doctor_approvel_id" value="@Model.Doctor_approvel.doctor_approvel_id" />
-                        <button class="btn btn-danger">Reject</button>
+                        <button class="btn btn-danger"><i class="fa-solid fa-xmark"></i></button>
                     </form>
                 </div>
                 <div class="row">

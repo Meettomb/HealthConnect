@@ -36,7 +36,9 @@ namespace HealthConnect.Models
         public bool account_approve { get; set; }
 
         public DateTime account_create_date { get; set; }
+        public bool? block { get; set; }
         public bool isactive { get; set; }
+        public bool? mobail_verifie { get; set; }
     }
 
 }

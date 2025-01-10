@@ -2,3 +2,100 @@
     margin: 0;
     padding: 0;
 }
+
+input[type=number]::-webkit-inner-spin-button,
+input[type=number]::-webkit-outer-spin-button {
+    -webkit-appearance: none;
+    margin: 0;
+}
+
+/* Firefox */
+input[type=number] {
+    -moz-appearance: textfield;
+}
+
+.name_first_latter {
+    width: 30px;
+    height: 30px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 50%;
+    background-color: #ccc;
+    text-align: center;
+    line-height: 30px;
+    font-size: 16px;
+    color: black;
+    font-weight: 500;
+}
+.delet_icon {
+    color: red;
+    padding: 8px 9px;
+    margin: 0 5px;
+    border-radius: 10px;
+    border: 2px red solid;
+    cursor: pointer;
+    &:hover
+{
+    background-color: red;
+    color: white;
+}
+}
+
+.block_icon {
+    color: red;
+    padding: 8px;
+    margin: 0 5px;
+    border-radius: 10px;
+    border: 2px red solid;
+    cursor: pointer;
+    &:hover
+
+{
+    background-color: red;
+    color: white;
+}
+}
+
+.edit_icon {
+    color: lawngreen;
+    padding: 8px 7px;
+    margin: 0 5px;
+    border-radius: 10px;
+    border: 2px lawngreen solid;
+    cursor: pointer;
+    &:hover
+
+{
+    background-color: lawngreen;
+    color: white;
+}
+}
+
+.info_icon {
+    color: deepskyblue;
+    padding: 8px;
+    margin: 0 5px;
+    border-radius: 10px;
+    border: 2px deepskyblue solid;
+    cursor: pointer;
+    &:hover
+
+{
+    background-color: deepskyblue;
+    color: white;
+}
+}
+
+
+.if_account_block{
+    position: relative;
+}
+    .if_account_block i {
+        position: absolute;
+        top: 17px;
+        left: 17px;
+        color: red;
+        cursor: pointer;
+        font-size: 27px;
+    }

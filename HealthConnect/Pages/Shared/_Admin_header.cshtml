@@ -25,6 +25,9 @@
     <link rel="icon" href="/images/HealthConnectTabLogo.png" />
 
     <link rel="stylesheet" href="/css/Admin_custom.css" />
+
+
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css">
   
 </head>
 <body>
@@ -129,8 +132,9 @@
                     </a>
                     <div class="collapse" id="user-management">
                         <ul class="nav flex-column sub-menu">
-                            <li class="nav-item"><a class="nav-link" href="/Admin/UserData/Active_user_data">User Data</a></li>
-                            <li class="nav-item"><a class="nav-link" href="/Admin/UserData/Deleted_user">Deleted User</a></li>
+                            <li class="nav-item"><a class="nav-link" href="/Admin/UserData/UserList/Active_user_data">User Data</a></li>
+                            <li class="nav-item"><a class="nav-link" href="/Admin/UserData/UserList/Deleted_user">Deleted User</a></li>
+                            <li class="nav-item"><a class="nav-link" href="/Admin/UserData/UserList/Block_user">Block User</a></li>
                             <li class="nav-item"><a class="nav-link" href="/Admin/UserData/Register_inquiry">Register inquiry</a></li>
                         </ul>
                     </div>
@@ -160,7 +164,7 @@
                     <ul class="navbar-nav w-100">
                         <li class="nav-item w-100">
                             <form class="nav-link mt-2 mt-md-0 d-none d-lg-flex search">
-                                <input type="text" class="form-control" id="myInput" placeholder="Search products">
+                                <input type="text" class="form-control" id="myInput" placeholder="Search products" autocomplete="off">
                             </form>
                         </li>
                     </ul>
@@ -275,6 +279,24 @@
     <!-- endinject -->
     <!-- Custom js for this page -->
     <script src="/assets/js/dashboard.js"></script>
+    <script src="/js/jQuery"></script>
+
+    <script>
+        $(document).ready(function () {
+            $("#myInput").on("keyup", function () {
+                var value = $(this).val().toLowerCase();
+                $(".data").filter(function () {
+                    $(this).toggle($(this).text().toLowerCase().indexOf(value) > -1);
+                });
+            });
+        });
+
+         document.getElementById('myInput').addEventListener('keydown', function(event) {
+          if (event.key === 'Enter') {
+            event.preventDefault();
+          }
+        });
+    </script>
 
 
 </body>
