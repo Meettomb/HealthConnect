@@ -1,6 +1,7 @@
 using HealthConnect.Models;
 using HealthConnect.Services;
 using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.Data.SqlClient;
@@ -121,8 +122,9 @@ namespace HealthConnect.Pages.User
             doctor_Approvel.state = HttpContext.Session.GetString("State");
             doctor_Approvel.pincode = HttpContext.Session.GetString("Pincode");
             doctor_Approvel.gender = HttpContext.Session.GetString("Gender");
-            doctor_Approvel.role = HttpContext.Session.GetString("Role");
-            doctor_Approvel.password = HttpContext.Session.GetString("Password");
+            doctor_Approvel.role = HttpContext.Session.GetString("Role"); 
+            var hashedPassword = new PasswordHasher<Doctor_approvel>().HashPassword(doctor_Approvel, HttpContext.Session.GetString("Password"));
+            doctor_Approvel.password = hashedPassword;
 
             // Additional doctor details
             doctor_Approvel.medical_registration_no = Request.Form["medical_registration_no"];

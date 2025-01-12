@@ -87,7 +87,7 @@ namespace HealthConnect.Pages.User
             HttpContext.Session.SetString("Account_create_date", DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss"));
 
 
-            if (user.role == "Patient")
+            if (user.role == "User")
             {
                 var otp = new Random().Next(100000, 999999).ToString();
                 HttpContext.Session.SetString("OTP", otp);

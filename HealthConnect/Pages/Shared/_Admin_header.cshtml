@@ -28,7 +28,7 @@
 
 
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css">
-  
+
 </head>
 <body>
 
@@ -46,11 +46,25 @@
                     <div class="profile-desc">
                         <div class="profile-pic">
                             <div class="count-indicator">
-                                <img class="img-xs rounded-circle" src="/documant/P_Photo.jpg" alt="">
+
+                                @if (string.IsNullOrEmpty(Model.ProfilePic))
+                                {
+                                    <span class="name_first_latter">
+                                        @Model.FirstName[0].ToString().ToUpper()
+                                    </span>
+                                   
+                                }
+                                else
+                                {
+                                    <img class="img-xs rounded-circle" src="/documant/@Model.ProfilePic" alt="image" />
+                                   
+                                }
+
+                                @* <img class="img-xs rounded-circle" src="/documant/P_Photo.jpg" alt=""> *@
                                 <span class="count bg-success"></span>
                             </div>
                             <div class="profile-name">
-                                <h5 class="mb-0 font-weight-normal">User Name</h5>
+                                <h5 class="mb-0 font-weight-normal">@Model.FirstName @Model.LastName</h5>
                                 <span>Admin</span>
                             </div>
                         </div>
@@ -93,8 +107,10 @@
                             </a>
 
                             <div class="dropdown-divider"></div>
-                            
-                                <a class="dropdown-item preview-item" href="/Sign_in">
+
+                            @if (Model.UserId == null)
+                            {
+                                <a class="dropdown-item preview-item" href="/User/Sign_in">
                                     <div class="preview-thumbnail">
                                         <div class="preview-icon bg-dark rounded-circle">
                                             <i class="mdi mdi-login text-danger"></i>
@@ -104,7 +120,21 @@
                                         <p class="preview-subject mb-1">Login</p>
                                     </div>
                                 </a>
-                           
+
+                            }
+                            else{
+                                <a class="dropdown-item preview-item" href="/User/Logout">
+                                    <div class="preview-thumbnail">
+                                        <div class="preview-icon bg-dark rounded-circle">
+                                            <i class="mdi mdi-login text-danger"></i>
+                                        </div>
+                                    </div>
+                                    <div class="preview-item-content">
+                                        <p class="preview-subject mb-1">Logout</p>
+                                    </div>
+                                </a>
+                            }
+
                         </div>
                     </div>
                 </li>
@@ -140,9 +170,9 @@
                     </div>
                 </li>
 
-               
 
-              
+
+
 
 
 
@@ -174,8 +204,20 @@
                         <li class="nav-item dropdown">
                             <a class="nav-link" id="profileDropdown" href="#" data-toggle="dropdown">
                                 <div class="navbar-profile">
-                                    <img class="img-xs rounded-circle" src="/documant/P_Photo.jpg" alt="">
-                                    <p class="mb-0 d-none d-sm-block navbar-profile-name">UserName</p>
+
+                                    @if (string.IsNullOrEmpty(Model.ProfilePic))
+                                    {
+                                        <span class="name_first_latter">
+                                            @Model.FirstName[0].ToString().ToUpper()
+                                        </span>
+
+                                    }
+                                    else
+                                    {
+                                        <img class="img-xs rounded-circle" src="/documant/@Model.ProfilePic" alt="image" />
+
+                                    }
+                                    <p class="mb-0 d-none d-sm-block navbar-profile-name">@Model.FirstName @Model.LastName</p>
                                     <i class="mdi mdi-menu-down d-none d-sm-block"></i>
                                 </div>
                             </a>
@@ -219,18 +261,35 @@
                                 </a>
                                 <div class="dropdown-divider"></div>
 
-                              
-                                    <a class="dropdown-item preview-item" href="/Sign_in">
+
+                                @if (Model.UserId == null)
+                                {
+                                    <a class="dropdown-item preview-item" href="/User/Sign_in">
                                         <div class="preview-thumbnail">
                                             <div class="preview-icon bg-dark rounded-circle">
-                                                <i class="mdi mdi-logout text-danger"></i>
+                                                <i class="mdi mdi-login text-danger"></i>
                                             </div>
                                         </div>
                                         <div class="preview-item-content">
                                             <p class="preview-subject mb-1">Login</p>
                                         </div>
                                     </a>
-                                
+
+                                }
+                                else
+                                {
+                                    <a class="dropdown-item preview-item" href="/User/Logout">
+                                        <div class="preview-thumbnail">
+                                            <div class="preview-icon bg-dark rounded-circle">
+                                                <i class="mdi mdi-login text-danger"></i>
+                                            </div>
+                                        </div>
+                                        <div class="preview-item-content">
+                                            <p class="preview-subject mb-1">Logout</p>
+                                        </div>
+                                    </a>
+                                }
+
 
 
 

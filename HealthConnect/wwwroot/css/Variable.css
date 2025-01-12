@@ -2,9 +2,21 @@
 :root {
     --body-bg-color: #F5F5F5;
     --header-bg-color: white;
-    --header-text-color: #0055a4;
-    --header-text-hover-color: #00a651;
-    --button-bg-color: #048077;
+    --header-text-hover-color: #1977cc;
+    --button-bg-color: #1977cc;
     --button-font-color: white;
     --main-font-color: #333333;
+    --heading-color: #2c4964;
+    --header-text-color: #2c4964;
+    /*    --button-hover-bg-color: #0d6efd;*/
+    --button-hover-bg-color: #53a8f5;
+
+    --default-color: #444444;
+    --heading-color: #2c4964;
+    --accent-color: #1977cc;
+    --surface-color: #ffffff;
+    --contrast-color: #ffffff;
+    --default-font: "Roboto", system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial, "Noto Sans", "Liberation Sans", sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";
+    --heading-font: "Poppins", sans-serif;
+    --nav-font: "Raleway", sans-serif;
 }

@@ -11,3 +11,15 @@ window.addEventListener('scroll', function () {
         header.classList.remove('scrolled');
     }
 });
+
+document.addEventListener('DOMContentLoaded', () => {
+    const passwordInput = document.getElementById('password');
+    const toggleIcon = document.querySelector('.fa-eye');
+
+    toggleIcon.addEventListener('click', () => {
+        const isPasswordVisible = passwordInput.type === 'text';
+        passwordInput.type = isPasswordVisible ? 'password' : 'text';
+        toggleIcon.classList.toggle('fa-eye-slash', !isPasswordVisible);
+        toggleIcon.classList.toggle('fa-eye', isPasswordVisible);
+    });
+});

@@ -21,9 +21,36 @@ namespace HealthConnect.Pages.Admin.UserData
             _emailSettings = emailSettings.Value;
             _connectionString = configuration.GetConnectionString("HealthConnect");
         }
-
+        public int? UserId { get; set; }
+        public string? FirstName { get; set; }
+        public string? LastName { get; set; }
+        public string? ProfilePic { get; set; }
         public IActionResult OnGet()
         {
+            UserId = HttpContext.Session.GetInt32("Id");
+            if (UserId.HasValue)
+            {
+                using (SqlConnection con = new SqlConnection(_connectionString))
+                {
+                    string query = "SELECT * FROM User_Table WHERE id = @UserId";
+                    using (SqlCommand cmd = new SqlCommand(query, con))
+                    {
+                        cmd.Parameters.AddWithValue("@UserId", UserId.Value);
+                        con.Open();
+                        using (SqlDataReader reader = cmd.ExecuteReader())
+                        {
+                            if (reader.Read())
+                            {
+                                FirstName = reader["first_name"].ToString();
+                                LastName = reader["last_name"].ToString();
+                                ProfilePic = reader["profile_pic"].ToString();
+                                UserId = (int?)reader["id"];
+                            }
+                        }
+                        con.Close();
+                    }
+                }
+            }
             using SqlConnection connection = new SqlConnection(_connectionString);
             {
                 string query = "SELECT * FROM Doctor_approvel WHERE account_approve IS NULL";

@@ -20,15 +20,28 @@
 </head>
 <body class="login_body">
 
-
     @if (!string.IsNullOrEmpty(Model.ErrorMessage))
     {
-        <p class="error_message">@Model.ErrorMessage</p>
+        <div class="error_message">@Model.ErrorMessage</div>
     }
-
+ 
     @if (!string.IsNullOrEmpty(Model.SuccessMessage))
     {
         <p class="success_message">@Model.SuccessMessage</p>
+    }
+
+    @if (TempData["SuccessMessage"] != null)
+    {
+        <div class="success_message">
+            @TempData["SuccessMessage"]
+        </div>
+    }
+
+    @if (TempData["ErrorMessage"] != null)
+    {
+        <div class="error_message">
+            @TempData["ErrorMessage"]
+        </div>
     }
 
 
@@ -39,26 +52,24 @@
                 <div class="from_heading">
                     <h1>Sign in</h1>
                 </div>
-                <div class="user_input_box">
-                    <input type="email" id="email" name="email" placeholder="Enter your Email" required>
+                <div class="user_input_box" style="margin:20px 0;">
+                    <input type="email" id="email" name="email" placeholder="Enter your Email">
                     <label for="email">Email</label>
                     <i class="fa-solid fa-at"></i>
                 </div>
-                <p id="Email_error_message" class="error">Error</p>
 
-                <div class="user_input_box">
-                    <input type="password" id="password" name="password" placeholder="Enter your Password" required>
+                <div class="user_input_box" style="margin:20px 0;">
+                    <input type="password" id="password" class="password-input" name="password" placeholder="Enter your Password">
                     <label for="password">Password</label>
                     <i class="fa-regular fa-eye"></i>
                 </div>
-                <p id="Password_error_message" class="error">Error</p>
 
 
                 <div class="login_button">
                     <button type="submit">Sign in</button>
                 </div>
 
-                <a href="/User/Forgot_password">Forgot password?</a>
+                <a href="/User/Forgot_password/Enter_Email">Forgot password?</a>
                 <a href="/User/Sign_up">Don't have an account? Sign up</a>
 
             </form>
@@ -66,6 +77,8 @@
 
         </div>
     </div>
+
+    <script src="/js/Script.js"></script>
 
 
     <script>

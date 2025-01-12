@@ -39,6 +39,7 @@ namespace HealthConnect.Models
         public bool? block { get; set; }
         public bool isactive { get; set; }
         public bool? mobail_verifie { get; set; }
+        public string? auth_token { get; set; }
     }
 
 }

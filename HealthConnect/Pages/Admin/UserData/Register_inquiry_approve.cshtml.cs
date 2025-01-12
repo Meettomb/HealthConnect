@@ -18,15 +18,42 @@ namespace HealthConnect.Pages.Admin.UserData
         private readonly IEmailService _emailService;
         private readonly EmailSettings _emailSettings;
         private readonly string _connectionString;
-
+        public string FirstName { get; set; }
+        public string LastName { get; set; }
+        public string ProfilePic { get; set; }
         public Register_inquiry_approveModel(IEmailService emailService, IOptions<EmailSettings> emailSettings, IConfiguration configuration)
         {
             _emailService = emailService;
             _emailSettings = emailSettings.Value;
             _connectionString = configuration.GetConnectionString("HealthConnect");
         }
+        public int? UserId { get; set; }
         public IActionResult OnGet(int doctor_approvel_id)
         {
+            UserId = HttpContext.Session.GetInt32("Id");
+            if (UserId.HasValue)
+            {
+                using (SqlConnection con = new SqlConnection(_connectionString))
+                {
+                    string query = "SELECT * FROM User_Table WHERE id = @UserId";
+                    using (SqlCommand cmd = new SqlCommand(query, con))
+                    {
+                        cmd.Parameters.AddWithValue("@UserId", UserId.Value);
+                        con.Open();
+                        using (SqlDataReader reader = cmd.ExecuteReader())
+                        {
+                            if (reader.Read())
+                            {
+                                FirstName = reader["first_name"].ToString();
+                                LastName = reader["last_name"].ToString();
+                                ProfilePic = reader["profile_pic"].ToString();
+                                UserId = (int?)reader["id"];
+                            }
+                        }
+                        con.Close();
+                    }
+                }
+            }
             Doctor_approvel doctor = null;
             using (SqlConnection connection = new SqlConnection(_connectionString))
             {
@@ -129,7 +156,7 @@ namespace HealthConnect.Pages.Admin.UserData
                         account_create_date = DateTime.Now,
                         isactive = true,
                         block = false,
-                        mobail_verifie =false
+                        mobail_verifie = false
                     };
                     reader.Close();
 

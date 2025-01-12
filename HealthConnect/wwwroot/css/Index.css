@@ -3,7 +3,6 @@
 * {
     margin: 0;
     padding: 0;
-
 }
 
 input[type=number]::-webkit-inner-spin-button,
@@ -113,7 +112,7 @@ input[type=number] {
 
 body {
     width: 100%;
-    font-family: 'Roboto', sans-serif;
+    font-family: var(--default-font);
     background-color: var(--body-bg-color);
 }
 
@@ -129,6 +128,7 @@ header {
     gap: 10px;
     transition: background-color 0.3s ease;
     z-index: 1000;
+    font-weight: 400;
 }
 
 #header.scrolled {
@@ -151,6 +151,7 @@ header nav {
     justify-content: space-between;
     align-items: center;
     z-index: 1000;
+    font-family: var(--nav-font);
 }
 
 .header_drop_down {
@@ -163,7 +164,9 @@ header nav {
 
     .header_drop_down p {
         cursor: pointer;
-        font-weight: 600;
+        /*        font-weight: 400;*/
+
+        font-family: var(--nav-font);
     }
 
 
@@ -186,7 +189,8 @@ header nav {
         display: flex;
         flex-direction: column;
         row-gap: 20px;
-        font-weight: 500;
+        /*        font-weight: 400;*/
+        font-family: var(--nav-font);
         font-size: 14px;
     }
 
@@ -205,7 +209,9 @@ header nav {
         display: flex;
         flex-direction: column;
         row-gap: 20px;
-        font-weight: 500;
+        /*        font-weight: 400;*/
+
+        font-family: var(--nav-font);
         font-size: 14px;
     }
 
@@ -224,7 +230,9 @@ header nav {
         display: flex;
         flex-direction: column;
         row-gap: 20px;
-        font-weight: 500;
+        /*        font-weight: 400;*/
+
+        font-family: var(--nav-font);
         font-size: 14px;
     }
 
@@ -246,7 +254,8 @@ header nav {
         display: flex;
         flex-direction: column;
         row-gap: 20px;
-        font-weight: 500;
+        /*        font-weight: 400;*/
+        font-family: var(--nav-font);
         font-size: 14px;
     }
 
@@ -255,23 +264,38 @@ header nav {
             text-decoration: inherit;
             width: 100%;
             color: var(--header-text-color);
+            font-family: var(--nav-font);
         }
 
-.header_user_icon_drop_down {
-    border: 2px solid #048077;
+.header_user_icon_drop_down .header_user_icon {
+    border: 2px solid var(--button-bg-color);
+    background-color: var(--button-bg-color);
+    color: white;
     padding: 5px 7px;
     border-radius: 50%;
     cursor: pointer;
+    &:hover
+
+{
+    background-color: var(--button-hover-bg-color);
+}
+
 }
 
 .header_login_button {
-    background-color: #048077;
+    background-color: var(--button-bg-color);
     color: white;
     padding: 5px 12px;
     border-radius: 5px;
     cursor: pointer;
     -webkit-text-decoration: inherit;
     text-decoration: inherit;
+    &:hover
+
+{
+    background-color: var(--button-hover-bg-color);
+}
+
 }
 
 
@@ -291,8 +315,8 @@ header nav {
 /*--------------------------------------------------------------------------------------------------------------*/
 
 .back_button i {
-    background-color: #048077;
-    color: var(--button-font-color);
+    background-color: var(--button-bg-color);
+    color: var(--contrast-color);
     padding: 10px 12px;
     border-radius: 5px;
     cursor: pointer;
@@ -302,6 +326,12 @@ header nav {
     z-index: 1000;
     position: absolute;
     top: 0;
+    &:hover
+
+{
+    background-color: var(--button-hover-bg-color);
+}
+
 }
 
 .loging_container {
@@ -321,7 +351,7 @@ header nav {
     }
 
     .loging_container form {
-        border: 1px solid black;
+        border: 1px solid var(--heading-color);
         max-width: 90%;
         min-width: 30%;
         border-radius: 10px;
@@ -335,9 +365,10 @@ header nav {
         .loging_container form .from_heading {
             font-size: 30px;
             font-weight: 600;
-            color: darkslategrey;
+            color: var(--heading-color);
             text-align: center;
             margin: 30px 0 70px 0;
+            font-family: var(--heading-font);
         }
 
         .loging_container form .user_input_box {
@@ -355,6 +386,8 @@ header nav {
                 border-bottom: 2px solid #ccc;
                 background-color: #F5F5F5;
                 font-size: 16px;
+                color: var(--accent-color);
+                font-weight: 400;
             }
 
             .loging_container form .user_input_box label {
@@ -366,7 +399,7 @@ header nav {
 
             .loging_container form .user_input_box input:focus {
                 outline: none;
-                border-bottom: 2px solid #048077;
+                border-bottom: 2px solid var(--accent-color);
             }
 
         .loging_container form p {
@@ -383,19 +416,19 @@ header nav {
             top: 35%;
             right: 10%;
             font-size: 20px;
-            color: #048077;
+            color: var(--accent-color);
         }
 
         .loging_container form .user_input_box input:focus + label,
         .loging_container form .user_input_box input + label {
             top: -10px;
             font-size: 14px;
-            color: #048077;
+            color: var(--accent-color);
             font-weight: 600;
         }
 
 .login_button button {
-    background-color: #048077;
+    background-color: var(--accent-color);
     color: white;
     padding: 10px 100px;
     border-radius: 5px;
@@ -405,10 +438,16 @@ header nav {
     margin: 15px 0px 20px 0px;
     border: none;
     font-size: 16px;
+    &:hover
+
+{
+    background-color: var(--button-hover-bg-color);
+}
+
 }
 
 .loging_container form a {
-    color: #048077;
+    color: var(--accent-color);
     text-decoration: none;
     font-weight: 600;
     font-size: 14px;
@@ -416,7 +455,7 @@ header nav {
     &:hover
 
 {
-    color: #3784b1;
+    color: var(--accent-color);
     text-decoration: underline;
 }
 
@@ -440,14 +479,12 @@ header nav {
     width: 100%;
     height: 90vh;
     justify-content: space-evenly;
-/*    margin-top: 50%;*/
-/*overflow: scroll;*/
 }
 
 .user_filsd_wrep {
     display: flex;
     margin: 30px 0;
-    position:relative;
+    position: relative;
 }
 
     .user_filsd_wrep .user_input_box input {
@@ -493,7 +530,7 @@ header nav {
     .regi_form_container form .from_heading {
         font-size: 30px;
         font-weight: 600;
-        color: darkslategrey;
+        color: var(--heading-color);
         text-align: center;
         margin: 30px 0 70px 0;
     }
@@ -513,6 +550,7 @@ header nav {
             border-bottom: 2px solid #ccc;
             background-color: #F5F5F5;
             font-size: 16px;
+            color: var(--accent-color);
         }
 
         .regi_form_container form .user_input_box select {
@@ -520,7 +558,7 @@ header nav {
             padding: 10px 0px 10px 0px;
             border: none;
             border-bottom: 2px solid #ccc;
-            background-color: #F5F5F5;
+            /*            background-color: #F5F5F5;*/
             font-size: 16px;
         }
 
@@ -534,7 +572,7 @@ header nav {
 
         .regi_form_container form .user_input_box input:focus {
             outline: none;
-            border-bottom: 2px solid #048077;
+            border-bottom: 2px solid var(--accent-color);
         }
 
     .regi_form_container form p {
@@ -550,20 +588,20 @@ header nav {
         top: 35%;
         right: 10%;
         font-size: 20px;
-        color: #048077;
+        color: var(--accent-color);
     }
 
     .regi_form_container form .user_input_box input:focus + label,
     .regi_form_container form .user_input_box input + label {
         top: -10px;
         font-size: 14px;
-        color: #048077;
+        color: var(--accent-color);
         font-weight: 600;
     }
 
 .regi_form_container button {
-    background-color: #048077;
-    color: white;
+    background-color: var(--accent-color);
+    color: var(--contrast-color);
     padding: 10px 100px;
     border-radius: 5px;
     cursor: pointer;
@@ -572,10 +610,16 @@ header nav {
     margin: 15px 0px 20px 0px;
     border: none;
     font-size: 16px;
+    &:hover
+
+{
+    background-color: var(--button-hover-bg-color);
+}
+
 }
 
 .regi_form_container form a {
-    color: #048077;
+    color: var(--accent-color);
     text-decoration: none;
     font-weight: 600;
     font-size: 14px;
@@ -583,7 +627,7 @@ header nav {
     &:hover
 
 {
-    color: #3784b1;
+    color: var(--accent-color);
     text-decoration: underline;
 }
 
@@ -601,7 +645,7 @@ header nav {
     padding: 15px 20px;
     background-color: white;
     margin: 10px 0px 10px 0px;
-    border: 1px dashed #048077;
+    border: 1px dashed var(--heading-color);
     cursor: pointer;
 }
 
@@ -610,16 +654,16 @@ header nav {
     padding: 15px 6px;
     background-color: white;
     margin: 10px 0px 10px 0px;
-    border: 1px dashed #048077;
+    border: 1px dashed var(--heading-color);
     cursor: pointer;
 }
 
 .regi_form_container form .patient_radio::after {
-    content: 'Patient';
+    content: 'User';
     padding: 15px 13px;
     background-color: white;
     margin: 10px 0px 10px 0px;
-    border: 1px dashed #048077;
+    border: 1px dashed var(--heading-color);
     cursor: pointer;
 }
 
@@ -628,15 +672,16 @@ header nav {
     padding: 15px 10px;
     background-color: white;
     margin: 10px 0px 10px 0px;
-    border: 1px dashed #048077;
+    border: 1px dashed var(--heading-color);
     cursor: pointer;
 }
+
 .user_filsd_wrep .user_input_box select {
     max-width: 100%;
     min-width: 100%;
     outline: 1px solid var(--header-text-hover-color);
     background-color: red;
-    border-radius:5px;
+    border-radius: 5px;
     border-bottom: none;
 }
 

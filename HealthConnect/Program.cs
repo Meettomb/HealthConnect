@@ -1,3 +1,4 @@
+using HealthConnect;
 using HealthConnect.Data;
 using HealthConnect.Models;
 using HealthConnect.Services;
@@ -38,6 +39,11 @@ if (!app.Environment.IsDevelopment())
 }
 
 app.UseSession();
+
+app.UseAuthTokenMiddleware();
+
+app.UseMiddleware<AuthTokenMiddleware>();
+
 app.UseHttpsRedirection();
 app.UseStaticFiles();
 

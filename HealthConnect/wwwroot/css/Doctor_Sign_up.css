@@ -108,8 +108,8 @@ body {
 
 
 .back_button i {
-    background-color: #048077;
-    color: var(--button-font-color);
+    background-color: var(--accent-color);
+    color: var(--contrast-color);
     padding: 10px 12px;
     border-radius: 5px;
     cursor: pointer;
@@ -152,7 +152,8 @@ body {
         .loging_container form .from_heading {
             font-size: 30px;
             font-weight: 600;
-            color: darkslategrey;
+            color: var(--heading-color);
+            font-family: var(--heading-font);
             text-align: center;
             margin: 30px 0 70px 0;
         }
@@ -200,7 +201,7 @@ body {
             top: 35%;
             right: 10%;
             font-size: 20px;
-            color: #048077;
+            color: var(--accent-color);
         }
 
         .loging_container form .user_input_box input:focus + label,
@@ -210,35 +211,6 @@ body {
             color: #048077;
             font-weight: 600;
         }
-
-.login_button button {
-    background-color: #048077;
-    color: white;
-    padding: 10px 100px;
-    border-radius: 5px;
-    cursor: pointer;
-    -webkit-text-decoration: inherit;
-    text-decoration: inherit;
-    margin: 15px 0px 20px 0px;
-    border: none;
-    font-size: 16px;
-}
-
-.loging_container form a {
-    color: #048077;
-    text-decoration: none;
-    font-weight: 600;
-    font-size: 14px;
-    margin: 5px 0px 20px 0px;
-    &:hover
-
-{
-    color: #3784b1;
-    text-decoration: underline;
-}
-
-}
-
 
 
 
@@ -311,7 +283,8 @@ body {
     .regi_form_container form .from_heading {
         font-size: 30px;
         font-weight: 600;
-        color: darkslategrey;
+        color: var(--heading-color);
+        font-family: var(--heading-font);
         text-align: center;
         margin: 30px 0 70px 0;
     }
@@ -328,16 +301,17 @@ body {
             width: 90%;
             padding: 10px 15px;
             border: none;
-            border-bottom: 2px solid #ccc;
+            border-bottom: 2px solid var(--accent-color);
             background-color: #F5F5F5;
             font-size: 16px;
+            color: var(--accent-color);
         }
 
         .regi_form_container form .user_input_box select {
             width: 100%;
             padding: 10px 0px 10px 0px;
             border: none;
-            border-bottom: 2px solid #ccc;
+            border-bottom: 2px solid var(--accent-color);
             background-color: #F5F5F5;
             font-size: 16px;
         }
@@ -368,20 +342,20 @@ body {
         top: 35%;
         right: 10%;
         font-size: 20px;
-        color: #048077;
+        color: var(--accent-color);
     }
 
     .regi_form_container form .user_input_box input:focus + label,
     .regi_form_container form .user_input_box input + label {
         top: -10px;
         font-size: 14px;
-        color: #048077;
+        color: var(--accent-color);
         font-weight: 600;
     }
 
 .regi_form_container button {
-    background-color: #048077;
-    color: white;
+    background-color: var(--accent-color);
+    color: var(--contrast-color);
     padding: 10px 100px;
     border-radius: 5px;
     cursor: pointer;
@@ -390,10 +364,16 @@ body {
     margin: 15px 0px 20px 0px;
     border: none;
     font-size: 16px;
+    &:hover
+
+{
+    background-color: var(--button-hover-bg-color);
+}
+
 }
 
 .regi_form_container form a {
-    color: #048077;
+    color: var(--accent-color);
     text-decoration: none;
     font-weight: 600;
     font-size: 14px;
@@ -401,7 +381,7 @@ body {
     &:hover
 
 {
-    color: #3784b1;
+    color: var(--button-hover-bg-color);
     text-decoration: underline;
 }
 
@@ -447,17 +427,18 @@ body {
     top: 0;
     left: 30%;
     padding: 19px 20px;
-    background-color: #048077;
+    background-color: var(--accent-color);
     border-radius: 5px;
-    color: white;
+    color: var(--contrast-color);
     cursor: pointer;
     font-size: 10px;
 }
+
 &:hover {
     &:before
 
 {
-    background-color: #3784b1;
+    background-color: var(--button-hover-bg-color);
 }
 
 }
@@ -469,23 +450,24 @@ body {
     &:before
 
 {
-    content: ' Upload Medical License Photo'; 
+    content: ' Upload Medical License Photo';
     position: absolute;
     top: 0;
     left: 30%;
     padding: 19px 20px;
-    background-color: #048077;
+    background-color: var(--accent-color);
     border-radius: 5px;
-    color: white;
+    color: var(--contrast-color);
     cursor: pointer;
     font-size: 10px;
 }
+
 Upload Medical License Photo
 &:hover {
     &:before
 
 {
-    background-color: #3784b1;
+    background-color: var(--button-hover-bg-color);
 }
 
 }
@@ -514,8 +496,8 @@ Upload Medical License Photo
 }
 
 .tag {
-    background-color: #4caf50;
-    color: white;
+    background-color: var(--accent-color);
+    color: var(--contrast-color);
     padding: 5px 10px;
     border-radius: 15px;
     display: flex;

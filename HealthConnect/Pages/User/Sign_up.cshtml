@@ -110,7 +110,7 @@
             <div>Role</div>
              <div class="user_filsd_wrep"> 
                 <div class="user_input_box radio">
-                    <input class="patient_radio" type="radio" name="role" value="Patient" required />
+                    <input class="patient_radio" type="radio" name="role" value="User" required />
                     <input class="doctor_radio" type="radio" name="role" value="Doctor" required />
                 </div>
                 <p class="error"></p>
@@ -119,14 +119,14 @@
 
             <div class="user_filsd_wrep">
                 <div class="user_input_box">
-                    <input type="password" name="password" placeholder="Password" required>
+                    <input type="password" class="password-input" name="password" placeholder="Password" required>
                     <label>Password</label>
                     <i class="fa-regular fa-eye"></i>
                 </div>
                 <p class="error"></p>
 
                 <div class="user_input_box">
-                    <input type="password" name="confirm_password" placeholder="Confirm Password" required>
+                    <input type="password" class="password-input" name="confirm_password" placeholder="Confirm Password" required>
                     <label>Confirm Password</label>
                     <i class="fa-regular fa-eye"></i>
                 </div>
@@ -146,6 +146,26 @@
         <p class="error_message">@Model.ErrorMessage</p>
     }
 
+
+
+
+    <script>
+                document.addEventListener('DOMContentLoaded', () => {
+            const passwordInputs = document.querySelectorAll('.password-input');
+            const toggleIcons = document.querySelectorAll('.fa-eye');
+
+            toggleIcons.forEach((icon, index) => {
+                icon.addEventListener('click', () => {
+                    const input = passwordInputs[index];
+                    const isPasswordVisible = input.type === 'text';
+                    input.type = isPasswordVisible ? 'password' : 'text';
+                    icon.classList.toggle('fa-eye-slash', !isPasswordVisible);
+                    icon.classList.toggle('fa-eye', isPasswordVisible);
+                });
+            });
+        });
+
+    </script>
 
     <script>
         document.querySelector('form').addEventListener('submit', function(event) {
