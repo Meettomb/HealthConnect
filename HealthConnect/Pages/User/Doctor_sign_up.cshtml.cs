@@ -137,6 +137,7 @@ namespace HealthConnect.Pages.User
             doctor_Approvel.languages_spoken = string.Join(", ", Request.Form["languages_spoken"]);
             doctor_Approvel.clinic_or_hospital_address = Request.Form["clinic_or_hospital_address"];
             doctor_Approvel.consultation_fee = Request.Form["consultation_fee"];
+            doctor_Approvel.medicine_type = Request.Form["medicine_type"];
             doctor_Approvel.account_create_date = DateTime.Now;
 
             // Save data to database (Note: you will need to use your custom data access method since you're not using DbContext)
@@ -178,11 +179,11 @@ namespace HealthConnect.Pages.User
                 var query = @"INSERT INTO Doctor_approvel 
                     (first_name, last_name, email, mobil_no, dob, House_number_and_Street_name, country, city, state, pincode, gender, role, password, 
                      medical_registration_no, state_medical_council, year_of_registration, doctore_experience, hospital_or_clinic, doctor_qualifications, 
-                     doctor_type, languages_spoken, clinic_or_hospital_address, consultation_fee, account_create_date, profile_pic, doctore_medical_license_photo, isactive)
+                     doctor_type, languages_spoken, clinic_or_hospital_address, consultation_fee, account_create_date, profile_pic, doctore_medical_license_photo, isactive, medicine_type)
                   VALUES 
                     (@FirstName, @LastName, @Email, @MobilNo, @DOB, @HouseNoStreetName, @Country, @City, @State, @Pincode, @Gender, @Role, @Password, 
                      @MedicalRegistrationNo, @StateMedicalCouncil, @YearOfRegistration, @DoctorExperience, @HospitalOrClinic, @DoctorQualifications, 
-                     @DoctorType, @LanguagesSpoken, @ClinicOrHospitalAddress, @ConsultationFee, @AccountCreateDate, @ProfilePic, @MedicalLicensePhoto, @IsActive)";
+                     @DoctorType, @LanguagesSpoken, @ClinicOrHospitalAddress, @ConsultationFee, @AccountCreateDate, @ProfilePic, @MedicalLicensePhoto, @IsActive, @Medicine_type)";
 
                 using (var command = new SqlCommand(query, connection))
                 {
@@ -212,6 +213,7 @@ namespace HealthConnect.Pages.User
                     command.Parameters.AddWithValue("@AccountCreateDate", doctor_Approvel.account_create_date);
                     command.Parameters.AddWithValue("@ProfilePic", doctor_Approvel.profile_pic);
                     command.Parameters.AddWithValue("@MedicalLicensePhoto", doctor_Approvel.doctore_medical_license_photo);
+                    command.Parameters.AddWithValue("@Medicine_type", doctor_Approvel.medicine_type);
                     command.Parameters.AddWithValue("@IsActive", false);
 
                     int rowsAffected = await command.ExecuteNonQueryAsync();

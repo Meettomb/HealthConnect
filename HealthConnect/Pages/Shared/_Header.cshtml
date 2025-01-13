@@ -10,6 +10,10 @@
 
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css">
 
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@100..900&family=Sofia+Sans+Condensed:ital,wght@0,1..1000;1,1..1000&display=swap" rel="stylesheet">
+
 </head>
 <body>
     <header id="header">
@@ -63,6 +67,60 @@
                     </div>
                 </div>
 
+                <div class="login_and_profile">
+
+                    @if (Model.UserId == null)
+                    {
+                        <a class="header_login_button" href="/User/Sign_in">Login</a>
+                    }
+                    else
+                    {
+                        <div class="header_user_icon_drop_down">
+                            <div class="header_user_icon">
+                                <i class="fa-solid fa-user"></i>
+                            </div>
+                            <div class="header_user_services">
+                                <section>
+                                    <a href="#">
+                                        <i class="fa-solid fa-gear"></i> Settings
+                                    </a>
+                                    <a href="/User/Logout">
+                                        <i class="fa-solid fa-right-from-bracket"></i> Logout
+                                    </a>
+                                </section>
+                            </div>
+                        </div>
+                    }
+
+                </div>
+
+            </div>
+            <div class="hamburger_container">
+                <div class="baar">
+                    <i class="fa-solid fa-bars"></i>
+                </div>
+                <div class="hamburger_container_link" id="hamburger_container_link">
+                    <ul>
+                        <li><a href="#">Home</a></li>
+                        <li><a href="#">Blog</a></li>
+                        <li class="S_by_S">Search by Speciality</li>
+                        <div class="hamburgar_Search_by_Speciality" style="display: none;">
+                            <a href="#">1</a>
+                            <a href="#">1</a>
+                        </div>
+                        <li class="S_by_C">Search by Condition</li>
+                        <div class="hamburgar_Search_by_Condition" style="display: none;">
+                            <a href="#">2</a>
+                            <a href="#">2</a>
+                        </div>
+                        <li class="S_by_City">Search by City</li>
+                        <div class="hamburgar_Search_by_City" style="display: none;">
+                            <a href="#">3</a>
+                            <a href="#">3</a>
+                        </div>
+                    </ul>
+                </div>
+
                 @if (Model.UserId == null)
                 {
                     <a class="header_login_button" href="/User/Sign_in">Login</a>
@@ -70,10 +128,10 @@
                 else
                 {
                     <div class="header_user_icon_drop_down">
-                        <div class="header_user_icon">
+                        <div class="header_user_icon2">
                             <i class="fa-solid fa-user"></i>
                         </div>
-                        <div class="header_user_services">
+                        <div class="header_user_services2">
                             <section>
                                 <a href="#">
                                     <i class="fa-solid fa-gear"></i> Settings
@@ -85,11 +143,9 @@
                         </div>
                     </div>
                 }
-
-
-
             </div>
 
+           
         </nav>
     </header>
 
@@ -103,13 +159,40 @@
 
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <script>
+               $(document).ready(function() {
+            // Toggle entire hamburger menu
+            $('.baar').click(function() {
+                $('.hamburger_container_link').slideToggle(300);
+            });
+
+            // Toggle "Search by Speciality"
+            $('.S_by_S').click(function() {
+                $('.hamburgar_Search_by_Speciality').slideToggle(300);
+            });
+
+            // Toggle "Search by Condition"
+            $('.S_by_C').click(function() {
+                $('.hamburgar_Search_by_Condition').slideToggle(300);
+            });
+
+            // Toggle "Search by City"
+            $('.S_by_City').click(function() {
+                $('.hamburgar_Search_by_City').slideToggle(300);
+            });
+        });
+
+    </script>
+
+
+
+    <script>
                $(document).ready(function () {
             // Toggle Search by Speciality
             $(".Speciality_drop_down p").on("click", function () {
                 $(".Search_by_Speciality").slideToggle();
                 const icon = $(this).find(".toggle-icon1");
                 const currentRotation = icon.data("rotation") || 0;
-                const newRotation = (currentRotation + 180) % 360; // Toggle between 0 and 180 degrees
+                const newRotation = (currentRotation + 180) % 360;
                 icon.css("transform", `rotate(${newRotation}deg)`);
                 icon.data("rotation", newRotation);
 
@@ -150,6 +233,7 @@
                 // Close other dropdowns
                 $(".Search_by_Speciality, .Search_by_Condition, .Search_by_city").slideUp();
             });
+
 
             // Close dropdowns if clicked outside
             $(document).on("click", function (e) {

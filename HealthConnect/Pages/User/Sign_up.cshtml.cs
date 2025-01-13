@@ -33,11 +33,11 @@ namespace HealthConnect.Pages.User
 
         public async Task<IActionResult> OnPostAsync()
         {
-            if (!ModelState.IsValid)
-            {
-                ErrorMessage = "Please fill out all required fields.";
-                return Page();
-            }
+            //if (!ModelState.IsValid)
+            //{
+            //    ErrorMessage = "Please fill out all required fields.";
+            //    return Page();
+            //}
 
             using (SqlConnection connection = new SqlConnection(_connectionString))
             {

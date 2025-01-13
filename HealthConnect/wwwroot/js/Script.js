@@ -1,16 +1,21 @@
 ﻿// header Scroll script
 
-const header = document.getElementById('header');
+const header = document.querySelector('#header');
+const hamburgerLink = document.querySelector('.hamburger_container_link');
 
-window.addEventListener('scroll', function () {
+window.addEventListener('scroll', () => {
     const scrollPosition = window.pageYOffset || document.documentElement.scrollTop;
 
     if (scrollPosition > 100) {
         header.classList.add('scrolled');
+        //hamburgerLink.classList.add('hamburgerLink_scroll');
     } else {
         header.classList.remove('scrolled');
+        //hamburgerLink.classList.remove('hamburgerLink_scroll');
     }
 });
+
+
 
 document.addEventListener('DOMContentLoaded', () => {
     const passwordInput = document.getElementById('password');

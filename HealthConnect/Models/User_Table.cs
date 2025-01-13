@@ -40,6 +40,7 @@ namespace HealthConnect.Models
         public bool isactive { get; set; }
         public bool? mobail_verifie { get; set; }
         public string? auth_token { get; set; }
+        public string? medicine_type { get; set; }
     }
 
 }

@@ -34,5 +34,6 @@
         public bool? account_approve { get; set; }
         public DateTime account_create_date { get; set; } = DateTime.Now;
         public bool isactive { get; set; }
+        public string medicine_type { get; set; }
     }
 }

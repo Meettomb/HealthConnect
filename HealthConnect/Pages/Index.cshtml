@@ -18,23 +18,61 @@
 </head>
 <body>
     <main>
+
         <section class="index_section_1">
-            <div class="slider_div">
-                <img src="/images/slider_image2.jpg" />
+            <div class="slider">
+                <p class="welcome_text1">
+                    Welcome to HealtConnect
+                </p>
+                <p class="welcome_text2">
+                    Your health is our pryority
+                </p>
+
+                <div class="whay_us_conteainer">
+                    <div class="why_us">
+                        <div class="why_choose_us_left">
+                            <h2>Why Choose HealthConnect?</h2>
+                            <p>
+                                HealthConnect offers trusted, secure, and convenient healthcare services.
+                                Enjoy easy appointment booking, digital prescriptions, and personalized care to meet your needs.
+                                From general consultations to specialist support, we keep you connected to quality healthcare.
+                            </p>
+
+                            <a href="#About">Learn More <i class="fa-solid fa-chevron-right"></i></a>
+                        </div>
+
+                        <div class="why_choose_us_right">
+                            <div class="why_choose_us_detail">
+                                <p><i class="fa-solid fa-stethoscope"></i></p>
+                                <h3>Verified Doctors</h3>
+                                <p>All doctors associated with HealthConnect are highly qualified, certified, and verified to ensure you receive trusted medical advice.</p>
+                            </div>
+
+                            <div class="why_choose_us_detail">
+                                <p><i class="fa-solid fa-shield-halved"></i></p>
+                                <h3>Complete Security</h3>
+                                <p>Your data is protected with industry-leading security. We prioritize 100% privacy of your health records and offer secure payment processing.</p>
+                            </div>
+
+                            <div class="why_choose_us_detail">
+                                <p><i class="fa-solid fa-square-phone"></i></p>
+                                <h3>24/7 Support</h3>
+                                <p>Our dedicated support team is available round the clock to assist you with any queries, ensuring a smooth and stress-free experience.</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
             </div>
-            <p>
-                Welcome to HealtConnect
-            </p>
         </section>
 
         <section class="index_section_2">
+            <h1>Welcome! Your User ID is: @Model.UserId</h1>
         </section>
 
     </main>
 
 
 
-    <h1>Welcome! Your User ID is: @Model.UserId</h1>
     @if (!string.IsNullOrEmpty(Model.ErrorMessage))
     {
         <div class="error_message">@Model.ErrorMessage</div>

@@ -95,7 +95,8 @@ namespace HealthConnect.Pages.Admin.UserData.UserList
                                 account_approve = !reader.IsDBNull(26) ? reader.GetBoolean(26) : false, // Default false if null
                                 account_create_date = !reader.IsDBNull(27) ? reader.GetDateTime(27) : DateTime.Now,
                                 block = reader.GetBoolean(28),
-                                isactive = reader.GetBoolean(29)
+                                isactive = reader.GetBoolean(29),
+                                medicine_type = !reader.IsDBNull(32) ? reader.GetString(32) : null,
                             };
 
                         }
@@ -105,7 +106,7 @@ namespace HealthConnect.Pages.Admin.UserData.UserList
 
             if (userTable == null)
             {
-                return NotFound(); // Handle no record found
+                return NotFound();
             }
 
             User_Table = userTable;

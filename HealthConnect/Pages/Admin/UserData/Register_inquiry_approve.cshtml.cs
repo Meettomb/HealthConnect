@@ -96,7 +96,8 @@ namespace HealthConnect.Pages.Admin.UserData
                                 consultation_fee = reader.GetString(25),
                                 account_approve = !reader.IsDBNull(26) ? reader.GetBoolean(26) : (bool?)null,
                                 account_create_date = !reader.IsDBNull(27) ? DateTime.Parse(reader.GetString(27)) : DateTime.Now,
-                                isactive = reader.GetBoolean(28)
+                                isactive = reader.GetBoolean(28),
+                                medicine_type = reader.GetString(29)
                             };
                         }
                     }
@@ -104,7 +105,7 @@ namespace HealthConnect.Pages.Admin.UserData
             }
             if (doctor == null)
             {
-                return NotFound(); // Handle no record found
+                return NotFound();
             }
 
             Doctor_approvel = doctor;
@@ -118,7 +119,6 @@ namespace HealthConnect.Pages.Admin.UserData
             {
                 connection.Open();
 
-                // Retrieve Doctor_approvel data
                 var command = new SqlCommand("SELECT * FROM Doctor_approvel WHERE doctor_approvel_id = @Id", connection);
                 command.Parameters.AddWithValue("@Id", doctor_approvel_id);
                 var reader = command.ExecuteReader();
@@ -156,12 +156,12 @@ namespace HealthConnect.Pages.Admin.UserData
                         account_create_date = DateTime.Now,
                         isactive = true,
                         block = false,
-                        mobail_verifie = false
+                        mobail_verifie = false,
+                        medicine_type = reader.IsDBNull(29) ? null : reader.GetString(29),
                     };
                     reader.Close();
 
-                    // Insert into User_Table
-                    var insertCommand = new SqlCommand("INSERT INTO User_Table (first_name, last_name, email, mobil_no, dob, House_number_and_Street_name, country, city, state, pincode, gender, role, password, profile_pic, doctore_medical_license_photo, medical_registration_no, state_medical_council, year_of_registration, doctore_experience, hospital_or_clinic, doctor_qualifications, doctor_type, languages_spoken, clinic_or_hospital_address, consultation_fee, account_approve, account_create_date, isactive, block, mobail_verifie) VALUES (@FirstName, @LastName, @Email, @MobileNo, @Dob, @Address, @Country, @City, @State, @Pincode, @Gender, @Role, @Password, @ProfilePic, @MedicalLicensePhoto, @MedicalRegNo, @StateMedicalCouncil, @YearOfRegistration, @Experience, @HospitalClinic, @Qualifications, @DoctorType, @Languages, @ClinicAddress, @Fee, @Approve, @CreateDate, @IsActive, @Block, @Mobail_verifie)", connection);
+                    var insertCommand = new SqlCommand("INSERT INTO User_Table (first_name, last_name, email, mobil_no, dob, House_number_and_Street_name, country, city, state, pincode, gender, role, password, profile_pic, doctore_medical_license_photo, medical_registration_no, state_medical_council, year_of_registration, doctore_experience, hospital_or_clinic, doctor_qualifications, doctor_type, languages_spoken, clinic_or_hospital_address, consultation_fee, account_approve, account_create_date, isactive, block, mobail_verifie, medicine_type) VALUES (@FirstName, @LastName, @Email, @MobileNo, @Dob, @Address, @Country, @City, @State, @Pincode, @Gender, @Role, @Password, @ProfilePic, @MedicalLicensePhoto, @MedicalRegNo, @StateMedicalCouncil, @YearOfRegistration, @Experience, @HospitalClinic, @Qualifications, @DoctorType, @Languages, @ClinicAddress, @Fee, @Approve, @CreateDate, @IsActive, @Block, @Mobail_verifie, @Medicine_type)", connection);
                     insertCommand.Parameters.AddWithValue("@FirstName", doctor.first_name);
                     insertCommand.Parameters.AddWithValue("@LastName", doctor.last_name);
                     insertCommand.Parameters.AddWithValue("@Email", doctor.email);
@@ -192,17 +192,17 @@ namespace HealthConnect.Pages.Admin.UserData
                     insertCommand.Parameters.AddWithValue("@IsActive", doctor.isactive);
                     insertCommand.Parameters.AddWithValue("@Block", doctor.block);
                     insertCommand.Parameters.AddWithValue("@Mobail_verifie", doctor.mobail_verifie);
+                    insertCommand.Parameters.AddWithValue("@Medicine_type", (object)doctor.medicine_type ?? DBNull.Value);
 
                     insertCommand.ExecuteNonQuery();
 
-                    // Update Doctor_approvel
                     var updateCommand = new SqlCommand("UPDATE Doctor_approvel SET isactive = @IsActive, account_approve = @Approve WHERE doctor_approvel_id = @Id", connection);
                     updateCommand.Parameters.AddWithValue("@IsActive", true);
                     updateCommand.Parameters.AddWithValue("@Approve", true);
                     updateCommand.Parameters.AddWithValue("@Id", doctor_approvel_id);
                     updateCommand.ExecuteNonQuery();
 
-                    SendApprovalEmail(doctor.email);  // Call method to send an email
+                    SendApprovalEmail(doctor.email);  
                 }
             }
             return RedirectToPage("/Admin/UserData/Register_inquiry");
@@ -234,8 +234,8 @@ namespace HealthConnect.Pages.Admin.UserData
                 var command = new SqlCommand("SELECT email FROM Doctor_approvel WHERE doctor_approvel_id = @Id", connection);
                 command.Parameters.AddWithValue("@Id", doctor_approvel_id);
 
-                var result = command.ExecuteScalar();  // ExecuteScalar will return the first column of the first row
-                return result?.ToString();  // Return the email as a string
+                var result = command.ExecuteScalar(); 
+                return result?.ToString();
             }
         }
 
@@ -244,7 +244,7 @@ namespace HealthConnect.Pages.Admin.UserData
             string emailBody = "Your account will be rejected. Thank you";
 
             var emailSent = await _emailService.SendEmailAsync(
-                email, // now passing the correct email string
+                email,
                 "Doctor Registration Verification",
                 emailBody
             );
@@ -254,9 +254,8 @@ namespace HealthConnect.Pages.Admin.UserData
         {
             string emailBody = "Your account will be activated. Thank you";
 
-            // Ensure doctor_Approvel is valid and contains an 'email' property
             var emailSent = await _emailService.SendEmailAsync(
-                email, // assuming you want to send the email to the provided 'email' parameter
+                email, 
                 "Doctor Registration Verification",
                 emailBody
             );
