@@ -24,8 +24,9 @@ namespace HealthConnect.Pages.Admin.UserData.UserList
         public int? UserId { get; set; }
         public string? FirstName { get; set; }
         public string? LastName { get; set; }
+        public string? Role { get; set; }
         public string? ProfilePic { get; set; }
-        public void OnGet()
+        public IActionResult OnGet()
         {
             UserId = HttpContext.Session.GetInt32("Id");
             if (UserId.HasValue)
@@ -44,12 +45,22 @@ namespace HealthConnect.Pages.Admin.UserData.UserList
                                 FirstName = reader["first_name"].ToString();
                                 LastName = reader["last_name"].ToString();
                                 ProfilePic = reader["profile_pic"].ToString();
-                                UserId = (int?)reader["id"];
+                                Role = reader["role"].ToString();
+                                UserId = reader["id"] as int?;
                             }
                         }
                         con.Close();
                     }
                 }
+
+                if (Role != "Admin")
+                {
+                    return RedirectToPage("/index");
+                }
+            }
+            else
+            {
+                return RedirectToPage("/index");
             }
             using SqlConnection connection = new SqlConnection(_connectionString);
             {
@@ -88,6 +99,7 @@ namespace HealthConnect.Pages.Admin.UserData.UserList
                     connection.Close();
                 }
             }
+            return Page();
         }
 
     }

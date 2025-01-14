@@ -4,6 +4,7 @@ using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.Data.SqlClient;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
+using System.Data;
 
 namespace HealthConnect.Pages
 {
@@ -17,6 +18,10 @@ namespace HealthConnect.Pages
         public User_Table User { get; set; }
 
         public int? UserId { get; set; }
+        public string FirstName{ get; set; }
+        public string LastName{ get; set; }
+        public string ProfilePic { get; set; }
+        public string Role { get; set; }
         public string ErrorMessage { get; set; }
         public string SuccessMessage { get; set; }
 
@@ -32,14 +37,34 @@ namespace HealthConnect.Pages
             string roleInSession = HttpContext.Session.GetString("UserRole");
 
             UserId = HttpContext.Session.GetInt32("Id");
+            if (UserId.HasValue)
+            {
+                using (SqlConnection con = new SqlConnection(_connectionString))
+                {
+                    string query = "SELECT * FROM User_Table WHERE id = @UserId";
+                    using (SqlCommand cmd = new SqlCommand(query, con))
+                    {
+                        cmd.Parameters.AddWithValue("@UserId", UserId.Value);
+                        con.Open();
+                        using (SqlDataReader reader = cmd.ExecuteReader())
+                        {
+                            if (reader.Read())
+                            {
+                                FirstName = reader["first_name"].ToString();
+                                LastName = reader["last_name"].ToString();
+                                ProfilePic = reader["profile_pic"].ToString();
+                                Role = reader["role"].ToString();
+                                UserId = (int?)reader["id"];
+                            }
+                        }
+                        con.Close();
+                    }
+                }
+            }
 
             if (UserId.HasValue && !string.IsNullOrEmpty(roleInSession))
             {
-                if (roleInSession == "Admin")
-                {
-                    return RedirectToPage("/Admin/Admin_index");
-                }
-                else if (roleInSession == "User" || roleInSession == "Doctor")
+                if (roleInSession == "User" || roleInSession == "Doctor" || roleInSession == "Admin")
                 {
                     return Page();
                 }

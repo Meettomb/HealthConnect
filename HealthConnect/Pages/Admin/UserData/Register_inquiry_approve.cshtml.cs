@@ -4,6 +4,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.Data.SqlClient;
 using Microsoft.Extensions.Options;
+using System.Data;
 using System.Net.Mail;
 
 namespace HealthConnect.Pages.Admin.UserData
@@ -20,6 +21,7 @@ namespace HealthConnect.Pages.Admin.UserData
         private readonly string _connectionString;
         public string FirstName { get; set; }
         public string LastName { get; set; }
+        public string Role { get; set; }
         public string ProfilePic { get; set; }
         public Register_inquiry_approveModel(IEmailService emailService, IOptions<EmailSettings> emailSettings, IConfiguration configuration)
         {
@@ -47,12 +49,22 @@ namespace HealthConnect.Pages.Admin.UserData
                                 FirstName = reader["first_name"].ToString();
                                 LastName = reader["last_name"].ToString();
                                 ProfilePic = reader["profile_pic"].ToString();
-                                UserId = (int?)reader["id"];
+                                Role = reader["role"].ToString();
+                                UserId = reader["id"] as int?;
                             }
                         }
                         con.Close();
                     }
                 }
+
+                if (Role != "Admin")
+                {
+                    return RedirectToPage("/index");
+                }
+            }
+            else
+            {
+                return RedirectToPage("/index");
             }
             Doctor_approvel doctor = null;
             using (SqlConnection connection = new SqlConnection(_connectionString))

@@ -199,7 +199,7 @@ namespace HealthConnect.Pages.OTPVerify
             // Send a confirmation email after saving to the database
             string subject = "Registration Completed";
             string body = "Your registration is successfully completed on HealthConnect.";
-            string combinedBody = $"{body}\n\nThank you for registering with HealthConnect!\n\nRegards,\nHealthConnect Team";
+            string combinedBody = $"{body}\n\nThank you for registering with HealthConnect!\n\n";
 
             await _emailService.SendEmailAsync(user.email, subject, combinedBody);
         }

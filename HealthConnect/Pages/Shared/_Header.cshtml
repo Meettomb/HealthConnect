@@ -84,6 +84,12 @@
                                     <a href="#">
                                         <i class="fa-solid fa-gear"></i> Settings
                                     </a>
+                                    @if (Model.Role == "Admin")
+                                    {
+                                        <a href="/Admin/Admin_index">
+                                            <i class="fa-solid fa-user-tie"></i> Admin side
+                                        </a>
+                                    }
                                     <a href="/User/Logout">
                                         <i class="fa-solid fa-right-from-bracket"></i> Logout
                                     </a>
@@ -136,6 +142,12 @@
                                 <a href="#">
                                     <i class="fa-solid fa-gear"></i> Settings
                                 </a>
+                                @if (Model.Role == "Admin"){
+                                    <a href="/Admin/Admin_index">
+                                        <i class="fa-solid fa-user-tie"></i> Admin side
+                                    </a>
+                                }
+                                
                                 <a href="/User/Logout">
                                     <i class="fa-solid fa-right-from-bracket"></i> Logout
                                 </a>
@@ -178,6 +190,11 @@
             // Toggle "Search by City"
             $('.S_by_City').click(function() {
                 $('.hamburgar_Search_by_City').slideToggle(300);
+            });
+            
+            // Toggle "User section"
+            $('.header_user_icon2').click(function() {
+                $('.header_user_services2').slideToggle(300);
             });
         });
 
