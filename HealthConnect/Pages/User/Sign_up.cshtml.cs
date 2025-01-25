@@ -27,9 +27,94 @@ namespace HealthConnect.Pages.User
 
         public string ErrorMessage { get; set; }
 
-        public void OnGet()
+        public int? UserId { get; set; }
+
+        public IActionResult OnGet()
         {
+            UserId = HttpContext.Session.GetInt32("Id");
+            string roleInSession = HttpContext.Session.GetString("UserRole");
+
+            if (UserId.HasValue && !string.IsNullOrEmpty(roleInSession))
+            {
+                if (roleInSession == "Admin")
+                {
+                    return RedirectToPage("/Admin/Admin_index");
+                }
+                else if (roleInSession == "User" || roleInSession == "Doctor")
+                {
+                    return RedirectToPage("/index");
+                }
+                else
+                {
+                    ModelState.AddModelError(string.Empty, "Invalid role in session.");
+                }
+            }
+
+            string deviceId = Request.Cookies["deviceUniqueId"];
+            if (string.IsNullOrEmpty(deviceId))
+            {
+                return Page();
+            }
+
+            using (SqlConnection con = new SqlConnection(_connectionString))
+            {
+                string query = @"SELECT id, first_name, last_name, email, role, isactive 
+                         FROM User_Table 
+                         WHERE ',' + auth_token + ',' LIKE '%,' + @DeviceId + ',%'";
+
+                using (SqlCommand cmd = new SqlCommand(query, con))
+                {
+                    cmd.Parameters.AddWithValue("@DeviceId", deviceId);
+                    con.Open();
+                    SqlDataReader reader = cmd.ExecuteReader();
+
+                    if (reader.Read())
+                    {
+                        int userId = Convert.ToInt32(reader["id"]);
+                        string firstName = reader["first_name"].ToString();
+                        string lastName = reader["last_name"].ToString();
+                        string email = reader["email"].ToString();
+                        string role = reader["role"].ToString();
+                        bool isActive = Convert.ToBoolean(reader["isactive"]);
+
+                        if (isActive)
+                        {
+                            HttpContext.Session.SetInt32("Id", userId);
+                            HttpContext.Session.SetString("FirstName", firstName);
+                            HttpContext.Session.SetString("LastName", lastName);
+                            HttpContext.Session.SetString("Email", email);
+                            HttpContext.Session.SetString("UserRole", role);
+
+                            // Redirect based on role
+                            if (role == "Admin")
+                            {
+                                return RedirectToPage("/Admin/Admin_index");
+                            }
+                            else if (role == "User" || role == "Doctor")
+                            {
+                                return RedirectToPage("/index");
+                            }
+                            else
+                            {
+                                ModelState.AddModelError(string.Empty, "Invalid role.");
+                            }
+                        }
+                        else
+                        {
+                            ModelState.AddModelError(string.Empty, "Account is not active.");
+                        }
+                    }
+                    else
+                    {
+                        ModelState.AddModelError(string.Empty, "Device not recognized or account not found.");
+                    }
+                }
+            }
+
+            return Page();
         }
+
+
 
         public async Task<IActionResult> OnPostAsync()
         {
@@ -85,6 +170,7 @@ namespace HealthConnect.Pages.User
             HttpContext.Session.SetString("Role", user.role);
             HttpContext.Session.SetString("Password", user.password); 
             HttpContext.Session.SetString("Account_create_date", DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss"));
+            HttpContext.Session.SetString("CurrencyCode", user.currency_code); 
 
 
             if (user.role == "User")

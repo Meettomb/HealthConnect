@@ -47,6 +47,7 @@ namespace HealthConnect.Pages.OTPVerify
         public string Role { get; set; }
         public string Password { get; set; }
         public string Account_create_date { get; set; }
+        public string CurrencyCode { get; set; }
 
         public string SessionOtp { get; set; }
 
@@ -67,6 +68,7 @@ namespace HealthConnect.Pages.OTPVerify
             Role = HttpContext.Session.GetString("Role");
             Password = HttpContext.Session.GetString("Password");
             Account_create_date = HttpContext.Session.GetString("Account_create_date");
+            CurrencyCode = HttpContext.Session.GetString("CurrencyCode");
 
             SessionOtp = HttpContext.Session.GetString("OTP");
 
@@ -149,6 +151,7 @@ namespace HealthConnect.Pages.OTPVerify
                 pincode = HttpContext.Session.GetString("Pincode"),
                 gender = HttpContext.Session.GetString("Gender"),
                 role = HttpContext.Session.GetString("Role"),
+                currency_code = HttpContext.Session.GetString("CurrencyCode"),
                 password = new PasswordHasher<User_Table>().HashPassword(null, HttpContext.Session.GetString("Password")),
                 account_approve = true,
                 isactive = true,
@@ -159,8 +162,8 @@ namespace HealthConnect.Pages.OTPVerify
             using (SqlConnection connection = new SqlConnection(_connectionString))
             {
                 connection.Open();
-                string query = "INSERT INTO User_Table (first_name, last_name, email, mobil_no, dob, House_number_and_Street_name, country, city, state, pincode, gender, role, password, isactive, account_approve, Account_create_date, block, mobail_verifie) " +
-                               "VALUES (@first_name, @last_name, @email, @mobil_no, @dob, @House_number_and_Street_name, @country, @city, @state, @pincode, @gender, @role, @password, @isactive, @account_approve, @Account_create_date, @Block, @Mobail_verifie)";
+                string query = "INSERT INTO User_Table (first_name, last_name, email, mobil_no, dob, House_number_and_Street_name, country, city, state, pincode, gender, role, password, isactive, account_approve, Account_create_date, block, mobail_verifie, currency_code) " +
+                               "VALUES (@first_name, @last_name, @email, @mobil_no, @dob, @House_number_and_Street_name, @country, @city, @state, @pincode, @gender, @role, @password, @isactive, @account_approve, @Account_create_date, @Block, @Mobail_verifie, @Currency_code)";
 
                 using (SqlCommand command = new SqlCommand(query, connection))
                 {
@@ -181,6 +184,7 @@ namespace HealthConnect.Pages.OTPVerify
                     command.Parameters.AddWithValue("@isactive", user.isactive);
                     command.Parameters.AddWithValue("@Block", user.block);
                     command.Parameters.AddWithValue("@Mobail_verifie", user.mobail_verifie);
+                    command.Parameters.AddWithValue("@Currency_code", user.currency_code);
 
                     string accountCreateDateString = HttpContext.Session.GetString("Account_create_date");
                     if (DateTime.TryParse(accountCreateDateString, out DateTime accountCreateDate))

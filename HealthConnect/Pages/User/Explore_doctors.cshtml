@@ -1,0 +1,168 @@
+﻿@page
+@model HealthConnect.Pages.User.Explore_doctorsModel
+@{
+    Layout = "_Header";
+    ViewData["Title"] = "Explore Doctors";
+}
+
+
+<div class="doctor_search_div">
+    <div class="search_doctore">
+        <input type="text" name="name" id="myInput" value="" autocomplete="off" placeholder="Search doctor name" />
+    </div>
+</div>
+
+<section class="explorer_doctor_section1">
+    <div class="filtre_doctor_div">
+        <div class="select_filter">
+            <p>Doctor speciality</p>
+            <select>
+                <option selected disabled>Select doctor speciality</option>
+                <option value="Dermatology">Dermatology</option>
+                <option value="Family Medicine">Family Medicine</option>
+                <option value="Oncology">Oncology</option>
+                <option value="Internal Medicine">Internal Medicine</option>
+                <option value="Geriatrics">Geriatrics</option>
+                <option value="Psychiatry">Psychiatry</option>
+                <option value="Medical Genetics">Medical Genetics</option>
+                <option value="Colorectal Surgery">Colorectal Surgery</option>
+                <option value="Neurology">Neurology</option>
+                <option value="Gastroenterology">Gastroenterology</option>
+                <option value="Endocrinology">Endocrinology</option>
+                <option value="Obstetrics and Gynaecology">Obstetrics and Gynaecology</option>
+                <option value="Hematology">Hematology</option>
+                <option value="Emergency Medicine">Emergency Medicine</option>
+                <option value="Pathology">Pathology</option>
+                <option value="Critical Care Medicine">Critical Care Medicine</option>
+                <option value="Cardiology">Cardiology</option>
+                <option value="Anesthesiology">Anesthesiology</option>
+                <option value="Immunology">Immunology</option>
+                <option value="Pediatrics">Pediatrics</option>
+                <option value="Ophthalmology">Ophthalmology</option>
+                <option value="General Surgery">General Surgery</option>
+                <option value="Diagnostic Radiology">Diagnostic Radiology</option>
+                <option value="Hospice and Palliative Medicine">Hospice and Palliative Medicine</option>
+
+            </select>
+        </div>
+
+        <div class="select_filter">
+            <p>State</p>
+            <select>
+                <option selected disabled>Select State</option>
+            </select>
+        </div>
+
+        <div class="select_filter">
+            <p>City</p>
+            <select>
+                <option selected disabled>Select city</option>
+            </select>
+        </div>
+
+        <div class="select_filter">
+            <p>Gender</p>
+            <select>
+                <option selected disabled>Select Gender</option>
+                <option>Male</option>
+                <option>Female</option>
+            </select>
+        </div>
+
+        <div class="select_filter">
+            <p>Minimum experience</p>
+            <select>
+                <option selected disabled>Select minimum experience</option>
+                <option>1</option>
+                <option>2</option>
+            </select>
+        </div>
+    </div>
+</section>
+
+<section class="explorer_doctor_section2">
+    <div class="all_doctor_div">
+        @if (Model.User_list != null && Model.User_list.Count > 0)
+        {
+            @foreach (var data in Model.User_list)
+            {
+                <div class="all_doctor_single_div data">
+                    <div class="all_doctor_single_div_sides">
+                        <!-- Use data attributes for country and currency code -->
+                        <div class="all_doctor_single_left" data-country="@data.country" data-currency="@data.currency_code">
+                            <img src="/documant/@data.profile_pic" alt="Dr. @data.first_name @data.last_name" />
+                            <p><i class="fa-solid fa-location-dot"></i> @data.country, @data.state, @data.city</p>
+                        </div>
+
+                        <div class="all_doctor_single_middle">
+                            <h1>@data.first_name @data.last_name </h1>
+                            <p>@data.doctor_qualifications </p>
+                            <p>@data.medicine_type</p>
+                            <p>Experience: @data.doctore_experience Years <span></span></p>
+                        </div>
+
+                        <div class="all_doctor_single_right_right">
+                            <p><i class="fa-solid fa-star"></i> 5 Star</p>
+                            <p><i class="fa-solid fa-comments"></i> 20 Review</p>
+
+                            @if (data.hospital_or_clinic == "Clinic")
+                            {
+                                <p class="hospital_or_clinic"><i class="fa-solid fa-house-chimney-medical"></i> @data.hospital_or_clinic</p>
+                            }
+                            else
+                            {
+                                <p class="hospital_or_clinic"><i class="fa-solid fa-hospital"></i> @data.hospital_or_clinic</p>
+                            }
+                            <address>
+                                @data.clinic_or_hospital_address
+                            </address>
+
+                            @if (data.on_site_consultation_fee != null)
+                            {
+                                <p class="fee" id="fee-on-site-@data.country"><strong>@data.on_site_consultation_fee</strong> On site consultation</p>
+                            }
+
+                            @if (data.video_call_consultation_fee != null)
+                            {
+                                <p class="fee" id="fee-video-call-@data.country"><strong>@data.video_call_consultation_fee</strong> Video consultation</p>
+                            }
+                        </div>
+                    </div>
+
+                    <div class="all_doctor_single_div_comunication_option">
+                        @if (data.hospital_or_clinic == "Clinic")
+                        {
+                            <p><i class="fa-solid fa-house-chimney-medical"></i><span id="fee-hospital-or-clinic-@data.country">$@data.on_site_consultation_fee</span></p>
+                        }
+                        else
+                        {
+                            <p><i class="fa-solid fa-hospital"></i><span id="fee-hospital-or-clinic-@data.country">@data.on_site_consultation_fee</span></p>
+                        }
+
+                        <p><a href="#"><i class="fa-brands fa-rocketchat"></i> Chat</a></p>
+
+                        @if (data.video_call_consultation_fee != null)
+                        {
+                            <p><a href="#"><i class="fa-solid fa-video"></i> Video call</a></p>
+                        }
+                        else
+                        {
+                            <p><a href="#" class="disabled-link"><i class="fa-solid fa-video"></i> Video call</a></p>
+                        }
+
+                        <p><a href="#"><i class="fa-regular fa-calendar-days"></i> Book Appointment</a></p>
+                        <p><a href="#"><i class="fa-solid fa-user-doctor"></i> View profile</a></p>
+                    </div>
+                </div>
+            }
+
+          
+        }
+        else
+        {
+            <p>No doctors found.</p>
+        }
+    </div>
+</section>
+
+

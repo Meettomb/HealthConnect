@@ -102,12 +102,14 @@ namespace HealthConnect.Pages.Admin.UserData.UserList
                                 doctor_type = !reader.IsDBNull(22) ? reader.GetString(22) : null,
                                 languages_spoken = !reader.IsDBNull(23) ? reader.GetString(23) : null,
                                 clinic_or_hospital_address = !reader.IsDBNull(24) ? reader.GetString(24) : null,
-                                consultation_fee = !reader.IsDBNull(25) ? reader.GetString(25) : null,
-                                account_approve = !reader.IsDBNull(26) ? reader.GetBoolean(26) : false, // Default false if null
+                                on_site_consultation_fee = !reader.IsDBNull(25) ? reader.GetString(25) : null,
+                                account_approve = !reader.IsDBNull(26) ? reader.GetBoolean(26) : false, 
                                 account_create_date = !reader.IsDBNull(27) ? reader.GetDateTime(27) : DateTime.Now,
                                 block = reader.GetBoolean(28),
                                 isactive = reader.GetBoolean(29),
                                 medicine_type = !reader.IsDBNull(32) ? reader.GetString(32) : null,
+                                currency_code = !reader.IsDBNull(33) ? reader.GetString(33) : null,
+                                video_call_consultation_fee = !reader.IsDBNull(34) ? reader.GetString(34) : null,
                             };
 
                         }

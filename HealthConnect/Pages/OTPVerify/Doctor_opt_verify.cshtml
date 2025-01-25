@@ -5,6 +5,13 @@
     Layout = "~/Pages/Shared/_OtpVerify.cshtml";
 }
 
+<style>
+    #timer {
+        float: right;
+        margin: 10px 0;
+    }
+</style>
+
 <div class="opt_verify_container">
     <h1>Verify you OTP</h1>
     <p>Enter the OTP sent to your email</p>
@@ -15,6 +22,8 @@
         </div>
 
         <button type="submit" name="submit">Verify</button>
+
+        <div id="timer"></div>
     </form>
 </div>
 @if (!string.IsNullOrEmpty(Model.ErrorMessage))
@@ -47,4 +56,27 @@
             alert('An error occurred: ' + error);
         });
     }
+</script>
+
+
+
+<script>
+    window.onload = function() {
+        let timeLeft = 120;
+        const timerDisplay = document.getElementById('timer');
+
+        const timerInterval = setInterval(function() {
+            const minutes = Math.floor(timeLeft / 60);
+            const seconds = timeLeft % 60;
+
+            timerDisplay.textContent = `Time Left: ${minutes}:${seconds < 10 ? '0' : ''}${seconds}`;
+
+            if (timeLeft <= 0) {
+                clearInterval(timerInterval);
+                timerDisplay.textContent = 'Time Expired';
+            }
+
+            timeLeft--;
+        }, 1000);
+    };
 </script>

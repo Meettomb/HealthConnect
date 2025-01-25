@@ -20,7 +20,7 @@
 <body class="login_body">
     <div class="back_button" onclick="history.back()"><i class="fa-solid fa-arrow-left"></i></div>
 
-  
+
 
 
 
@@ -30,13 +30,11 @@
                 <h4>Continue yor Registration process</h4>
             </div>
             <div class="user_filsd_wrep">
-                <!-- Profile Picture Input -->
                 <div class="user_input_box">
                     <input type="file" id="profilePicInput" name="profile_pic" accept="image/*" required>
                 </div>
                 <p class="error"></p>
 
-                <!-- Medical License Input -->
                 <div class="user_input_box">
                     <input type="file" id="licensePhotoInput" name="doctore_medical_license_photo" accept="image/*" required>
                 </div>
@@ -72,22 +70,6 @@
             </div>
 
 
-
-            <div class="user_filsd_wrep">
-                <div class="user_input_box">
-                    <select id="" name="medicine_type" required>
-                        <option value="" disabled selected>Select your medicine type</option>
-                        <option value="Ayurvedic medicine">Ayurvedic medicine</option>
-                        <option value="Homeopathy medicine">Homeopathy medicine</option>
-                        <option value="Allopathy medicine">Allopathy medicine</option>
-                    </select>
-                </div>
-                <p class="error"></p>
-
-            </div>
-
-
-
             <div class="user_filsd_wrep">
                 <div class="user_input_box">
                     <input type="text" name="medical_registration_no" placeholder="Medical Registration No" required>
@@ -96,14 +78,21 @@
                 <p class="error"></p>
 
                 <div class="user_input_box">
-                    <input type="text" name="doctore_experience" placeholder="5 Years" required>
-                    <label>Doctore experience</label>
+
+                    <select id="YearOfRegistration" name="doctore_experience" required>
+                        <option value="" disabled selected>Select passing year</option>
+                        @for (int yearOption = DateTime.Now.Year; yearOption >= 1900; yearOption--)
+                        {
+                            <option value="@yearOption">@yearOption</option>
+                        }
+                    </select>
                 </div>
                 <p class="error"></p>
             </div>
 
 
             <div class="user_filsd_wrep">
+
                 <div class="user_input_box">
                     <select name="hospital_or_clinic" required>
                         <option value="" disabled selected>Select Hospital or Clinic</option>
@@ -112,23 +101,12 @@
                     </select>
                 </div>
                 <p class="error"></p>
-                <div class="user_input_box">
-                    <select name="doctor_qualifications" required>
-                        <option value="" disabled selected>Select your Qualifications</option>
-                        <option value="MBBS (Bachelor of Medicine, Bachelor of Surgery)">MBBS (Bachelor of Medicine, Bachelor of Surgery)</option>
-                        <option value="MD (Doctor of Medicine)">MD (Doctor of Medicine)</option>
-                        <option value="DO (Doctor of Osteopathic Medicine)">DO (Doctor of Osteopathic Medicine)</option>
-                        <option value="MS (Master of Surgery)">MS (Master of Surgery)</option>
-                        <option value="DM (Doctorate of Medicine)">DM (Doctorate of Medicine)</option>
-                        <option value="MCh (Magister Chirurgiae)">MCh (Magister Chirurgiae)</option>
-                    </select>
-                </div>
-                <p class="error"></p>
+
             </div>
 
-            <div class="user_filsd_wrep">
-                <!-- Doctor Type Selection -->
-                <div class="user_input_box">
+            <div class="user_multiple_filsd_wrep">
+                <label>Select doctor type</label>
+                <div class="user_select_box">
                     <select id="doctorTypeSelect" name="doctor_type" multiple required>
                         <option value="General Physician">General Physician</option>
                         <option value="Family Doctor">Family Doctor</option>
@@ -138,13 +116,11 @@
                     </select>
                 </div>
                 <div id="doctorTypeTags" class="tags-container"></div>
-
-
             </div>
 
-            <div class="user_filsd_wrep">
-                <!-- Languages Spoken Selection -->
-                <div class="user_input_box">
+            <div class="user_multiple_filsd_wrep">
+                <label>Select your langauge</label>
+                <div class="user_select_box">
                     <select id="languagesSpokenSelect" name="languages_spoken" multiple required>
                         <option value="English">English</option>
                         <option value="Hindi">Hindi</option>
@@ -159,6 +135,37 @@
                 <div id="languagesSpokenTags" class="tags-container"></div>
             </div>
 
+
+            <div class="user_multiple_filsd_wrep">
+                <label>Select medicine type</label>
+                <div class="user_select_box">
+                    <select id="MedicineTypeSelect" name="medicine_type" multiple required>
+                        <option value="Ayurvedic medicine">Ayurvedic medicine</option>
+                        <option value="Homeopathy medicine">Homeopathy medicine</option>
+                        <option value="Allopathy medicine">Allopathy medicine</option>
+                    </select>
+                </div>
+
+                <div id="MedicineTypeTags" class="tags-container"></div>
+            </div>
+
+
+            <div class="user_multiple_filsd_wrep">
+                <label>Select your qualifications</label>
+                <div class="user_select_box">
+                    <select id="DoctorQualificationsSelect" name="doctor_qualifications" multiple required>
+                        <option value="MBBS (Bachelor of Medicine, Bachelor of Surgery)">MBBS (Bachelor of Medicine, Bachelor of Surgery)</option>
+                        <option value="MD (Doctor of Medicine)">MD (Doctor of Medicine)</option>
+                        <option value="DO (Doctor of Osteopathic Medicine)">DO (Doctor of Osteopathic Medicine)</option>
+                        <option value="MS (Master of Surgery)">MS (Master of Surgery)</option>
+                        <option value="DM (Doctorate of Medicine)">DM (Doctorate of Medicine)</option>
+                        <option value="MCh (Magister Chirurgiae)">MCh (Magister Chirurgiae)</option>
+                    </select>
+                </div>
+
+                <div id="DoctorQualificationsTags" class="tags-container"></div>
+            </div>
+
             <div class="user_filsd_wrep">
                 <div class="user_input_box">
                     <input type="text" name="clinic_or_hospital_address" placeholder="Doctor Address" required>
@@ -167,11 +174,24 @@
                 <p class="error"></p>
 
                 <div class="user_input_box">
-                    <input type="text" name="consultation_fee" placeholder="150" required>
-                    <label>Consultation Fee</label>
+                    <input type="text" name="on_site_consultation_fee" placeholder="150" required>
+                    <label>On site Consultation Fee</label>
                 </div>
                 <p class="error"></p>
             </div>
+
+
+            <div class="user_filsd_wrep">
+                <div class="user_input_box">
+
+                    <div class="user_input_box">
+                        <input type="text" name="video_call_consultation_fee" placeholder="150" required>
+                        <label>Video call Consultation Fee</label>
+                    </div>
+                    <p class="error"></p>
+                </div>
+            </div>
+
 
             <div class="login_button">
                 <button type="submit" id="submitButton">Verify Doctor</button>
@@ -194,7 +214,7 @@
             const tagsContainer = document.getElementById(tagsContainerId);
 
             selectElement.addEventListener('change', function () {
-                tagsContainer.innerHTML = '';  // Clear current tags
+                tagsContainer.innerHTML = '';
 
                 Array.from(this.selectedOptions).forEach(option => {
                     const tag = document.createElement('div');
@@ -202,9 +222,8 @@
                     tag.textContent = option.text;
 
                     const removeBtn = document.createElement('span');
-                    removeBtn.textContent = '✖';  // Cancel symbol
+                    removeBtn.textContent = '✖';
                     removeBtn.onclick = () => {
-                        // Deselect the option
                         option.selected = false;
                         tag.remove();
                     };
@@ -215,9 +234,10 @@
             });
         }
 
-        // Initialize the function for both dropdowns
         handleSelection('doctorTypeSelect', 'doctorTypeTags');
         handleSelection('languagesSpokenSelect', 'languagesSpokenTags');
+        handleSelection('MedicineTypeSelect', 'MedicineTypeTags');
+        handleSelection('DoctorQualificationsSelect', 'DoctorQualificationsTags');
 
 
     </script>

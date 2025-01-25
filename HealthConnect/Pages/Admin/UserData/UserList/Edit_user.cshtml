@@ -16,8 +16,20 @@
                         <label class="col-sm-3 col-form-label">Role</label>
                         <div class="col-sm-12">
                             <select class="form-control" name="role">
-                                <option value="@Model.User_Table.role">@Model.User_Table.role</option>
-                                <option value="Admin">Admin</option>
+
+                                @if (Model.User_Table.role == "Admin")
+                                {
+                                    <option value="Admin">Admin</option>
+                                    <option value="User">User</option>
+
+                                }
+                                else
+                                {
+                                    <option value="User">User</option>
+                                    <option value="Admin">Admin</option>
+
+                                }
+
                             </select>
 
                         </div>

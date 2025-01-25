@@ -30,10 +30,12 @@
         public string doctor_type { get; set; }
         public string languages_spoken { get; set; }
         public string clinic_or_hospital_address { get; set; }
-        public string consultation_fee { get; set; }
+        public string on_site_consultation_fee { get; set; }
         public bool? account_approve { get; set; }
         public DateTime account_create_date { get; set; } = DateTime.Now;
         public bool isactive { get; set; }
         public string medicine_type { get; set; }
+        public string currency_code { get; set; }
+        public string video_call_consultation_fee { get; set; }
     }
 }

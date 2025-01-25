@@ -309,12 +309,16 @@ body {
 
         .regi_form_container form .user_input_box select {
             width: 100%;
-            padding: 10px 0px 10px 0px;
+            padding: 10px 0px 10px 10px;
             border: none;
             border-bottom: 2px solid var(--accent-color);
             background-color: #F5F5F5;
             font-size: 16px;
         }
+
+            .regi_form_container form .user_input_box select::-webkit-scrollbar {
+                display: none;
+            }
 
 
         .regi_form_container form .user_input_box label {
@@ -488,11 +492,10 @@ Upload Medical License Photo
 .tags-container {
     display: flex;
     flex-wrap: wrap;
-    gap: 10px;
-    margin-top: 15px;
+    column-gap: 10px;
     width: 100%;
-    height: 20px;
-    margin: 30px 15px;
+    height: auto;
+    margin: 15px;
 }
 
 .tag {
@@ -519,3 +522,29 @@ Upload Medical License Photo
     -webkit-flex-wrap: wrap;
     flex-wrap: wrap;
 }
+
+.user_multiple_filsd_wrep {
+    width: 100%;
+}
+    .user_multiple_filsd_wrep label {
+        margin-left: 15px;
+        color: var(--accent-color);
+        font-weight: 600;
+        font-size: 14px;
+    }
+
+    .user_multiple_filsd_wrep .user_select_box {
+        display: flex;
+        justify-content: center;
+        width: 100%;
+    }
+
+        .user_multiple_filsd_wrep .user_select_box select {
+            width: 95%;
+            margin: 20px 0 0 0;
+            border: 1px solid var(--accent-color);
+            padding-left: 10px;
+        }
+            .user_multiple_filsd_wrep .user_select_box select::-webkit-scrollbar {
+                display: none;
+            }

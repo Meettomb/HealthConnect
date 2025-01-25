@@ -1,0 +1,78 @@
+﻿@page
+@model Doctor_typesModel
+@{
+    Layout = "_Admin_header";
+    ViewData["Title"] = "Doctor types";
+}
+
+<div class="col-md-6 grid-margin stretch-card">
+    <div class="card">
+        <div class="card-body">
+            <h4 class="card-title">Add doctor types</h4>
+            <form method="post" asp-page-handler="RoleUpdate">
+                <div class="col-md-12">
+                    <div class="form-group row">
+                        <div class="col-sm-12">
+
+                            <div class="form-group">
+                                <label for="exampleInputUsername1">Type of doctor</label>
+                                <input type="text" class="form-control" name="type_of_doctor" id="type_of_doctor" placeholder="Type of doctor">
+                            </div>
+
+                        </div>
+                    </div>
+                    <button type="submit" class="btn btn-primary mr-2">Submit</button>
+                </div>
+            </form>
+
+        </div>
+    </div>
+</div>
+
+
+<div class="col-md-8 grid-margin stretch-card">
+    <div class="card">
+        <div class="card-body">
+            <h4 class="card-title">Add doctor types</h4>
+            <div class="table-responsive">
+                <table class="table">
+                    <thead>
+                        <tr>
+                            <th> id </th>
+                            <th> Types of Doctor </th>
+
+                        </tr>
+                    </thead>
+                    <tbody>
+
+                        @foreach (var item in Model.Types_of_doctor)
+                        {
+                            <tr class="data">
+                                <td> @item.doctor_type_id </td>
+                                <td> @item.type_of_doctor </td>
+                                <td>
+                                    <a class="edit_icon" href="/Admin/Doctor_list_management/Doctor_types_manage/Doctor_types_edit?doctor_type_id=@item.doctor_type_id"><i class="fa-regular fa-pen-to-square"></i></a>
+
+                                </td>
+                                <td>
+                                    <form method="post" asp-page-handler="Delete">
+                                        <input type="hidden" name="id" value="@item.doctor_type_id" />
+                                        <button class="btn btn-danger"><i class="fa-solid fa-trash-can"></i></button>
+                                    </form>
+                                </td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+@if (TempData["SuccessMessage"] != null)
+{
+    <div class="success_message">
+        @TempData["SuccessMessage"]
+    </div>
+}

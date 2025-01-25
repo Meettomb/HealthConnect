@@ -49,11 +49,14 @@ namespace HealthConnect.Pages.User
         public string Role { get; set; }
         public string Password { get; set; }
         public string Account_create_date { get; set; }
+        public string CurrencyCode { get; set; }
+
+        public int? UserId { get; set; }
 
         public string SessionOtp { get; set; }
+
         public IActionResult OnGet()
         {
-            // Retrieve data from session
             FirstName = HttpContext.Session.GetString("FirstName");
             LastName = HttpContext.Session.GetString("LastName");
             Email = HttpContext.Session.GetString("Email");
@@ -68,8 +71,89 @@ namespace HealthConnect.Pages.User
             Role = HttpContext.Session.GetString("Role");
             Password = HttpContext.Session.GetString("Password");
             Account_create_date = HttpContext.Session.GetString("Account_create_date");
+            CurrencyCode = HttpContext.Session.GetString("CurrencyCode");
 
             SessionOtp = HttpContext.Session.GetString("OTP");
+
+            UserId = HttpContext.Session.GetInt32("Id");
+            string roleInSession = HttpContext.Session.GetString("UserRole");
+
+            if (UserId.HasValue && !string.IsNullOrEmpty(roleInSession))
+            {
+                if (roleInSession == "Admin")
+                {
+                    return RedirectToPage("/Admin/Admin_index");
+                }
+                else if (roleInSession == "User" || roleInSession == "Doctor")
+                {
+                    return RedirectToPage("/index");
+                }
+                else
+                {
+                    ModelState.AddModelError(string.Empty, "Invalid role in session.");
+                }
+            }
+
+            string deviceId = Request.Cookies["deviceUniqueId"];
+            if (string.IsNullOrEmpty(deviceId))
+            {
+                return Page();
+            }
+
+            using (SqlConnection con = new SqlConnection(_connectionString))
+            {
+                string query = @"SELECT id, first_name, last_name, email, role, isactive 
+                         FROM User_Table 
+                         WHERE ',' + auth_token + ',' LIKE '%,' + @DeviceId + ',%'";
+
+                using (SqlCommand cmd = new SqlCommand(query, con))
+                {
+                    cmd.Parameters.AddWithValue("@DeviceId", deviceId);
+                    con.Open();
+                    SqlDataReader reader = cmd.ExecuteReader();
+
+                    if (reader.Read())
+                    {
+                        int userId = Convert.ToInt32(reader["id"]);
+                        string firstName = reader["first_name"].ToString();
+                        string lastName = reader["last_name"].ToString();
+                        string email = reader["email"].ToString();
+                        string role = reader["role"].ToString();
+                        bool isActive = Convert.ToBoolean(reader["isactive"]);
+
+                        if (isActive)
+                        {
+                            HttpContext.Session.SetInt32("Id", userId);
+                            HttpContext.Session.SetString("FirstName", firstName);
+                            HttpContext.Session.SetString("LastName", lastName);
+                            HttpContext.Session.SetString("Email", email);
+                            HttpContext.Session.SetString("UserRole", role);
+
+                            // Redirect based on role
+                            if (role == "Admin")
+                            {
+                                return RedirectToPage("/Admin/Admin_index");
+                            }
+                            else if (role == "User" || role == "Doctor")
+                            {
+                                return RedirectToPage("/index");
+                            }
+                            else
+                            {
+                                ModelState.AddModelError(string.Empty, "Invalid role.");
+                            }
+                        }
+                        else
+                        {
+                            ModelState.AddModelError(string.Empty, "Account is not active.");
+                        }
+                    }
+                    else
+                    {
+                        ModelState.AddModelError(string.Empty, "Device not recognized or account not found.");
+                    }
+                }
+            }
 
             return Page();
         }
@@ -83,7 +167,6 @@ namespace HealthConnect.Pages.User
                 return Page();
             }
 
-            // Get file paths
             var profilePic = Request.Form.Files["profile_pic"];
             var licensePic = Request.Form.Files["doctore_medical_license_photo"];
 
@@ -93,7 +176,6 @@ namespace HealthConnect.Pages.User
                 return Page();
             }
 
-            // Save files to wwwroot/documant folder
             var profilePicPath = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot", "documant", profilePic.FileName);
             var licensePicPath = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot", "documant", licensePic.FileName);
 
@@ -107,7 +189,6 @@ namespace HealthConnect.Pages.User
                 await licensePic.CopyToAsync(stream);
             }
 
-            // Populate the Doctor_approvel object
             doctor_Approvel.profile_pic = profilePic.FileName;
             doctor_Approvel.doctore_medical_license_photo = licensePic.FileName;
 
@@ -122,11 +203,11 @@ namespace HealthConnect.Pages.User
             doctor_Approvel.state = HttpContext.Session.GetString("State");
             doctor_Approvel.pincode = HttpContext.Session.GetString("Pincode");
             doctor_Approvel.gender = HttpContext.Session.GetString("Gender");
-            doctor_Approvel.role = HttpContext.Session.GetString("Role"); 
+            doctor_Approvel.role = HttpContext.Session.GetString("Role");
+            doctor_Approvel.currency_code = HttpContext.Session.GetString("CurrencyCode");
             var hashedPassword = new PasswordHasher<Doctor_approvel>().HashPassword(doctor_Approvel, HttpContext.Session.GetString("Password"));
             doctor_Approvel.password = hashedPassword;
 
-            // Additional doctor details
             doctor_Approvel.medical_registration_no = Request.Form["medical_registration_no"];
             doctor_Approvel.state_medical_council = Request.Form["state_medical_council"];
             doctor_Approvel.year_of_registration = Request.Form["year_of_registration"];
@@ -136,11 +217,11 @@ namespace HealthConnect.Pages.User
             doctor_Approvel.doctor_type = string.Join(", ", Request.Form["doctor_type"]);
             doctor_Approvel.languages_spoken = string.Join(", ", Request.Form["languages_spoken"]);
             doctor_Approvel.clinic_or_hospital_address = Request.Form["clinic_or_hospital_address"];
-            doctor_Approvel.consultation_fee = Request.Form["consultation_fee"];
+            doctor_Approvel.on_site_consultation_fee = Request.Form["on_site_consultation_fee"];
             doctor_Approvel.medicine_type = Request.Form["medicine_type"];
             doctor_Approvel.account_create_date = DateTime.Now;
+            doctor_Approvel.video_call_consultation_fee = Request.Form["video_call_consultation_fee"];
 
-            // Save data to database (Note: you will need to use your custom data access method since you're not using DbContext)
             bool isSaved = await SaveDoctorApprovalToDatabase(doctor_Approvel);
             if (!isSaved)
             {
@@ -148,7 +229,6 @@ namespace HealthConnect.Pages.User
                 return Page();
             }
 
-            // Send confirmation email
             string emailBody = "Your account will be activated after verifying your details. This process may take a few days.";
             var emailSent = await _emailService.SendEmailAsync(
                 doctor_Approvel.email,
@@ -169,7 +249,6 @@ namespace HealthConnect.Pages.User
             return RedirectToPage("/Index");
         }
 
-        // Example method for saving the data to database using ADO.NET
         private async Task<bool> SaveDoctorApprovalToDatabase(Doctor_approvel doctor_Approvel)
         {
             using (var connection = new SqlConnection(_connectionString))
@@ -179,11 +258,13 @@ namespace HealthConnect.Pages.User
                 var query = @"INSERT INTO Doctor_approvel 
                     (first_name, last_name, email, mobil_no, dob, House_number_and_Street_name, country, city, state, pincode, gender, role, password, 
                      medical_registration_no, state_medical_council, year_of_registration, doctore_experience, hospital_or_clinic, doctor_qualifications, 
-                     doctor_type, languages_spoken, clinic_or_hospital_address, consultation_fee, account_create_date, profile_pic, doctore_medical_license_photo, isactive, medicine_type)
+                     doctor_type, languages_spoken, clinic_or_hospital_address, on_site_consultation_fee, account_create_date, profile_pic, doctore_medical_license_photo, 
+                     isactive, medicine_type, currency_code, video_call_consultation_fee)
                   VALUES 
                     (@FirstName, @LastName, @Email, @MobilNo, @DOB, @HouseNoStreetName, @Country, @City, @State, @Pincode, @Gender, @Role, @Password, 
                      @MedicalRegistrationNo, @StateMedicalCouncil, @YearOfRegistration, @DoctorExperience, @HospitalOrClinic, @DoctorQualifications, 
-                     @DoctorType, @LanguagesSpoken, @ClinicOrHospitalAddress, @ConsultationFee, @AccountCreateDate, @ProfilePic, @MedicalLicensePhoto, @IsActive, @Medicine_type)";
+                     @DoctorType, @LanguagesSpoken, @ClinicOrHospitalAddress, @On_site_consultation_fee, @AccountCreateDate, @ProfilePic, @MedicalLicensePhoto, 
+                     @IsActive, @Medicine_type, @Currency_code, @Video_call_consultation_fee)";
 
                 using (var command = new SqlCommand(query, connection))
                 {
@@ -209,12 +290,14 @@ namespace HealthConnect.Pages.User
                     command.Parameters.AddWithValue("@DoctorType", doctor_Approvel.doctor_type);
                     command.Parameters.AddWithValue("@LanguagesSpoken", doctor_Approvel.languages_spoken);
                     command.Parameters.AddWithValue("@ClinicOrHospitalAddress", doctor_Approvel.clinic_or_hospital_address);
-                    command.Parameters.AddWithValue("@ConsultationFee", doctor_Approvel.consultation_fee);
+                    command.Parameters.AddWithValue("@On_site_consultation_fee", doctor_Approvel.on_site_consultation_fee);
                     command.Parameters.AddWithValue("@AccountCreateDate", doctor_Approvel.account_create_date);
                     command.Parameters.AddWithValue("@ProfilePic", doctor_Approvel.profile_pic);
                     command.Parameters.AddWithValue("@MedicalLicensePhoto", doctor_Approvel.doctore_medical_license_photo);
                     command.Parameters.AddWithValue("@Medicine_type", doctor_Approvel.medicine_type);
                     command.Parameters.AddWithValue("@IsActive", false);
+                    command.Parameters.AddWithValue("@Currency_code", doctor_Approvel.currency_code);
+                    command.Parameters.AddWithValue("@Video_call_consultation_fee", doctor_Approvel.video_call_consultation_fee);
 
                     int rowsAffected = await command.ExecuteNonQueryAsync();
                     return rowsAffected > 0;

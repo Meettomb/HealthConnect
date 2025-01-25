@@ -105,11 +105,13 @@ namespace HealthConnect.Pages.Admin.UserData
                                 doctor_type = reader.GetString(22),
                                 languages_spoken = reader.GetString(23),
                                 clinic_or_hospital_address = reader.GetString(24),
-                                consultation_fee = reader.GetString(25),
+                                on_site_consultation_fee = reader.GetString(25),
                                 account_approve = !reader.IsDBNull(26) ? reader.GetBoolean(26) : (bool?)null,
                                 account_create_date = !reader.IsDBNull(27) ? DateTime.Parse(reader.GetString(27)) : DateTime.Now,
                                 isactive = reader.GetBoolean(28),
-                                medicine_type = reader.GetString(29)
+                                medicine_type = reader.GetString(29),
+                                currency_code = reader.GetString(30),
+                                video_call_consultation_fee = reader.GetString(31)
                             };
                         }
                     }
@@ -163,17 +165,19 @@ namespace HealthConnect.Pages.Admin.UserData
                         doctor_type = reader.IsDBNull(22) ? null : reader.GetString(22),
                         languages_spoken = reader.IsDBNull(23) ? null : reader.GetString(23),
                         clinic_or_hospital_address = reader.IsDBNull(24) ? null : reader.GetString(24),
-                        consultation_fee = reader.IsDBNull(25) ? null : reader.GetString(25),
+                        on_site_consultation_fee = reader.IsDBNull(25) ? null : reader.GetString(25),
                         account_approve = true,
                         account_create_date = DateTime.Now,
                         isactive = true,
                         block = false,
                         mobail_verifie = false,
                         medicine_type = reader.IsDBNull(29) ? null : reader.GetString(29),
+                        currency_code = reader.IsDBNull(30) ? null : reader.GetString(30),
+                        video_call_consultation_fee = reader.IsDBNull(31) ? null : reader.GetString(31)
                     };
                     reader.Close();
 
-                    var insertCommand = new SqlCommand("INSERT INTO User_Table (first_name, last_name, email, mobil_no, dob, House_number_and_Street_name, country, city, state, pincode, gender, role, password, profile_pic, doctore_medical_license_photo, medical_registration_no, state_medical_council, year_of_registration, doctore_experience, hospital_or_clinic, doctor_qualifications, doctor_type, languages_spoken, clinic_or_hospital_address, consultation_fee, account_approve, account_create_date, isactive, block, mobail_verifie, medicine_type) VALUES (@FirstName, @LastName, @Email, @MobileNo, @Dob, @Address, @Country, @City, @State, @Pincode, @Gender, @Role, @Password, @ProfilePic, @MedicalLicensePhoto, @MedicalRegNo, @StateMedicalCouncil, @YearOfRegistration, @Experience, @HospitalClinic, @Qualifications, @DoctorType, @Languages, @ClinicAddress, @Fee, @Approve, @CreateDate, @IsActive, @Block, @Mobail_verifie, @Medicine_type)", connection);
+                    var insertCommand = new SqlCommand("INSERT INTO User_Table (first_name, last_name, email, mobil_no, dob, House_number_and_Street_name, country, city, state, pincode, gender, role, password, profile_pic, doctore_medical_license_photo, medical_registration_no, state_medical_council, year_of_registration, doctore_experience, hospital_or_clinic, doctor_qualifications, doctor_type, languages_spoken, clinic_or_hospital_address, on_site_consultation_fee, account_approve, account_create_date, isactive, block, mobail_verifie, medicine_type, currency_code, video_call_consultation_fee) VALUES (@FirstName, @LastName, @Email, @MobileNo, @Dob, @Address, @Country, @City, @State, @Pincode, @Gender, @Role, @Password, @ProfilePic, @MedicalLicensePhoto, @MedicalRegNo, @StateMedicalCouncil, @YearOfRegistration, @Experience, @HospitalClinic, @Qualifications, @DoctorType, @Languages, @ClinicAddress, @On_site_consultation_fee, @Approve, @CreateDate, @IsActive, @Block, @Mobail_verifie, @Medicine_type, @Currency_code, @Video_call_consultation_fee)", connection);
                     insertCommand.Parameters.AddWithValue("@FirstName", doctor.first_name);
                     insertCommand.Parameters.AddWithValue("@LastName", doctor.last_name);
                     insertCommand.Parameters.AddWithValue("@Email", doctor.email);
@@ -198,13 +202,15 @@ namespace HealthConnect.Pages.Admin.UserData
                     insertCommand.Parameters.AddWithValue("@DoctorType", (object)doctor.doctor_type ?? DBNull.Value);
                     insertCommand.Parameters.AddWithValue("@Languages", (object)doctor.languages_spoken ?? DBNull.Value);
                     insertCommand.Parameters.AddWithValue("@ClinicAddress", (object)doctor.clinic_or_hospital_address ?? DBNull.Value);
-                    insertCommand.Parameters.AddWithValue("@Fee", (object)doctor.consultation_fee ?? DBNull.Value);
+                    insertCommand.Parameters.AddWithValue("@On_site_consultation_fee", (object)doctor.on_site_consultation_fee ?? DBNull.Value);
                     insertCommand.Parameters.AddWithValue("@Approve", doctor.account_approve);
                     insertCommand.Parameters.AddWithValue("@CreateDate", doctor.account_create_date);
                     insertCommand.Parameters.AddWithValue("@IsActive", doctor.isactive);
                     insertCommand.Parameters.AddWithValue("@Block", doctor.block);
                     insertCommand.Parameters.AddWithValue("@Mobail_verifie", doctor.mobail_verifie);
                     insertCommand.Parameters.AddWithValue("@Medicine_type", (object)doctor.medicine_type ?? DBNull.Value);
+                    insertCommand.Parameters.AddWithValue("@Currency_code", (object)doctor.currency_code ?? DBNull.Value);
+                    insertCommand.Parameters.AddWithValue("@Video_call_consultation_fee", (object)doctor.video_call_consultation_fee ?? DBNull.Value);
 
                     insertCommand.ExecuteNonQuery();
 

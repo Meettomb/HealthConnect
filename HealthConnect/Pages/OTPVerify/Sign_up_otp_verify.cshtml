@@ -4,7 +4,12 @@
     ViewData["Title"] = "Sign_up_otp_verify";
     Layout = "~/Pages/Shared/_OtpVerify.cshtml";
 }
-
+<style>
+    #timer{
+        float: right;
+        margin: 10px 0;
+    }
+</style>
 <div class="opt_verify_container">
     <h1>Verify you OTP</h1>
     <p>Enter the OTP sent to your email</p>
@@ -15,6 +20,8 @@
         </div>
 
         <button type="submit" name="submit">Verify</button>
+
+        <div id="timer"></div>
     </form>
 </div>
 @if (!string.IsNullOrEmpty(Model.ErrorMessage))
@@ -26,6 +33,33 @@
 {
     <p class="success_message">@Model.SuccessMessage</p>
 }
+
+
+<script>
+    // Function to start the timer when the page loads
+    window.onload = function() {
+        let timeLeft = 120; // 2 minutes in seconds (120 seconds)
+        const timerDisplay = document.getElementById('timer');
+
+        // Update the timer every second
+        const timerInterval = setInterval(function() {
+            const minutes = Math.floor(timeLeft / 60);
+            const seconds = timeLeft % 60;
+
+            // Format time to show as "MM:SS"
+            timerDisplay.textContent = `Time Left: ${minutes}:${seconds < 10 ? '0' : ''}${seconds}`;
+
+            // If the timer reaches zero, stop the countdown
+            if (timeLeft <= 0) {
+                clearInterval(timerInterval);
+                timerDisplay.textContent = 'Time Expired';
+            }
+
+            timeLeft--;
+        }, 1000);
+    };
+</script>
+
 
 <script>
     function resendOTP() {

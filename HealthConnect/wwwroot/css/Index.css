@@ -14,7 +14,6 @@ input[type=number]::-webkit-outer-spin-button {
     margin: 0;
 }
 
-/* Firefox */
 input[type=number] {
     -moz-appearance: textfield;
 }
@@ -164,13 +163,18 @@ header nav {
     position: relative;
 }
 
+    .header_drop_down p a {
+        text-decoration: none;
+        color: var(--header-text-color);
+    }
+
     .header_drop_down p {
         cursor: pointer;
         font-family: var(--nav-font);
     }
 
 
-        .header_drop_down p:hover {
+        .header_drop_down p a:hover {
             color: var(--header-text-hover-color);
         }
 
@@ -182,7 +186,18 @@ header nav {
     border: 1px solid #ccc;
     padding: 10px;
     box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
+    height: 50dvh;
+    overflow: scroll;
 }
+
+    .Search_by_Speciality::-webkit-scrollbar {
+        display: none;
+    }
+
+    .Search_by_Speciality ul a {
+        text-decoration: none;
+        color: var(--header-text-color);
+    }
 
     .Search_by_Speciality ul {
         list-style-type: none;
@@ -239,9 +254,9 @@ header nav {
     right: 0px;
     background-color: #f9f9f9;
     border: 1px solid #ccc;
-    padding: 10px;
+    padding: 10px 15px 10px 10px;
     box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
-    width: 20%;
+    width: auto;
 }
 
     .header_user_services section {
@@ -253,9 +268,10 @@ header nav {
         font-size: 14px;
     }
 
-        .header_user_services section a i{
+        .header_user_services section a i {
             margin: 0 15px 0 0;
         }
+
         .header_user_services section a {
             -webkit-text-decoration: inherit;
             text-decoration: inherit;
@@ -322,11 +338,11 @@ header nav {
 
     .hamburger_container_link {
         display: none;
-        max-height: 500px;
+        max-height: 80dvh;
         min-height: auto;
-        position: fixed; /* Moves with scroll */
+        position: fixed;
         left: 0;
-        top: 11.5%;
+        top: 75px;
         width: 100%;
         background-color: var(--surface-color);
         overflow: scroll;
@@ -336,9 +352,13 @@ header nav {
         z-index: -10;
     }
 
+        .hamburger_container_link::-webkit-scrollbar {
+            display: none;
+        }
+
     .hamburgerLink_scroll {
-        top: 100% !important; /* Adjust as needed */
-        transition: top 0.3s ease; /* Smooth transition */
+        top: 100% !important;
+        transition: top 0.3s ease;
     }
 
 
@@ -364,6 +384,7 @@ header nav {
             text-decoration: none;
             width: 100%;
             color: var(--default-color);
+            background-color: transparent;
         }
 
 
@@ -404,9 +425,10 @@ header nav {
         font-size: 14px;
     }
 
-        .header_user_services2 section a i{
+        .header_user_services2 section a i {
             margin: 0 15px 0 0;
         }
+
         .header_user_services2 section a {
             -webkit-text-decoration: inherit;
             text-decoration: inherit;
@@ -416,8 +438,7 @@ header nav {
         }
 
 .hamburgar_Search_by_Speciality,
-.hamburgar_Search_by_Condition,
-.hamburgar_Search_by_City {
+.hamburgar_Search_by_Condition {
     display: flex;
     flex-direction: column;
     margin-left: 15px;
@@ -1198,4 +1219,436 @@ header nav {
         .index_about_container .index_about_right .about_detail p {
             font-size: 14px;
         }
+}
+
+
+/*--------------------------------------------------------------------------------------------------------------*/
+/*--------------------------------------------------------------------------------------------------------------*/
+/*--------------------------------------------------------------------------------------------------------------*/
+/*--------------------------------------------------------------------------------------------------------------*/
+/*--------------------------------------------------------------------------------------------------------------*/
+/*                                                 Explor_Doctor                                                */
+/*--------------------------------------------------------------------------------------------------------------*/
+/*--------------------------------------------------------------------------------------------------------------*/
+/*--------------------------------------------------------------------------------------------------------------*/
+/*--------------------------------------------------------------------------------------------------------------*/
+/*--------------------------------------------------------------------------------------------------------------*/
+
+.doctor_search_div {
+    width: 100%;
+    display: flex;
+    justify-content: center;
+}
+
+    .doctor_search_div .search_doctore {
+        width: 100%;
+        margin: 10px 0;
+    }
+
+        .doctor_search_div .search_doctore input {
+            width: 30%;
+            padding: 5px 5px;
+            font-size: 17px;
+            font-family: var(--default-font);
+            margin-left: 2.5%;
+            margin-top: 20px;
+            outline: none;
+            border-radius: 5px;
+            color: var(--default-color);
+        }
+
+
+.explorer_doctor_section1 {
+    width: 100%;
+    height: auto;
+    display: flex;
+    justify-content: center;
+    padding: 15px 0;
+    margin: 15px 0;
+}
+
+    .explorer_doctor_section1 .filtre_doctor_div {
+        width: 95%;
+        height: auto;
+        display: flex;
+        column-gap: 30px;
+        row-gap: 20px;
+        color: var(--heading-color);
+        font-size: 16px;
+        font-weight: 500;
+        flex-wrap: wrap;
+    }
+
+        .explorer_doctor_section1 .filtre_doctor_div p {
+            font-family: var(--default-font);
+            font-size: 14px;
+        }
+
+        .explorer_doctor_section1 .filtre_doctor_div select {
+            outline: none;
+            padding: 2px 20px 2px 2px;
+            font-size: 13px;
+            width: auto;
+            margin-top: 2px;
+        }
+
+            .explorer_doctor_section1 .filtre_doctor_div select option {
+                color: var(--default-color);
+                font-family: var(--default-font);
+            }
+
+
+.explorer_doctor_section2 {
+    width: 100%;
+    height: auto;
+    display: flex;
+    justify-content: center;
+    margin: 30px 0;
+}
+
+    .explorer_doctor_section2 .all_doctor_div {
+        width: 95%;
+        display: flex;
+        justify-content: center;
+        gap: 30px;
+        flex-wrap: wrap;
+    }
+
+        .explorer_doctor_section2 .all_doctor_div .all_doctor_single_div {
+            width: 47%;
+            height: auto;
+            background-color: #e0e0e0;
+            border-radius: 5px;
+            padding: 10px 10px;
+        }
+
+            .explorer_doctor_section2 .all_doctor_div .all_doctor_single_div .all_doctor_single_div_sides {
+                display: flex;
+                height: 150px;
+                gap: 5px;
+            }
+
+                .explorer_doctor_section2 .all_doctor_div .all_doctor_single_div .all_doctor_single_div_sides .all_doctor_single_left {
+                    width: 20%;
+                    height: 100%;
+                }
+
+                    .explorer_doctor_section2 .all_doctor_div .all_doctor_single_div .all_doctor_single_div_sides .all_doctor_single_left img {
+                        width: 95%;
+                        height: 80%;
+                        object-fit: cover;
+                    }
+
+                    .explorer_doctor_section2 .all_doctor_div .all_doctor_single_div .all_doctor_single_div_sides .all_doctor_single_left p {
+                        font-size: 12px;
+                        margin: 10px 0;
+                        display: flex;
+                        gap: 10px;
+                    }
+
+                .explorer_doctor_section2 .all_doctor_div .all_doctor_single_div .all_doctor_single_div_sides .all_doctor_single_middle {
+                    padding: 0 5px;
+                    width: 55%;
+                }
+
+                    .explorer_doctor_section2 .all_doctor_div .all_doctor_single_div .all_doctor_single_div_sides .all_doctor_single_middle h1 {
+                        font-size: 20px;
+                        font-weight: 1000;
+                        color: var(--heading-color);
+                    }
+
+                    .explorer_doctor_section2 .all_doctor_div .all_doctor_single_div .all_doctor_single_div_sides .all_doctor_single_middle p {
+                        margin-top: 10px;
+                        font-weight: normal;
+                        font-size: 13px;
+                    }
+
+
+                .explorer_doctor_section2 .all_doctor_div .all_doctor_single_div .all_doctor_single_div_sides .all_doctor_single_right_right {
+                    position: relative;
+                    width: 25%;
+                    display: grid;
+                }
+
+                    .explorer_doctor_section2 .all_doctor_div .all_doctor_single_div .all_doctor_single_div_sides .all_doctor_single_right_right p {
+                        font-size: 10px;
+                        margin: 0px 5px;
+                        text-align: right;
+                    }
+
+                    .explorer_doctor_section2 .all_doctor_div .all_doctor_single_div .all_doctor_single_div_sides .all_doctor_single_right_right .fee {
+                        font-weight: 800;
+                        color: var(--heading-color);
+                    }
+
+                        .explorer_doctor_section2 .all_doctor_div .all_doctor_single_div .all_doctor_single_div_sides .all_doctor_single_right_right .fee strong {
+                            color: var(--accent-color);
+                            font-size: 11px;
+                        }
+
+                    .explorer_doctor_section2 .all_doctor_div .all_doctor_single_div .all_doctor_single_div_sides .all_doctor_single_right_right .hospital_or_clinic {
+                        cursor: pointer;
+                    }
+
+                    .explorer_doctor_section2 .all_doctor_div .all_doctor_single_div .all_doctor_single_div_sides .all_doctor_single_right_right address {
+                        font-size: 10px;
+                        position: absolute;
+                        bottom: 28%;
+                        right: 0;
+                        display: none;
+                        background-color: #f3eadd;
+                        padding: 2px 5px;
+                    }
+
+                    .explorer_doctor_section2 .all_doctor_div .all_doctor_single_div .all_doctor_single_div_sides .all_doctor_single_right_right .hospital_or_clinic:hover + address {
+                        display: block;
+                    }
+
+
+            .explorer_doctor_section2 .all_doctor_div .all_doctor_single_div .all_doctor_single_div_comunication_option {
+                display: flex;
+                margin: 15px 0 0 0;
+                flex-wrap: wrap;
+                row-gap: 5px;
+            }
+
+                .explorer_doctor_section2 .all_doctor_div .all_doctor_single_div .all_doctor_single_div_comunication_option p {
+                    border: 1px solid var(--accent-color);
+                    min-width: 24.5%;
+                    max-width: 100%;
+                    font-size: 12px;
+                    text-align: center;
+                    flex-grow: 1;
+                }
+
+                    .explorer_doctor_section2 .all_doctor_div .all_doctor_single_div .all_doctor_single_div_comunication_option p:first-child {
+                        color: var(--heading-color);
+                        font-size: 16px;
+                        font-weight: 800;
+                        display: flex;
+                        align-items: center;
+                        justify-content: center;
+                        gap: 10px;
+                        width: 15%;
+                    }
+
+                    .explorer_doctor_section2 .all_doctor_div .all_doctor_single_div .all_doctor_single_div_comunication_option p .disabled-link {
+                        pointer-events: none;
+                        cursor: not-allowed;
+                    }
+
+                    .explorer_doctor_section2 .all_doctor_div .all_doctor_single_div .all_doctor_single_div_comunication_option p a {
+                        text-decoration: none;
+                        color: var(--default-color);
+                        font-family: var(--default-font);
+                        display: inline-flex;
+                        justify-content: center;
+                        gap: 5px;
+                        width: 100%;
+                        height: 100%;
+                        padding: 10px 5px;
+                        text-align: center;
+                        font-weight: 400;
+                    }
+
+                        .explorer_doctor_section2 .all_doctor_div .all_doctor_single_div .all_doctor_single_div_comunication_option p a:hover {
+                            color: var(--accent-color);
+                        }
+
+
+@media (max-width: 1347px) {
+    .explorer_doctor_section2 .all_doctor_div .all_doctor_single_div .all_doctor_single_div_sides .all_doctor_single_left {
+        width: 15%;
+    }
+
+    .explorer_doctor_section2 .all_doctor_div .all_doctor_single_div .all_doctor_single_div_comunication_option {
+        margin: 24px 0 0 0;
+    }
+}
+
+@media (max-width: 1247px) and (min-width: 1000px) {
+    .explorer_doctor_section2 .all_doctor_div .all_doctor_single_div {
+        max-width: 50%;
+        min-width: 80%;
+    }
+}
+
+@media (max-width: 1247px) {
+    .explorer_doctor_section2 .all_doctor_div .all_doctor_single_div .all_doctor_single_div_sides .all_doctor_single_left img {
+        height: 80%;
+        width: 85%;
+    }
+
+    .explorer_doctor_section2 .all_doctor_div .all_doctor_single_div .all_doctor_single_div_comunication_option p {
+        font-size: 15px;
+    }
+
+        .explorer_doctor_section2 .all_doctor_div .all_doctor_single_div .all_doctor_single_div_comunication_option p a {
+            padding: 6px 5px;
+        }
+}
+
+@media (max-width: 1103px) {
+    .explorer_doctor_section2 .all_doctor_div .all_doctor_single_div .all_doctor_single_div_sides .all_doctor_single_left p {
+        width: auto;
+    }
+
+    .explorer_doctor_section2 .all_doctor_div .all_doctor_single_div .all_doctor_single_div_comunication_option {
+        margin: 20px 0 0 0;
+    }
+}
+
+@media (max-width: 999px) {
+
+    .explorer_doctor_section2 .all_doctor_div .all_doctor_single_div {
+        width: 100%;
+    }
+
+        .explorer_doctor_section2 .all_doctor_div .all_doctor_single_div .all_doctor_single_div_sides .all_doctor_single_right_right {
+            user-select: none;
+        }
+
+            .explorer_doctor_section2 .all_doctor_div .all_doctor_single_div .all_doctor_single_div_sides .all_doctor_single_right_right .hospital_or_clinic:focus + address {
+                display: block;
+            }
+}
+
+@media (max-width: 690px) {
+    .explorer_doctor_section2 .all_doctor_div .all_doctor_single_div .all_doctor_single_div_comunication_option p {
+        font-size: 10px;
+    }
+
+        .explorer_doctor_section2 .all_doctor_div .all_doctor_single_div .all_doctor_single_div_comunication_option p:first-child {
+            font-size: 13px;
+        }
+
+    .explorer_doctor_section2 .all_doctor_div .all_doctor_single_div .all_doctor_single_div_sides .all_doctor_single_right_right {
+        width: 35%;
+    }
+
+        .explorer_doctor_section2 .all_doctor_div .all_doctor_single_div .all_doctor_single_div_sides .all_doctor_single_right_right p {
+            font-size: 8px;
+        }
+
+    .explorer_doctor_section2 .all_doctor_div .all_doctor_single_div .all_doctor_single_div_sides .all_doctor_single_middle {
+        width: 55%;
+    }
+
+    .explorer_doctor_section2 .all_doctor_div .all_doctor_single_div .all_doctor_single_div_sides .all_doctor_single_left img {
+        height: 65%;
+        width: 100%;
+    }
+
+    .explorer_doctor_section2 .all_doctor_div .all_doctor_single_div .all_doctor_single_div_sides .all_doctor_single_left p {
+        font-size: 10px;
+    }
+
+    .explorer_doctor_section2 .all_doctor_div .all_doctor_single_div .all_doctor_single_div_sides .all_doctor_single_middle p {
+        font-size: 10px;
+        gap: 6px;
+    }
+
+    .explorer_doctor_section2 .all_doctor_div .all_doctor_single_div .all_doctor_single_div_sides .all_doctor_single_left {
+        width: 18%;
+    }
+
+    .explorer_doctor_section2 .all_doctor_div .all_doctor_single_div .all_doctor_single_div_sides .all_doctor_single_middle h1 {
+        font-size: 19px;
+        font-weight: 900;
+    }
+
+    .explorer_doctor_section2 .all_doctor_div .all_doctor_single_div .all_doctor_single_div_comunication_option {
+        margin: 0;
+    }
+
+    .doctor_search_div .search_doctore input {
+        width: 50%;
+        font-size: 12px;
+    }
+}
+
+
+@media (max-width: 490px) {
+    .explorer_doctor_section2 .all_doctor_div .all_doctor_single_div .all_doctor_single_div_sides .all_doctor_single_left p {
+        font-size: 8px;
+        gap: 2px;
+    }
+
+    .explorer_doctor_section2 .all_doctor_div .all_doctor_single_div .all_doctor_single_div_sides .all_doctor_single_right_right .fee {
+        font-weight: 800;
+        font-size: 8px;
+    }
+
+        .explorer_doctor_section2 .all_doctor_div .all_doctor_single_div .all_doctor_single_div_sides .all_doctor_single_right_right .fee strong {
+            font-size: 10px;
+        }
+
+    .explorer_doctor_section2 .all_doctor_div .all_doctor_single_div .all_doctor_single_div_comunication_option p a {
+        font-size: 9px;
+    }
+
+    .explorer_doctor_section2 .all_doctor_div .all_doctor_single_div .all_doctor_single_div_comunication_option p:first-child {
+        font-size: 10px;
+    }
+}
+
+@media (max-width: 433px) {
+    .explorer_doctor_section2 .all_doctor_div .all_doctor_single_div .all_doctor_single_div_comunication_option {
+        display: flex;
+        margin: 15px 0 0 0;
+        flex-wrap: wrap;
+        row-gap: 6px;
+        column-gap: 5px;
+        margin-top: -5px;
+    }
+
+        .explorer_doctor_section2 .all_doctor_div .all_doctor_single_div .all_doctor_single_div_comunication_option p {
+            width: 35%;
+        }
+}
+
+
+.loder {
+    width: 100%;
+    height: 100dvh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: fixed;
+    top: 0;
+    backdrop-filter: blur(5000px);
+    z-index: 10000;
+    overflow: hidden;
+    background-color: var(--body-bg-color);
+}
+
+    .loder img {
+        width: 15%;
+        max-width: 20%;
+        mix-blend-mode: multiply;
+    }
+
+    .loder::-webkit-scrollbar {
+        display: none;
+    }
+
+.hidden {
+    display: none;
+}
+
+@media screen and (max-width: 768px) {
+    .loder img {
+        width: 50%;
+    }
+}
+
+@media screen and (max-width: 480px) {
+    .loder img {
+        width: 100%;
+    }
+}
+
+.no-scroll {
+    overflow: hidden;
+    height: 100vh;
 }

@@ -18,10 +18,13 @@ namespace HealthConnect.Pages
         public User_Table User { get; set; }
 
         public int? UserId { get; set; }
-        public string FirstName{ get; set; }
-        public string LastName{ get; set; }
+        public string FirstName { get; set; }
+        public string LastName { get; set; }
         public string ProfilePic { get; set; }
         public string Role { get; set; }
+        public string Country { get; set; }
+        public string State { get; set; }
+        public string City { get; set; }
         public string ErrorMessage { get; set; }
         public string SuccessMessage { get; set; }
 
@@ -54,6 +57,9 @@ namespace HealthConnect.Pages
                                 LastName = reader["last_name"].ToString();
                                 ProfilePic = reader["profile_pic"].ToString();
                                 Role = reader["role"].ToString();
+                                Country = reader["country"].ToString();
+                                State = reader["state"].ToString();
+                                City = reader["city"].ToString();
                                 UserId = (int?)reader["id"];
                             }
                         }
@@ -103,11 +109,7 @@ namespace HealthConnect.Pages
                             HttpContext.Session.SetInt32("Id", userId);
                             HttpContext.Session.SetString("UserRole", role);
 
-                            if (role == "Admin")
-                            {
-                                return RedirectToPage("/Admin/Admin_index");
-                            }
-                            else if (role == "User" || role == "Doctor")
+                            if (role == "User" || role == "Doctor" || role == "Admin")
                             {
                                 return RedirectToPage("/index");
                             }

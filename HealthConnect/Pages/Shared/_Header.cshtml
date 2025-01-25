@@ -16,56 +16,84 @@
 
 </head>
 <body>
+
+
+    <div class="loder" id="loder">
+        <img src="/Loder.gif" alt="Alternate Text" />
+    </div>
+
+
+
     <header id="header">
         <nav>
-            <img class="logo" src="~/images/HealthConnectLogo.png" alt="Alternate Text" />
+            
+            <img class="logo" src="/images/HealthConnectLogo.png" alt="Alternate Text" onclick="redirectToHomepage()" />
 
             <div class="header_drop_down">
 
-                <p>Home</p>
-                <p>About</p>
+                <p><a href="/">Home</a></p>
+                <p><a href="#">About</a></p>
+
+                <p><a href="/User/Explore_doctors">Explore doctors</a></p>
 
                 <div class="Speciality_drop_down">
                     <p>Search by Speciality <i class="fa-solid fa-angle-down toggle-icon1"></i></p>
                     <div class="Search_by_Speciality">
                         <ul>
-                            <li>Cardiology</li>
-                            <li>Neurology</li>
-                            <li>Orthopedics</li>
-                            <li>Urology</li>
-                            <li>ENT</li>
-                            <li>General Physician</li>
+                            <a href="">
+                            <li>Dermatology</li></a>
+                            <a href="">
+                            <li>Family Medicine</li></a>
+                            <a href="">
+                            <li>Oncology</li></a>
+                            <a href="">
+                            <li>Internal Medicine</li></a>
+                            <a href="">
+                            <li>Geriatrics</li></a>
+                            <a href="">
+                            <li>Psychiatry</li></a>
+                            <a href="">
+                            <li>Medical Genetics</li></a>
+                            <a href="">
+                            <li>Colorectal Surgery</li></a>
+                            <a href="">
+                            <li>Neurology</li></a>
+                            <a href="">
+                            <li>Gastroenterology</li></a>
+                            <a href="">
+                            <li>Endocrinology</li></a>
+                            <a href="">
+                            <li>Obstetrics and Gynaecology</li></a>
+                            <a href="">
+                            <li>Hematology</li></a>
+                            <a href="">
+                            <li>Emergency Medicine</li></a>
+                            <a href="">
+                            <li>Pathology</li></a>
+                            <a href="">
+                            <li>Critical Care Medicine</li></a>
+                            <a href="">
+                            <li>Cardiology</li></a>
+                            <a href="">
+                            <li>Anesthesiology</li></a>
+                            <a href="">
+                            <li>Immunology</li></a>
+                            <a href="">
+                            <li>Pediatrics</li></a>
+                            <a href="">
+                            <li>Ophthalmology</li></a>
+                            <a href="">
+                            <li>General Surgery</li></a>
+                            <a href="">
+                            <li>Diagnostic Radiology</li></a>
+                            <a href="">
+                            <li>Hospice and Palliative Medicine</li></a>
                         </ul>
-                    </div>
-                </div>
 
-                <div class="Condition_drop_down">
-                    <p>Search by Condition <i class="fa-solid fa-angle-down toggle-icon1"></i></p>
-                    <div class="Search_by_Condition">
-                        <ul>
-                            <li>Cardiology</li>
-                            <li>Neurology</li>
-                            <li>Orthopedics</li>
-                            <li>Urology</li>
-                            <li>ENT</li>
-                            <li>General Physician</li>
-                        </ul>
                     </div>
                 </div>
-
-                <div class="City_drop_down">
-                    <p>Search by City <i class="fa-solid fa-angle-down toggle-icon1"></i></p>
-                    <div class="Search_by_city">
-                        <ul>
-                            <li>Cardiology</li>
-                            <li>Neurology</li>
-                            <li>Orthopedics</li>
-                            <li>Urology</li>
-                            <li>ENT</li>
-                            <li>General Physician</li>
-                        </ul>
-                    </div>
-                </div>
+                <p>Blog</p>
+                <p>Shop</p>
 
                 <div class="login_and_profile">
 
@@ -107,23 +135,62 @@
                 </div>
                 <div class="hamburger_container_link" id="hamburger_container_link">
                     <ul>
-                        <li><a href="#">Home</a></li>
+                        <li><a href="/">Home</a></li>
+                        <li><a href="#">About</a></li>
+                        <li><a href="/User/Explore_doctors">Explor doctors</a></li>
+
+                        <li class="S_by_S">Search by Speciality <i class="fa-solid fa-angle-down toggle-icon1"></i></li>
+                    </ul>
+                    <div class="hamburgar_Search_by_Speciality" style="display: none;">
+                        <ul>
+                            <li><a href="#">General Practitioners (GP) / Family Medicine</a></li>
+                            <li><a href="#">Internal Medicine</a></li>
+                            <li><a href="#">Surgical Specialists</a></li>
+                            <li><a href="#">Pediatricians</a></li>
+                            <li><a href="#">Women’s Health Specialists</a></li>
+                            <li><a href="#">Mental Health Professionals</a></li>
+                            <li><a href="#">Cardiologists</a></li>
+                            <li><a href="#">Dermatologists</a></li>
+                            <li><a href="#">Neurologists</a></li>
+                            <li><a href="#">Oncologists</a></li>
+                            <li><a href="#">Ophthalmologists</a></li>
+                            <li><a href="#">Ear, Nose, and Throat (ENT) Specialists</a></li>
+                            <li><a href="#">Orthopedic Specialists</a></li>
+                            <li><a href="#">Anesthesiologists</a></li>
+                            <li><a href="#">Radiologists</a></li>
+                            <li><a href="#">Pathologists</a></li>
+                            <li><a href="#">Gastroenterologists</a></li>
+                            <li><a href="#">Endocrinologists</a></li>
+                            <li><a href="#">Immunologists</a></li>
+                            <li><a href="#">Pulmonologists</a></li>
+                            <li><a href="#">Hematologists</a></li>
+                            <li><a href="#">Emergency Medicine Specialists</a></li>
+                            <li><a href="#">Pain Management Specialists</a></li>
+                            <li><a href="#">Rehabilitation Medicine Specialists</a></li>
+                            <li><a href="#">Chiropractors</a></li>
+                            <li><a href="#">Dentists</a></li>
+                            <li><a href="#">Urologists</a></li>
+                            <li><a href="#">Occupational Medicine</a></li>
+                            <li><a href="#">Allergists</a></li>
+                            <li><a href="#">Palliative Care and Hospice Doctors</a></li>
+                            <li><a href="#">Toxicologists</a></li>
+                            <li><a href="#">Sports Medicine</a></li>
+                            <li><a href="#">Geriatric Specialists</a></li>
+                            <li><a href="#">Infectious Disease Specialists</a></li>
+                            <li><a href="#">Geneticists</a></li>
+                            <li><a href="#">Acupuncturists</a></li>
+                            <li><a href="#">Naturopaths</a></li>
+                            <li><a href="#">Physiatrists</a></li>
+                            <li><a href="#">Clinical Nutritionists</a></li>
+                            <li><a href="#">Speech-Language Pathologists</a></li>
+                            <li><a href="#">Plastic Surgeons</a></li>
+
+                        </ul>
+                    </div>
+                    <ul>
+   
                         <li><a href="#">Blog</a></li>
-                        <li class="S_by_S">Search by Speciality</li>
-                        <div class="hamburgar_Search_by_Speciality" style="display: none;">
-                            <a href="#">1</a>
-                            <a href="#">1</a>
-                        </div>
-                        <li class="S_by_C">Search by Condition</li>
-                        <div class="hamburgar_Search_by_Condition" style="display: none;">
-                            <a href="#">2</a>
-                            <a href="#">2</a>
-                        </div>
-                        <li class="S_by_City">Search by City</li>
-                        <div class="hamburgar_Search_by_City" style="display: none;">
-                            <a href="#">3</a>
-                            <a href="#">3</a>
-                        </div>
+                        <li><a href="#">Shop</a></li>
                     </ul>
                 </div>
 
@@ -142,12 +209,13 @@
                                 <a href="#">
                                     <i class="fa-solid fa-gear"></i> Settings
                                 </a>
-                                @if (Model.Role == "Admin"){
+                                @if (Model.Role == "Admin")
+                                {
                                     <a href="/Admin/Admin_index">
                                         <i class="fa-solid fa-user-tie"></i> Admin side
                                     </a>
                                 }
-                                
+
                                 <a href="/User/Logout">
                                     <i class="fa-solid fa-right-from-bracket"></i> Logout
                                 </a>
@@ -157,7 +225,7 @@
                 }
             </div>
 
-           
+
         </nav>
     </header>
 
@@ -191,7 +259,7 @@
             $('.S_by_City').click(function() {
                 $('.hamburgar_Search_by_City').slideToggle(300);
             });
-            
+
             // Toggle "User section"
             $('.header_user_icon2').click(function() {
                 $('.header_user_services2').slideToggle(300);
@@ -263,7 +331,24 @@
 
     </script>
 
+    <script src="/js/jQuery"></script>
 
+    <script>
+        $(document).ready(function () {
+            $("#myInput").on("keyup", function () {
+                var value = $(this).val().toLowerCase();
+                $(".data").filter(function () {
+                    $(this).toggle($(this).text().toLowerCase().indexOf(value) > -1);
+                });
+            });
+        });
+
+         document.getElementById('myInput').addEventListener('keydown', function(event) {
+          if (event.key === 'Enter') {
+            event.preventDefault();
+          }
+        });
+    </script>
 
 
 </body>

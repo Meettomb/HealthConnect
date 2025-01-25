@@ -99,3 +99,94 @@ input[type=number] {
         cursor: pointer;
         font-size: 27px;
     }
+
+.error_message {
+    color: red;
+    font-size: 14px;
+    font-weight: 700;
+    margin: 10px 0px;
+    text-align: center;
+    position: absolute;
+    top: 15px;
+    right: 15px;
+    background-color: #f8d7da;
+    padding: 10px 20px;
+    border-radius: 5px;
+    animation: shake 3s;
+    opacity: 0;
+}
+
+.success_message {
+    color: green;
+    font-size: 14px;
+    font-weight: 700;
+    margin: 10px 0px;
+    text-align: center;
+    position: absolute;
+    top: 15px;
+    right: 15px;
+    background-color: #d4edda;
+    padding: 10px 20px;
+    border-radius: 5px;
+    animation: shake 3s;
+    opacity: 0;
+    z-index: 10000;
+}
+
+@keyframes shake {
+    0% {
+        transform: translateX(0);
+        opacity: 0.2;
+        display: block;
+    }
+
+    10% {
+        transform: translateX(-10px);
+        opacity: 0.5;
+    }
+
+    20% {
+        transform: translateX(10px);
+        opacity: 1;
+    }
+
+    30% {
+        transform: translateX(-10px);
+        opacity: 1;
+    }
+
+    40% {
+        transform: translateX(10px);
+        opacity: 1;
+    }
+
+    50% {
+        transform: translateX(-10px);
+        opacity: 1;
+    }
+
+    60% {
+        transform: translateX(10px);
+        opacity: 1;
+    }
+
+    70% {
+        transform: translateX(-10px);
+        opacity: 1;
+    }
+
+    80% {
+        transform: translateX(10px);
+        opacity: 0.5;
+    }
+
+    90% {
+        transform: translateX(-10px);
+        opacity: 0.2;
+    }
+
+    100% {
+        transform: translateX(0);
+        opacity: 0;
+    }
+}
