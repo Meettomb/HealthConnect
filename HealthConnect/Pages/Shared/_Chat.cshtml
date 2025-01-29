@@ -1,0 +1,62 @@
+﻿<!DOCTYPE html>
+
+<html>
+<head>
+    <meta name="viewport" content="width=device-width" />
+    <title>@ViewBag.Title</title>
+    <link href="/css/index.css" rel="stylesheet" />
+    <link href="/images/HealthConnectTabLogo.png" rel="icon" />
+
+
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css">
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@100..900&family=Sofia+Sans+Condensed:ital,wght@0,1..1000;1,1..1000&display=swap" rel="stylesheet">
+
+</head>
+<body>
+    <section class="chat_section_1">
+        <div class="chat_section_container">
+            <div class="doctor_profile_section">
+                <i class="fa-solid fa-arrow-left" onclick="redirectToExplorepage()"></i>
+                <a href="" title="Doctor Profile">
+                    <img src="/documant/@Model.User.profile_pic" />
+                    <p>
+                        <span>Dr. </span>
+                        <span>@Model.User.first_name</span>
+                        <span>@Model.User.last_name</span>
+                    </p>
+                </a>
+            </div>
+        </div>
+    </section>
+
+    <div>
+        @RenderBody()
+    </div>
+
+
+    <section class="chat_section_2">
+        <div class="chat_section2_container">
+            <div class="message">
+                <button type="button" class="emoji">
+                    <i class="fa-regular fa-face-smile"></i>
+                </button>
+                <div class="message_type_and_send">
+
+                    <input type="text" name="message" id="message" autocomplete="off" />
+
+                    <button type="button" class="send">
+                        <i class="fa-regular fa-paper-plane"></i>
+                    </button>
+
+                </div>
+            </div>
+        </div>
+    </section>
+
+
+    <script src="/js/script.js"></script>
+</body>
+</html>

@@ -110,6 +110,7 @@ namespace HealthConnect.Pages.Admin.UserData.UserList
                                 medicine_type = !reader.IsDBNull(32) ? reader.GetString(32) : null,
                                 currency_code = !reader.IsDBNull(33) ? reader.GetString(33) : null,
                                 video_call_consultation_fee = !reader.IsDBNull(34) ? reader.GetString(34) : null,
+                                doctor_specialitis = !reader.IsDBNull(35) ? reader.GetString(35) : null,
                             };
 
                         }

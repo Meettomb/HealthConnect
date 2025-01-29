@@ -1,6 +1,9 @@
 ﻿function redirectToHomepage() {
     window.location.href = "/";
 }
+function redirectToExplorepage() {
+    window.location.href = "/User/Explore_doctors";
+}
 
 // Loder Script
 document.addEventListener('DOMContentLoaded', () => {

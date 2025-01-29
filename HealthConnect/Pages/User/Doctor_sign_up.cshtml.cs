@@ -28,6 +28,16 @@ namespace HealthConnect.Pages.User
         }
 
         [BindProperty]
+        public Types_of_Doctor TypesOfDoctor { get; set; } = new Types_of_Doctor();
+
+        public List<Types_of_Doctor> Types_of_doctor { get; set; } = new List<Types_of_Doctor>();
+
+        [BindProperty]
+        public Doctor_Specialitis SpecialitisOfDoctor { get; set; } = new Doctor_Specialitis();
+
+        public List<Doctor_Specialitis> doctorSpecialitiesList = new List<Doctor_Specialitis>();
+
+        [BindProperty]
         public Doctor_approvel doctor_Approvel { get; set; }
 
         public string ErrorMessage { get; set; }
@@ -78,6 +88,36 @@ namespace HealthConnect.Pages.User
             UserId = HttpContext.Session.GetInt32("Id");
             string roleInSession = HttpContext.Session.GetString("UserRole");
 
+
+
+            Types_of_doctor = new List<Types_of_Doctor>();
+
+            using (SqlConnection connection = new SqlConnection(_connectionString))
+            {
+                string query = "SELECT * FROM Types_of_Doctor";
+                using (SqlCommand command = new SqlCommand(query, connection))
+                {
+                    connection.Open();
+                    using (SqlDataReader reader = command.ExecuteReader())
+                    {
+                        while (reader.Read())
+                        {
+                            Types_of_doctor.Add(new Types_of_Doctor
+                            {
+                                doctor_type_id = reader.GetInt32(0),
+                                type_of_doctor = reader.GetString(1)
+                            });
+                        }
+                    }
+                }
+            }
+
+            // Initialize doctorSpecialitiesList
+            doctorSpecialitiesList = new List<Doctor_Specialitis>();
+
+
+
+          
             if (UserId.HasValue && !string.IsNullOrEmpty(roleInSession))
             {
                 if (roleInSession == "Admin")
@@ -158,6 +198,45 @@ namespace HealthConnect.Pages.User
             return Page();
         }
 
+        public JsonResult OnGetFetchSpecialities(int doctorTypeId)
+        {
+            var doctorSpecialities = new List<Doctor_Specialitis>();
+
+            string query = @"
+    SELECT 
+        DS.doctor_specialitis_id,
+        DS.doctor_type_id,
+        DS.doctor_specialitis
+    FROM 
+        Doctor_Specialitis DS
+    WHERE 
+        DS.doctor_type_id = @doctorTypeId";
+
+            using (SqlConnection connection = new SqlConnection(_connectionString))
+            {
+                using (SqlCommand command = new SqlCommand(query, connection))
+                {
+                    command.Parameters.AddWithValue("@doctorTypeId", doctorTypeId);
+                    connection.Open();
+                    using (SqlDataReader reader = command.ExecuteReader())
+                    {
+                        while (reader.Read())
+                        {
+                            doctorSpecialities.Add(new Doctor_Specialitis
+                            {
+                                doctor_specialitis_id = reader.GetInt32(0),
+                                doctor_type_id = reader.GetInt32(1),
+                                doctor_specialitis = reader.GetString(2)
+                            });
+                        }
+                    }
+                }
+            }
+
+            return new JsonResult(doctorSpecialities);
+        }
+
+
 
         public async Task<IActionResult> OnPostAsync()
         {
@@ -221,6 +300,7 @@ namespace HealthConnect.Pages.User
             doctor_Approvel.medicine_type = Request.Form["medicine_type"];
             doctor_Approvel.account_create_date = DateTime.Now;
             doctor_Approvel.video_call_consultation_fee = Request.Form["video_call_consultation_fee"];
+            doctor_Approvel.doctor_specialitis = Request.Form["doctor_specialitis"];
 
             bool isSaved = await SaveDoctorApprovalToDatabase(doctor_Approvel);
             if (!isSaved)
@@ -259,12 +339,12 @@ namespace HealthConnect.Pages.User
                     (first_name, last_name, email, mobil_no, dob, House_number_and_Street_name, country, city, state, pincode, gender, role, password, 
                      medical_registration_no, state_medical_council, year_of_registration, doctore_experience, hospital_or_clinic, doctor_qualifications, 
                      doctor_type, languages_spoken, clinic_or_hospital_address, on_site_consultation_fee, account_create_date, profile_pic, doctore_medical_license_photo, 
-                     isactive, medicine_type, currency_code, video_call_consultation_fee)
+                     isactive, medicine_type, currency_code, video_call_consultation_fee, doctor_specialitis)
                   VALUES 
                     (@FirstName, @LastName, @Email, @MobilNo, @DOB, @HouseNoStreetName, @Country, @City, @State, @Pincode, @Gender, @Role, @Password, 
                      @MedicalRegistrationNo, @StateMedicalCouncil, @YearOfRegistration, @DoctorExperience, @HospitalOrClinic, @DoctorQualifications, 
                      @DoctorType, @LanguagesSpoken, @ClinicOrHospitalAddress, @On_site_consultation_fee, @AccountCreateDate, @ProfilePic, @MedicalLicensePhoto, 
-                     @IsActive, @Medicine_type, @Currency_code, @Video_call_consultation_fee)";
+                     @IsActive, @Medicine_type, @Currency_code, @Video_call_consultation_fee, @Doctor_specialitis)";
 
                 using (var command = new SqlCommand(query, connection))
                 {
@@ -298,6 +378,7 @@ namespace HealthConnect.Pages.User
                     command.Parameters.AddWithValue("@IsActive", false);
                     command.Parameters.AddWithValue("@Currency_code", doctor_Approvel.currency_code);
                     command.Parameters.AddWithValue("@Video_call_consultation_fee", doctor_Approvel.video_call_consultation_fee);
+                    command.Parameters.AddWithValue("@Doctor_specialitis", doctor_Approvel.doctor_specialitis);
 
                     int rowsAffected = await command.ExecuteNonQueryAsync();
                     return rowsAffected > 0;

@@ -548,3 +548,32 @@ Upload Medical License Photo
             .user_multiple_filsd_wrep .user_select_box select::-webkit-scrollbar {
                 display: none;
             }
+
+#DoctorSpecialitisTypeSelect option{
+    margin: 5px 0;
+    font-size: 16px;
+}
+
+#languagesSpokenSelect {
+    height: 150px;
+    overflow: scroll;
+    font-size: 16px;
+}
+    #languagesSpokenSelect option {
+        margin: 5px 0;
+    }
+
+
+#MedicineTypeSelect option{
+    margin: 5px 0;
+    font-size: 16px;
+}
+
+#DoctorQualificationsSelect {
+/*    height: 250px;*/
+    overflow: scroll;
+    font-size: 16px;
+}
+    #DoctorQualificationsSelect option {
+        margin: 5px 0;
+    }

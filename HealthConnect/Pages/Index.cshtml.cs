@@ -28,6 +28,16 @@ namespace HealthConnect.Pages
         public string ErrorMessage { get; set; }
         public string SuccessMessage { get; set; }
 
+        [BindProperty]
+        public Types_of_Doctor TypesOfDoctor { get; set; } = new Types_of_Doctor();
+
+        public List<Types_of_Doctor> Types_of_doctor { get; set; } = new List<Types_of_Doctor>();
+
+        [BindProperty]
+        public Doctor_Specialitis SpecialitisOfDoctor { get; set; } = new Doctor_Specialitis();
+
+        public List<Doctor_Specialitis> doctorSpecialitiesList = new List<Doctor_Specialitis>();
+
         public IndexModel(ILogger<IndexModel> logger, IConfiguration configuration)
         {
             _logger = logger;
@@ -38,6 +48,48 @@ namespace HealthConnect.Pages
         public IActionResult OnGet()
         {
             string roleInSession = HttpContext.Session.GetString("UserRole");
+
+            using (SqlConnection connection = new SqlConnection(_connectionString))
+            {
+                string query = "SELECT doctor_specialitis_id, doctor_specialitis FROM Doctor_Specialitis";
+
+                using (SqlCommand command = new SqlCommand(query, connection))
+                {
+                    connection.Open();
+                    using (SqlDataReader reader = command.ExecuteReader())
+                    {
+                        while (reader.Read())
+                        {
+                            doctorSpecialitiesList.Add(new Doctor_Specialitis
+                            {
+                                doctor_specialitis_id = reader.GetInt32(0),
+                                doctor_specialitis = reader.GetString(1), 
+                            });
+                        }
+                    }
+                }
+            }
+             
+            using (SqlConnection connection = new SqlConnection(_connectionString))
+            {
+                string query = "SELECT doctor_type_id, type_of_doctor FROM Types_of_Doctor";
+
+                using (SqlCommand command = new SqlCommand(query, connection))
+                {
+                    connection.Open();
+                    using (SqlDataReader reader = command.ExecuteReader())
+                    {
+                        while (reader.Read())
+                        {
+                            Types_of_doctor.Add(new Types_of_Doctor
+                            {
+                                doctor_type_id = reader.GetInt32(0),
+                                type_of_doctor = reader.GetString(1),
+                            });
+                        }
+                    }
+                }
+            }
 
             UserId = HttpContext.Session.GetInt32("Id");
             if (UserId.HasValue)
@@ -130,8 +182,12 @@ namespace HealthConnect.Pages
                 }
             }
 
+
             return Page();
         }
+
+    
+
 
     }
 }

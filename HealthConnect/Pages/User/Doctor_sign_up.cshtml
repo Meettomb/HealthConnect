@@ -16,6 +16,8 @@
     <link href="/images/HealthConnectTabLogo.png" rel="icon" />
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css">
 
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+
 </head>
 <body class="login_body">
     <div class="back_button" onclick="history.back()"><i class="fa-solid fa-arrow-left"></i></div>
@@ -50,7 +52,7 @@
             <div class="user_filsd_wrep">
                 <div class="user_input_box">
                     <select id="StateMedicalCouncil" name="state_medical_council" required>
-                        <option value="" disabled selected>Select your medical council</option>
+                        <option value="" disabled selected>-- Select your medical council --</option>
                         <option value="Chattisgarh Medical Council">Chattisgarh Medical Council</option>
                         <option value="Other">Other</option>
                     </select>
@@ -59,7 +61,7 @@
 
                 <div class="user_input_box">
                     <select id="YearOfRegistration" name="year_of_registration" required>
-                        <option value="" disabled selected>Select Year of Registration</option>
+                        <option value="" disabled selected>-- Select Year of Registration --</option>
                         @for (int yearOption = DateTime.Now.Year; yearOption >= 1900; yearOption--)
                         {
                             <option value="@yearOption">@yearOption</option>
@@ -80,7 +82,7 @@
                 <div class="user_input_box">
 
                     <select id="YearOfRegistration" name="doctore_experience" required>
-                        <option value="" disabled selected>Select passing year</option>
+                        <option value="" disabled selected>-- Select passing year --</option>
                         @for (int yearOption = DateTime.Now.Year; yearOption >= 1900; yearOption--)
                         {
                             <option value="@yearOption">@yearOption</option>
@@ -95,46 +97,40 @@
 
                 <div class="user_input_box">
                     <select name="hospital_or_clinic" required>
-                        <option value="" disabled selected>Select Hospital or Clinic</option>
+                        <option value="" disabled selected>-- Select Hospital or Clinic --</option>
                         <option value="Clinic">Clinic</option>
                         <option value="Hospital">Hospital</option>
                     </select>
                 </div>
                 <p class="error"></p>
 
+                <div class="user_input_box">
+                    <select id="doctorTypeSelect" name="doctor_type" required onchange="fetchDoctorSpecialities()">
+
+                        <option disabled >-- Select doctor type --</option>
+                        @foreach (var item in Model.Types_of_doctor)
+                        {
+                            <option value="@item.doctor_type_id">@item.type_of_doctor</option>
+                        }
+                    </select>
+                </div>
+
             </div>
 
             <div class="user_multiple_filsd_wrep">
-                <label>Select doctor type</label>
+                <label>Select your specialities</label>
                 <div class="user_select_box">
-                    <select id="doctorTypeSelect" name="doctor_type" multiple required>
-                        <option value="General Physician">General Physician</option>
-                        <option value="Family Doctor">Family Doctor</option>
-                        <option value="Internal Medicine">Internal Medicine</option>
-                        <option value="Pediatrics">Pediatrics</option>
-                        <option value="Psychiatry">Psychiatry</option>
+                    <select id="DoctorSpecialitisTypeSelect" name="doctor_specialitis" multiple required>
+                        @foreach (var item in Model.doctorSpecialitiesList)
+                        {
+                            <option value="@item.doctor_specialitis_id">@item.doctor_specialitis</option>
+                        }
                     </select>
                 </div>
-                <div id="doctorTypeTags" class="tags-container"></div>
-            </div>
 
-            <div class="user_multiple_filsd_wrep">
-                <label>Select your langauge</label>
-                <div class="user_select_box">
-                    <select id="languagesSpokenSelect" name="languages_spoken" multiple required>
-                        <option value="English">English</option>
-                        <option value="Hindi">Hindi</option>
-                        <option value="Bengali">Bengali</option>
-                        <option value="Telugu">Telugu</option>
-                        <option value="Marathi">Marathi</option>
-                        <option value="Tamil">Tamil</option>
-                        <option value="Urdu">Urdu</option>
-                        <option value="Gujarati">Gujarati</option>
-                    </select>
-                </div>
-                <div id="languagesSpokenTags" class="tags-container"></div>
+                <div id="DoctorSpecialitisTypeSelectTags" class="tags-container"></div>
             </div>
-
+           
 
             <div class="user_multiple_filsd_wrep">
                 <label>Select medicine type</label>
@@ -160,11 +156,72 @@
                         <option value="MS (Master of Surgery)">MS (Master of Surgery)</option>
                         <option value="DM (Doctorate of Medicine)">DM (Doctorate of Medicine)</option>
                         <option value="MCh (Magister Chirurgiae)">MCh (Magister Chirurgiae)</option>
+                        <option value="FRCS (Fellow of the Royal College of Surgeons)">FRCS (Fellow of the Royal College of Surgeons)</option>
+                        <option value="MRCP (Membership of the Royal Colleges of Physicians)">MRCP (Membership of the Royal Colleges of Physicians)</option>
+                        <option value="FACP (Fellow of the American College of Physicians)">FACP (Fellow of the American College of Physicians)</option>
+                        <option value="FACOG (Fellow of the American College of Obstetricians and Gynecologists)">FACOG (Fellow of the American College of Obstetricians and Gynecologists)</option>
+                        <option value="FACS (Fellow of the American College of Surgeons)">FACS (Fellow of the American College of Surgeons)</option>
+                        <option value="PG Diploma in Pediatrics">PG Diploma in Pediatrics</option>
+                        <option value="PG Diploma in Dermatology">PG Diploma in Dermatology</option>
+                        <option value="PG Diploma in Anesthesia">PG Diploma in Anesthesia</option>
+                        <option value="DGO (Diploma in Obstetrics and Gynecology)">DGO (Diploma in Obstetrics and Gynecology)</option>
+                        <option value="DNB (Diplomate of National Board)">DNB (Diplomate of National Board)</option>
+                        <option value="BAMS (Bachelor of Ayurvedic Medicine and Surgery)">BAMS (Bachelor of Ayurvedic Medicine and Surgery)</option>
+                        <option value="BHMS (Bachelor of Homeopathic Medicine and Surgery)">BHMS (Bachelor of Homeopathic Medicine and Surgery)</option>
+                        <option value="BUMS (Bachelor of Unani Medicine and Surgery)">BUMS (Bachelor of Unani Medicine and Surgery)</option>
+                        <option value="MDS (Master of Dental Surgery)">MDS (Master of Dental Surgery)</option>
+                        <option value="MD in Dermatology, Venereology, and Leprosy">MD in Dermatology, Venereology, and Leprosy</option>
+                        <option value="MD in Pediatrics">MD in Pediatrics</option>
+                        <option value="MD in Psychiatry">MD in Psychiatry</option>
+                        <option value="MD in General Medicine">MD in General Medicine</option>
+                        <option value="MS in Orthopedics">MS in Orthopedics</option>
+                        <option value="MS in ENT (Otorhinolaryngology)">MS in ENT (Otorhinolaryngology)</option>
+                        <option value="MS in Ophthalmology">MS in Ophthalmology</option>
+                        <option value="DM in Cardiology">DM in Cardiology</option>
+                        <option value="DM in Neurology">DM in Neurology</option>
+                        <option value="MCh in Neurosurgery">MCh in Neurosurgery</option>
+                        <option value="MCh in Urology">MCh in Urology</option>
+                        <option value="MCh in Plastic Surgery">MCh in Plastic Surgery</option>
+                        <option value="MCh in Pediatric Surgery">MCh in Pediatric Surgery</option>
+                        <option value="DNB in Cardiology">DNB in Cardiology</option>
+                        <option value="DNB in Gastroenterology">DNB in Gastroenterology</option>
+                        <option value="DNB in Neurology">DNB in Neurology</option>
+                        <option value="DNB in Oncology">DNB in Oncology</option>
+                        <option value="FICS (Fellowship of International College of Surgeons)">FICS (Fellowship of International College of Surgeons)</option>
+                        <option value="FICM (Fellow of Indian College of Medicine)">FICM (Fellow of Indian College of Medicine)</option>
+                        <option value="FRCP (Fellow of the Royal College of Physicians)">FRCP (Fellow of the Royal College of Physicians)</option>
+                        <option value="FRCS in Orthopedics">FRCS in Orthopedics</option>
+                        <option value="MCh in Cardio Thoracic Surgery">MCh in Cardio Thoracic Surgery</option>
+                        <option value="DCH (Diploma in Child Health)">DCH (Diploma in Child Health)</option>
+                        <option value="FACS (Fellow of the American College of Surgeons)">FACS (Fellow of the American College of Surgeons)</option>
+                        <option value="FICOG (Fellow of the Indian College of Obstetricians and Gynecologists)">FICOG (Fellow of the Indian College of Obstetricians and Gynecologists)</option>
+                        <option value="FRCS in General Surgery">FRCS in General Surgery</option>
+                        <option value="MPhil in Clinical Psychology">MPhil in Clinical Psychology</option>
+                        <option value="PhD in Medical Sciences">PhD in Medical Sciences</option>
+                        <option value="MD in Forensic Medicine">MD in Forensic Medicine</option>
+                        <option value="MD in Radiology">MD in Radiology</option>
+                        <option value="MD in Pathology">MD in Pathology</option>
+                        <option value="MD in Microbiology">MD in Microbiology</option>
+                        <option value="MBBS in Medicine">MBBS in Medicine</option>
+                        <option value="MBBS in Surgery">MBBS in Surgery</option>
+
                     </select>
                 </div>
 
                 <div id="DoctorQualificationsTags" class="tags-container"></div>
             </div>
+
+            <div class="user_multiple_filsd_wrep">
+                <label>Select your langauge</label>
+                <div class="user_select_box">
+                    <select id="languagesSpokenSelect" name="languages_spoken" multiple required>
+                        <option value="" disabled>-- Select langauge --</option>
+                    </select>
+                </div>
+
+                <div id="languagesSpokenTags" class="tags-container"></div>
+            </div>
+
 
             <div class="user_filsd_wrep">
                 <div class="user_input_box">
@@ -207,6 +264,69 @@
     <div id="error-message" style="color: red; display: none;"></div>
     <div id="success-message" style="color: green; display: none;"></div>
 
+    <script>
+
+                       let languagesSpokenSelect = document.getElementById('languagesSpokenSelect');
+
+        const settings = {
+            async: true,
+            crossDomain: true,
+            url: 'https://ai-translate.p.rapidapi.com/languages',
+            method: 'GET',
+            headers: {
+                'x-rapidapi-key': '3f03d9797emsh73ca4574bd5e4d8p18d1c3jsn45f14e7f6f51',
+                'x-rapidapi-host': 'ai-translate.p.rapidapi.com'
+            }
+        };
+
+        $.ajax(settings).done(function (response) {
+            console.log(response);
+
+            // Check if the response contains language data
+            if (response) {
+                // Loop through the object and create option elements
+                for (let languageCode in response) {
+                    let languageName = response[languageCode]; // Get the language name from the object
+
+                    let option = document.createElement('option');
+                    option.value = languageName; // Set the value to the language name
+                    option.textContent = languageName; // Set the display text to the language name
+                    languagesSpokenSelect.appendChild(option); // Append option to the select element
+                }
+            }
+        });
+
+
+    </script>
+
+
+    <script>
+                function fetchDoctorSpecialities() {
+            var doctorTypeId = document.getElementById("doctorTypeSelect").value;
+
+            if (doctorTypeId) {
+                // Adjust the URL for Razor Pages handler
+                fetch(`/User/Doctor_sign_up?handler=FetchSpecialities&doctorTypeId=${doctorTypeId}`)
+                    .then(response => response.json())
+                    .then(data => {
+                        // Clear existing options
+                        var selectElement = document.getElementById("DoctorSpecialitisTypeSelect");
+                        selectElement.innerHTML = '<option disabled>-- Select Specialities --</option>';
+
+                        // Add new options based on the fetched data
+                        data.forEach(function (item) {
+                            var option = document.createElement("option");
+                            option.value = item.doctor_specialitis_id;
+                            option.text = item.doctor_specialitis;
+                            selectElement.appendChild(option);
+                        });
+                    })
+                    .catch(error => console.log(error));
+            }
+        }
+
+    </script>
+
 
     <script>
               function handleSelection(selectElementId, tagsContainerId) {
@@ -234,7 +354,7 @@
             });
         }
 
-        handleSelection('doctorTypeSelect', 'doctorTypeTags');
+        handleSelection('DoctorSpecialitisTypeSelect', 'DoctorSpecialitisTypeSelectTags');
         handleSelection('languagesSpokenSelect', 'languagesSpokenTags');
         handleSelection('MedicineTypeSelect', 'MedicineTypeTags');
         handleSelection('DoctorQualificationsSelect', 'DoctorQualificationsTags');

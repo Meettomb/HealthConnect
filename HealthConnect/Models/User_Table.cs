@@ -43,6 +43,8 @@ namespace HealthConnect.Models
         public string? medicine_type { get; set; }
         public string? currency_code { get; set; }
         public string? video_call_consultation_fee { get; set; }
+        public string? doctor_specialitis { get; set; }
+        public bool? doctor_profile_complete { get; set; }
     }
 
 }

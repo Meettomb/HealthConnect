@@ -32,6 +32,16 @@ namespace HealthConnect.Pages.User
         public string SuccessMessage { get; set; }
 
 
+        [BindProperty]
+        public Types_of_Doctor TypesOfDoctor { get; set; } = new Types_of_Doctor();
+
+        public List<Types_of_Doctor> Types_of_doctor { get; set; } = new List<Types_of_Doctor>();
+
+        [BindProperty]
+        public Doctor_Specialitis SpecialitisOfDoctor { get; set; } = new Doctor_Specialitis();
+
+        public List<Doctor_Specialitis> doctorSpecialitiesList = new List<Doctor_Specialitis>();
+
 
 
 
@@ -51,6 +61,47 @@ namespace HealthConnect.Pages.User
             if (UserId.HasValue)
             {
                 GetCurrentUserDetails(UserId.Value);
+            }
+            using (SqlConnection connection = new SqlConnection(_connectionString))
+            {
+                string query = "SELECT doctor_specialitis_id, doctor_specialitis FROM Doctor_Specialitis";
+
+                using (SqlCommand command = new SqlCommand(query, connection))
+                {
+                    connection.Open();
+                    using (SqlDataReader reader = command.ExecuteReader())
+                    {
+                        while (reader.Read())
+                        {
+                            doctorSpecialitiesList.Add(new Doctor_Specialitis
+                            {
+                                doctor_specialitis_id = reader.GetInt32(0),
+                                doctor_specialitis = reader.GetString(1),
+                            });
+                        }
+                    }
+                }
+            }
+
+            using (SqlConnection connection = new SqlConnection(_connectionString))
+            {
+                string query = "SELECT doctor_type_id, type_of_doctor FROM Types_of_Doctor";
+
+                using (SqlCommand command = new SqlCommand(query, connection))
+                {
+                    connection.Open();
+                    using (SqlDataReader reader = command.ExecuteReader())
+                    {
+                        while (reader.Read())
+                        {
+                            Types_of_doctor.Add(new Types_of_Doctor
+                            {
+                                doctor_type_id = reader.GetInt32(0),
+                                type_of_doctor = reader.GetString(1),
+                            });
+                        }
+                    }
+                }
             }
 
             GetDoctorsList("Doctor");
@@ -91,7 +142,34 @@ namespace HealthConnect.Pages.User
         {
             using (SqlConnection connection = new SqlConnection(_connectionString))
             {
-                string query = "SELECT * FROM User_Table WHERE role = @Role";
+                string query = @"
+                SELECT u.id, u.first_name, u.last_name, u.email, u.mobil_no, 
+       u.dob, u.House_number_and_Street_name, u.country, u.city, 
+       u.state, u.pincode, u.gender, u.role, u.password, 
+       u.profile_pic, u.doctore_medical_license_photo, u.medical_registration_no, 
+       u.state_medical_council, u.year_of_registration, u.doctore_experience, 
+       u.hospital_or_clinic, u.doctor_qualifications, u.doctor_type, 
+       u.languages_spoken, u.clinic_or_hospital_address, u.on_site_consultation_fee, 
+       u.account_approve, u.account_create_date, u.block, u.isactive, 
+       u.mobail_verifie, u.auth_token, u.medicine_type, 
+       u.currency_code, u.video_call_consultation_fee,
+       STRING_AGG(ds.doctor_specialitis, ', ') AS doctor_specialitis_list 
+FROM User_Table u
+LEFT JOIN Doctor_Specialitis ds 
+    ON ds.doctor_specialitis_id IN (SELECT value FROM STRING_SPLIT(u.doctor_specialitis, ','))
+WHERE u.role = @Role
+GROUP BY u.id, u.first_name, u.last_name, u.email, u.mobil_no, 
+         u.dob, u.House_number_and_Street_name, u.country, u.city, 
+         u.state, u.pincode, u.gender, u.role, u.password, 
+         u.profile_pic, u.doctore_medical_license_photo, u.medical_registration_no, 
+         u.state_medical_council, u.year_of_registration, u.doctore_experience, 
+         u.hospital_or_clinic, u.doctor_qualifications, u.doctor_type, 
+         u.languages_spoken, u.clinic_or_hospital_address, u.on_site_consultation_fee, 
+         u.account_approve, u.account_create_date, u.block, u.isactive, 
+         u.mobail_verifie, u.auth_token, u.medicine_type, 
+         u.currency_code, u.video_call_consultation_fee";
+
+
                 using (SqlCommand cmd = new SqlCommand(query, connection))
                 {
                     cmd.Parameters.AddWithValue("@Role", role);
@@ -103,8 +181,7 @@ namespace HealthConnect.Pages.User
                         {
                             int currentYear = DateTime.Now.Year;
                             int doctorExperienceYear = reader.IsDBNull(19) ? 0 : int.Parse(reader.GetString(19));
-                            int experienceInYears = doctorExperienceYear == 0 ? 0 : (currentYear - doctorExperienceYear) - 2; 
-                                                                                                                              
+                            int experienceInYears = doctorExperienceYear == 0 ? 0 : (currentYear - doctorExperienceYear) - 2;
 
                             var userData = new User_Table
                             {
@@ -136,17 +213,17 @@ namespace HealthConnect.Pages.User
                                 on_site_consultation_fee = reader.IsDBNull(25) ? null : reader.GetString(25),
                                 account_approve = reader.GetBoolean(26),
                                 account_create_date = reader.GetDateTime(27),
-                                block = reader.IsDBNull(28) ? null : reader.GetBoolean(28),
+                                block = reader.IsDBNull(28) ? (bool?)null : reader.GetBoolean(28),
                                 isactive = reader.GetBoolean(29),
-                                mobail_verifie = reader.IsDBNull(30) ? null : reader.GetBoolean(30),
+                                mobail_verifie = reader.IsDBNull(30) ? (bool?)null : reader.GetBoolean(30),
                                 auth_token = reader.IsDBNull(31) ? null : reader.GetString(31),
                                 medicine_type = reader.IsDBNull(32) ? null : reader.GetString(32),
                                 currency_code = reader.IsDBNull(33) ? null : reader.GetString(33),
-                                video_call_consultation_fee = reader.IsDBNull(34) ? null : reader.GetString(34)
+                                video_call_consultation_fee = reader.IsDBNull(34) ? null : reader.GetString(34),
+                                doctor_specialitis = reader.IsDBNull(35) ? null : reader.GetString(35)
                             };
                             User_list.Add(userData);
                         }
-
                     }
                 }
             }

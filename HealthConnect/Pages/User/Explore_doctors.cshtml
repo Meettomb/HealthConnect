@@ -16,34 +16,14 @@
     <div class="filtre_doctor_div">
         <div class="select_filter">
             <p>Doctor speciality</p>
-            <select>
+            <select id="specialityFilter">
                 <option selected disabled>Select doctor speciality</option>
-                <option value="Dermatology">Dermatology</option>
-                <option value="Family Medicine">Family Medicine</option>
-                <option value="Oncology">Oncology</option>
-                <option value="Internal Medicine">Internal Medicine</option>
-                <option value="Geriatrics">Geriatrics</option>
-                <option value="Psychiatry">Psychiatry</option>
-                <option value="Medical Genetics">Medical Genetics</option>
-                <option value="Colorectal Surgery">Colorectal Surgery</option>
-                <option value="Neurology">Neurology</option>
-                <option value="Gastroenterology">Gastroenterology</option>
-                <option value="Endocrinology">Endocrinology</option>
-                <option value="Obstetrics and Gynaecology">Obstetrics and Gynaecology</option>
-                <option value="Hematology">Hematology</option>
-                <option value="Emergency Medicine">Emergency Medicine</option>
-                <option value="Pathology">Pathology</option>
-                <option value="Critical Care Medicine">Critical Care Medicine</option>
-                <option value="Cardiology">Cardiology</option>
-                <option value="Anesthesiology">Anesthesiology</option>
-                <option value="Immunology">Immunology</option>
-                <option value="Pediatrics">Pediatrics</option>
-                <option value="Ophthalmology">Ophthalmology</option>
-                <option value="General Surgery">General Surgery</option>
-                <option value="Diagnostic Radiology">Diagnostic Radiology</option>
-                <option value="Hospice and Palliative Medicine">Hospice and Palliative Medicine</option>
-
+                @foreach (var item in Model.doctorSpecialitiesList)
+                {
+                    <option value="@item.doctor_specialitis">@item.doctor_specialitis</option>
+                }
             </select>
+
         </div>
 
         <div class="select_filter">
@@ -88,7 +68,6 @@
             {
                 <div class="all_doctor_single_div data">
                     <div class="all_doctor_single_div_sides">
-                        <!-- Use data attributes for country and currency code -->
                         <div class="all_doctor_single_left" data-country="@data.country" data-currency="@data.currency_code">
                             <img src="/documant/@data.profile_pic" alt="Dr. @data.first_name @data.last_name" />
                             <p><i class="fa-solid fa-location-dot"></i> @data.country, @data.state, @data.city</p>
@@ -96,7 +75,7 @@
 
                         <div class="all_doctor_single_middle">
                             <h1>@data.first_name @data.last_name </h1>
-                            <p>@data.doctor_qualifications </p>
+                            <p>@data.doctor_specialitis </p>
                             <p>@data.medicine_type</p>
                             <p>Experience: @data.doctore_experience Years <span></span></p>
                         </div>
@@ -130,6 +109,7 @@
                     </div>
 
                     <div class="all_doctor_single_div_comunication_option">
+                        
                         @if (data.hospital_or_clinic == "Clinic")
                         {
                             <p><i class="fa-solid fa-house-chimney-medical"></i><span id="fee-hospital-or-clinic-@data.country">$@data.on_site_consultation_fee</span></p>
@@ -139,7 +119,7 @@
                             <p><i class="fa-solid fa-hospital"></i><span id="fee-hospital-or-clinic-@data.country">@data.on_site_consultation_fee</span></p>
                         }
 
-                        <p><a href="#"><i class="fa-brands fa-rocketchat"></i> Chat</a></p>
+                        <p><a href="/User/Chat?id=@data.id"><i class="fa-brands fa-rocketchat"></i> Chat</a></p>
 
                         @if (data.video_call_consultation_fee != null)
                         {
@@ -156,7 +136,7 @@
                 </div>
             }
 
-          
+
         }
         else
         {
