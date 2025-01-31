@@ -70,7 +70,7 @@ namespace HealthConnect.Pages.Admin.UserData.UserList
 
             using (SqlConnection connection = new SqlConnection(_connectionString))
             {
-                string query = "SELECT * FROM User_Table WHERE account_approve = 1 AND isactive = 1";
+                string query = "SELECT * FROM User_Table WHERE account_approve = 1 AND isactive = 1 ORDER BY id DESC";
                 using (SqlCommand command = new SqlCommand(query, connection))
                 {
                     connection.Open();

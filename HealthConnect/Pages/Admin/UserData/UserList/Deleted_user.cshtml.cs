@@ -35,7 +35,7 @@ namespace HealthConnect.Pages.Admin.UserData.UserList
             {
                 using (SqlConnection con = new SqlConnection(_connectionString))
                 {
-                    string query = "SELECT * FROM User_Table WHERE id = @UserId";
+                    string query = "SELECT * FROM User_Table WHERE id = @UserId ORDER BY id DESC";
                     using (SqlCommand cmd = new SqlCommand(query, con))
                     {
                         cmd.Parameters.AddWithValue("@UserId", UserId.Value);
