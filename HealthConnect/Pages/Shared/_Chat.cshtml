@@ -28,6 +28,10 @@
                         <span>@Model.User.last_name</span>
                     </p>
                 </a>
+                <div class="chat_clear">
+                    <i class="fa-solid fa-broom" id="clearChat" title="Clear chat history" onclick="clearChatHistory()"></i>
+                </div>
+
             </div>
         </div>
     </section>
@@ -36,27 +40,114 @@
         @RenderBody()
     </div>
 
-
+    <p id="message"> </p>
     <section class="chat_section_2">
         <div class="chat_section2_container">
             <div class="message">
                 <button type="button" class="emoji">
                     <i class="fa-regular fa-face-smile"></i>
                 </button>
-                <div class="message_type_and_send">
+                <input type="text" name="message" id="messageInput" autocomplete="off" placeholder="Type your message..." />
 
-                    <input type="text" name="message" id="message" autocomplete="off" />
-
-                    <button type="button" class="send">
-                        <i class="fa-regular fa-paper-plane"></i>
-                    </button>
-
-                </div>
+                <button type="button" class="send" onclick="sendMessage()">
+                    <i class="fa-regular fa-paper-plane"></i>
+                </button>
             </div>
+
         </div>
     </section>
 
-
     <script src="/js/script.js"></script>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/microsoft-signalr/7.0.0/signalr.min.js"></script>
+
+    <script>
+              const connection = new signalR.HubConnectionBuilder()
+            .withUrl("/chatHub")
+            .build();
+
+        let senderId = "@Model.UserId"; // Get sender ID from Razor
+        let receiverId = "@Model.User.id"; // Get receiver ID
+
+        connection.start().then(() => {
+            console.log("SignalR Connected");
+            loadMessagesFromServer(); // Load messages from server
+        });
+
+        // Send message when clicking the button
+        function sendMessage() {
+            const messageInput = document.getElementById("messageInput");
+            const message = messageInput.value.trim();
+
+            if (!message) {
+                alert("Please enter a message");
+                return;
+            }
+
+            connection.invoke("SendMessage", senderId, receiverId, message)
+                .then(() => saveMessageToServer(senderId, receiverId, message))
+                .catch(err => console.error(err.toString()));
+
+            messageInput.value = "";
+        }
+
+        // Receive messages from SignalR
+        connection.on("ReceiveMessage", (sender, receiver, message) => {
+            displayMessage(message);
+        });
+
+        // Display messages (Only show the message, not IDs)
+        function displayMessage(message) {
+            const messageContainer = document.getElementById("messages");
+            const newMessage = document.createElement("p");
+
+            newMessage.textContent = message; // Only display the message text
+            newMessage.style.margin = "10px 0";
+
+            messageContainer.appendChild(newMessage);
+        }
+
+        // Save messages to the server
+        function saveMessageToServer(senderId, receiverId, message) {
+            fetch("/api/chat/save", {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({ senderId, receiverId, message })
+            }).catch(err => console.error("Error saving message:", err));
+        }
+
+            // Load messages from server
+        function loadMessagesFromServer() {
+            fetch(`/api/chat/load?senderId=${senderId}&receiverId=${receiverId}`)
+                .then(response => response.json())
+                .then(messages => {
+                    messages.forEach(msg => displayMessage(msg.message)); // Only display the message text
+                })
+                .catch(err => console.error("Error loading messages:", err));
+        }
+
+                              function clearChatHistory() {
+            fetch("/api/chat/clear", {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({ senderId, receiverId }) // Send the current sender and receiver IDs
+            })
+            .then(response => response.json())
+            .then(data => {
+                console.log(data.message); // Log success message
+                document.getElementById("messages").innerHTML = ""; // Clear chat UI
+            })
+            .catch(err => console.error("Error clearing chat:", err));
+        }
+
+
+
+    </script>
+
+
+
+
 </body>
 </html>
+
+

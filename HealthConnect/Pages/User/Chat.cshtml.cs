@@ -43,6 +43,9 @@ namespace HealthConnect.Pages.User
 
         public List<Doctor_Specialitis> doctorSpecialitiesList = new List<Doctor_Specialitis>();
 
+        public int? ReceiverId { get; set; }
+
+
         public ChatModel(ILogger<ChatModel> logger, IConfiguration configuration)
         {
             _logger = logger;
@@ -64,6 +67,7 @@ namespace HealthConnect.Pages.User
 
             LoadDoctorSpecialities();
             LoadDoctorTypes();
+            ReceiverId = id;
 
             return Page();
         }
@@ -179,5 +183,11 @@ namespace HealthConnect.Pages.User
                 }
             }
         }
+
+
+
+       
+
+
     }
 }

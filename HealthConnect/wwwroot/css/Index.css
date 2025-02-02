@@ -326,6 +326,7 @@ header nav {
 }
 
 }
+
 .header_user_icon_drop_down .header_user_image {
     border: 2px solid var(--button-bg-color);
     color: white;
@@ -334,6 +335,7 @@ header nav {
     width: 31.2px;
     height: 31.2px;
 }
+
     .header_user_icon_drop_down .header_user_image img {
         width: 100%;
         height: 100%;
@@ -447,6 +449,7 @@ header nav {
 }
 
 }
+
 .header_user_icon_drop_down .header_user_image2 {
     border: 2px solid var(--button-bg-color);
     color: white;
@@ -455,12 +458,14 @@ header nav {
     width: 31.2px;
     height: 31.2px;
 }
+
     .header_user_icon_drop_down .header_user_image2 img {
         width: 100%;
         height: 100%;
         border-radius: 50%;
     }
-    .header_user_services2 {
+
+.header_user_services2 {
     display: none;
     position: absolute;
     top: 60px;
@@ -1749,6 +1754,7 @@ header nav {
             padding: 10px 0;
             display: flex;
             align-items: center;
+            justify-content: space-between;
             border-top-left-radius: 10px;
             border-top-right-radius: 10px;
         }
@@ -1770,7 +1776,7 @@ header nav {
                 text-decoration: none;
                 height: 100%;
                 font-family: var(--heading-font);
-                width: 100%;
+                width: auto;
             }
 
             .chat_section_1 .chat_section_container .doctor_profile_section img {
@@ -1857,14 +1863,18 @@ header nav {
             }
 
             .chat_container .all_chat .right_message .right_message_text {
-                background-color: var(--accent-color);
-                color: var(--contrast-color);
-                padding: 10px 15px;
-                border-radius: 5px;
-                margin-right: 10px;
                 max-width: 60%;
-                overflow-wrap: break-word;
+                gap: 20px;
             }
+
+                .chat_container .all_chat .right_message .right_message_text p {
+                    margin: 10px 10px 10px 0;
+                    background-color: var(--accent-color);
+                    color: var(--contrast-color);
+                    padding: 2px 12px;
+                    border-radius: 5px;
+                    overflow-wrap: break-word;
+                }
 
 .chat_section_2 {
     width: 100%;
@@ -1925,7 +1935,7 @@ header nav {
                 border-top-left-radius: 50px;
                 outline: none;
                 background: color-mix(in srgb, var(--contrast-color), transparent 80%);
-                width: 100%;
+                width: 70%;
                 color: var(--contrast-color);
             }
 
@@ -1942,6 +1952,7 @@ header nav {
                 display: flex;
                 align-items: center;
                 justify-content: center;
+                margin: 0 0 0 -20px;
             }
 
                 .chat_section_2 .chat_section2_container .message .send i {
@@ -1949,21 +1960,11 @@ header nav {
                     padding: 10px 15px;
                 }
 
-/*@media (max-width:1000px) and (min-height: 768px) {
-    .chat_section_1 .chat_section_container .doctor_profile_section img{
-        width: 45px;
-        height: 45px;
-    }
-    .chat_section_1 .chat_section_container .doctor_profile_section a {
-        font-size: 20px;
-    }
-    .chat_section_1 .chat_section_container .chat_container{
-        height: 82dvh;
-    }
+
+.chat_section_1 .chat_section_container .doctor_profile_section .chat_clear i{
+    margin-left: auto;
+    margin-right: 20px;
+    cursor: pointer;
+    font-size: 20px;
+    color: darkred;
 }
-@media (max-width:768px) and (min-height: 25px) {
-    .chat_section_1 .chat_section_container .chat_container {
-        height: 85dvh;
-    }
-}
-*/
