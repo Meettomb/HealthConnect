@@ -316,7 +316,7 @@ header nav {
     border: 2px solid var(--button-bg-color);
     background-color: var(--button-bg-color);
     color: white;
-    padding: 5px 7px;
+    padding: 5px 8px;
     border-radius: 50%;
     cursor: pointer;
     &:hover
@@ -439,7 +439,7 @@ header nav {
         border: 2px solid var(--button-bg-color);
         background-color: var(--button-bg-color);
         color: white;
-        padding: 5px 7px;
+        padding: 5px 8px;
         border-radius: 50%;
         cursor: pointer;
         &:hover
@@ -1961,10 +1961,203 @@ header nav {
                 }
 
 
-.chat_section_1 .chat_section_container .doctor_profile_section .chat_clear i{
+.chat_section_1 .chat_section_container .doctor_profile_section .chat_clear i {
     margin-left: auto;
     margin-right: 20px;
     cursor: pointer;
     font-size: 20px;
     color: darkred;
+}
+
+
+/*--------------------------------------------------------------------------------------------------------------*/
+/*--------------------------------------------------------------------------------------------------------------*/
+/*--------------------------------------------------------------------------------------------------------------*/
+/*--------------------------------------------------------------------------------------------------------------*/
+/*--------------------------------------------------------------------------------------------------------------*/
+/*                                                 Chatting                                                     */
+/*--------------------------------------------------------------------------------------------------------------*/
+/*--------------------------------------------------------------------------------------------------------------*/
+/*--------------------------------------------------------------------------------------------------------------*/
+/*--------------------------------------------------------------------------------------------------------------*/
+/*--------------------------------------------------------------------------------------------------------------*/
+
+
+.chatting_header {
+    width: 100%;
+    height: auto;
+    display: flex;
+    align-items: center;
+}
+
+    .chatting_header .first_column {
+        width: 4%;
+        height: 97.2dvh;
+        background-color: var(--header-bg-color);
+        color: var(--header-text-color);
+        display: flex;
+        align-items: center;
+        justify-content: flex-start;
+        flex-direction: column;
+        gap: 20px;
+        padding: 10px;
+        overflow: hidden;
+    }
+
+        .chatting_header .first_column img {
+            width: 40px;
+            height: auto;
+            margin-bottom: 5px;
+            cursor: pointer;
+            border-radius: 50%;
+        }
+
+        .chatting_header .first_column .chatting_name_first_latter {
+            background-color: var(--accent-color);
+            padding: 8px 12px;
+            border-radius: 50%;
+            color: var(--contrast-color);
+            -moz-user-select: none;
+            -ms-user-select: none;
+            -webkit-user-select: none;
+            user-select: none;
+        }
+
+
+    .chatting_header .chatting_message_icon {
+        margin-top: 5px;
+        font-size: 20px;
+        cursor: pointer;
+    }
+
+        .chatting_header .chatting_message_icon:hover {
+            transform: scale(1.1);
+            transition: transform 0.5s ease-in-out;
+        }
+
+
+    .chatting_header .chatting_setting_icon {
+        margin-top: 5px;
+        font-size: 20px;
+        cursor: pointer;
+    }
+
+        .chatting_header .chatting_setting_icon:hover {
+            transform: rotate(60deg) scale(1.1);
+            transition: transform 0.5s ease-in-out;
+        }
+
+    .chatting_header .second_column {
+        width: 30%;
+        height: 97.3dvh;
+        background-color: red;
+        background-color: var(--header-text-color);
+        color: var(--contrast-color);
+        overflow-y: scroll;
+        padding: 10px 10px;
+    }
+
+        .chatting_header .second_column::-webkit-scrollbar {
+            width: 8px;
+        }
+
+        .chatting_header .second_column::-webkit-scrollbar-track {
+            background: #f0f0f0;
+            border-radius: 10px;
+        }
+
+        .chatting_header .second_column::-webkit-scrollbar-thumb {
+            background: #888;
+            border-radius: 10px;
+        }
+
+            .chatting_header .second_column::-webkit-scrollbar-thumb:hover {
+                background: #555;
+            }
+
+        .chatting_header .second_column .chatting_search {
+            position: relative;
+            width: 100%;
+            height: 50px;
+            display: flex;
+            align-items: center;
+        }
+
+
+.initials-avatar {
+    width: 40px;
+    height: 40px;
+    background-color: var(--accent-color);
+    color: white;
+    font-size: 20px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 50%;
+    text-align: center;
+}
+
+
+
+.chatting_header .second_column .chatting_search input {
+    width: 90%;
+    padding: 8px 50px 8px 5px;
+    font-size: 17px;
+    top: 0;
+    border-radius: 5px;
+    border: none;
+    outline: none;
+    background: color-mix(in srgb, var(--contrast-color), transparent 80%);
+    color: var(--contrast-color);
+}
+
+.chatting_header .second_column .chatting_search i {
+    position: absolute;
+    right: 5%;
+    z-index: 2;
+    color: var(--contrast-color);
+    font-weight: 900;
+}
+
+.chatting_header .second_column .chatting_list {
+    margin: 10px 0;
+}
+
+    .chatting_header .second_column .chatting_list ul li {
+        display: flex;
+        align-items: center;
+        list-style: none;
+        gap: 10px;
+        padding: 15px 0;
+    }
+
+        .chatting_header .second_column .chatting_list ul li:hover {
+            background-color: #385671;
+        }
+
+        .chatting_header .second_column .chatting_list ul li img {
+            width: 45px;
+            height: 45px;
+            margin-bottom: 5px;
+            cursor: pointer;
+            border-radius: 50%;
+        }
+
+        .chatting_header .second_column .chatting_list ul li span {
+            font-weight: 500;
+            font-family: var(--heading-font);
+        }
+
+.chatting_header .third_column {
+    width: 64%;
+    height: 100dvh;
+    background-color: var(--header-bg-color);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.chatting_header {
+    width: 100%;
+    background-color: var(--header-bg-color);
 }

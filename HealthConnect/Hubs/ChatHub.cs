@@ -5,12 +5,13 @@ namespace HealthConnect.Hubs
 {
     public class ChatHub : Hub
     {
+        // Send the message to all clients (broadcast)
         public async Task SendMessage(string senderId, string receiverId, string message)
         {
             await Clients.All.SendAsync("ReceiveMessage", senderId, receiverId, message);
         }
 
-        // WebRTC Signaling
+        // WebRTC Signaling Methods (optional, based on your requirements)
         public async Task SendOffer(string targetUser, string offer)
         {
             await Clients.Client(targetUser).SendAsync("ReceiveOffer", Context.ConnectionId, offer);

@@ -1,0 +1,317 @@
+﻿<!DOCTYPE html>
+
+<html>
+<head>
+    <meta name="viewport" content="width=device-width" />
+    <title>@ViewBag.Title</title>
+    <link href="/images/HealthConnectTabLogo.png" rel="icon" />
+
+    <link rel="stylesheet" href="/css/Index.css">
+
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css">
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@100..900&family=Sofia+Sans+Condensed:ital,wght@0,1..1000;1,1..1000&display=swap" rel="stylesheet">
+
+</head>
+<body>
+
+    <div class="chatting_header">
+        <div class="first_column">
+
+            <img class="logo" src="/images/HealthConnectTabLogo.png" alt="Health Connect" onclick="redirectToHomepage()" />
+
+            @if (string.IsNullOrEmpty(Model.ProfilePic))
+            {
+                <span class="chatting_name_first_latter">
+                    @Model.FirstName[0].ToString().ToUpper()
+                </span>
+
+            }
+            else
+            {
+                <img class="profile_pic" src="/documant/@Model.ProfilePic" alt="Profile Picture" />
+            }
+            <div class="chatting_message_icon">
+                <i class="fa-solid fa-message"></i>
+            </div>
+            <div class="chatting_setting_icon">
+                <i class="fa-solid fa-gear"></i>
+            </div>
+        </div>
+
+        <div class="second_column">
+            <h3>Chats</h3>
+
+            <div class="chatting_search">
+                <input type="text" id="myInput" placeholder="Search" />
+                <i class="fa-solid fa-search"></i>
+            </div>
+
+            <div class="chatting_list">
+                <ul id="receiverList" class="data">
+                    <li id="receiverItem">
+                        <img id="RecerverImage" src="" alt="Alternate Text" />
+                        <span id="ReceiverFirstName"></span>
+                        <span id="ReceiverLastName"></span>
+                    </li>
+                </ul>
+            </div>
+        </div>
+
+        <div class="third_column" id="chatContainer">
+            @RenderBody()
+        </div>
+    </div>
+
+
+
+
+    <script src="/js/Script.js"></script>
+
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/microsoft-signalr/7.0.0/signalr.min.js"></script>
+
+    <script>
+        const connection = new signalR.HubConnectionBuilder()
+            .withUrl("/chatHub") // SignalR hub URL
+            .build();
+
+        let senderId = "@Model.UserId"; // Get sender ID from Razor
+        let currentReceiverId = null; // Track the selected receiver
+
+        // Start the SignalR connection
+        connection.start().then(() => {
+            console.log("SignalR Connected");
+            fetchReceivers(); // Fetch the receivers after connection is established
+        }).catch(err => {
+            console.error("SignalR connection failed: ", err);
+        });
+
+        // Fetch the list of receivers
+               // Fetch the list of receivers
+        function fetchReceivers() {
+            fetch(`/api/chat/getReceivers?senderId=${senderId}`)
+                .then(response => response.json())
+                .then(receivers => {
+                    const receiverList = document.getElementById("receiverList");
+                    receiverList.innerHTML = ""; // Clear previous content
+
+                    if (!receivers || receivers.length === 0) {
+                        receiverList.innerHTML = "<p>No chats found.</p>";
+                        return;
+                    }
+
+                    receivers.forEach((receiver, index) => {
+                        const listItem = document.createElement("li");
+                        listItem.classList.add("data"); // Add class for styling
+
+                        // Store receiver details in data attributes
+                        listItem.dataset.id = receiver.id;
+                        listItem.dataset.firstName = receiver.firstName;
+                        listItem.dataset.lastName = receiver.lastName;
+                        listItem.dataset.profilePic = receiver.profilePic;
+
+                        let imgElement;
+                        if (receiver.profilePic) {
+                            imgElement = document.createElement("img");
+                            imgElement.src = `/documant/${receiver.profilePic}`;
+                            imgElement.alt = "Profile Picture";
+                        } else {
+                            const firstLetter = receiver.firstName.charAt(0).toUpperCase();
+                            imgElement = document.createElement("p");
+                            imgElement.textContent = firstLetter;
+                            imgElement.classList.add("initials-avatar");
+                        }
+                        listItem.appendChild(imgElement);
+
+                        const firstName = document.createElement("span");
+                        firstName.textContent = receiver.firstName;
+                        listItem.appendChild(firstName);
+
+                        const lastName = document.createElement("span");
+                        lastName.textContent = receiver.lastName;
+                        listItem.appendChild(lastName);
+
+                        receiverList.appendChild(listItem);
+
+                        // Handle click event
+                        listItem.style.cursor = "pointer";
+                        listItem.onclick = () => loadMessagesForReceiver(receiver);
+                    });
+                })
+                .catch(err => console.error("Error fetching receivers:", err));
+        }
+
+
+        // Load messages when clicking on a receiver
+                        function loadMessagesForReceiver(receiver) {
+            currentReceiverId = receiver.id; // Store selected receiver
+
+            const receiverImageContainer = document.getElementById("ReceiverImageContainer"); // Parent container
+            receiverImageContainer.innerHTML = ""; // Clear previous content
+
+            if (receiver.profilePic) {
+                // If profile picture exists, display the image
+                const imgElement = document.createElement("img");
+                imgElement.src = `/documant/${receiver.profilePic}`;
+                imgElement.alt = "Profile Picture";
+                imgElement.id = "ReceiverImage";
+                receiverImageContainer.appendChild(imgElement);
+            } else {
+                // If profile picture is null, display the first letter of the first name
+                const firstLetter = receiver.firstName.charAt(0).toUpperCase();
+                const initialsElement = document.createElement("p");
+                initialsElement.textContent = firstLetter;
+                initialsElement.classList.add("initials-avatar"); // Add CSS class for styling
+                receiverImageContainer.appendChild(initialsElement);
+            }
+
+            // Update receiver's name in the chat UI
+            document.getElementById("ReceiverFirstName").textContent = receiver.firstName;
+            document.getElementById("ReceiverLastName").textContent = receiver.lastName;
+
+            document.getElementById("chatWith").textContent = `Chatting with ${receiver.firstName} ${receiver.lastName}`;
+            document.getElementById("chatContainer").style.display = "block"; // Show chat UI
+
+            // Fetch previous messages
+            fetch(`/api/chat/load?senderId=${senderId}&receiverId=${receiver.id}`)
+                .then(response => response.json())
+                .then(messages => {
+                    const messageContainer = document.getElementById("messages");
+                    messageContainer.innerHTML = ""; // Clear previous messages
+
+                    messages.forEach(msg => displayMessage(msg.message)); // Display messages
+                })
+                .catch(err => console.error("Error loading messages:", err));
+        }
+
+
+
+        // Send message when clicking the button
+             // Send message when clicking the button
+        function sendMessage() {
+            const messageInput = document.getElementById("messageInput");
+            const message = messageInput.value.trim();
+
+            if (!message) {
+                alert("Please enter a message");
+                return;
+            }
+
+            // Ensure senderId and currentReceiverId are properly set
+            if (!senderId || !currentReceiverId) {
+                console.error("Sender or Receiver ID is missing!");
+                return;
+            }
+
+            // Send the message via SignalR
+            connection.invoke("SendMessage", senderId, currentReceiverId, message)
+                .catch(err => console.error("Error sending message: ", err));
+
+            // Save the message to the server
+            saveMessageToServer(senderId, currentReceiverId, message);
+
+            // Clear the input field
+            messageInput.value = "";
+        }
+
+        // Receive messages from SignalR
+        connection.on("ReceiveMessage", (sender, receiver, message) => {
+            // Only display the message once when it's received from SignalR
+            if (sender !== senderId) {  // Check if the message is not the one we sent
+                displayMessage(message);
+            }
+        });
+
+
+        // Receive messages from SignalR
+        connection.on("ReceiveMessage", (sender, receiver, message) => {
+            displayMessage(message); // Display the received message
+        });
+
+        // Display messages (Only show the message, not IDs)
+               // Display messages (Only show the message, not IDs)
+        function displayMessage(message) {
+            const messageContainer = document.getElementById("messages");
+
+            // Check if the message is already displayed (optional)
+            const existingMessage = [...messageContainer.children].find(
+                child => child.textContent === message
+            );
+            if (existingMessage) return; // Prevent adding duplicate messages
+
+            const newMessage = document.createElement("p");
+            newMessage.textContent = message; // Only display the message text
+            newMessage.style.margin = "10px 0";
+
+            messageContainer.appendChild(newMessage);
+        }
+
+
+        // Save messages to the server
+        function saveMessageToServer(senderId, receiverId, message) {
+            fetch("/api/chat/save", {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({ senderId, receiverId, message })
+            })
+            .then(response => response.json())
+            .then(data => console.log("Message saved:", data))
+            .catch(err => console.error("Error saving message:", err));
+        }
+
+        // Load messages from server when chat is opened
+        function loadMessagesFromServer() {
+            fetch(`/api/chat/load?senderId=${senderId}&receiverId=${receiverId}`)
+                .then(response => response.json())
+                .then(messages => {
+                    messages.forEach(msg => displayMessage(msg.message)); // Only display the message text
+                })
+                .catch(err => console.error("Error loading messages:", err));
+        }
+
+        // Clear chat history
+        function clearChatHistory() {
+            if (!currentReceiverId) {
+                alert("Please select a chat first.");
+                return;
+            }
+
+            fetch("/api/chat/clear", {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({ senderId, receiverId: currentReceiverId })
+            })
+            .then(response => response.json())
+            .then(data => {
+                console.log(data.message);
+                document.getElementById("messages").innerHTML = ""; // Clear chat UI
+            })
+            .catch(err => console.error("Error clearing chat:", err));
+        }
+
+    </script>
+
+
+
+    <script>
+                $(document).ready(function () {
+            $("#myInput").on("keyup", function () {
+                var value = $(this).val().toLowerCase();
+
+                // Update the selector to target list items (li)
+                $("#receiverList li").filter(function () {
+                    // Toggle visibility based on whether the search term is found in the receiver's name
+                    $(this).toggle($(this).text().toLowerCase().indexOf(value) > -1);
+                });
+            });
+        });
+
+    </script>
+
+
+</body>
+</html>

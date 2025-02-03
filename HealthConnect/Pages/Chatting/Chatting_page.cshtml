@@ -1,0 +1,28 @@
+﻿@page
+@model HealthConnect.Pages.Chatting.Chatting_pageModel
+@{
+    Layout = "_ChattingNav";
+    ViewData["Title"] = "Chatting";
+}
+
+<div>
+    <div class="chatting_header">
+        <div id="ReceiverImageContainer">
+            <img id="ReceiverImage" src="" alt="Profile pic" />
+        </div>
+        <p class="receiver_name">
+            <span id="ReceiverFirstName"></span>
+            <span id="ReceiverLastName"></span>
+        </p>
+    </div>
+
+    <h3>Chat with <span id="chatWith"></span></h3>
+    <!-- Input Box for New Messages -->
+    <input type="text" id="messageInput" placeholder="Type a message...">
+    <button onclick="sendMessage()">Send</button>
+    <button onclick="clearChatHistory()">Clear Chat</button>
+    <div id="messages">
+        <p id="ReceiverSide"></p>
+        <p id="SenderSide"></p>
+    </div> <!-- Chat messages container -->
+</div>

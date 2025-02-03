@@ -8,11 +8,11 @@ using System;
 using System.Collections.Generic;
 using System.Data;
 
-namespace HealthConnect.Pages.User
+namespace HealthConnect.Pages.Chatting
 {
-    public class ChatModel : PageModel
+    public class Chatting_pageModel : PageModel
     {
-        private readonly ILogger<ChatModel> _logger;
+        private readonly ILogger<Chatting_pageModel> _logger;
         private readonly IConfiguration _configuration;
         private readonly string _connectionString;
 
@@ -46,7 +46,7 @@ namespace HealthConnect.Pages.User
         public int? ReceiverId { get; set; }
 
 
-        public ChatModel(ILogger<ChatModel> logger, IConfiguration configuration)
+        public Chatting_pageModel(ILogger<Chatting_pageModel> logger, IConfiguration configuration)
         {
             _logger = logger;
             _configuration = configuration;

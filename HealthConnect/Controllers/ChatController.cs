@@ -1,4 +1,6 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using HealthConnect.Models;
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.Data.SqlClient;
 using System.Collections.Generic;
 using System.IO;
 using System.Text.Json;
@@ -7,6 +9,14 @@ using System.Text.Json;
 [ApiController]
 public class ChatController : ControllerBase
 {
+   
+
+    private readonly string _connectionString;
+    public ChatController(IConfiguration configuration)
+    {
+        _connectionString = configuration.GetConnectionString("HealthConnect");
+    }
+
     private static readonly string filePath = "wwwroot/chatMessages.json";
 
     [HttpPost("save")]
@@ -26,6 +36,7 @@ public class ChatController : ControllerBase
         return Ok();
     }
 
+    // Load messages between sender and receiver
     [HttpGet("load")]
     public IActionResult LoadMessages([FromQuery] string senderId, [FromQuery] string receiverId)
     {
@@ -59,7 +70,57 @@ public class ChatController : ControllerBase
         return Ok(new { message = "Chat history cleared successfully." });
     }
 
-   
+    [HttpGet("getReceivers")]
+    public IActionResult GetReceivers([FromQuery] string senderId)
+    {
+        if (!System.IO.File.Exists(filePath))
+            return Ok(new List<object>());
+
+        string existingData = System.IO.File.ReadAllText(filePath);
+        var messages = JsonSerializer.Deserialize<List<ChatMessage>>(existingData) ?? new List<ChatMessage>();
+
+        var receiverIds = messages
+            .Where(msg => msg.SenderId == senderId || msg.ReceiverId == senderId)  // Include both SenderId and ReceiverId
+            .Select(msg => msg.SenderId == senderId ? msg.ReceiverId : msg.SenderId) // Get the opposite party (Receiver or Sender)
+            .Distinct()
+            .ToList();
+
+        var receiverDetails = new List<object>();
+
+        using (SqlConnection con = new SqlConnection(_connectionString))
+        {
+            con.Open();
+            foreach (var receiverId in receiverIds)
+            {
+                string query = "SELECT id, first_name, last_name, profile_pic, role, country, state, city FROM User_Table WHERE id = @ReceiverId";
+                using (SqlCommand cmd = new SqlCommand(query, con))
+                {
+                    cmd.Parameters.AddWithValue("@ReceiverId", receiverId);
+                    using (SqlDataReader reader = cmd.ExecuteReader())
+                    {
+                        while (reader.Read())
+                        {
+                            receiverDetails.Add(new
+                            {
+                                Id = reader["id"].ToString(),
+                                FirstName = reader["first_name"].ToString(),
+                                LastName = reader["last_name"].ToString(),
+                                ProfilePic = reader["profile_pic"].ToString(),
+                                Role = reader["role"].ToString(),
+                                Country = reader["country"].ToString(),
+                                State = reader["state"].ToString(),
+                                City = reader["city"].ToString()
+                            });
+                        }
+                    }
+                }
+            }
+        }
+
+        return Ok(receiverDetails);
+    }
+
+
 }
 public class ClearChatRequest
 {

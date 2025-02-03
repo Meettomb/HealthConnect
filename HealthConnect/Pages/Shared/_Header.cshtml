@@ -87,17 +87,17 @@
                             else
                             {
                                 <div class="header_user_icon">
-                                    <i class="fa-solid fa-user"></i>
-
+                                    @Model.FirstName[0].ToString().ToUpper()
                                 </div>
+
                             }
                             <div class="header_user_services">
                                 <section>
                                     <a href="#">
                                         <i class="fa-solid fa-gear"></i> Settings
                                     </a>
-                                    
-                                    <a href="#">
+
+                                    <a href="/Chatting/Chatting_page">
                                         <i class="fa-solid fa-message"></i> Message
                                     </a>
                                     @if (Model.Role == "Admin")
@@ -183,7 +183,7 @@
                         {
 
                             <div class="header_user_icon2">
-                                <i class="fa-solid fa-user"></i>
+                                @Model.FirstName[0].ToString().ToUpper()
                             </div>
                         }
                         <div class="header_user_services2">
@@ -191,7 +191,7 @@
                                 <a href="#">
                                     <i class="fa-solid fa-gear"></i> Settings
                                 </a>
-                                <a href="#">
+                                <a href="/Chatting/Chatting_page">
                                     <i class="fa-solid fa-message"></i> Message
                                 </a>
                                 @if (Model.Role == "Admin")
