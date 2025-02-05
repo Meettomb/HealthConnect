@@ -73,7 +73,7 @@
                 <div class="index_about_right">
                     <h1>About Us</h1>
                     <article>
-                        Our website provides a comprehensive healthcare solution, connecting patients with trusted doctors for real-time consultations via chat and video calls. 
+                        Our website provides a comprehensive healthcare solution, connecting patients with trusted doctors for real-time consultations via chat and video calls.
                         Receive personalized prescriptions and order medications seamlessly, ensuring convenient, secure, and confidential healthcare services from home.
                     </article>
 
@@ -82,12 +82,12 @@
                         <p>Our platform enables users to connect with verified doctors instantly through secure chat and video calling for personalized consultations.</p>
                     </div>
 
-                    <div class ="about_detail">
+                    <div class="about_detail">
                         <h2>Expert Medical Consultations</h2>
                         <p>Experienced doctors provide accurate diagnoses and medical prescriptions tailored to each patient’s needs.</p>
                     </div>
 
-                    <div class ="about_detail_read_more">
+                    <div class="about_detail_read_more">
                         <a href="#">Read more <i class="fa-solid fa-chevron-right"></i></a>
                     </div>
 
@@ -98,7 +98,28 @@
         <section class="index_section_3">
             <div class="count_container">
                 <div class="detail">
+                    <i class="fa-solid fa-user-doctor"></i>
+                    <div class="count">
+                        <h2 id="totalDoctorsCount" data-count="@Model.TotalDoctorsCount">0</h2>
+                        <h2>Doctor</h2>
+                    </div>
 
+                </div>
+                <div class="detail">
+                    <i class="fa-solid fa-hand-holding-heart"></i>
+                    <div class="count">
+                        <h2 id="TotalSpecialitiesCount" data-count="@Model.TotalSpecialitiesCount">0</h2>
+
+                        <h2>Specialities</h2>
+
+                    </div>
+                </div>
+                <div class="detail">
+                    <i class="fa-solid fa-users"></i>
+                    <div class="count">
+                        <h2 id="TotalUsersCount" data-count="@Model.TotalUsersCount">0</h2>
+                        <h2>Users</h2>
+                    </div>
                 </div>
             </div>
         </section>

@@ -25,7 +25,6 @@ namespace HealthConnect.Pages.Admin
         public int? UserId { get; set; }
         public string? ErrorMessage { get; set; }
 
-        //public List<User_Table> UserTable { get; set; }
         public List<CountryCount> UserTable { get; set; }
 
 

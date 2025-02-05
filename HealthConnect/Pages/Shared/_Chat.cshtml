@@ -4,7 +4,7 @@
 <head>
     <meta name="viewport" content="width=device-width" />
     <title>@ViewBag.Title</title>
-    <link href="/css/index.css" rel="stylesheet" />
+    <link href="/css/index.css" rel="stylesheet" asp-append-version="true" />
     <link href="/images/HealthConnectTabLogo.png" rel="icon" />
 
 
@@ -16,6 +16,13 @@
 
 </head>
 <body>
+
+
+    <div class="loder" id="loder">
+        <img src="/Loder.gif" alt="Alternate Text" />
+    </div>
+
+
     <section class="chat_section_1">
         <div class="chat_section_container">
             <div class="doctor_profile_section">
@@ -62,7 +69,7 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/microsoft-signalr/7.0.0/signalr.min.js"></script>
 
     <script>
-              const connection = new signalR.HubConnectionBuilder()
+                 const connection = new signalR.HubConnectionBuilder()
             .withUrl("/chatHub")
             .build();
 
@@ -93,16 +100,17 @@
 
         // Receive messages from SignalR
         connection.on("ReceiveMessage", (sender, receiver, message) => {
-            displayMessage(message);
+            displayMessage(sender, receiver, message);
         });
 
-        // Display messages (Only show the message, not IDs)
-        function displayMessage(message) {
-            const messageContainer = document.getElementById("messages");
-            const newMessage = document.createElement("p");
+        // Display messages (Sender messages in `right_message_text`, Receiver messages in `left_message_text`)
+        function displayMessage(sender, receiver, message) {
+            const messageContainer = sender === senderId ? document.getElementById("right_message_text") : document.getElementById("left_message_text");
 
-            newMessage.textContent = message; // Only display the message text
-            newMessage.style.margin = "10px 0";
+            const newMessage = document.createElement("p");
+            newMessage.textContent = message;
+            newMessage.style.margin = "5px 0";
+            newMessage.classList.add("chat-message");
 
             messageContainer.appendChild(newMessage);
         }
@@ -116,15 +124,22 @@
             }).catch(err => console.error("Error saving message:", err));
         }
 
-            // Load messages from server
-        function loadMessagesFromServer() {
+        // Load messages from server
+               function loadMessagesFromServer() {
             fetch(`/api/chat/load?senderId=${senderId}&receiverId=${receiverId}`)
                 .then(response => response.json())
                 .then(messages => {
-                    messages.forEach(msg => displayMessage(msg.message)); // Only display the message text
+                    if (messages.length > 0) {
+                        // Redirect if messages exist
+                        window.location.href = "/Chatting/Chatting_page";
+                    } else {
+                        console.log("No chat history found.");
+                    }
                 })
                 .catch(err => console.error("Error loading messages:", err));
         }
+
+       
 
                               function clearChatHistory() {
             fetch("/api/chat/clear", {
@@ -139,8 +154,6 @@
             })
             .catch(err => console.error("Error clearing chat:", err));
         }
-
-
 
     </script>
 

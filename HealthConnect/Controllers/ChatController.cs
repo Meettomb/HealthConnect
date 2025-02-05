@@ -121,6 +121,7 @@ public class ChatController : ControllerBase
     }
 
 
+
 }
 public class ClearChatRequest
 {
@@ -136,3 +137,10 @@ public class ChatMessage
     public string Message { get; set; } 
 }
 
+public class ChatMessage2
+{
+    public int SenderId { get; set; } // Change from string to int
+    public int ReceiverId { get; set; } // Change from string to int
+    public string Message { get; set; }
+    public DateTime Timestamp { get; set; }
+}

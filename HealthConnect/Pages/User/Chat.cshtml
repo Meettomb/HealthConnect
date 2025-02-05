@@ -17,12 +17,14 @@
             {
                 <i class="fa-solid fa-user"></i>
             }
-            <div class="left_message_text">.</div>
+            <div class="left_message_text" id="left_message_text">
+                <p id="rceiver_message"></p>
+            </div>
         </div>
         <div class="right_message">
 
-            <div class="right_message_text" >
-                <p id="messages"></p>
+            <div class="right_message_text" id="right_message_text">
+                <p id="send_messages"></p>
             </div>
 
             @if (!string.IsNullOrEmpty(Model.ProfilePic))

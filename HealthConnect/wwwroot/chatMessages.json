@@ -1,1 +1,1 @@
-[{"SenderId":"22","ReceiverId":"26","Message":"hello Dr. Dai Sato"},{"SenderId":"22","ReceiverId":"25","Message":"hello"},{"SenderId":"22","ReceiverId":"25","Message":"Hello 2"},{"SenderId":"22","ReceiverId":"25","Message":"yes"},{"SenderId":"25","ReceiverId":"22","Message":"ggg"}]
+[{"SenderId":"26","ReceiverId":"26","Message":"Hello"},{"SenderId":"26","ReceiverId":"22","Message":"Hello"}]

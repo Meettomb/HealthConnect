@@ -4,8 +4,8 @@
 @import url('https://fonts.googleapis.com/css2?family=Gabarito:wght@400..900&family=Outfit:wght@100..900&family=Roboto:ital,wght@0,100..900;1,100..900&family=Sofia+Sans+Condensed:ital,wght@0,1..1000;1,1..1000&display=swap');
 
 :root {
-    --body-bg-color: #F5F5F5;
-    --header-bg-color: white;
+    --body-bg-color: #f1f7fc;
+    --header-bg-color: #ffffff;
     --header-text-hover-color: #1977cc;
     --button-bg-color: #1977cc;
     --button-font-color: white;

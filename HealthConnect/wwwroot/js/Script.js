@@ -100,3 +100,38 @@ async function fetchCurrencySymbol() {
 
 // Call the function on page load
 window.onload = fetchCurrencySymbol;
+
+
+
+
+
+document.addEventListener("DOMContentLoaded", function () {
+    function animateCountUp(element, start, end, duration) {
+        let startTime = null;
+        function step(currentTime) {
+            if (!startTime) startTime = currentTime;
+            let progress = Math.min((currentTime - startTime) / duration, 1);
+            element.innerText = Math.floor(progress * (end - start) + start);
+            if (progress < 1) {
+                requestAnimationFrame(step);
+            }
+        }
+        requestAnimationFrame(step);
+    }
+
+    // Get all elements with a data-count attribute
+    document.querySelectorAll("[data-count]").forEach(countElement => {
+        let targetCount = parseInt(countElement.getAttribute("data-count"));
+
+        let observer = new IntersectionObserver((entries, observer) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    animateCountUp(countElement, 0, targetCount, 500); // 0.5 sec animation
+                    observer.disconnect(); // Stop observing after first trigger
+                }
+            });
+        }, { threshold: 0.5 }); // Trigger when 50% of the element is visible
+
+        observer.observe(countElement);
+    });
+});

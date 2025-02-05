@@ -6,7 +6,7 @@
     <title>@ViewBag.Title</title>
     <link href="/images/HealthConnectTabLogo.png" rel="icon" />
 
-    <link rel="stylesheet" href="/css/Index.css">
+    <link rel="stylesheet" href="/css/Index.css" asp-append-version="true">
 
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css">
 
@@ -16,6 +16,10 @@
 
 </head>
 <body>
+
+    <div class="loder" id="loder">
+        <img src="/Loder.gif" alt="Alternate Text" />
+    </div>
 
     <div class="chatting_header">
         <div class="first_column">
@@ -33,34 +37,44 @@
             {
                 <img class="profile_pic" src="/documant/@Model.ProfilePic" alt="Profile Picture" />
             }
-            <div class="chatting_message_icon">
+            <div class="chatting_message_icon" id="chatting_message_icon">
                 <i class="fa-solid fa-message"></i>
             </div>
-            <div class="chatting_setting_icon">
+            <div class="chatting_setting_icon" id="chatting_setting_icon">
                 <i class="fa-solid fa-gear"></i>
             </div>
         </div>
 
-        <div class="second_column">
-            <h3>Chats</h3>
+        <div class="second_column" id="second_column">
 
-            <div class="chatting_search">
-                <input type="text" id="myInput" placeholder="Search" />
-                <i class="fa-solid fa-search"></i>
+            <div class="chat_user_lists" id="chat_user_lists">
+                <h3>Chats</h3>
+
+                <div class="chatting_search">
+                    <input type="text" id="myInput" placeholder="Search" />
+                    <i class="fa-solid fa-search"></i>
+                </div>
+
+                <div class="chatting_list">
+                    <ul id="receiverList" class="data">
+                        <li id="receiverItem">
+                            <img id="RecerverImage" src="" alt="Alternate Text" />
+                            <span id="ReceiverFirstName"></span>
+                            <span id="ReceiverLastName"></span>
+                        </li>
+                    </ul>
+                </div>
             </div>
 
-            <div class="chatting_list">
-                <ul id="receiverList" class="data">
-                    <li id="receiverItem">
-                        <img id="RecerverImage" src="" alt="Alternate Text" />
-                        <span id="ReceiverFirstName"></span>
-                        <span id="ReceiverLastName"></span>
-                    </li>
-                </ul>
+            <div class="chatting_setting" id="chatting_setting">
+                <p>
+                    Setting
+                </p>
             </div>
         </div>
 
-        <div class="third_column" id="chatContainer">
+
+        <div class="third_column" id="MainchatContainer">
             @RenderBody()
         </div>
     </div>
@@ -84,14 +98,13 @@
 
         // Start the SignalR connection
         connection.start().then(() => {
-            console.log("SignalR Connected");
+            // console.log("SignalR Connected");
             fetchReceivers(); // Fetch the receivers after connection is established
         }).catch(err => {
             console.error("SignalR connection failed: ", err);
         });
 
         // Fetch the list of receivers
-               // Fetch the list of receivers
         function fetchReceivers() {
             fetch(`/api/chat/getReceivers?senderId=${senderId}`)
                 .then(response => response.json())
@@ -147,108 +160,192 @@
 
 
         // Load messages when clicking on a receiver
-                        function loadMessagesForReceiver(receiver) {
-            currentReceiverId = receiver.id; // Store selected receiver
+                       function loadMessagesForReceiver(receiver) {
+            // console.log("Loading messages for receiver ID:", receiver.id);
+            currentReceiverId = receiver.id; // Ensure this updates correctly
 
-            const receiverImageContainer = document.getElementById("ReceiverImageContainer"); // Parent container
-            receiverImageContainer.innerHTML = ""; // Clear previous content
 
-            if (receiver.profilePic) {
-                // If profile picture exists, display the image
-                const imgElement = document.createElement("img");
-                imgElement.src = `/documant/${receiver.profilePic}`;
-                imgElement.alt = "Profile Picture";
-                imgElement.id = "ReceiverImage";
-                receiverImageContainer.appendChild(imgElement);
-            } else {
-                // If profile picture is null, display the first letter of the first name
-                const firstLetter = receiver.firstName.charAt(0).toUpperCase();
-                const initialsElement = document.createElement("p");
-                initialsElement.textContent = firstLetter;
-                initialsElement.classList.add("initials-avatar"); // Add CSS class for styling
-                receiverImageContainer.appendChild(initialsElement);
-            }
+                const receiverImageContainer = document.getElementById("ReceiverImageContainer"); // Parent container
+        receiverImageContainer.innerHTML = ""; // Clear previous content
 
-            // Update receiver's name in the chat UI
-            document.getElementById("ReceiverFirstName").textContent = receiver.firstName;
-            document.getElementById("ReceiverLastName").textContent = receiver.lastName;
+        if (receiver.profilePic) {
+            // If profile picture exists, display the image
+            const imgElement = document.createElement("img");
+            imgElement.src = `/documant/${receiver.profilePic}`;
+            imgElement.alt = "Profile Picture";
+            imgElement.id = "ReceiverImage";
+            receiverImageContainer.appendChild(imgElement);
+        } else {
+            const firstLetter = receiver.firstName.charAt(0).toUpperCase();
+            const initialsElement = document.createElement("p");
+            initialsElement.textContent = firstLetter;
+            initialsElement.classList.add("initials-avatar"); // Add CSS class for styling
+            receiverImageContainer.appendChild(initialsElement);
+        }
 
-            document.getElementById("chatWith").textContent = `Chatting with ${receiver.firstName} ${receiver.lastName}`;
-            document.getElementById("chatContainer").style.display = "block"; // Show chat UI
 
-            // Fetch previous messages
-            fetch(`/api/chat/load?senderId=${senderId}&receiverId=${receiver.id}`)
+
+        // Update receiver's name in the chat UI
+        document.getElementById("ReceiverFirstName2").textContent = receiver.firstName;
+        document.getElementById("ReceiverLastName2").textContent = receiver.lastName;
+        document.getElementById("chatWith").textContent = `Chatting with ${receiver.firstName} ${receiver.lastName}`;
+        document.getElementById("chatContainer").style.display = "block";
+
+
+        // document.getElementById("SenderSide").innerHTML = "";
+        // document.getElementById("ReceiverSide").innerHTML = "";
+
+
+            document.getElementById("chatContainer").innerHTML = ""; // Clear previous messages
+
+            fetch(`/api/chat/load?senderId=${senderId}&receiverId=${currentReceiverId}`)
                 .then(response => response.json())
                 .then(messages => {
-                    const messageContainer = document.getElementById("messages");
-                    messageContainer.innerHTML = ""; // Clear previous messages
-
-                    messages.forEach(msg => displayMessage(msg.message)); // Display messages
+                    // console.log("Messages loaded:", messages);
+                    if (!messages || messages.length === 0) {
+                        // console.log("No messages found for this receiver.");
+                        return;
+                    }
+                    messages.forEach(msg => {
+                        const isSender = msg.senderId == senderId;
+                        displayMessage(msg.message, isSender);
+                    });
                 })
                 .catch(err => console.error("Error loading messages:", err));
         }
 
 
 
+              function displayMessage(message, senderId, receiverId) {
+            if (!currentReceiverId || senderId !== currentUserId && receiverId !== currentUserId) return; // Ensure correct chat
+
+            const chatContainer = document.getElementById("chatContainer");
+            if (!chatContainer) return; // Prevent errors if chat is not loaded
+
+            // Determine if the logged-in user is the sender
+            const isSender = senderId === currentUserId && receiverId === currentReceiverId;
+
+            // Escape HTML to prevent XSS attacks
+            let escapedMessage = message.replace(/</g, "&lt;").replace(/>/g, "&gt;");
+
+            // Convert links into clickable hyperlinks
+            let formattedMessage = escapedMessage.replace(
+                /(https?:\/\/[^\s]+)/g,
+                '<a href="$1" target="_blank" style="color: blue; text-decoration: underline;">$1</a>'
+            );
+
+            // Create a wrapper for the message
+            const messageWrapper = document.createElement("div");
+            messageWrapper.classList.add(isSender ? "Sender_Side" : "Receiver_Side");
+
+            // Create a paragraph element for the message text
+            const messageText = document.createElement("p");
+            messageText.classList.add(isSender ? "SenderSide" : "ReceiverSide");
+            messageText.innerHTML = formattedMessage;
+            messageText.style.margin = "10px 0";
+
+            // Append message text to the wrapper
+            messageWrapper.appendChild(messageText);
+
+            // Append the message wrapper to chatContainer
+            chatContainer.appendChild(messageWrapper);
+
+            // Scroll to the latest message
+            chatContainer.scrollTop = chatContainer.scrollHeight;
+        }
+
+
+
+
+
         // Send message when clicking the button
-             // Send message when clicking the button
         function sendMessage() {
             const messageInput = document.getElementById("messageInput");
-            const message = messageInput.value.trim();
+            let message = messageInput.value.trim();
 
             if (!message) {
                 alert("Please enter a message");
                 return;
             }
 
-            // Ensure senderId and currentReceiverId are properly set
+            // Encode special characters to prevent XSS
+            message = message.replace(/</g, "&lt;").replace(/>/g, "&gt;");
+
             if (!senderId || !currentReceiverId) {
                 console.error("Sender or Receiver ID is missing!");
                 return;
             }
 
-            // Send the message via SignalR
+            // Send message via SignalR
             connection.invoke("SendMessage", senderId, currentReceiverId, message)
                 .catch(err => console.error("Error sending message: ", err));
 
             // Save the message to the server
             saveMessageToServer(senderId, currentReceiverId, message);
 
-            // Clear the input field
+            // Clear input field
             messageInput.value = "";
         }
-
-        // Receive messages from SignalR
-        connection.on("ReceiveMessage", (sender, receiver, message) => {
-            // Only display the message once when it's received from SignalR
-            if (sender !== senderId) {  // Check if the message is not the one we sent
-                displayMessage(message);
+                document.getElementById("messageInput").addEventListener("keypress", function (event) {
+            if (event.key === "Enter") {
+                event.preventDefault(); // Prevent default new line behavior
+                sendMessage();
             }
         });
 
 
-        // Receive messages from SignalR
-        connection.on("ReceiveMessage", (sender, receiver, message) => {
-            displayMessage(message); // Display the received message
+
+                connection.on("ReceiveMessage", (sender, receiver, message) => {
+            if (sender === senderId) {
+                // Message sent by the current user
+                displayMessage(message, true);
+            } else {
+                // Message received from another user
+                displayMessage(message, false);
+            }
         });
 
+
+
         // Display messages (Only show the message, not IDs)
-               // Display messages (Only show the message, not IDs)
-        function displayMessage(message) {
-            const messageContainer = document.getElementById("messages");
+               function displayMessage(message, isSender) {
+            if (!currentReceiverId) return; // Ensure a chat is open
 
-            // Check if the message is already displayed (optional)
-            const existingMessage = [...messageContainer.children].find(
-                child => child.textContent === message
+            const chatContainer = document.getElementById("chatContainer");
+            if (!chatContainer) return; // Avoid errors if chat is not loaded
+
+            // Escape HTML to prevent XSS attacks
+            let escapedMessage = message.replace(/</g, "&lt;").replace(/>/g, "&gt;");
+
+            // Detect links and convert them into clickable hyperlinks
+            let formattedMessage = escapedMessage.replace(
+                /(https?:\/\/[^\s]+)/g,
+                '<a href="$1" target="_blank" style="color: blue; text-decoration: underline;">$1</a>'
             );
-            if (existingMessage) return; // Prevent adding duplicate messages
 
-            const newMessage = document.createElement("p");
-            newMessage.textContent = message; // Only display the message text
-            newMessage.style.margin = "10px 0";
+            // Create a new wrapper for the message
+            const messageWrapper = document.createElement("div");
+            messageWrapper.classList.add(isSender ? "Sender_Side" : "Receiver_Side"); // Assign sender or receiver class
 
-            messageContainer.appendChild(newMessage);
+            // Create a new paragraph element for the message text
+            const messageText = document.createElement("p");
+            messageText.classList.add(isSender ? "SenderSide" : "ReceiverSide");
+            messageText.innerHTML = formattedMessage;
+            messageText.style.margin = "10px 0";
+
+            // Append message text to the wrapper
+            messageWrapper.appendChild(messageText);
+
+            // Append the message wrapper to chatContainer (messages will be ordered correctly)
+            chatContainer.appendChild(messageWrapper);
+
+            // Scroll to the latest message
+            chatContainer.scrollTop = chatContainer.scrollHeight;
         }
+
+
+
+
 
 
         // Save messages to the server
@@ -259,7 +356,7 @@
                 body: JSON.stringify({ senderId, receiverId, message })
             })
             .then(response => response.json())
-            .then(data => console.log("Message saved:", data))
+            // .then(data => console.log("Message saved:", data))
             .catch(err => console.error("Error saving message:", err));
         }
 
@@ -273,25 +370,30 @@
                 .catch(err => console.error("Error loading messages:", err));
         }
 
-        // Clear chat history
-        function clearChatHistory() {
+
+
+                        function clearChatHistory() {
             if (!currentReceiverId) {
-                alert("Please select a chat first.");
+                console.error("Receiver ID is not set.");
                 return;
             }
 
             fetch("/api/chat/clear", {
                 method: "POST",
                 headers: { "Content-Type": "application/json" },
-                body: JSON.stringify({ senderId, receiverId: currentReceiverId })
+                body: JSON.stringify({ senderId, receiverId: currentReceiverId }) // Use currentReceiverId
             })
             .then(response => response.json())
             .then(data => {
-                console.log(data.message);
-                document.getElementById("messages").innerHTML = ""; // Clear chat UI
+                // console.log(data.message);
+                document.getElementById("Sender_Side").innerHTML = ""; // Clear chat UI
+
             })
             .catch(err => console.error("Error clearing chat:", err));
         }
+
+
+
 
     </script>
 
@@ -307,6 +409,52 @@
                     // Toggle visibility based on whether the search term is found in the receiver's name
                     $(this).toggle($(this).text().toLowerCase().indexOf(value) > -1);
                 });
+            });
+        });
+
+    </script>
+
+
+    <script>
+                document.addEventListener("DOMContentLoaded", function () {
+            let chatUserLists = document.getElementById("chat_user_lists");
+            let chattingSetting = document.getElementById("chatting_setting");
+            let messageIcon = document.getElementById("chatting_message_icon");
+            let settingIcon = document.getElementById("chatting_setting_icon");
+            let secondColumn = document.getElementById("second_column");
+
+            // Function to check screen width
+            function checkScreenSize() {
+                return window.innerWidth <= 1000;
+            }
+
+            // Default state: Hide second column on small screens
+            if (checkScreenSize()) {
+                secondColumn.style.display = "none";
+            }
+
+            // Show second column when message or settings icon is clicked
+            messageIcon.addEventListener("click", function () {
+                secondColumn.style.display = "block";
+                chatUserLists.style.display = "block";
+                chattingSetting.style.display = "none";
+                secondColumn.style.zIndex = "10";  // Set z-index for the second column
+            });
+
+            settingIcon.addEventListener("click", function () {
+                secondColumn.style.display = "block";
+                chatUserLists.style.display = "none";
+                chattingSetting.style.display = "block";
+                secondColumn.style.zIndex = "10";  // Set z-index for the second column
+            });
+
+            // Close second column when clicking outside (except on chat_user_lists or chatting_setting)
+            document.addEventListener("click", function (e) {
+                if (checkScreenSize() && !secondColumn.contains(e.target) &&
+                    !messageIcon.contains(e.target) && !settingIcon.contains(e.target) &&
+                    !chatUserLists.contains(e.target) && !chattingSetting.contains(e.target)) {
+                    secondColumn.style.display = "none";  // Hide second column
+                }
             });
         });
 
