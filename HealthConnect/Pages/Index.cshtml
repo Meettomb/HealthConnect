@@ -124,6 +124,82 @@
             </div>
         </section>
 
+        @if (Model.Role == "Doctor" && Model.DoctorProfileComplete == false)
+        {
+            <div class="finel_step_for_doctor_registration" id="popup">
+                <div class="form_section">
+                    <h1>First complite your profile</h1>
+                    <form method="post">
+                        <div class="filde_container">
+                            <p>Choose your daily Woking hours</p>
+
+                            <div class="time_filde">
+
+                                <div class="fildes">
+                                    <label>Starting hours</label>
+                                    <input type="time" name="work_start_time" value="" />
+                                </div>
+
+                                <div class="fildes">
+                                    <label>Ending hours</label>
+                                    <input type="time" name="work_end_time" value="" />
+                                </div>
+
+                            </div>
+                        </div>
+
+                        <div class="filde_container">
+                            <P>Choose your working days</P>
+                            <div class="fildes">
+
+                                <div class="chackbox_fild">
+                                    <input type="checkbox" name="weekly_work_days" value="Monday" />
+                                    <label>Monday</label>
+                                </div>
+
+                                <div class="chackbox_fild">
+                                    <input type="checkbox" name="weekly_work_days" value="Tuesday" />
+                                    <label>Tuesday</label>
+                                </div>
+
+                                <div class="chackbox_fild">
+                                    <input type="checkbox" name="weekly_work_days" value="Wednesday" />
+                                    <label>Wednesday</label>
+                                </div>
+
+                                <div class="chackbox_fild">
+                                    <input type="checkbox" name="weekly_work_days" value="Thursday" />
+                                    <label>Thursday</label>
+                                </div>
+
+                                <div class="chackbox_fild">
+                                    <input type="checkbox" name="weekly_work_days" value="Friday" />
+                                    <label>Friday</label>
+                                </div>
+
+                                <div class="chackbox_fild">
+                                    <input type="checkbox" name="weekly_work_days" value="Saturday" />
+                                    <label>Saturday</label>
+                                </div>
+
+                                <div class="chackbox_fild">
+                                    <input type="checkbox" name="weekly_work_days" value="Sunday" />
+                                    <label>Sunday</label>
+                                </div>
+
+                            </div>
+                        </div>
+
+
+                        <div class="submit_button">
+                            <button type="submit">Submit</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        }
+
+
     </main>
 
 
@@ -136,5 +212,18 @@
     {
         <p class="success_message">@Model.SuccessMessage</p>
     }
+
+    @if (TempData["SuccessMessage"] != null)
+    {
+        <div class="success_message">@TempData["SuccessMessage"]</div>
+    }
+
+    @if (TempData["ErrorMessage"] != null)
+    {
+        <div class="error_message">@TempData["ErrorMessage"]</div>
+    }
+
+
+
 </body>
 </html>

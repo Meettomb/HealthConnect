@@ -33,6 +33,7 @@ input[type=number] {
     border-radius: 5px;
     animation: shake 3s;
     opacity: 0;
+    z-index: 1000;
 }
 
 @keyframes shake {
@@ -107,6 +108,7 @@ input[type=number] {
     border-radius: 5px;
     animation: shake 3s;
     opacity: 0;
+    z-index: 1000;
 }
 
 
@@ -535,7 +537,7 @@ header nav {
         justify-content: space-evenly;
         flex-wrap: wrap;
         -webkit-flex-grow: 1;
-        flex-grow: 1;   
+        flex-grow: 1;
     }
 
 
@@ -573,40 +575,133 @@ header nav {
                     margin-top: 10px;
                     text-align: center;
                 }
+
 @media (max-width: 1000px) {
     .index_section_3 .count_container .detail {
         min-width: 30%;
     }
 }
+
 @media (max-width: 766px) {
     .index_section_3 .count_container .detail {
         width: 95%;
     }
 }
-/*--------------------------------------------------------------------------------------------------------------*/
-/*--------------------------------------------------------------------------------------------------------------*/
-/*--------------------------------------------------------------------------------------------------------------*/
-/*--------------------------------------------------------------------------------------------------------------*/
-/*--------------------------------------------------------------------------------------------------------------*/
-/*                                                 Login                                                        */
-/*--------------------------------------------------------------------------------------------------------------*/
-/*--------------------------------------------------------------------------------------------------------------*/
-/*--------------------------------------------------------------------------------------------------------------*/
-/*--------------------------------------------------------------------------------------------------------------*/
-/*--------------------------------------------------------------------------------------------------------------*/
-.back_button i {
-    background-color: var(--button-bg-color);
-    color: var(--contrast-color);
-    padding: 10px 12px;
-    border-radius: 5px;
-    cursor: pointer;
-    -webkit-text-decoration: inherit;
-    text-decoration: inherit;
-    margin: 30px 0px 0px 50px;
+
+.finel_step_for_doctor_registration {
+    display: flex;
+    align-items: center;
+    -webkit-justify-content: center;
+    justify-content: center;
+    flex-direction: column;
+    gap: 20px;
+    margin: 20px 0;
+    width: 100%;
+    height: 100dvh;
+    position: fixed;
+    top: -20px;
     z-index: 1000;
-    position: absolute;
-    top: 0;
-    &:hover
+    backdrop-filter: blur(200px);
+    overflow-y: scroll;
+}
+
+    .finel_step_for_doctor_registration .form_section {
+        width: auto;
+        height: auto;
+        position: fixed;
+        padding: 20px;
+        background-color: var(--contrast-color);
+        -ms-flex-direction: column;
+        -webkit-flex-direction: column;
+        flex-direction: column;
+        -moz-border-radius: 10px;
+        -webkit-border-radius: 10px;
+        border-radius: 10px;
+    }
+
+    .finel_step_for_doctor_registration h1 {
+        font-size: 30px;
+        font-weight: 600;
+        color: var(--heading-color);
+        font-family: var(--heading-font);
+        text-align: center;
+        margin: 50px 0 30px 0;
+    }
+
+
+    .finel_step_for_doctor_registration .form_section form {
+        width: 100%;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+    }
+        .finel_step_for_doctor_registration .form_section form .filde_container {
+            margin: 20px 0;
+        }
+            .finel_step_for_doctor_registration .form_section form .filde_container p {
+                color: var(--header-text-color);
+                margin: 10px 0;
+                font-size: 20px;
+            }
+        .finel_step_for_doctor_registration .form_section form .filde_container .time_filde {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 30px;
+        }
+            .finel_step_for_doctor_registration .form_section form .filde_container .time_filde input {
+                margin: 10px 0;
+            }
+            .finel_step_for_doctor_registration .form_section form .filde_container .time_filde label {
+                color: var(--header-text-color);
+                margin: 10px 0;
+            }
+            .finel_step_for_doctor_registration .form_section form .filde_container input {
+                margin: 10px;
+            }
+            .finel_step_for_doctor_registration .form_section form .filde_container label {
+                margin: 10px;
+            }
+        .finel_step_for_doctor_registration .form_section form .submit_button {
+            width: 100%;
+            display: flex;
+            justify-content: center;
+        }
+            .finel_step_for_doctor_registration .form_section form button {
+            background-color: var(--accent-color);
+            color: var(--contrast-color);
+            border: none;
+            outline: none;
+            padding: 10px 50px;
+            -moz-border-radius: 5px;
+            -webkit-border-radius: 5px;
+            border-radius: 5px;
+            cursor: pointer;
+            font-weight: 600;
+        }
+        /*--------------------------------------------------------------------------------------------------------------*/
+        /*--------------------------------------------------------------------------------------------------------------*/
+        /*--------------------------------------------------------------------------------------------------------------*/
+        /*--------------------------------------------------------------------------------------------------------------*/
+        /*--------------------------------------------------------------------------------------------------------------*/
+        /*                                                 Login                                                        */
+        /*--------------------------------------------------------------------------------------------------------------*/
+        /*--------------------------------------------------------------------------------------------------------------*/
+        /*--------------------------------------------------------------------------------------------------------------*/
+        /*--------------------------------------------------------------------------------------------------------------*/
+        /*--------------------------------------------------------------------------------------------------------------*/
+        .back_button i {
+            background-color: var(--button-bg-color);
+            color: var(--contrast-color);
+            padding: 10px 12px;
+            border-radius: 5px;
+            cursor: pointer;
+            -webkit-text-decoration: inherit;
+            text-decoration: inherit;
+            margin: 30px 0px 0px 50px;
+            z-index: 1000;
+            position: absolute;
+            top: 0;
+            &:hover
 
 {
     background-color: var(--button-hover-bg-color);

@@ -24,6 +24,7 @@ namespace HealthConnect.Pages
         public string Country { get; set; }
         public string State { get; set; }
         public string City { get; set; }
+        public bool? DoctorProfileComplete { get; set; }
         public string ErrorMessage { get; set; }
         public string SuccessMessage { get; set; }
 
@@ -125,6 +126,9 @@ namespace HealthConnect.Pages
                                 State = reader["state"].ToString();
                                 City = reader["city"].ToString();
                                 UserId = (int?)reader["id"];
+                                DoctorProfileComplete = reader["doctor_profile_complete"] != DBNull.Value ? (bool?)(Convert.ToInt32(reader["doctor_profile_complete"]) == 1) : null;
+
+
                             }
                         }
                         con.Close();
@@ -255,7 +259,65 @@ namespace HealthConnect.Pages
             public int Count { get; set; }
         }
 
-      
+
+        public IActionResult OnPost()
+        {
+            int? UserId = HttpContext.Session.GetInt32("Id");
+
+            if (!UserId.HasValue)
+            {
+                ErrorMessage = "User session expired. Please log in again.";
+                return Page();
+            }
+
+            OnPostAddDoctorworkingInfo(UserId.Value);
+
+            return RedirectToPage();
+        }
+
+        public void OnPostAddDoctorworkingInfo(int UserId)
+        {
+            if (User.work_start_time == null)
+            {
+                ErrorMessage = "Please select work start time.";
+                return;
+            }
+            if (User.work_end_time == null)
+            {
+                ErrorMessage = "Please select work end time.";
+                return;
+            }
+            if (string.IsNullOrEmpty(User.weekly_work_days) || User.weekly_work_days.Length == 0)
+            {
+                ErrorMessage = "Please select days which you would like to work.";
+                return;
+            }
+
+            using (SqlConnection connection = new SqlConnection(_connectionString))
+            {
+                connection.Open();
+                string updateQuery = "UPDATE User_Table SET work_start_time = @work_start_time, work_end_time = @work_end_time, " +
+                                     "weekly_work_days = @weekly_work_days, doctor_profile_complete = 1 WHERE id = @UserId;";
+
+                using (SqlCommand command = new SqlCommand(updateQuery, connection))
+                {
+                    command.Parameters.AddWithValue("@UserId", UserId);
+                    command.Parameters.AddWithValue("@work_start_time", User.work_start_time);
+                    command.Parameters.AddWithValue("@work_end_time", User.work_end_time);
+                    command.Parameters.AddWithValue("@weekly_work_days", string.Join(",", User.weekly_work_days));
+
+                    int rowsAffected = command.ExecuteNonQuery();
+                    if (rowsAffected > 0)
+                    {
+                        SuccessMessage = "Doctor working information updated successfully.";
+                    }
+                    else
+                    {
+                        ErrorMessage = "Failed to update doctor working information.";
+                    }
+                }
+            }
+        }
 
 
     }

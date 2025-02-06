@@ -135,3 +135,16 @@ document.addEventListener("DOMContentLoaded", function () {
         observer.observe(countElement);
     });
 });
+
+
+
+
+document.addEventListener("DOMContentLoaded", function () {
+    var doctorStep = document.getElementById("popup");
+
+    if (doctorStep) {
+        document.body.classList.add("no-scroll");
+    } else {
+        document.body.classList.remove("no-scroll");
+    }
+});

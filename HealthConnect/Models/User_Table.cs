@@ -45,6 +45,10 @@ namespace HealthConnect.Models
         public string? video_call_consultation_fee { get; set; }
         public string? doctor_specialitis { get; set; }
         public bool? doctor_profile_complete { get; set; }
+
+        public string? work_start_time { get; set; }
+        public string? work_end_time { get; set; }
+        public string? weekly_work_days { get; set; }
     }
 
 }
