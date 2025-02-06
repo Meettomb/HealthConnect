@@ -71,6 +71,7 @@
                     Setting
                 </p>
             </div>
+
         </div>
 
 
@@ -416,12 +417,16 @@
 
 
     <script>
-                document.addEventListener("DOMContentLoaded", function () {
+        document.addEventListener("DOMContentLoaded", function () {
             let chatUserLists = document.getElementById("chat_user_lists");
             let chattingSetting = document.getElementById("chatting_setting");
             let messageIcon = document.getElementById("chatting_message_icon");
             let settingIcon = document.getElementById("chatting_setting_icon");
             let secondColumn = document.getElementById("second_column");
+
+            chatUserLists.style.display = "block";
+            chattingSetting.style.display = "none";
+
 
             // Function to check screen width
             function checkScreenSize() {

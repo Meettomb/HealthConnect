@@ -148,3 +148,49 @@ document.addEventListener("DOMContentLoaded", function () {
         document.body.classList.remove("no-scroll");
     }
 });
+
+
+
+
+document.addEventListener("DOMContentLoaded", function () {
+    let detailsLeft = document.querySelector(".why_choose_us_left");
+    let detailsRight = document.querySelectorAll(".why_choose_us_detail");
+    let welcomeTexts = document.querySelectorAll("#welcome_text1, #welcome_text2"); 
+    let DownUpAnimation = document.querySelectorAll(".DownUpAnimation");
+
+    let observer = new IntersectionObserver((entries, observer) => {
+        entries.forEach((entry, index) => {
+            if (entry.isIntersecting) {
+                entry.target.style.transitionDelay = index * 300 + "ms";
+                entry.target.classList.add("visible");
+                observer.unobserve(entry.target); 
+            }
+        });
+    }, { threshold: 0.5 });
+
+    let observer2 = new IntersectionObserver((entries, observer2) => {
+        entries.forEach((entry, index) => {
+            if (entry.isIntersecting) {
+                entry.target.style.transitionDelay = index * 300 + "ms";
+                entry.target.classList.add("visible2");
+                observer2.unobserve(entry.target);
+            }
+        });
+    }, { threshold: 0.5 });
+    
+    let observer3 = new IntersectionObserver((entries, observer3) => {
+        entries.forEach((entry, index) => {
+            if (entry.isIntersecting) {
+                entry.target.style.transitionDelay = index * 300 + "ms";
+                entry.target.classList.add("visible3");
+                observer3.unobserve(entry.target);
+            }
+        });
+    }, { threshold: 0.5 });
+
+    if (detailsLeft) observer.observe(detailsLeft);
+    detailsRight.forEach((detail) => observer.observe(detail));
+    welcomeTexts.forEach((text) => observer2.observe(text));
+    DownUpAnimation.forEach((text) => observer3.observe(text));
+});
+
