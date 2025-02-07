@@ -874,6 +874,7 @@ header nav {
 
     .user_filsd_wrep .user_input_box input {
         padding: 10px 1px;
+
     }
 
         .user_filsd_wrep .user_input_box input[type=date] {
@@ -932,7 +933,8 @@ header nav {
             width: 90%;
             padding: 10px 15px;
             border: none;
-            border-bottom: 2px solid #ccc;
+            border: 2px solid #ccc;
+            border-radius: 5px;
             background-color: #F5F5F5;
             font-size: 16px;
             color: var(--accent-color);
@@ -1063,7 +1065,7 @@ header nav {
 .user_filsd_wrep .user_input_box select {
     max-width: 100%;
     min-width: 100%;
-    outline: 1px solid var(--header-text-hover-color);
+    outline: 1px solid #ccc;
     background-color: red;
     border-radius: 5px;
     border-bottom: none;
@@ -1540,6 +1542,7 @@ header nav {
         width: 95%;
         height: auto;
         display: flex;
+        justify-content: flex-start;
         column-gap: 30px;
         row-gap: 20px;
         color: var(--heading-color);
@@ -1557,14 +1560,17 @@ header nav {
             outline: none;
             padding: 2px 20px 2px 2px;
             font-size: 13px;
-            width: auto;
             margin-top: 2px;
         }
 
             .explorer_doctor_section1 .filtre_doctor_div select option {
                 color: var(--default-color);
                 font-family: var(--default-font);
+
             }
+                .explorer_doctor_section1 .filtre_doctor_div select::-webkit-scrollbar {
+                    display: none;
+                }
 
 
 .explorer_doctor_section2 {
@@ -1578,7 +1584,7 @@ header nav {
     .explorer_doctor_section2 .all_doctor_div {
         width: 95%;
         display: flex;
-        justify-content: center;
+        justify-content: space-between;
         gap: 30px;
         flex-wrap: wrap;
     }

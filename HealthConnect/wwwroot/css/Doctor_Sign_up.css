@@ -170,7 +170,7 @@ body {
                 width: 90%;
                 padding: 10px 15px;
                 border: none;
-                border-bottom: 2px solid #ccc;
+                border: 2px solid #ccc;
                 background-color: #F5F5F5;
                 font-size: 16px;
             }
@@ -241,6 +241,7 @@ body {
 
     .user_filsd_wrep .user_input_box input {
         padding: 10px 1px;
+        border: 2px solid var(--accent-color);
     }
 
         .user_filsd_wrep .user_input_box input[type=date] {
@@ -301,7 +302,10 @@ body {
             width: 90%;
             padding: 10px 15px;
             border: none;
-            border-bottom: 2px solid var(--accent-color);
+            border: 1px solid var(--accent-color);
+            -moz-border-radius: 5px;
+            -webkit-border-radius: 5px;
+            border-radius: 5px;
             background-color: #F5F5F5;
             font-size: 16px;
             color: var(--accent-color);
@@ -429,13 +433,19 @@ body {
     content: 'Upload Profile Picture';
     position: absolute;
     top: 0;
-    left: 30%;
+    left: 5%;
+    width: 75%;
     padding: 19px 20px;
     background-color: var(--accent-color);
+    background-image: url('../user-regular.svg');
+    background-repeat: no-repeat;
     border-radius: 5px;
     color: var(--contrast-color);
     cursor: pointer;
     font-size: 10px;
+    background-size: 20px;
+    background-position: 90% 50%;
+
 }
 
 &:hover {
@@ -448,6 +458,8 @@ body {
 }
 }
 
+
+
 #licensePhotoInput {
     width: 0%;
     border: none;
@@ -457,9 +469,14 @@ body {
     content: ' Upload Medical License Photo';
     position: absolute;
     top: 0;
-    left: 30%;
+    left: 5%;
+    width: 75%;
     padding: 19px 20px;
     background-color: var(--accent-color);
+    background-image: url('../id-card-regular.svg');
+    background-size: 20px;
+    background-position: 90% 50%;
+    background-repeat: no-repeat;
     border-radius: 5px;
     color: var(--contrast-color);
     cursor: pointer;
@@ -526,6 +543,7 @@ Upload Medical License Photo
 .user_multiple_filsd_wrep {
     width: 100%;
 }
+
     .user_multiple_filsd_wrep label {
         margin-left: 15px;
         color: var(--accent-color);
@@ -545,11 +563,12 @@ Upload Medical License Photo
             border: 1px solid var(--accent-color);
             padding-left: 10px;
         }
+
             .user_multiple_filsd_wrep .user_select_box select::-webkit-scrollbar {
                 display: none;
             }
 
-#DoctorSpecialitisTypeSelect option{
+#DoctorSpecialitisTypeSelect option {
     margin: 5px 0;
     font-size: 16px;
 }
@@ -559,21 +578,23 @@ Upload Medical License Photo
     overflow: scroll;
     font-size: 16px;
 }
+
     #languagesSpokenSelect option {
         margin: 5px 0;
     }
 
 
-#MedicineTypeSelect option{
+#MedicineTypeSelect option {
     margin: 5px 0;
     font-size: 16px;
 }
 
 #DoctorQualificationsSelect {
-/*    height: 250px;*/
+    /*    height: 250px;*/
     overflow: scroll;
     font-size: 16px;
 }
+
     #DoctorQualificationsSelect option {
         margin: 5px 0;
     }

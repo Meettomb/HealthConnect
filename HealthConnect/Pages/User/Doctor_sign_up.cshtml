@@ -305,7 +305,6 @@
             var doctorTypeId = document.getElementById("doctorTypeSelect").value;
 
             if (doctorTypeId) {
-                // Adjust the URL for Razor Pages handler
                 fetch(`/User/Doctor_sign_up?handler=FetchSpecialities&doctorTypeId=${doctorTypeId}`)
                     .then(response => response.json())
                     .then(data => {

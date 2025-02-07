@@ -18,6 +18,7 @@
             <p>Doctor speciality</p>
             <select id="specialityFilter">
                 <option selected disabled>Select doctor speciality</option>
+                <option selected value="all">All</option>
                 @foreach (var item in Model.doctorSpecialitiesList)
                 {
                     <option value="@item.doctor_specialitis">@item.doctor_specialitis</option>
@@ -27,46 +28,56 @@
         </div>
 
         <div class="select_filter">
+            <p>Country</p>
+            <select id="country-select">
+                <option selected value="all">All</option>
+            </select>
+        </div>
+        
+        <div class="select_filter">
             <p>State</p>
-            <select>
-                <option selected disabled>Select State</option>
+            <select id="state-select">
+                <option selected value="all">All</option>
             </select>
         </div>
 
         <div class="select_filter">
             <p>City</p>
-            <select>
-                <option selected disabled>Select city</option>
+            <select id="city-select">
+                <option selected value="all">All</option>
             </select>
         </div>
 
         <div class="select_filter">
             <p>Gender</p>
-            <select>
-                <option selected disabled>Select Gender</option>
-                <option>Male</option>
-                <option>Female</option>
+            <select id="gender">
+                <option selected value="All">All</option>
+                <option value="Male">Male</option>
+                <option value="Female">Female</option>
             </select>
         </div>
 
         <div class="select_filter">
             <p>Minimum experience</p>
-            <select>
-                <option selected disabled>Select minimum experience</option>
-                <option>1</option>
-                <option>2</option>
+            <select id="experience">
+                <option selected>All</option>
+                @for (int i = 1; i <= 70; i++)
+                {
+
+                    <option value="@i">@i</option>
+                }
             </select>
         </div>
     </div>
 </section>
 
 <section class="explorer_doctor_section2">
-    <div class="all_doctor_div">
+    <div class="all_doctor_div" id="doctorsList">
         @if (Model.User_list != null && Model.User_list.Count > 0)
         {
             @foreach (var data in Model.User_list)
             {
-                <div class="all_doctor_single_div data">
+                <div class="all_doctor_single_div" data-city="@data.city" data-state="@data.state" data-country="@data.country" data-experience="@data.doctore_experience" data-name="@data.first_name @data.last_name" data-speciality="@data.doctor_specialitis" data-gender="@data.gender">
                     <div class="all_doctor_single_div_sides">
                         <div class="all_doctor_single_left" data-country="@data.country" data-currency="@data.currency_code">
                             <img src="/documant/@data.profile_pic" alt="Dr. @data.first_name @data.last_name" />
@@ -109,7 +120,7 @@
                     </div>
 
                     <div class="all_doctor_single_div_comunication_option">
-                        
+
                         @if (data.hospital_or_clinic == "Clinic")
                         {
                             <p><i class="fa-solid fa-house-chimney-medical"></i><span id="fee-hospital-or-clinic-@data.country">$@data.on_site_consultation_fee</span></p>
@@ -135,8 +146,6 @@
                     </div>
                 </div>
             }
-
-
         }
         else
         {
@@ -144,5 +153,173 @@
         }
     </div>
 </section>
+
+
+<script>
+    function filterDoctors() {
+        var selectedSpeciality = document.getElementById("specialityFilter").value.toLowerCase();
+        var selectedGender = document.getElementById("gender").value.toLowerCase();
+        var searchQuery = document.getElementById("myInput").value.toLowerCase();
+        var selctedMinAge = document.getElementById("experience").value.toLowerCase();
+        var selctedCountry = document.getElementById("country-select").value.toUpperCase();
+        var selctedState = document.getElementById("state-select").value.toUpperCase();
+        var selctedCity = document.getElementById("city-select").value.toLowerCase();
+
+        var doctors = document.querySelectorAll(".all_doctor_single_div");
+
+        doctors.forEach(function(doctor) {
+            var doctorSpecialities = doctor.getAttribute("data-speciality").toLowerCase().split(", ");
+            var doctorGender = doctor.getAttribute("data-gender").toLowerCase();
+            var doctorFullName = doctor.getAttribute("data-name").toLowerCase();
+            var doctorMinexperience = doctor.getAttribute("data-experience").toLowerCase();
+            var country = doctor.getAttribute("data-country").toUpperCase();
+            var state = doctor.getAttribute("data-state").toUpperCase();
+            var city = doctor.getAttribute("data-city").toLowerCase();
+
+            var matchesSpeciality = selectedSpeciality === "all" || doctorSpecialities.includes(selectedSpeciality);
+            var matchesGender = selectedGender === "all" || doctorGender === selectedGender;
+            var matchesName = searchQuery === "" || doctorFullName.includes(searchQuery);
+            var matchesExperience = selctedMinAge === "all" || parseInt(doctorMinexperience) >= parseInt(selctedMinAge);
+            var matchesCountry = selctedCountry === "ALL" || country === selctedCountry;
+            var matchesState = selctedState === "ALL" || state === selctedState;
+            var matchesCity = selctedCity === "all" || city === selctedCity;
+
+
+            if (matchesSpeciality && matchesGender && matchesName && matchesExperience && matchesCountry && matchesState && matchesCity) {
+                doctor.style.display = "block";
+            } else {
+                doctor.style.display = "none";
+            }
+        });
+    }
+
+    document.getElementById("specialityFilter").addEventListener("change", filterDoctors);
+    document.getElementById("gender").addEventListener("change", filterDoctors);
+    document.getElementById("myInput").addEventListener("input", filterDoctors);
+    document.getElementById("experience").addEventListener("change", filterDoctors);
+    document.getElementById("country-select").addEventListener("change", filterDoctors);
+    document.getElementById("state-select").addEventListener("change", filterDoctors);
+    document.getElementById("city-select").addEventListener("change", filterDoctors);
+</script>
+
+
+<script>
+    const countrySelect = document.getElementById('country-select');
+       const currencyCodeInput = document.getElementById('currency-code');
+
+           const stateSelect = document.getElementById('state-select');
+           const citySelect = document.getElementById('city-select');
+
+              const countrySettings = {
+           async: true,
+           crossDomain: true,
+           url: 'https://country-state-city-search-rest-api.p.rapidapi.com/allcountries',
+           method: 'GET',
+           headers: {
+               'x-rapidapi-key': '3f03d9797emsh73ca4574bd5e4d8p18d1c3jsn45f14e7f6f51',
+               'x-rapidapi-host': 'country-state-city-search-rest-api.p.rapidapi.com'
+           }
+       };
+
+       $.ajax(countrySettings).done(function (response) {
+           if (Array.isArray(response)) {
+               response.forEach(country => {
+                   const option = document.createElement('option');
+                   option.value = country.isoCode;
+                   option.textContent = country.name;
+                   countrySelect.appendChild(option);
+               });
+           } else {
+               console.error('API response is not an array:', response);
+           }
+       });
+
+
+         // Fetch states based on selected country code
+            countrySelect.addEventListener('change', function () {
+                const selectedCountryCode = countrySelect.value;
+                const selectedCountryName = countrySelect.options[countrySelect.selectedIndex].text;
+
+                console.log('Selected Country Code:', selectedCountryCode);
+                console.log('Selected Country Name:', selectedCountryName);
+
+                if (selectedCountryCode) {
+                    stateSelect.innerHTML = '<option disabled selected>Select your State</option>';
+
+                    const stateSettings = {
+                        async: true,
+                        crossDomain: true,
+                        url: `https://country-state-city-search-rest-api.p.rapidapi.com/states-by-countrycode?countrycode=${selectedCountryCode}`,
+                        method: 'GET',
+                        headers: {
+                            'x-rapidapi-key': '3f03d9797emsh73ca4574bd5e4d8p18d1c3jsn45f14e7f6f51',
+                            'x-rapidapi-host': 'country-state-city-search-rest-api.p.rapidapi.com'
+                        }
+                    };
+
+                    $.ajax(stateSettings).done(function (stateResponse) {
+                        if (Array.isArray(stateResponse)) {
+                            stateResponse.forEach(state => {
+                                const option = document.createElement('option');
+                                option.value = state.isoCode;
+                                option.textContent = state.name;
+                                stateSelect.appendChild(option);
+                            });
+                        } else {
+                            console.error('API response for states is not an array:', stateResponse);
+                        }
+                    });
+                }
+            });
+
+            // Fetch cities based on selected country and state code
+                   stateSelect.addEventListener('change', function () {
+                const selectedCountryCode = countrySelect.value;
+                const selectedStateCode = stateSelect.value;
+
+                const selectedStateName = stateSelect.options[stateSelect.selectedIndex].text;
+
+                console.log('Selected State Code:', selectedStateCode);
+                console.log('Selected State Name:', selectedStateName);
+
+                if (selectedCountryCode && selectedStateCode) {
+                    citySelect.innerHTML = '<option disabled selected>Select your City</option>';
+
+                    const citySettings = {
+                        async: true,
+                        crossDomain: true,
+                        url: `https://country-state-city-search-rest-api.p.rapidapi.com/cities-by-countrycode-and-statecode?countrycode=${selectedCountryCode}&statecode=${selectedStateCode}`,
+                        method: 'GET',
+                        headers: {
+                            'x-rapidapi-key': '3f03d9797emsh73ca4574bd5e4d8p18d1c3jsn45f14e7f6f51',
+                            'x-rapidapi-host': 'country-state-city-search-rest-api.p.rapidapi.com'
+                        }
+                    };
+
+                    $.ajax(citySettings).done(function (cityResponse) {
+                        if (Array.isArray(cityResponse)) {
+                            cityResponse.forEach(city => {
+                                const option = document.createElement('option');
+                                option.value = city.name;
+                                option.textContent = city.name; 
+                                citySelect.appendChild(option);
+                            });
+                        } else {
+                            console.error('API response for cities is not an array:', cityResponse);
+                        }
+                    });
+                }
+            });
+
+            // Display selected city name and its ISO code after selecting a city
+            citySelect.addEventListener('change', function () {
+                const selectedCityName = citySelect.options[citySelect.selectedIndex].text;
+                const selectedCityCode = citySelect.value; 
+
+                console.log('Selected City Name:', selectedCityName);
+                console.log('Selected City Code:', selectedCityCode);
+            });
+
+</script>
 
 
