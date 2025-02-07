@@ -137,18 +137,29 @@ document.addEventListener("DOMContentLoaded", function () {
 });
 
 
-
-
 document.addEventListener("DOMContentLoaded", function () {
     var doctorStep = document.getElementById("popup");
+    var closePopup = document.getElementById("closePopup");
+    var videoCallButtons = document.querySelectorAll(".video-call");
 
-    if (doctorStep) {
-        document.body.classList.add("no-scroll");
-    } else {
-        document.body.classList.remove("no-scroll");
+    if (!doctorStep) return; // Exit if popup does not exist
+
+    // Open popup and disable scrolling
+    videoCallButtons.forEach(function (button) {
+        button.addEventListener("click", function () {
+            doctorStep.style.display = "flex";
+            document.body.classList.add("no-scroll"); // Disable scrolling
+        });
+    });
+
+    // Close popup and enable scrolling
+    if (closePopup) {
+        closePopup.addEventListener("click", function () {
+            doctorStep.style.display = "none";
+            document.body.classList.remove("no-scroll"); // Enable scrolling
+        });
     }
 });
-
 
 
 

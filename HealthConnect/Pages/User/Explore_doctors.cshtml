@@ -33,7 +33,7 @@
                 <option selected value="all">All</option>
             </select>
         </div>
-        
+
         <div class="select_filter">
             <p>State</p>
             <select id="state-select">
@@ -134,7 +134,7 @@
 
                         @if (data.video_call_consultation_fee != null)
                         {
-                            <p><a href="#"><i class="fa-solid fa-video"></i> Video call</a></p>
+                            <p data-doctorId="@data.id" class="video-call" id="video-call"><a href="#"><i class="fa-solid fa-video"></i> Video call</a></p>
                         }
                         else
                         {
@@ -154,6 +154,24 @@
     </div>
 </section>
 
+<section class="explorer_doctor_section3" id="popup">
+    <div class="videocall_consultation_container">
+        <div class="videocall_consultation">
+            <i class="fa-solid fa-times" id="closePopup"></i>
+            <h1>Video call consultation</h1>
+            <form method="post">
+
+                <input type="text" name="user_id" value="@Model.UserId" />
+                <input type="text" name="doctor_id" id="doctorIdInput" readonly>
+
+                <input type="text" name="speciality" placeholder="Enter doctor speciality" />
+                <input type="text" name="date" placeholder="Select date" />
+                <input type="text" name="time" placeholder="Select time" />
+                <button type="submit" name="submit">Book now</button>
+            </form>
+        </div>
+    </div>
+</section>
 
 <script>
     function filterDoctors() {
@@ -301,7 +319,7 @@
                             cityResponse.forEach(city => {
                                 const option = document.createElement('option');
                                 option.value = city.name;
-                                option.textContent = city.name; 
+                                option.textContent = city.name;
                                 citySelect.appendChild(option);
                             });
                         } else {
@@ -314,7 +332,7 @@
             // Display selected city name and its ISO code after selecting a city
             citySelect.addEventListener('change', function () {
                 const selectedCityName = citySelect.options[citySelect.selectedIndex].text;
-                const selectedCityCode = citySelect.value; 
+                const selectedCityCode = citySelect.value;
 
                 console.log('Selected City Name:', selectedCityName);
                 console.log('Selected City Code:', selectedCityCode);
@@ -322,4 +340,13 @@
 
 </script>
 
+
+<script>
+    $(document).ready(function () {
+        $(".video-call").click(function () {
+            var doctorId = $(this).attr("data-doctorId");
+            $("#doctorIdInput").val(doctorId);
+        });
+    });
+</script>
 

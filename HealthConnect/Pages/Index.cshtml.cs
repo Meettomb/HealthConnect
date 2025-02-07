@@ -83,6 +83,9 @@ namespace HealthConnect.Pages
                 }
             }
 
+            TotalSpecialitiesCount = doctorSpecialitiesList?.Count ?? 0;
+
+
             using (SqlConnection connection = new SqlConnection(_connectionString))
             {
                 string query = "SELECT doctor_type_id, type_of_doctor FROM Types_of_Doctor";
@@ -209,48 +212,20 @@ namespace HealthConnect.Pages
             {
                 connection.Open();
 
-                // Fetch roles (doctors)
-                // Fetch total count of users with role 'Doctor'
                 string getDoctorCount = "SELECT COUNT(*) FROM User_Table WHERE role = 'Doctor'";
                 using (SqlCommand command = new SqlCommand(getDoctorCount, connection))
                 {
-                    TotalDoctorsCount = (int)command.ExecuteScalar(); // Get the count of doctors
+                    TotalDoctorsCount = (int)command.ExecuteScalar();
                 }
 
-
-                // Fetch specialities
-                string getSpecialities = "SELECT doctor_specialitis_id FROM Doctor_Specialitis";
-                using (SqlCommand command = new SqlCommand(getSpecialities, connection))
-                {
-                    using (SqlDataReader reader = command.ExecuteReader())
-                    {
-                        while (reader.Read())
-                        {
-                            doctorSpecialitiesList.Add(new Doctor_Specialitis
-                            {
-                                doctor_specialitis_id = reader.GetInt32(0),
-                            });
-                        }
-                    }
-                }
-
-                // Fetch total user count
                 string getTotalUsers = "SELECT COUNT(*) FROM User_Table ";
                 using (SqlCommand command = new SqlCommand(getTotalUsers, connection))
                 {
-                    TotalUsersCount = (int)command.ExecuteScalar(); // Get the count directly
+                    TotalUsersCount = (int)command.ExecuteScalar(); 
                 }
             }
 
-            // Count doctors by role
-            DoctorCounts = User_TableList
-                .GroupBy(u => u.role)
-                .Select(g => new DoctorCount { role = g.Key, Count = g.Count() })
-                .OrderBy(x => x.role)
-                .ToList();
-
-            // Count total specialities
-            TotalSpecialitiesCount = doctorSpecialitiesList.Count;
+         
         }
 
         public class DoctorCount

@@ -874,7 +874,6 @@ header nav {
 
     .user_filsd_wrep .user_input_box input {
         padding: 10px 1px;
-
     }
 
         .user_filsd_wrep .user_input_box input[type=date] {
@@ -1566,11 +1565,11 @@ header nav {
             .explorer_doctor_section1 .filtre_doctor_div select option {
                 color: var(--default-color);
                 font-family: var(--default-font);
-
             }
-                .explorer_doctor_section1 .filtre_doctor_div select::-webkit-scrollbar {
-                    display: none;
-                }
+
+            .explorer_doctor_section1 .filtre_doctor_div select::-webkit-scrollbar {
+                display: none;
+            }
 
 
 .explorer_doctor_section2 {
@@ -1928,6 +1927,79 @@ header nav {
     height: 100vh;
 }
 
+.explorer_doctor_section3 {
+    width: 100%;
+    height: 100dvh;
+    justify-content: center;
+    position: fixed;
+    top: 0;
+    left: 0;
+    -webkit-align-items: center;
+    align-items: center;
+    -webkit-justify-content: center;
+    justify-content: center;
+    background-color: transparent;
+    z-index: 1000;
+    -webkit-backdrop-filter: blur(5px);
+    backdrop-filter: blur(5px);
+    display: none;
+}
+
+    .explorer_doctor_section3 .videocall_consultation_container {
+        max-width: 90%;
+        min-width: 30%;
+        height: 50%;
+        background-color: var(--contrast-color);
+        display: flex;
+        -webkit-justify-content: center;
+        justify-content: center;
+        box-shadow: 0 0 10px 5px var(--heading-color);
+        border-radius: 10px;
+    }
+
+
+
+        .explorer_doctor_section3 .videocall_consultation_container .videocall_consultation {
+            padding: 15px;
+            position: relative;
+            width: 100%;
+            display: flex;
+            -ms-flex-direction: column;
+            -webkit-flex-direction: column;
+            flex-direction: column;
+            -webkit-align-items: center;
+            align-items: center;
+        }
+
+            .explorer_doctor_section3 .videocall_consultation_container .videocall_consultation h1 {
+                text-align: center;
+                margin: 15px;
+                font-family: var(--heading-font);
+            }
+
+            .explorer_doctor_section3 .videocall_consultation_container .videocall_consultation i {
+                display: flex;
+                align-self: flex-start;
+                justify-self: flex-end;
+                background-color: red;
+                color: var(--contrast-color);
+                z-index: 1000;
+                font-size: 20px;
+                padding: 7px 10px;
+                cursor: pointer;
+                position: absolute;
+                right: 0;
+                top: 0;
+                border-radius: 0 10px 0 0;
+            }
+
+            .explorer_doctor_section3 .videocall_consultation_container .videocall_consultation form {
+                display: flex;
+                flex-direction: column;
+                width: 80%;
+                margin: 20px 0;
+                gap: 10px;
+            }
 
 
 /*--------------------------------------------------------------------------------------------------------------*/
@@ -1941,11 +2013,6 @@ header nav {
 /*--------------------------------------------------------------------------------------------------------------*/
 /*--------------------------------------------------------------------------------------------------------------*/
 /*--------------------------------------------------------------------------------------------------------------*/
-
-
-
-
-
 .chat_section_1 {
     width: 100%;
     height: auto;

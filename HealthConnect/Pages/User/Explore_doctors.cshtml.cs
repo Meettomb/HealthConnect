@@ -60,8 +60,34 @@ namespace HealthConnect.Pages.User
 
             if (UserId.HasValue)
             {
-                GetCurrentUserDetails(UserId.Value);
+
+                using (SqlConnection con = new SqlConnection(_connectionString))
+                {
+                    string query = "SELECT * FROM User_Table WHERE id = @UserId";
+                    using (SqlCommand cmd = new SqlCommand(query, con))
+                    {
+                        cmd.Parameters.AddWithValue("@UserId", UserId);
+                        con.Open();
+                        using (SqlDataReader reader = cmd.ExecuteReader())
+                        {
+                            if (reader.Read())
+                            {
+                                FirstName = reader["first_name"].ToString();
+                                LastName = reader["last_name"].ToString();
+                                ProfilePic = reader["profile_pic"].ToString();
+                                Role = reader["role"].ToString();
+                                Country = reader["country"].ToString();
+                                State = reader["state"].ToString();
+                                City = reader["city"].ToString();
+                                CurrencyCode = reader["currency_code"].ToString();
+                                UserId = (int?)reader["id"];
+                            }
+                        }
+                        con.Close();
+                    }
+                }
             }
+
             using (SqlConnection connection = new SqlConnection(_connectionString))
             {
                 string query = "SELECT doctor_specialitis_id, doctor_specialitis FROM Doctor_Specialitis";
@@ -109,34 +135,7 @@ namespace HealthConnect.Pages.User
             return Page();
         }
 
-        private void GetCurrentUserDetails(int userId)
-        {
-            using (SqlConnection con = new SqlConnection(_connectionString))
-            {
-                string query = "SELECT * FROM User_Table WHERE id = @UserId";
-                using (SqlCommand cmd = new SqlCommand(query, con))
-                {
-                    cmd.Parameters.AddWithValue("@UserId", userId);
-                    con.Open();
-                    using (SqlDataReader reader = cmd.ExecuteReader())
-                    {
-                        if (reader.Read())
-                        {
-                            FirstName = reader["first_name"].ToString();
-                            LastName = reader["last_name"].ToString();
-                            ProfilePic = reader["profile_pic"].ToString();
-                            Role = reader["role"].ToString();
-                            Country = reader["country"].ToString();
-                            State = reader["state"].ToString();
-                            City = reader["city"].ToString();
-                            CurrencyCode = reader["currency_code"].ToString();
-                            UserId = (int?)reader["id"];
-                        }
-                    }
-                    con.Close();
-                }
-            }
-        }
+        
 
         private void GetDoctorsList(string role)
         {
