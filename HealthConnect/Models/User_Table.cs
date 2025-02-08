@@ -48,7 +48,7 @@ namespace HealthConnect.Models
 
         public string? work_start_time { get; set; }
         public string? work_end_time { get; set; }
-        public string? weekly_work_days { get; set; }
+        public List<string>? weekly_work_days { get; set; }
     }
 
 }

@@ -245,6 +245,15 @@ namespace HealthConnect.Pages
                 return Page();
             }
 
+            var selectedDays = Request.Form["weekly_work_days"].ToList();
+
+            if (selectedDays.Count == 0)
+            {
+                ErrorMessage = "Please select days which you would like to work.";
+                return Page();
+            }
+
+            User.weekly_work_days = selectedDays;
             OnPostAddDoctorworkingInfo(UserId.Value);
 
             return RedirectToPage();
@@ -262,7 +271,7 @@ namespace HealthConnect.Pages
                 ErrorMessage = "Please select work end time.";
                 return;
             }
-            if (string.IsNullOrEmpty(User.weekly_work_days) || User.weekly_work_days.Length == 0)
+            if (User.weekly_work_days == null || User.weekly_work_days.Count == 0)
             {
                 ErrorMessage = "Please select days which you would like to work.";
                 return;
@@ -279,7 +288,7 @@ namespace HealthConnect.Pages
                     command.Parameters.AddWithValue("@UserId", UserId);
                     command.Parameters.AddWithValue("@work_start_time", User.work_start_time);
                     command.Parameters.AddWithValue("@work_end_time", User.work_end_time);
-                    command.Parameters.AddWithValue("@weekly_work_days", string.Join(",", User.weekly_work_days));
+                    command.Parameters.AddWithValue("@weekly_work_days", string.Join(",", User.weekly_work_days)); 
 
                     int rowsAffected = command.ExecuteNonQuery();
                     if (rowsAffected > 0)
@@ -293,6 +302,7 @@ namespace HealthConnect.Pages
                 }
             }
         }
+
 
 
     }

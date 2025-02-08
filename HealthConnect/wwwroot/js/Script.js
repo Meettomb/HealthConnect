@@ -140,12 +140,12 @@ document.addEventListener("DOMContentLoaded", function () {
 document.addEventListener("DOMContentLoaded", function () {
     var doctorStep = document.getElementById("popup");
     var closePopup = document.getElementById("closePopup");
-    var videoCallButtons = document.querySelectorAll(".video-call");
+    var consultancy = document.querySelectorAll(".video-call, .Book-Onsite-Appointment");
 
     if (!doctorStep) return; // Exit if popup does not exist
 
     // Open popup and disable scrolling
-    videoCallButtons.forEach(function (button) {
+    consultancy.forEach(function (button) {
         button.addEventListener("click", function () {
             doctorStep.style.display = "flex";
             document.body.classList.add("no-scroll"); // Disable scrolling

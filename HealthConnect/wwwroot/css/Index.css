@@ -31,21 +31,21 @@ input[type=number] {
     background-color: #f8d7da;
     padding: 10px 20px;
     border-radius: 5px;
-    animation: shake 3s;
+    animation: shake 5s;
     opacity: 0;
-    z-index: 1000;
+    z-index: 10000;
 }
 
 @keyframes shake {
     0% {
         transform: translateX(0);
-        opacity: 0.2;
+        opacity: 0.5;
         display: block;
     }
 
     10% {
         transform: translateX(-10px);
-        opacity: 0.5;
+        opacity: 1;
     }
 
     20% {
@@ -80,12 +80,12 @@ input[type=number] {
 
     80% {
         transform: translateX(10px);
-        opacity: 0.5;
+        opacity: 1;
     }
 
     90% {
         transform: translateX(-10px);
-        opacity: 0.2;
+        opacity: 0.5;
     }
 
     100% {
@@ -108,7 +108,7 @@ input[type=number] {
     border-radius: 5px;
     animation: shake 3s;
     opacity: 0;
-    z-index: 1000;
+    z-index: 10000;
 }
 
 
@@ -1948,13 +1948,14 @@ header nav {
     .explorer_doctor_section3 .videocall_consultation_container {
         max-width: 90%;
         min-width: 30%;
-        height: 50%;
-        background-color: var(--contrast-color);
+        height: auto;
+        background-image: linear-gradient(to bottom right, var(--accent-color), var(--header-text-color), var(--accent-color));
         display: flex;
         -webkit-justify-content: center;
         justify-content: center;
         box-shadow: 0 0 10px 5px var(--heading-color);
         border-radius: 10px;
+        padding: 0px 0 10px 0;
     }
 
 
@@ -1975,6 +1976,7 @@ header nav {
                 text-align: center;
                 margin: 15px;
                 font-family: var(--heading-font);
+                color: var(--contrast-color);
             }
 
             .explorer_doctor_section3 .videocall_consultation_container .videocall_consultation i {
@@ -2001,7 +2003,51 @@ header nav {
                 gap: 10px;
             }
 
+                .explorer_doctor_section3 .videocall_consultation_container .videocall_consultation form .sloat_time_and_date {
+                    display: flex;
+                    gap: 10px;
+                    -ms-flex-direction: column;
+                    -webkit-flex-direction: column;
+                    flex-direction: column;
+                }
 
+                    .explorer_doctor_section3 .videocall_consultation_container .videocall_consultation form .sloat_time_and_date label {
+                        color: var(--contrast-color);
+                        font-family: var(--heading-font);
+                        margin: 10px 0 0 0;
+                    }
+
+                    .explorer_doctor_section3 .videocall_consultation_container .videocall_consultation form .sloat_time_and_date select {
+                        font-family: var(--default-font);
+                        padding: 10px;
+                        background-color: var(--footer-bg-color);
+                        color: var(--default-color);
+                        border: none;
+                    }
+
+                        .explorer_doctor_section3 .videocall_consultation_container .videocall_consultation form .sloat_time_and_date select::-webkit-scrollbar {
+                            display: none;
+                        }
+
+                    .explorer_doctor_section3 .videocall_consultation_container .videocall_consultation form .sloat_time_and_date input {
+                        font-family: var(--default-font);
+                        padding: 10px;
+                        background-color: var(--footer-bg-color);
+                        color: var(--default-color);
+                        border: none;
+                    }
+
+                .explorer_doctor_section3 .videocall_consultation_container .videocall_consultation form button {
+                    padding: 10px 20px;
+                    margin-top: 30px;
+                    cursor: pointer;
+                    background-color: var(--accent-color);
+                    color: var(--contrast-color);
+                    font-family: var(--heading-font);
+                    border-radius: 5px;
+                    border: none;
+                    font-size: 17px;
+                }
 /*--------------------------------------------------------------------------------------------------------------*/
 /*--------------------------------------------------------------------------------------------------------------*/
 /*--------------------------------------------------------------------------------------------------------------*/

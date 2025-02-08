@@ -111,6 +111,13 @@ namespace HealthConnect.Pages.Admin.UserData.UserList
                                 currency_code = !reader.IsDBNull(33) ? reader.GetString(33) : null,
                                 video_call_consultation_fee = !reader.IsDBNull(34) ? reader.GetString(34) : null,
                                 doctor_specialitis = !reader.IsDBNull(35) ? reader.GetString(35) : null,
+                                mobail_verifie = reader.GetBoolean(30),
+                                doctor_profile_complete = reader.GetBoolean(36),
+                                work_start_time = !reader.IsDBNull(37) ? reader.GetString(37) : null,
+                                work_end_time = !reader.IsDBNull(38) ? reader.GetString(38) : null,
+                                weekly_work_days = !reader.IsDBNull(39) ? reader.GetString(39).Split(',').ToList() : new List<string>()
+
+
                             };
 
                         }

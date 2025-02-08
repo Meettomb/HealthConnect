@@ -1,9 +1,11 @@
 using HealthConnect.Models;
+using HealthConnect.Services;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.Data.SqlClient;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
+using Microsoft.Extensions.Options;
 using System.Collections.Generic;
 
 namespace HealthConnect.Pages.User
@@ -13,6 +15,17 @@ namespace HealthConnect.Pages.User
         private readonly ILogger<Explore_doctorsModel> _logger;
         private readonly IConfiguration _configuration;
         private readonly string _connectionString;
+        private readonly IEmailService _emailService;
+        private readonly EmailSettings _emailSettings;
+
+        public Explore_doctorsModel(IEmailService emailService, IOptions<EmailSettings> emailSettings, ILogger<Explore_doctorsModel> logger, IConfiguration configuration)
+        {
+            _emailService = emailService;
+            _emailSettings = emailSettings.Value;
+            _logger = logger;
+            _configuration = configuration;
+            _connectionString = configuration.GetConnectionString("HealthConnect");
+        }
 
         [BindProperty]
         public User_Table User { get; set; }
@@ -22,6 +35,7 @@ namespace HealthConnect.Pages.User
         public int? UserId { get; set; }
         public string FirstName { get; set; }
         public string LastName { get; set; }
+        public string Email { get; set; }
         public string ProfilePic { get; set; }
         public string Role { get; set; }
         public string Country { get; set; }
@@ -43,14 +57,9 @@ namespace HealthConnect.Pages.User
         public List<Doctor_Specialitis> doctorSpecialitiesList = new List<Doctor_Specialitis>();
 
 
+        [BindProperty] public Appointments Appointments { get; set; }
 
 
-        public Explore_doctorsModel(ILogger<Explore_doctorsModel> logger, IConfiguration configuration)
-        {
-            _logger = logger;
-            _configuration = configuration;
-            _connectionString = configuration.GetConnectionString("HealthConnect");
-        }
 
         public IActionResult OnGet()
         {
@@ -74,6 +83,7 @@ namespace HealthConnect.Pages.User
                             {
                                 FirstName = reader["first_name"].ToString();
                                 LastName = reader["last_name"].ToString();
+                                Email = reader["email"].ToString();
                                 ProfilePic = reader["profile_pic"].ToString();
                                 Role = reader["role"].ToString();
                                 Country = reader["country"].ToString();
@@ -135,7 +145,10 @@ namespace HealthConnect.Pages.User
             return Page();
         }
 
-        
+
+
+
+
 
         private void GetDoctorsList(string role)
         {
@@ -149,14 +162,14 @@ namespace HealthConnect.Pages.User
        u.state_medical_council, u.year_of_registration, u.doctore_experience, 
        u.hospital_or_clinic, u.doctor_qualifications, u.doctor_type, 
        u.languages_spoken, u.clinic_or_hospital_address, u.on_site_consultation_fee, 
-       u.account_approve, u.account_create_date, u.block, u.isactive, 
+       u.doctor_profile_complete, u.account_create_date, u.block, u.isactive, 
        u.mobail_verifie, u.auth_token, u.medicine_type, 
-       u.currency_code, u.video_call_consultation_fee,
-       STRING_AGG(ds.doctor_specialitis, ', ') AS doctor_specialitis_list 
+       u.currency_code, u.video_call_consultation_fee, 
+       STRING_AGG(ds.doctor_specialitis, ', ') AS doctor_specialitis_list, u.work_start_time, u.work_end_time, u.weekly_work_days 
 FROM User_Table u
 LEFT JOIN Doctor_Specialitis ds 
     ON ds.doctor_specialitis_id IN (SELECT value FROM STRING_SPLIT(u.doctor_specialitis, ','))
-WHERE u.role = @Role
+WHERE u.role = @Role AND u.doctor_profile_complete = 1 AND u.isactive = 1
 GROUP BY u.id, u.first_name, u.last_name, u.email, u.mobil_no, 
          u.dob, u.House_number_and_Street_name, u.country, u.city, 
          u.state, u.pincode, u.gender, u.role, u.password, 
@@ -164,9 +177,9 @@ GROUP BY u.id, u.first_name, u.last_name, u.email, u.mobil_no,
          u.state_medical_council, u.year_of_registration, u.doctore_experience, 
          u.hospital_or_clinic, u.doctor_qualifications, u.doctor_type, 
          u.languages_spoken, u.clinic_or_hospital_address, u.on_site_consultation_fee, 
-         u.account_approve, u.account_create_date, u.block, u.isactive, 
+         u.doctor_profile_complete, u.account_create_date, u.block, u.isactive, 
          u.mobail_verifie, u.auth_token, u.medicine_type, 
-         u.currency_code, u.video_call_consultation_fee";
+         u.currency_code, u.video_call_consultation_fee, u.work_start_time, u.work_end_time, u.weekly_work_days";
 
 
                 using (SqlCommand cmd = new SqlCommand(query, connection))
@@ -210,7 +223,7 @@ GROUP BY u.id, u.first_name, u.last_name, u.email, u.mobil_no,
                                 languages_spoken = reader.IsDBNull(23) ? null : reader.GetString(23),
                                 clinic_or_hospital_address = reader.IsDBNull(24) ? null : reader.GetString(24),
                                 on_site_consultation_fee = reader.IsDBNull(25) ? null : reader.GetString(25),
-                                account_approve = reader.GetBoolean(26),
+                                doctor_profile_complete = reader.GetBoolean(26),
                                 account_create_date = reader.GetDateTime(27),
                                 block = reader.IsDBNull(28) ? (bool?)null : reader.GetBoolean(28),
                                 isactive = reader.GetBoolean(29),
@@ -219,7 +232,11 @@ GROUP BY u.id, u.first_name, u.last_name, u.email, u.mobil_no,
                                 medicine_type = reader.IsDBNull(32) ? null : reader.GetString(32),
                                 currency_code = reader.IsDBNull(33) ? null : reader.GetString(33),
                                 video_call_consultation_fee = reader.IsDBNull(34) ? null : reader.GetString(34),
-                                doctor_specialitis = reader.IsDBNull(35) ? null : reader.GetString(35)
+                                doctor_specialitis = reader.IsDBNull(35) ? null : reader.GetString(35),
+                                work_start_time = reader.IsDBNull(36) ? null : reader.GetString(36),
+                                work_end_time = reader.IsDBNull(37) ? null : reader.GetString(37),
+                                weekly_work_days = reader.IsDBNull(38) ? new List<string>() : reader.GetString(38).Split(',').ToList()
+
                             };
                             User_list.Add(userData);
                         }
@@ -227,6 +244,115 @@ GROUP BY u.id, u.first_name, u.last_name, u.email, u.mobil_no,
                 }
             }
         }
+
+
+
+        public async Task<IActionResult> OnPost()
+        {
+            await OnPostBookAppointmentAsync();
+            return RedirectToPage();
+        }
+
+        public async Task OnPostBookAppointmentAsync()
+        {
+            string userEmail = null;
+            string doctorEmail = null;
+            int rowEffect = 0;
+
+            using (SqlConnection connection = new SqlConnection(_connectionString))
+            {
+                await connection.OpenAsync();
+
+                string checkQuery = @"
+            SELECT COUNT(*) FROM Appointments 
+            WHERE doctor_id = @DoctorId 
+            AND appointment_date = @AppointmentDate 
+            AND time_slot = @TimeSlot 
+            AND appointment_approve = 1"; 
+
+                using (SqlCommand checkCmd = new SqlCommand(checkQuery, connection))
+                {
+                    checkCmd.Parameters.AddWithValue("@DoctorId", Appointments.doctor_id);
+                    checkCmd.Parameters.AddWithValue("@AppointmentDate", Appointments.appointment_date);
+                    checkCmd.Parameters.AddWithValue("@TimeSlot", Appointments.time_slot);
+
+                    int existingCount = (int)await checkCmd.ExecuteScalarAsync();
+
+                    if (existingCount > 0)
+                    {
+                        TempData["ErrorMessage"] = "This time slot is already booked. Please choose another slot.";
+                        return;
+                    }
+                }
+                string insertQuery = @"
+            INSERT INTO Appointments (user_id, doctor_id, appointment_type, time_slot, appointment_date, appointment_approve) 
+            VALUES (@UserId, @DoctorId, @AppointmentType, @TimeSlot, @AppointmentDate, @AppointmentApprove)";
+
+                using (SqlCommand command = new SqlCommand(insertQuery, connection))
+                {
+                    command.Parameters.AddWithValue("@UserId", Appointments.user_id);
+                    command.Parameters.AddWithValue("@DoctorId", Appointments.doctor_id);
+                    command.Parameters.AddWithValue("@AppointmentType", Appointments.appointment_type);
+                    command.Parameters.AddWithValue("@TimeSlot", Appointments.time_slot);
+                    command.Parameters.AddWithValue("@AppointmentDate", Appointments.appointment_date);
+                    command.Parameters.AddWithValue("@AppointmentApprove", true);
+
+                    rowEffect = await command.ExecuteNonQueryAsync();
+                }
+
+                if (rowEffect > 0)
+                {
+                    TempData["SuccessMessage"] = "Appointment booked successfully!";
+
+                    string emailQuery = "SELECT id, email FROM User_Table WHERE id = @UserId OR id = @DoctorId";
+                    using (SqlCommand emailCmd = new SqlCommand(emailQuery, connection))
+                    {
+                        emailCmd.Parameters.AddWithValue("@UserId", Appointments.user_id);
+                        emailCmd.Parameters.AddWithValue("@DoctorId", Appointments.doctor_id);
+
+                        using (SqlDataReader reader = await emailCmd.ExecuteReaderAsync())
+                        {
+                            while (await reader.ReadAsync())
+                            {
+                                string email = reader["email"].ToString();
+                                int fetchedId = Convert.ToInt32(reader["id"]);
+
+                                if (fetchedId == Appointments.user_id)
+                                {
+                                    userEmail = email;
+                                }
+                                else if (fetchedId == Appointments.doctor_id)
+                                {
+                                    doctorEmail = email;
+                                }
+                            }
+                        }
+                    }
+                }
+                else
+                {
+                    TempData["ErrorMessage"] = "Failed to book appointment. Please try again.";
+                }
+            }
+            if (!string.IsNullOrEmpty(userEmail))
+            {
+                string subject = "Appointment Confirmation";
+                string body = $"Dear User, your appointment is confirmed for {Appointments.appointment_date} at {Appointments.time_slot}.";
+                await _emailService.SendEmailAsync(userEmail, subject, body);
+                Console.WriteLine("User email sent.");
+            }
+
+            if (!string.IsNullOrEmpty(doctorEmail))
+            {
+                string subject = "New Appointment Scheduled";
+                string body = $"Dear Doctor, a new appointment has been booked by a patient. " +
+                              $"Appointment Type: {Appointments.appointment_type} " +
+                              $"Time: {Appointments.appointment_date} at {Appointments.time_slot}.";
+                await _emailService.SendEmailAsync(doctorEmail, subject, body);
+                Console.WriteLine("Doctor email sent.");
+            }
+        }
+
 
     }
 }

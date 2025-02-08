@@ -19,6 +19,26 @@
 </head>
 <body>
 
+    @if (!string.IsNullOrEmpty(Model.ErrorMessage))
+    {
+        <div class="error_message">@Model.ErrorMessage</div>
+    }
+
+    @if (!string.IsNullOrEmpty(Model.SuccessMessage))
+    {
+        <p class="success_message" id="messageContainer">@Model.SuccessMessage</p>
+    }
+
+    @if (TempData["SuccessMessage"] != null)
+    {
+        <div class="success_message">@TempData["SuccessMessage"]</div>
+    }
+
+    @if (TempData["ErrorMessage"] != null)
+    {
+        <div class="error_message">@TempData["ErrorMessage"]</div>
+    }
+
 
     <div class="loder" id="loder">
         <img src="/Loder.gif" alt="Alternate Text" />

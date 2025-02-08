@@ -177,7 +177,7 @@
                                         <tr>
                                             <th>Doctor Type</th>
                                             <td>@Model.User_Table.doctor_type</td>
-                                        </tr> 
+                                        </tr>
                                         <tr>
                                             <th>Doctor Specialitis</th>
                                             <td>@Model.User_Table.doctor_specialitis</td>
@@ -193,10 +193,25 @@
                                         <tr>
                                             <th>On site Consultation Fee</th>
                                             <td>@Model.User_Table.on_site_consultation_fee</td>
-                                        </tr> 
+                                        </tr>
                                         <tr>
                                             <th>Video call Consultation Fee</th>
                                             <td>@Model.User_Table.video_call_consultation_fee</td>
+                                        </tr>
+                                        
+                                        <tr>
+                                            <th>Work Start Time</th>
+                                            <td>@Model.User_Table.work_start_time</td>
+                                        </tr>
+                                         
+                                        <tr>
+                                            <th>Work End Time</th>
+                                            <td>@Model.User_Table.work_end_time</td>
+                                        </tr>
+                                         
+                                        <tr>
+                                            <th>Weekly Work Days</th>
+                                            <td>@string.Join(", ", Model.User_Table.weekly_work_days)</td>
                                         </tr>
 
                                     }
@@ -212,12 +227,26 @@
                                         <td>@Model.User_Table.account_create_date.ToString("dd/MM/yyyy")</td>
                                     </tr>
                                     <tr>
-                                        <th>Active Status</th>
-                                        <td>@(Model.User_Table.block == true ? "Block" : "Active")</td>
+                                        <th>Block or Not</th>
+                                        <td>@(Model.User_Table.block == true ? "Block" : "Not Block")</td>
                                     </tr>
                                     <tr>
                                         <th>Active Status</th>
                                         <td>@(Model.User_Table.isactive ? "Active" : "Inactive")</td>
+                                    </tr>
+                                    <tr>
+                                        <th>Mobail Number Verifie</th>
+                                        <td>
+                                            @if (Model.User_Table.mobail_verifie == true)
+                                            {
+                                                <text>Yes</text>
+                                            }
+                                            else
+                                            {
+                                                <text>No</text>
+                                            }
+                                        </td>
+
                                     </tr>
                                 </tbody>
 

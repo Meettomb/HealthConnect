@@ -68,6 +68,21 @@
                 }
             </select>
         </div>
+
+        <div class="select_filter">
+            <p>Doctor Available Days</p>
+            <select id="weekly-work-days">
+                <option selected>All</option>
+                <option value="Monday">Monday</option>
+                <option value="Tuesday">Tuesday</option>
+                <option value="Wednesday">Wednesday</option>
+                <option value="Thursday">Thursday</option>
+                <option value="Friday">Friday</option>
+                <option value="Saturday">Saturday</option>
+                <option value="Sunday">Sunday</option>
+            </select>
+        </div>
+
     </div>
 </section>
 
@@ -77,7 +92,7 @@
         {
             @foreach (var data in Model.User_list)
             {
-                <div class="all_doctor_single_div" data-city="@data.city" data-state="@data.state" data-country="@data.country" data-experience="@data.doctore_experience" data-name="@data.first_name @data.last_name" data-speciality="@data.doctor_specialitis" data-gender="@data.gender">
+                <div class="all_doctor_single_div" data-weekly-work-days="@string.Join(", ", data.weekly_work_days)" data-city="@data.city" data-state="@data.state" data-country="@data.country" data-experience="@data.doctore_experience" data-name="@data.first_name @data.last_name" data-speciality="@data.doctor_specialitis" data-gender="@data.gender">
                     <div class="all_doctor_single_div_sides">
                         <div class="all_doctor_single_left" data-country="@data.country" data-currency="@data.currency_code">
                             <img src="/documant/@data.profile_pic" alt="Dr. @data.first_name @data.last_name" />
@@ -88,6 +103,9 @@
                             <h1>@data.first_name @data.last_name </h1>
                             <p>@data.doctor_specialitis </p>
                             <p>@data.medicine_type</p>
+
+                            @* <p>@string.Join(", ", data.weekly_work_days)</p> *@
+
                             <p>Experience: @data.doctore_experience Years <span></span></p>
                         </div>
 
@@ -134,14 +152,22 @@
 
                         @if (data.video_call_consultation_fee != null)
                         {
-                            <p data-doctorId="@data.id" class="video-call" id="video-call"><a href="#"><i class="fa-solid fa-video"></i> Video call</a></p>
+                            <p data-work-start="@data.work_start_time" data-work-end="@data.work_end_time" data-weekly-work-days="@data.weekly_work_days"
+                               data-doctorId="@data.id" data-consultancy="Video Call" data-email="@data.email" data-fee="@data.video_call_consultation_fee"
+                               class="video-call" id="video-call">
+                                <a href="#"><i class="fa-solid fa-video"></i> Video call</a>
+                            </p>
                         }
                         else
                         {
                             <p><a href="#" class="disabled-link"><i class="fa-solid fa-video"></i> Video call</a></p>
                         }
 
-                        <p><a href="#"><i class="fa-regular fa-calendar-days"></i> Book Appointment</a></p>
+                        <p data-work-start="@data.work_start_time" data-work-end="@data.work_end_time" data-fee="@data.on_site_consultation_fee"
+                           data-weekly-work-days="@data.weekly_work_days" data-doctorId="@data.id" data-email="@data.email" data-consultancy="On site"
+                           class="Book-Onsite-Appointment">
+                            <a href="#"><i class="fa-regular fa-calendar-days"></i> Book Appointment</a>
+                        </p>
                         <p><a href="#"><i class="fa-solid fa-user-doctor"></i> View profile</a></p>
                     </div>
                 </div>
@@ -158,20 +184,110 @@
     <div class="videocall_consultation_container">
         <div class="videocall_consultation">
             <i class="fa-solid fa-times" id="closePopup"></i>
-            <h1>Video call consultation</h1>
-            <form method="post">
+            <h1>Book appointment</h1>
+            <form method="post" id="appointmentForm">
 
-                <input type="text" name="user_id" value="@Model.UserId" />
-                <input type="text" name="doctor_id" id="doctorIdInput" readonly>
+                <div class="login_user_booking">
 
-                <input type="text" name="speciality" placeholder="Enter doctor speciality" />
-                <input type="text" name="date" placeholder="Select date" />
-                <input type="text" name="time" placeholder="Select time" />
+                    <input type="hidden" name="user_id" value="@Model.UserId" />
+                    <input type="hidden" name="doctor_id" id="doctorIdInput" readonly>
+                    <input type="hidden" name="appointment_type" id="consultancyType" readonly>
+                    <input type="hidden" name="email" id="doctorEmail" readonly>
+
+                </div>
+
+                <div class="sloat_time_and_date">
+
+                    <label>Time slot</label>
+                    <select id="timeSlotsDropdown" name="time_slot"></select>
+
+
+                    <div id="messageContainer"></div>
+
+                    <label>Date</label>
+                    <input type="date" name="appointment_date" id="datePicker" placeholder="Select date" />
+
+                </div>
+
+
                 <button type="submit" name="submit">Book now</button>
             </form>
+
         </div>
     </div>
 </section>
+
+<section class="explorer_doctor_section4">
+    <div class="LoadMore">
+        <button>Load More</button>
+    </div>
+</section>
+
+
+
+
+
+<script>
+
+        document.addEventListener("DOMContentLoaded", function () {
+        var today = new Date().toISOString().split("T")[0];
+        document.getElementById("datePicker").setAttribute("min", today);
+    });
+
+
+    $(document).ready(function () {
+        $(".video-call, .Book-Onsite-Appointment").click(function (event) {
+            event.preventDefault();
+
+            var doctorId = $(this).attr("data-doctorid");
+            var consultancy = $(this).attr("data-consultancy");
+            var email = $(this).attr("data-email");
+            var WorkStart = $(this).attr("data-work-start");
+            var WorkEnd = $(this).attr("data-work-end");
+
+            console.log("Start Time:", WorkStart);
+            console.log("End Time:", WorkEnd);
+
+            if (!WorkStart || !WorkEnd) {
+                alert("Invalid work start or end time.");
+                return;
+            }
+
+           $("#doctorIdInput").val(doctorId);
+            $("#consultancyType").val(consultancy);
+            $("#doctorEmail").val(email);
+
+
+            generateTimeSlots(WorkStart, WorkEnd);
+        });
+
+        function generateTimeSlots(startTime, endTime) {
+            var timeSlotsDropdown = $("#timeSlotsDropdown");
+            timeSlotsDropdown.empty();
+
+            var start = convertToMinutes(startTime);
+            var end = convertToMinutes(endTime);
+
+            for (var time = start; time < end; time += 20) {
+                var slot = convertToTimeFormat(time) + " - " + convertToTimeFormat(time + 20);
+                timeSlotsDropdown.append(`<option value="${slot}">${slot}</option>`);
+            }
+        }
+
+        function convertToMinutes(time) {
+            var parts = time.split(":");
+            return parseInt(parts[0]) * 60 + parseInt(parts[1]);
+        }
+
+        function convertToTimeFormat(minutes) {
+            var hours = Math.floor(minutes / 60);
+            var mins = minutes % 60;
+            return (hours < 10 ? "0" + hours : hours) + ":" + (mins < 10 ? "0" + mins : mins);
+        }
+
+    });
+</script>
+
 
 <script>
     function filterDoctors() {
@@ -182,6 +298,7 @@
         var selctedCountry = document.getElementById("country-select").value.toUpperCase();
         var selctedState = document.getElementById("state-select").value.toUpperCase();
         var selctedCity = document.getElementById("city-select").value.toLowerCase();
+        var selectedWeeklyWorkDays = document.getElementById("weekly-work-days").value.toLowerCase();
 
         var doctors = document.querySelectorAll(".all_doctor_single_div");
 
@@ -193,6 +310,7 @@
             var country = doctor.getAttribute("data-country").toUpperCase();
             var state = doctor.getAttribute("data-state").toUpperCase();
             var city = doctor.getAttribute("data-city").toLowerCase();
+            var WeeklyWorkDays = doctor.getAttribute("data-weekly-work-days").toLowerCase().split(", ");
 
             var matchesSpeciality = selectedSpeciality === "all" || doctorSpecialities.includes(selectedSpeciality);
             var matchesGender = selectedGender === "all" || doctorGender === selectedGender;
@@ -201,9 +319,10 @@
             var matchesCountry = selctedCountry === "ALL" || country === selctedCountry;
             var matchesState = selctedState === "ALL" || state === selctedState;
             var matchesCity = selctedCity === "all" || city === selctedCity;
+            var matchesWeeklyWorkDays = selectedWeeklyWorkDays === "all" || WeeklyWorkDays.includes(selectedWeeklyWorkDays);
 
 
-            if (matchesSpeciality && matchesGender && matchesName && matchesExperience && matchesCountry && matchesState && matchesCity) {
+            if (matchesSpeciality && matchesGender && matchesName && matchesExperience && matchesCountry && matchesState && matchesCity && matchesWeeklyWorkDays) {
                 doctor.style.display = "block";
             } else {
                 doctor.style.display = "none";
@@ -218,6 +337,7 @@
     document.getElementById("country-select").addEventListener("change", filterDoctors);
     document.getElementById("state-select").addEventListener("change", filterDoctors);
     document.getElementById("city-select").addEventListener("change", filterDoctors);
+    document.getElementById("weekly-work-days").addEventListener("change", filterDoctors);
 </script>
 
 
@@ -341,12 +461,5 @@
 </script>
 
 
-<script>
-    $(document).ready(function () {
-        $(".video-call").click(function () {
-            var doctorId = $(this).attr("data-doctorId");
-            $("#doctorIdInput").val(doctorId);
-        });
-    });
-</script>
+
 
