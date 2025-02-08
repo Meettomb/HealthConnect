@@ -145,11 +145,6 @@ namespace HealthConnect.Pages.User
             return Page();
         }
 
-
-
-
-
-
         private void GetDoctorsList(string role)
         {
             using (SqlConnection connection = new SqlConnection(_connectionString))
@@ -244,6 +239,10 @@ GROUP BY u.id, u.first_name, u.last_name, u.email, u.mobil_no,
                 }
             }
         }
+
+
+
+
 
 
 

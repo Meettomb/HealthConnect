@@ -225,6 +225,64 @@
 
 
 
+<script>
+    document.addEventListener("DOMContentLoaded", function () {
+        let doctors = document.querySelectorAll(".all_doctor_single_div");
+        let loadMoreButton = document.querySelector(".LoadMore button");
+        let itemsToShow = 10; // Show only 10 by default
+        let itemsIncrement = 10; // Number of items to load each time
+
+        // Create "Show Less" button
+        let showLessButton = document.createElement("button");
+        showLessButton.textContent = "Show Less";
+        showLessButton.style.display = "none"; // Initially hidden
+        document.querySelector(".LoadMore").appendChild(showLessButton);
+
+        // Hide all doctors except the first 'itemsToShow'
+        doctors.forEach((doctor, index) => {
+            if (index >= itemsToShow) {
+                doctor.style.display = "none";
+            }
+        });
+
+        // Show Load More button only if there are more than 10 doctors
+        if (doctors.length > itemsToShow) {
+            loadMoreButton.style.display = "block";
+        } else {
+            loadMoreButton.style.display = "none";
+        }
+
+        loadMoreButton.addEventListener("click", function () {
+            let hiddenDoctors = Array.from(doctors).filter(doctor => doctor.style.display === "none");
+
+            // Show the next batch of doctors
+            for (let i = 0; i < itemsIncrement && i < hiddenDoctors.length; i++) {
+                hiddenDoctors[i].style.display = "block";
+            }
+
+            // If all doctors are visible, hide Load More button and show Show Less button
+            if (document.querySelectorAll(".all_doctor_single_div[style='display: none;']").length === 0) {
+                loadMoreButton.style.display = "none";
+                showLessButton.style.display = "block";
+            }
+        });
+
+        showLessButton.addEventListener("click", function () {
+            // Collapse back to showing only the first 'itemsToShow' doctors
+            doctors.forEach((doctor, index) => {
+                if (index >= itemsToShow) {
+                    doctor.style.display = "none";
+                }
+            });
+
+            // Reset button visibility
+            showLessButton.style.display = "none";
+            loadMoreButton.style.display = "block";
+        });
+    });
+</script>
+
+
 
 
 <script>

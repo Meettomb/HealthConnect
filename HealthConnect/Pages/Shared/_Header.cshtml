@@ -26,7 +26,7 @@
 
     @if (!string.IsNullOrEmpty(Model.SuccessMessage))
     {
-        <p class="success_message" id="messageContainer">@Model.SuccessMessage</p>
+        <p class="success_message">@Model.SuccessMessage</p>
     }
 
     @if (TempData["SuccessMessage"] != null)
