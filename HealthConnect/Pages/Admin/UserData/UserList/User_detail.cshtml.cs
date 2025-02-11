@@ -78,19 +78,19 @@ namespace HealthConnect.Pages.Admin.UserData.UserList
                             userTable = new User_Table
                             {
                                 id = reader.GetInt32(0),
-                                first_name = reader.GetString(1),
-                                last_name = reader.GetString(2),
-                                email = reader.GetString(3),
-                                mobil_no = reader.GetString(4),
-                                dob = reader.GetString(5),
-                                House_number_and_Street_name = reader.GetString(6),
-                                country = reader.GetString(7),
-                                city = reader.GetString(8),
-                                state = reader.GetString(9),
-                                pincode = reader.GetString(10),
-                                gender = reader.GetString(11),
-                                role = reader.GetString(12),
-                                password = reader.GetString(13),
+                                first_name = !reader.IsDBNull(1) ? reader.GetString(1) : null,
+                                last_name = !reader.IsDBNull(2) ? reader.GetString(2) : null,
+                                email = !reader.IsDBNull(3) ? reader.GetString(3) : null,
+                                mobil_no = !reader.IsDBNull(4) ? reader.GetString(4) : null,
+                                dob = !reader.IsDBNull(5) ? reader.GetString(5) : null,
+                                House_number_and_Street_name = !reader.IsDBNull(6) ? reader.GetString(6) : null,
+                                country = !reader.IsDBNull(7) ? reader.GetString(7) : null,
+                                city = !reader.IsDBNull(8) ? reader.GetString(8) : null,
+                                state = !reader.IsDBNull(9) ? reader.GetString(9) : null,
+                                pincode = !reader.IsDBNull(10) ? reader.GetString(10) : null,
+                                gender = !reader.IsDBNull(11) ? reader.GetString(11) : null,
+                                role = !reader.IsDBNull(12) ? reader.GetString(12) : null,
+                                password = !reader.IsDBNull(13) ? reader.GetString(13) : null,
                                 profile_pic = !reader.IsDBNull(14) ? reader.GetString(14) : null,
                                 doctore_medical_license_photo = !reader.IsDBNull(15) ? reader.GetString(15) : null,
                                 medical_registration_no = !reader.IsDBNull(16) ? reader.GetString(16) : null,
@@ -100,30 +100,35 @@ namespace HealthConnect.Pages.Admin.UserData.UserList
                                 hospital_or_clinic = !reader.IsDBNull(20) ? reader.GetString(20) : null,
                                 doctor_qualifications = !reader.IsDBNull(21) ? reader.GetString(21) : null,
                                 doctor_type = !reader.IsDBNull(22) ? reader.GetString(22) : null,
+                                //doctor_type = !reader.IsDBNull(22) ? int.Parse(reader.GetString(22)) : (int?)null,
+
+
+
+
                                 languages_spoken = !reader.IsDBNull(23) ? reader.GetString(23) : null,
                                 clinic_or_hospital_address = !reader.IsDBNull(24) ? reader.GetString(24) : null,
                                 on_site_consultation_fee = !reader.IsDBNull(25) ? reader.GetString(25) : null,
-                                account_approve = !reader.IsDBNull(26) ? reader.GetBoolean(26) : false, 
+                                account_approve = !reader.IsDBNull(26) ? reader.GetBoolean(26) : false,
                                 account_create_date = !reader.IsDBNull(27) ? reader.GetDateTime(27) : DateTime.Now,
-                                block = reader.GetBoolean(28),
-                                isactive = reader.GetBoolean(29),
+                                block = !reader.IsDBNull(28) && reader.GetBoolean(28),
+                                isactive = !reader.IsDBNull(29) && reader.GetBoolean(29),
+                                mobail_verifie = !reader.IsDBNull(30) && reader.GetBoolean(30),
                                 medicine_type = !reader.IsDBNull(32) ? reader.GetString(32) : null,
                                 currency_code = !reader.IsDBNull(33) ? reader.GetString(33) : null,
                                 video_call_consultation_fee = !reader.IsDBNull(34) ? reader.GetString(34) : null,
                                 doctor_specialitis = !reader.IsDBNull(35) ? reader.GetString(35) : null,
-                                mobail_verifie = reader.GetBoolean(30),
-                                doctor_profile_complete = reader.GetBoolean(36),
+                                doctor_profile_complete = !reader.IsDBNull(36) && reader.GetBoolean(36),
                                 work_start_time = !reader.IsDBNull(37) ? reader.GetString(37) : null,
                                 work_end_time = !reader.IsDBNull(38) ? reader.GetString(38) : null,
-                                weekly_work_days = !reader.IsDBNull(39) ? reader.GetString(39).Split(',').ToList() : new List<string>()
-
-
+                                weekly_work_days = !reader.IsDBNull(39) ? reader.GetString(39).Split(',').ToList() : new List<string>(),
+                                max_time_per_appointments = !reader.IsDBNull(40) ? reader.GetString(40) : null,
+                                break_between_two_appointments = !reader.IsDBNull(41) ? reader.GetString(41) : null
                             };
-
                         }
                     }
                 }
             }
+
 
             if (userTable == null)
             {

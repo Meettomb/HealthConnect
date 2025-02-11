@@ -63,7 +63,7 @@
                         <ul>
                             @foreach (var item in Model.Types_of_doctor)
                             {
-                                <a href="#">
+                                <a href="/User/Explore_doctors?Type=@item.type_of_doctor">
                                 <li>@item.type_of_doctor</li>
                                 </a>
                             }
@@ -79,7 +79,7 @@
                         <ul>
                             @foreach (var item in Model.doctorSpecialitiesList)
                             {
-                                <a href="#">
+                                <a href="/User/Explore_doctors?Speciality=@item.doctor_specialitis">
                                 <li>@item.doctor_specialitis</li>
                                 </a>
                             }
@@ -122,6 +122,11 @@
                                     <a href="/Chatting/Chatting_page">
                                         <i class="fa-solid fa-message"></i> Message
                                     </a>
+
+                                    <a href="/User/AppointmentManage/All_appointment">
+                                        <i class="fa-solid fa-calendar-day"></i> Appointment
+                                    </a>
+
                                     @if (Model.Role == "Admin")
                                     {
                                         <a href="/Admin/Admin_index">
@@ -216,6 +221,11 @@
                                 <a href="/Chatting/Chatting_page">
                                     <i class="fa-solid fa-message"></i> Message
                                 </a>
+
+                                <a href="/User/AppointmentManage/All_appointment">
+                                    <i class="fa-solid fa-calendar-day"></i> Appointment
+                                </a>
+
                                 @if (Model.Role == "Admin")
                                 {
                                     <a href="/Admin/Admin_index">
@@ -246,7 +256,7 @@
 
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <script>
-               $(document).ready(function() {
+        $(document).ready(function() {
             // Toggle entire hamburger menu
             $('.baar').click(function() {
                 $('.hamburger_container_link').slideToggle(300);

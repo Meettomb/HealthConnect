@@ -140,7 +140,7 @@ document.addEventListener("DOMContentLoaded", function () {
 document.addEventListener("DOMContentLoaded", function () {
     var doctorStep = document.getElementById("popup");
     var closePopup = document.getElementById("closePopup");
-    var consultancy = document.querySelectorAll(".video-call, .Book-Onsite-Appointment");
+    var consultancy = document.querySelectorAll(".video-call, .Book-Onsite-Appointment, .reschedule_appointmant");
 
     if (!doctorStep) return; // Exit if popup does not exist
 

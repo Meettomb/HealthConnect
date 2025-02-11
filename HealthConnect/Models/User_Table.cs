@@ -1,4 +1,5 @@
 ﻿using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace HealthConnect.Models
 {
@@ -29,7 +30,7 @@ namespace HealthConnect.Models
         public string? doctore_experience { get; set; }
         public string? hospital_or_clinic { get; set; }
         public string? doctor_qualifications { get; set; }
-        public string? doctor_type { get; set; }
+        [ForeignKey("Types_of_Doctor")] public string? doctor_type { get; set; }
         public string? languages_spoken { get; set; }
         public string? clinic_or_hospital_address { get; set; }
         public string? on_site_consultation_fee { get; set; }
@@ -49,6 +50,15 @@ namespace HealthConnect.Models
         public string? work_start_time { get; set; }
         public string? work_end_time { get; set; }
         public List<string>? weekly_work_days { get; set; }
+        public string? max_time_per_appointments { get; set; }
+        public string? break_between_two_appointments { get; set; }
+
+
+
+        public virtual ICollection<Appointments> UserAppointments { get; set; } 
+        public virtual ICollection<Appointments> DoctorAppointments { get; set; }
+        public virtual Types_of_Doctor Types_of_Doctor { get; set; }
+
     }
 
 }

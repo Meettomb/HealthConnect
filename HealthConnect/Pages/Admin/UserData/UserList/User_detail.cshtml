@@ -208,11 +208,21 @@
                                             <th>Work End Time</th>
                                             <td>@Model.User_Table.work_end_time</td>
                                         </tr>
-                                         
                                         <tr>
                                             <th>Weekly Work Days</th>
                                             <td>@string.Join(", ", Model.User_Table.weekly_work_days)</td>
                                         </tr>
+                                         
+                                        <tr>
+                                            <th>Max Time Per Appointments</th>
+                                            <td>@Model.User_Table.max_time_per_appointments Minutes</td>
+                                        </tr>
+                                           
+                                        <tr>
+                                            <th>Break Between Two Appointments</th>
+                                            <td>@Model.User_Table.break_between_two_appointments Minutes</td>
+                                        </tr>
+                                         
 
                                     }
 

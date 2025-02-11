@@ -132,7 +132,8 @@ namespace HealthConnect.Pages.User
                         {
                             Types_of_doctor.Add(new Types_of_Doctor
                             {
-                                doctor_type_id = reader.GetInt32(0),
+                                doctor_type_id = int.Parse(reader.GetString(0)), // Convert string to int
+
                                 type_of_doctor = reader.GetString(1),
                             });
                         }
@@ -150,31 +151,37 @@ namespace HealthConnect.Pages.User
             using (SqlConnection connection = new SqlConnection(_connectionString))
             {
                 string query = @"
-                SELECT u.id, u.first_name, u.last_name, u.email, u.mobil_no, 
-       u.dob, u.House_number_and_Street_name, u.country, u.city, 
-       u.state, u.pincode, u.gender, u.role, u.password, 
-       u.profile_pic, u.doctore_medical_license_photo, u.medical_registration_no, 
-       u.state_medical_council, u.year_of_registration, u.doctore_experience, 
-       u.hospital_or_clinic, u.doctor_qualifications, u.doctor_type, 
-       u.languages_spoken, u.clinic_or_hospital_address, u.on_site_consultation_fee, 
-       u.doctor_profile_complete, u.account_create_date, u.block, u.isactive, 
-       u.mobail_verifie, u.auth_token, u.medicine_type, 
-       u.currency_code, u.video_call_consultation_fee, 
-       STRING_AGG(ds.doctor_specialitis, ', ') AS doctor_specialitis_list, u.work_start_time, u.work_end_time, u.weekly_work_days 
-FROM User_Table u
-LEFT JOIN Doctor_Specialitis ds 
-    ON ds.doctor_specialitis_id IN (SELECT value FROM STRING_SPLIT(u.doctor_specialitis, ','))
-WHERE u.role = @Role AND u.doctor_profile_complete = 1 AND u.isactive = 1
-GROUP BY u.id, u.first_name, u.last_name, u.email, u.mobil_no, 
-         u.dob, u.House_number_and_Street_name, u.country, u.city, 
-         u.state, u.pincode, u.gender, u.role, u.password, 
-         u.profile_pic, u.doctore_medical_license_photo, u.medical_registration_no, 
-         u.state_medical_council, u.year_of_registration, u.doctore_experience, 
-         u.hospital_or_clinic, u.doctor_qualifications, u.doctor_type, 
-         u.languages_spoken, u.clinic_or_hospital_address, u.on_site_consultation_fee, 
-         u.doctor_profile_complete, u.account_create_date, u.block, u.isactive, 
-         u.mobail_verifie, u.auth_token, u.medicine_type, 
-         u.currency_code, u.video_call_consultation_fee, u.work_start_time, u.work_end_time, u.weekly_work_days";
+    SELECT u.id, u.first_name, u.last_name, u.email, u.mobil_no, 
+        u.dob, u.House_number_and_Street_name, u.country, u.city, 
+        u.state, u.pincode, u.gender, u.role, u.password, 
+        u.profile_pic, u.doctore_medical_license_photo, u.medical_registration_no, 
+        u.state_medical_council, u.year_of_registration, u.doctore_experience, 
+        u.hospital_or_clinic, u.doctor_qualifications, 
+        t.type_of_doctor AS doctor_type, -- Fetching doctor type name
+        u.languages_spoken, u.clinic_or_hospital_address, u.on_site_consultation_fee, 
+        u.doctor_profile_complete, u.account_create_date, u.block, u.isactive, 
+        u.mobail_verifie, u.auth_token, u.medicine_type, 
+        u.currency_code, u.video_call_consultation_fee, 
+        STRING_AGG(ds.doctor_specialitis, ', ') AS doctor_specialitis_list, 
+        u.work_start_time, u.work_end_time, u.weekly_work_days, 
+        u.max_time_per_appointments, u.break_between_two_appointments
+    FROM User_Table u
+    LEFT JOIN Types_of_Doctor t ON u.doctor_type = t.doctor_type_id -- Joining with Types_of_Doctor table
+    LEFT JOIN Doctor_Specialitis ds 
+        ON ds.doctor_specialitis_id IN (SELECT value FROM STRING_SPLIT(u.doctor_specialitis, ','))
+    WHERE u.role = @Role AND u.doctor_profile_complete = 1 AND u.isactive = 1
+    GROUP BY u.id, u.first_name, u.last_name, u.email, u.mobil_no, 
+        u.dob, u.House_number_and_Street_name, u.country, u.city, 
+        u.state, u.pincode, u.gender, u.role, u.password, 
+        u.profile_pic, u.doctore_medical_license_photo, u.medical_registration_no, 
+        u.state_medical_council, u.year_of_registration, u.doctore_experience, 
+        u.hospital_or_clinic, u.doctor_qualifications, t.type_of_doctor, 
+        u.languages_spoken, u.clinic_or_hospital_address, u.on_site_consultation_fee, 
+        u.doctor_profile_complete, u.account_create_date, u.block, u.isactive, 
+        u.mobail_verifie, u.auth_token, u.medicine_type, 
+        u.currency_code, u.video_call_consultation_fee, u.work_start_time, u.work_end_time, u.weekly_work_days, 
+        u.max_time_per_appointments, u.break_between_two_appointments";
+
 
 
                 using (SqlCommand cmd = new SqlCommand(query, connection))
@@ -215,6 +222,7 @@ GROUP BY u.id, u.first_name, u.last_name, u.email, u.mobil_no,
                                 hospital_or_clinic = reader.IsDBNull(20) ? null : reader.GetString(20),
                                 doctor_qualifications = reader.IsDBNull(21) ? null : reader.GetString(21),
                                 doctor_type = reader.IsDBNull(22) ? null : reader.GetString(22),
+                                //doctor_type = reader.IsDBNull(22) ? null : reader.IsDBNull(22) ? 22 : int.Parse(reader.GetString(22)),
                                 languages_spoken = reader.IsDBNull(23) ? null : reader.GetString(23),
                                 clinic_or_hospital_address = reader.IsDBNull(24) ? null : reader.GetString(24),
                                 on_site_consultation_fee = reader.IsDBNull(25) ? null : reader.GetString(25),
@@ -230,7 +238,9 @@ GROUP BY u.id, u.first_name, u.last_name, u.email, u.mobil_no,
                                 doctor_specialitis = reader.IsDBNull(35) ? null : reader.GetString(35),
                                 work_start_time = reader.IsDBNull(36) ? null : reader.GetString(36),
                                 work_end_time = reader.IsDBNull(37) ? null : reader.GetString(37),
-                                weekly_work_days = reader.IsDBNull(38) ? new List<string>() : reader.GetString(38).Split(',').ToList()
+                                weekly_work_days = reader.IsDBNull(38) ? new List<string>() : reader.GetString(38).Split(',').ToList(),
+                                max_time_per_appointments = reader.IsDBNull(39) ? null : reader.GetString(39),
+                                break_between_two_appointments = reader.IsDBNull(40) ? null : reader.GetString(40)
 
                             };
                             User_list.Add(userData);
@@ -267,7 +277,7 @@ GROUP BY u.id, u.first_name, u.last_name, u.email, u.mobil_no,
             WHERE doctor_id = @DoctorId 
             AND appointment_date = @AppointmentDate 
             AND time_slot = @TimeSlot 
-            AND appointment_approve = 1"; 
+            AND appointment_approve = 1";
 
                 using (SqlCommand checkCmd = new SqlCommand(checkQuery, connection))
                 {
@@ -284,8 +294,8 @@ GROUP BY u.id, u.first_name, u.last_name, u.email, u.mobil_no,
                     }
                 }
                 string insertQuery = @"
-            INSERT INTO Appointments (user_id, doctor_id, appointment_type, time_slot, appointment_date, appointment_approve) 
-            VALUES (@UserId, @DoctorId, @AppointmentType, @TimeSlot, @AppointmentDate, @AppointmentApprove)";
+            INSERT INTO Appointments (user_id, doctor_id, appointment_type, time_slot, appointment_date, appointment_approve, book_date_time, booking_user_role) 
+            VALUES (@UserId, @DoctorId, @AppointmentType, @TimeSlot, @AppointmentDate, @AppointmentApprove, @book_date_time, @booking_user_role)";
 
                 using (SqlCommand command = new SqlCommand(insertQuery, connection))
                 {
@@ -295,6 +305,8 @@ GROUP BY u.id, u.first_name, u.last_name, u.email, u.mobil_no,
                     command.Parameters.AddWithValue("@TimeSlot", Appointments.time_slot);
                     command.Parameters.AddWithValue("@AppointmentDate", Appointments.appointment_date);
                     command.Parameters.AddWithValue("@AppointmentApprove", true);
+                    command.Parameters.AddWithValue("@book_date_time", DateTime.Now);
+                    command.Parameters.AddWithValue("@booking_user_role", Appointments.booking_user_role);
 
                     rowEffect = await command.ExecuteNonQueryAsync();
                 }

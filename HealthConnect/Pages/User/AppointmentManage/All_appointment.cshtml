@@ -1,0 +1,173 @@
+﻿@page
+@model All_appointmentModel
+@{
+    Layout = "_Header";
+    ViewData["Title"] = "All Appointments";
+}
+
+<h1 class="All_appointments_title">All Appointments</h1>
+
+
+@* <section class="all_appointmant_section_2"> *@
+@*     <div class="all_appointment_table"> *@
+@*         @if (Model.AppointmentsList != null && Model.AppointmentsList.Any()) *@
+@*         { *@
+@*             <table border="1"> *@
+@*                 <thead> *@
+@*                     <tr> *@
+@*                         <th>Appointment ID</th> *@
+@*                         <th>Patient Name</th> *@
+@*                         <th>Doctor Name</th> *@
+@*                         <th>Appointment Date</th> *@
+@*                         <th>Appointment Time</th> *@
+@*                         <th>Booked On</th> *@
+@*                     </tr> *@
+@*                 </thead> *@
+@*                 <tbody> *@
+@*                     @foreach (var item in Model.AppointmentsList) *@
+@*                     { *@
+@*                         <tr> *@
+@*                             <td><img src="/documant/@item.Doctor.profile_pic" alt=" @item.Doctor.first_name @item.Doctor.last_name" /></td> *@
+@*                             <td> *@
+@*                                 @item.User.first_name @item.User.last_name *@
+@*                             </td> *@
+@*                             <td> *@
+@*                                 @item.Doctor.first_name @item.Doctor.last_name *@
+@*                             </td> *@
+@*                             <td>@item.appointment_date</td> *@
+@*                             <td>@item.time_slot</td> *@
+@*                             <td>@item.book_date_time.ToString("yyyy-MM-dd HH:mm")</td> *@
+@*                         </tr> *@
+@*                     } *@
+@*                 </tbody> *@
+@*             </table> *@
+@*         } *@
+@*         else *@
+@*         { *@
+@*             <p>No appointments found.</p> *@
+@*         } *@
+@*     </div> *@
+@* </section> *@
+
+
+
+
+
+
+<section class="explorer_doctor_section2">
+    <div class="all_doctor_div" id="doctorsList">
+        @if (Model.AppointmentsList != null && Model.AppointmentsList.Any())
+        {
+            @foreach (var data in Model.AppointmentsList)
+            {
+                <div class="all_doctor_single_div">
+                    <div class="all_doctor_single_div_sides">
+                        <div class="all_doctor_single_left">
+                            <img src="/documant/@data.Doctor.profile_pic" alt="Dr. @data.Doctor.first_name @data.Doctor.last_name" />
+                            <p><i class="fa-solid fa-location-dot"></i> @data.Doctor.country, @data.Doctor.state, @data.Doctor.city</p>
+                        </div>
+
+                        <div class="all_doctor_single_middle">
+                            <h1>@data.Doctor.first_name @data.Doctor.last_name </h1>
+                            <p>@data.Doctor.doctor_specialitis </p>
+                            <p>@data.Doctor.medicine_type</p>
+                            <input type="hidden" id="max_time_per_appointments" value="@data.Doctor.max_time_per_appointments" />
+                            <input type="hidden" id="break_between_two_appointments" value="@data.Doctor.break_between_two_appointments" />
+
+
+                            <p>Experience: @data.Doctor.doctore_experience Years <span></span></p>
+                        </div>
+
+                        <div class="all_doctor_single_right_right">
+                            <p><i class="fa-solid fa-star"></i> 5 Star</p>
+                            <p><i class="fa-solid fa-comments"></i> 20 Review</p>
+
+                            @if (data.Doctor.hospital_or_clinic == "Clinic")
+                            {
+                                <p class="hospital_or_clinic"><i class="fa-solid fa-house-chimney-medical"></i> @data.Doctor.hospital_or_clinic</p>
+                            }
+                            else
+                            {
+                                <p class="hospital_or_clinic"><i class="fa-solid fa-hospital"></i> @data.Doctor.hospital_or_clinic</p>
+                            }
+                            <address>
+                                @data.Doctor.clinic_or_hospital_address
+                            </address>
+
+                            @if (data.Doctor.on_site_consultation_fee != null)
+                            {
+                                <p class="fee"><strong data-currency_code="@data.Doctor.currency_code">@data.Doctor.on_site_consultation_fee</strong> On site consultation</p>
+                            }
+
+                            @if (data.Doctor.video_call_consultation_fee != null)
+                            {
+                                <p class="fee"><strong data-currency_code="@data.Doctor.currency_code">@data.Doctor.video_call_consultation_fee</strong> Video consultation</p>
+                            }
+                        </div>
+                    </div>
+
+                    <div class="all_doctor_single_div_comunication_option">
+
+                        @if (data.Doctor.hospital_or_clinic == "Clinic")
+                        {
+                            <p><span data-currency_code="@data.Doctor.currency_code">@data.Doctor.on_site_consultation_fee</span></p>
+                        }
+                        else
+                        {
+                            <p><span data-currency_code="@data.Doctor.currency_code">@data.Doctor.on_site_consultation_fee</span></p>
+                        }
+
+
+                        <p data-work-start="@data.Doctor.work_start_time" data-work-end="@data.Doctor.work_end_time" data-weekly-work-days="@data.Doctor.weekly_work_days"
+                           data-doctorId="@data.Doctor.id" data-consultancy="Video Call" data-email="@data.Doctor.email" data-fee="@data.Doctor.video_call_consultation_fee"
+                           data-notice="You have to Pay fee direct Doctor on Video call"
+                           data-max-time="@data.Doctor.max_time_per_appointments" data-breck-time="@data.Doctor.break_between_two_appointments" class="reschedule_appointmant" id="video-call">
+                            <a href="#"><i class="fa-solid fa-clock"></i> Reschedule </a>
+                        </p>
+
+
+
+                        <p data-work-start="@data.Doctor.work_start_time" data-work-end="@data.Doctor.work_end_time" data-fee="@data.Doctor.on_site_consultation_fee"
+                           data-weekly-work-days="@data.Doctor.weekly_work_days" data-doctorId="@data.Doctor.id" data-email="@data.Doctor.email" data-consultancy="On site"
+                           data-notice="You have to Pay fee direct Doctor on his site"
+                           data-max-time="@data.Doctor.max_time_per_appointments" data-breck-time="@data.Doctor.break_between_two_appointments" class="Book-Onsite-Appointment">
+                            <a href="#"><i class="fa-solid fa-calendar-xmark"></i> Cancle </a>
+                        </p>
+                        <p><a href="#"><i class="fa-solid fa-user-doctor"></i> View profile</a></p>
+                    </div>
+                </div>
+            }
+        }
+        else
+        {
+            <p>No doctors found.</p>
+        }
+    </div>
+</section>
+
+
+
+<div style="display: none;" id="popup">
+    <p>Hello</p>
+    <iframe src="/"></iframe>
+</div>
+
+
+
+<script>
+    fetch('/js/allcurrency.json')
+        .then(response => response.json())
+        .then(data => {
+            document.querySelectorAll("[data-currency_code]").forEach(element => {
+                const currencyCode = element.getAttribute("data-currency_code");
+
+                const currencyData = data.find(item => item.currency === currencyCode);
+
+                if (currencyData) {
+                    element.innerHTML = currencyData.symbol + element.innerHTML;
+                }
+            });
+        })
+        .catch(error => console.error('Error loading JSON:', error));
+
+</script>

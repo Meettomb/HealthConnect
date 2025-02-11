@@ -99,9 +99,10 @@ namespace HealthConnect.Pages
                         {
                             Types_of_doctor.Add(new Types_of_Doctor
                             {
-                                doctor_type_id = reader.GetInt32(0),
+                                doctor_type_id = reader.IsDBNull(0) ? 0 : int.Parse(reader.GetString(0)),
                                 type_of_doctor = reader.GetString(1),
                             });
+
                         }
                     }
                 }
@@ -276,12 +277,25 @@ namespace HealthConnect.Pages
                 ErrorMessage = "Please select days which you would like to work.";
                 return;
             }
+            if (User.max_time_per_appointments == null || !int.TryParse(User.max_time_per_appointments.ToString(), out _))
+            {
+                ErrorMessage = "Please enter a valid numeric value for max time in one appointment.";
+                return;
+            }
+
+            if (User.break_between_two_appointments == null || !int.TryParse(User.break_between_two_appointments.ToString(), out _))
+            {
+                ErrorMessage = "Please enter a valid numeric value for the break between two appointments.";
+                return;
+            }
+
 
             using (SqlConnection connection = new SqlConnection(_connectionString))
             {
                 connection.Open();
                 string updateQuery = "UPDATE User_Table SET work_start_time = @work_start_time, work_end_time = @work_end_time, " +
-                                     "weekly_work_days = @weekly_work_days, doctor_profile_complete = 1 WHERE id = @UserId;";
+                                     "weekly_work_days = @weekly_work_days, max_time_per_appointments = @max_time_per_appointments," +
+                                     "break_between_two_appointments = @break_between_two_appointments, doctor_profile_complete = 1 WHERE id = @UserId;";
 
                 using (SqlCommand command = new SqlCommand(updateQuery, connection))
                 {
@@ -289,6 +303,8 @@ namespace HealthConnect.Pages
                     command.Parameters.AddWithValue("@work_start_time", User.work_start_time);
                     command.Parameters.AddWithValue("@work_end_time", User.work_end_time);
                     command.Parameters.AddWithValue("@weekly_work_days", string.Join(",", User.weekly_work_days)); 
+                    command.Parameters.AddWithValue("@max_time_per_appointments", User.max_time_per_appointments);
+                    command.Parameters.AddWithValue("@break_between_two_appointments", User.break_between_two_appointments);
 
                     int rowsAffected = command.ExecuteNonQuery();
                     if (rowsAffected > 0)

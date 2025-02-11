@@ -212,6 +212,10 @@ namespace HealthConnect.Pages.Admin.UserData
                         hospital_or_clinic = reader.IsDBNull(20) ? null : reader.GetString(20),
                         doctor_qualifications = reader.IsDBNull(21) ? null : reader.GetString(21),
                         doctor_type = reader.IsDBNull(22) ? null : reader.GetString(22),
+                        //doctor_type = reader.IsDBNull(22) ? null : reader.IsDBNull(22) ? 22 : int.Parse(reader.GetString(22)),
+
+
+
                         languages_spoken = reader.IsDBNull(23) ? null : reader.GetString(23),
                         clinic_or_hospital_address = reader.IsDBNull(24) ? null : reader.GetString(24),
                         on_site_consultation_fee = reader.IsDBNull(25) ? null : reader.GetString(25),

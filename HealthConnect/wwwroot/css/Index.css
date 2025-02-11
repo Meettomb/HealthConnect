@@ -91,6 +91,7 @@ input[type=number] {
     100% {
         transform: translateX(0);
         opacity: 0;
+        display: none;
     }
 }
 
@@ -106,7 +107,7 @@ input[type=number] {
     background-color: #d4edda;
     padding: 10px 20px;
     border-radius: 5px;
-    animation: shake 3s;
+    animation: shake 5s;
     opacity: 0;
     z-index: 10000;
 }
@@ -603,12 +604,16 @@ header nav {
     top: -20px;
     z-index: 1000;
     backdrop-filter: blur(200px);
-    overflow-y: scroll;
+    overflow: hidden;
 }
+
+    .finel_step_for_doctor_registration::-webkit-scrollbar {
+        display: none;
+    }
 
     .finel_step_for_doctor_registration .form_section {
         width: auto;
-        height: auto;
+        height: 90dvh;
         position: fixed;
         padding: 20px;
         background-color: var(--contrast-color);
@@ -618,7 +623,12 @@ header nav {
         -moz-border-radius: 10px;
         -webkit-border-radius: 10px;
         border-radius: 10px;
+        overflow-y: scroll;
     }
+
+        .finel_step_for_doctor_registration .form_section::-webkit-scrollbar {
+            display: none;
+        }
 
     .finel_step_for_doctor_registration h1 {
         font-size: 30px;
@@ -655,12 +665,17 @@ header nav {
 
                 .finel_step_for_doctor_registration .form_section form .filde_container .time_filde input {
                     margin: 10px 0;
+                    padding: 10px 5px;
                 }
 
-                .finel_step_for_doctor_registration .form_section form .filde_container .time_filde label {
-                    color: var(--header-text-color);
-                    margin: 10px 0;
-                }
+            .finel_step_for_doctor_registration .form_section form .filde_container input[type=number] {
+                padding: 10px 10px;
+            }
+
+            .finel_step_for_doctor_registration .form_section form .filde_container .time_filde label {
+                color: var(--header-text-color);
+                margin: 10px 0;
+            }
 
             .finel_step_for_doctor_registration .form_section form .filde_container input {
                 margin: 10px;
@@ -1527,6 +1542,50 @@ header nav {
             color: var(--default-color);
         }
 
+.filter_icon_container {
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    margin: 15px 0;
+}
+
+    .filter_icon_container .filter_class {
+        width: 95%;
+        display: flex;
+        gap: 50px;
+    }
+
+        .filter_icon_container .filter_class .add_filter_class {
+            color: var(--default-color);
+            cursor: pointer;
+            display: flex;
+            gap: 5px;
+            border-radius: 5px;
+            border: 1px solid var(--default-color);
+            padding: 7px 10px;
+        }
+
+            .filter_icon_container .filter_class .add_filter_class i {
+                font-size: 20px;
+            }
+
+        .filter_icon_container .filter_class .remove_filter_class {
+            color: var(--default-color);
+            cursor: pointer;
+            display: flex;
+            gap: 5px;
+            border-radius: 5px;
+            border: 1px solid var(--default-color);
+            padding: 7px 10px;
+        }
+            .filter_icon_container .filter_class .remove_filter_class:hover {
+                color: #d50a0a;
+                border: 1px solid #d50a0a;
+            }
+
+            .filter_icon_container .filter_class .remove_filter_class i {
+                font-size: 20px;
+            }
 
 .explorer_doctor_section1 {
     width: 100%;
@@ -2003,6 +2062,22 @@ header nav {
                 gap: 10px;
             }
 
+                .explorer_doctor_section3 .videocall_consultation_container .videocall_consultation form .login_user_booking .notice {
+                    display: flex;
+                    -webkit-justify-content: center;
+                    justify-content: center;
+                    -webkit-align-items: center;
+                    align-items: center;
+                    gap: 10px;
+                    color: #FFD700;
+                }
+
+                    .explorer_doctor_section3 .videocall_consultation_container .videocall_consultation form .login_user_booking .notice p {
+                        font-family: var(--default-font);
+                        font-size: 14px;
+                        color: #FFD700;
+                    }
+
                 .explorer_doctor_section3 .videocall_consultation_container .videocall_consultation form .sloat_time_and_date {
                     display: flex;
                     gap: 10px;
@@ -2056,9 +2131,11 @@ header nav {
     -webkit-justify-content: center;
     justify-content: center;
 }
+
     .explorer_doctor_section4 .LoadMore {
         margin: 30px 0;
     }
+
         .explorer_doctor_section4 .LoadMore button {
             background-color: var(--accent-color);
             color: var(--contrast-color);
@@ -2069,6 +2146,7 @@ header nav {
             font-size: 17px;
             font-weight: 500;
         }
+
             .explorer_doctor_section4 .LoadMore button:hover {
                 background: color-mix(in srgb, var(--contrast-color), transparent 80%);
                 color: var(--accent-color);
@@ -2084,18 +2162,18 @@ header nav {
                 font-weight: 600;
             }
 
-        /*--------------------------------------------------------------------------------------------------------------*/
-        /*--------------------------------------------------------------------------------------------------------------*/
-        /*--------------------------------------------------------------------------------------------------------------*/
-        /*--------------------------------------------------------------------------------------------------------------*/
-        /*--------------------------------------------------------------------------------------------------------------*/
-        /*                                                 Chat                                                         */
-        /*--------------------------------------------------------------------------------------------------------------*/
-        /*--------------------------------------------------------------------------------------------------------------*/
-        /*--------------------------------------------------------------------------------------------------------------*/
-        /*--------------------------------------------------------------------------------------------------------------*/
-        /*--------------------------------------------------------------------------------------------------------------*/
-        .chat_section_1 {
+/*--------------------------------------------------------------------------------------------------------------*/
+/*--------------------------------------------------------------------------------------------------------------*/
+/*--------------------------------------------------------------------------------------------------------------*/
+/*--------------------------------------------------------------------------------------------------------------*/
+/*--------------------------------------------------------------------------------------------------------------*/
+/*                                                 Chat                                                         */
+/*--------------------------------------------------------------------------------------------------------------*/
+/*--------------------------------------------------------------------------------------------------------------*/
+/*--------------------------------------------------------------------------------------------------------------*/
+/*--------------------------------------------------------------------------------------------------------------*/
+/*--------------------------------------------------------------------------------------------------------------*/
+.chat_section_1 {
     width: 100%;
     height: auto;
     display: flex;
@@ -2797,4 +2875,14 @@ header nav {
         left: 43px;
         width: 70%;
     }
+}
+
+
+
+.All_appointments_title {
+    text-align: center;
+    padding: 0 20px;
+    color: var(--heading-color);
+    font-family: var(--heading-font);
+    margin: 20px 0;
 }
