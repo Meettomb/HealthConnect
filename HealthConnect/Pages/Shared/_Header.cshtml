@@ -21,22 +21,22 @@
 
     @if (!string.IsNullOrEmpty(Model.ErrorMessage))
     {
-        <div class="error_message">@Model.ErrorMessage</div>
+        <div class="error_message" id="errorMessage">@Model.ErrorMessage</div>
     }
 
     @if (!string.IsNullOrEmpty(Model.SuccessMessage))
     {
-        <p class="success_message">@Model.SuccessMessage</p>
+        <p class="success_message" id="successMessage">@Model.SuccessMessage</p>
     }
 
     @if (TempData["SuccessMessage"] != null)
     {
-        <div class="success_message">@TempData["SuccessMessage"]</div>
+        <div class="success_message" id="tempSuccessMessage">@TempData["SuccessMessage"]</div>
     }
 
     @if (TempData["ErrorMessage"] != null)
     {
-        <div class="error_message">@TempData["ErrorMessage"]</div>
+        <div class="error_message" id="tempErrorMessage">@TempData["ErrorMessage"]</div>
     }
 
 
@@ -387,6 +387,25 @@
 
     </script>
 
+
+            <script>
+        document.addEventListener("DOMContentLoaded", function () {
+            function hideMessageAfterDelay(elementId) {
+                let element = document.getElementById(elementId);
+                if (element && element.innerText.trim() !== "") {
+                    element.style.display = "block";
+                    setTimeout(() => {
+                        element.style.display = "none"; 
+                    }, 5000);
+                }
+            }
+
+            hideMessageAfterDelay("errorMessage");
+            hideMessageAfterDelay("successMessage");
+            hideMessageAfterDelay("tempSuccessMessage");
+            hideMessageAfterDelay("tempErrorMessage");
+        });
+    </script>
 
 </body>
 </html>

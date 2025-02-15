@@ -177,7 +177,7 @@
 
                         @if (data.video_call_consultation_fee != null)
                         {
-                            <p data-work-start="@data.work_start_time" data-work-end="@data.work_end_time" data-weekly-work-days="@data.weekly_work_days"
+                            <p data-work-start="@data.work_start_time" data-work-end="@data.work_end_time" data-weekly-work-days="@string.Join(", ", @data.weekly_work_days)"
                                data-doctorId="@data.id" data-consultancy="Video Call" data-email="@data.email" data-fee="@data.video_call_consultation_fee"
                                data-notice="You have to Pay fee direct Doctor on Video call"
                                data-max-time="@data.max_time_per_appointments" data-breck-time="@data.break_between_two_appointments" class="video-call" id="video-call">
@@ -190,7 +190,7 @@
                         }
 
                         <p data-work-start="@data.work_start_time" data-work-end="@data.work_end_time" data-fee="@data.on_site_consultation_fee"
-                           data-weekly-work-days="@data.weekly_work_days" data-doctorId="@data.id" data-email="@data.email" data-consultancy="On site"
+                           data-weekly-work-days="@string.Join(", ", @data.weekly_work_days)" data-doctorId="@data.id" data-email="@data.email" data-consultancy="On site"
                            data-notice="You have to Pay fee direct Doctor on his site"
                            data-max-time="@data.max_time_per_appointments" data-breck-time="@data.break_between_two_appointments" class="Book-Onsite-Appointment">
                             <a href="#"><i class="fa-regular fa-calendar-days"></i> Book Appointment</a>
@@ -212,7 +212,7 @@
         <div class="videocall_consultation">
             <i class="fa-solid fa-times" id="closePopup"></i>
             <h1>Book appointment</h1>
-            <form method="post" id="appointmentForm">
+            <form method="post" id="appointmentForm" onsubmit="return validateAppointment()">
 
                 <div class="login_user_booking">
 
@@ -222,7 +222,7 @@
                     <input type="hidden" name="email" id="doctorEmail" readonly>
                     <input type="hidden" id="max_time" readonly>
                     <input type="hidden" id="brack_time" readonly>
-                    <input type="text" name="booking_user_role" value="@Model.Role" id="brack_time" readonly>
+                    <input type="hidden" name="booking_user_role" value="@Model.Role" id="brack_time" readonly>
 
                     <div class="notice">
                         <span class="fa-regular fa-flag"></span>
@@ -241,7 +241,13 @@
 
                     <label>Date</label>
                     <input type="date" name="appointment_date" id="datePicker" placeholder="Select date" />
+                    <span id="dateError" style="color: red; display: none;">Doctor wash not available. Please select another Date.</span>
+                    <p><span id="Error_appointment_date"></span></p>
 
+                </div>
+                <div class="sloat_time_and_date">
+                    <label>Your Problem (Optional)</label>
+                    <textarea name="problem" id="problem" rows="5" placeholder="Problem"></textarea>
                 </div>
 
 
@@ -263,6 +269,22 @@
 
 
 <script>
+    function validateAppointment() {
+        let appointment_date = document.getElementById("datePicker");
+        let Error_appointment_date = document.getElementById("Error_appointment_date");
+
+        if (!appointment_date.value.trim()) {
+            Error_appointment_date.innerText = "Please select an appointment date.";
+            Error_appointment_date.style.color = "red";
+            return false; 
+        } else {
+            Error_appointment_date.innerText = ""; 
+            return true;
+        }
+    }
+</script>
+
+<script>
     fetch('/js/allcurrency.json')
         .then(response => response.json())
         .then(data => {
@@ -279,7 +301,6 @@
         .catch(error => console.error('Error loading JSON:', error));
 
 </script>
-
 
 
 <script>
@@ -340,14 +361,11 @@
 </script>
 
 
-
 <script>
-
-        document.addEventListener("DOMContentLoaded", function () {
+    document.addEventListener("DOMContentLoaded", function () {
         var today = new Date().toISOString().split("T")[0];
         document.getElementById("datePicker").setAttribute("min", today);
     });
-
 
     $(document).ready(function () {
         $(".video-call, .Book-Onsite-Appointment").click(function (event) {
@@ -361,68 +379,86 @@
             var Bookingnotice = $(this).attr("data-notice");
             var MaxTime = $(this).attr("data-max-time");
             var BrackTime = $(this).attr("data-breck-time");
+            var availableDaysString = $(this).attr("data-weekly-work-days");
 
             console.log("Start Time:", WorkStart);
             console.log("End Time:", WorkEnd);
+            console.log("Available Days:", availableDaysString);
 
             if (!WorkStart || !WorkEnd) {
                 alert("Invalid work start or end time.");
                 return;
             }
 
-           $("#doctorIdInput").val(doctorId);
+            $("#doctorIdInput").val(doctorId);
             $("#consultancyType").val(consultancy);
             $("#doctorEmail").val(email);
             $("#notice").text(Bookingnotice);
             $("#max_time").val(MaxTime);
             $("#brack_time").val(BrackTime);
 
-
             generateTimeSlots(WorkStart, WorkEnd);
+
+            disableUnavailableDays(availableDaysString);
         });
 
-             function generateTimeSlots(startTime, endTime) {
-        let max_time_per_appointments = parseInt(document.getElementById("max_time").value);
-        let break_between_two_appointments = parseInt(document.getElementById("brack_time").value);
+        function generateTimeSlots(startTime, endTime) {
+            let max_time_per_appointments = parseInt(document.getElementById("max_time").value);
+            let break_between_two_appointments = parseInt(document.getElementById("brack_time").value);
 
-        console.log("Max Appointment Time:", max_time_per_appointments);
-        console.log("Break Between Appointments:", break_between_two_appointments);
+            console.log("Max Appointment Time:", max_time_per_appointments);
+            console.log("Break Between Appointments:", break_between_two_appointments);
 
-        if (isNaN(max_time_per_appointments) || isNaN(break_between_two_appointments)) {
-            console.error("Invalid values for max appointment time or break time.");
-            return;
+            if (isNaN(max_time_per_appointments) || isNaN(break_between_two_appointments)) {
+                console.error("Invalid values for max appointment time or break time.");
+                return;
+            }
+
+            var timeSlotsDropdown = $("#timeSlotsDropdown");
+            timeSlotsDropdown.empty();
+
+            var start = convertToMinutes(startTime);
+            var end = convertToMinutes(endTime);
+
+            for (var time = start; time < end; time += (max_time_per_appointments + break_between_two_appointments)) {
+                var slot = convertToTimeFormat(time) + " - " + convertToTimeFormat(time + max_time_per_appointments);
+                timeSlotsDropdown.append(`<option value="${slot}">${slot}</option>`);
+            }
         }
 
-        var timeSlotsDropdown = $("#timeSlotsDropdown");
-        timeSlotsDropdown.empty();
-
-        var start = convertToMinutes(startTime);
-        var end = convertToMinutes(endTime);
-
-        for (var time = start; time < end; time += (max_time_per_appointments + break_between_two_appointments)) {
-            var slot = convertToTimeFormat(time) + " - " + convertToTimeFormat(time + max_time_per_appointments);
-            timeSlotsDropdown.append(`<option value="${slot}">${slot}</option>`);
+        function convertToMinutes(time) {
+            var parts = time.split(":");
+            return parseInt(parts[0]) * 60 + parseInt(parts[1]);
         }
-    }
 
-    function convertToMinutes(time) {
-        var parts = time.split(":");
-        return parseInt(parts[0]) * 60 + parseInt(parts[1]);
-    }
+        function convertToTimeFormat(minutes) {
+            var hours = Math.floor(minutes / 60);
+            var mins = minutes % 60;
+            return (hours < 10 ? "0" + hours : hours) + ":" + (mins < 10 ? "0" + mins : mins);
+        }
 
-    function convertToTimeFormat(minutes) {
-        var hours = Math.floor(minutes / 60);
-        var mins = minutes % 60;
-        return (hours < 10 ? "0" + hours : hours) + ":" + (mins < 10 ? "0" + mins : mins);
-    }
+        function disableUnavailableDays(availableDaysString) {
+            var availableDays = availableDaysString.split(",").map(day => day.trim());
 
-    // Ensure hidden values are loaded properly
-    window.onload = function () {
-        console.log("Max Time:", document.getElementById("max_time_per_appointments").value);
-        console.log("Break Time:", document.getElementById("break_between_two_appointments").value);
-    };
+            $("#datePicker").off("change").on("change", function () {
+                var selectedDate = new Date(this.value);
+                var selectedDayName = selectedDate.toLocaleDateString("en-US", { weekday: "long" });
 
+                console.log("Selected Day:", selectedDayName);
 
+                if (!availableDays.includes(selectedDayName)) {
+                    this.value = ""; 
+                    $("#dateError").show(); 
+                } else {
+                    $("#dateError").hide(); 
+                }
+            });
+        }
+
+        window.onload = function () {
+            console.log("Max Time:", document.getElementById("max_time").value);
+            console.log("Break Time:", document.getElementById("brack_time").value);
+        };
     });
 </script>
 
@@ -568,10 +604,6 @@
     });
 
 </script>
-
-
-
-
 
 
 

@@ -20,6 +20,7 @@ namespace HealthConnect.Models
         public bool appointment_approve { get; set; }
         public DateTime book_date_time { get; set; }
         public string booking_user_role { get; set; }
+        public string? problem { get; set; }
 
 
         public virtual User_Table User { get; set; }

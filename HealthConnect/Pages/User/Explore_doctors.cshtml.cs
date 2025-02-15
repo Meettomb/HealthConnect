@@ -132,7 +132,7 @@ namespace HealthConnect.Pages.User
                         {
                             Types_of_doctor.Add(new Types_of_Doctor
                             {
-                                doctor_type_id = int.Parse(reader.GetString(0)), // Convert string to int
+                                doctor_type_id = int.Parse(reader.GetString(0)),
 
                                 type_of_doctor = reader.GetString(1),
                             });
@@ -268,6 +268,7 @@ namespace HealthConnect.Pages.User
             string doctorEmail = null;
             int rowEffect = 0;
 
+
             using (SqlConnection connection = new SqlConnection(_connectionString))
             {
                 await connection.OpenAsync();
@@ -294,8 +295,8 @@ namespace HealthConnect.Pages.User
                     }
                 }
                 string insertQuery = @"
-            INSERT INTO Appointments (user_id, doctor_id, appointment_type, time_slot, appointment_date, appointment_approve, book_date_time, booking_user_role) 
-            VALUES (@UserId, @DoctorId, @AppointmentType, @TimeSlot, @AppointmentDate, @AppointmentApprove, @book_date_time, @booking_user_role)";
+            INSERT INTO Appointments (user_id, doctor_id, appointment_type, time_slot, appointment_date, appointment_approve, book_date_time, booking_user_role, problem) 
+            VALUES (@UserId, @DoctorId, @AppointmentType, @TimeSlot, @AppointmentDate, @AppointmentApprove, @book_date_time, @booking_user_role, @problem)";
 
                 using (SqlCommand command = new SqlCommand(insertQuery, connection))
                 {
@@ -307,6 +308,8 @@ namespace HealthConnect.Pages.User
                     command.Parameters.AddWithValue("@AppointmentApprove", true);
                     command.Parameters.AddWithValue("@book_date_time", DateTime.Now);
                     command.Parameters.AddWithValue("@booking_user_role", Appointments.booking_user_role);
+                    command.Parameters.AddWithValue("@problem", string.IsNullOrEmpty(Appointments.problem) ? (object)DBNull.Value : Appointments.problem);
+
 
                     rowEffect = await command.ExecuteNonQueryAsync();
                 }

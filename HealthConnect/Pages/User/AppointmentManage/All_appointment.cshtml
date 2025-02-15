@@ -5,153 +5,277 @@
     ViewData["Title"] = "All Appointments";
 }
 
-<h1 class="All_appointments_title">All Appointments</h1>
-
-
-@* <section class="all_appointmant_section_2"> *@
-@*     <div class="all_appointment_table"> *@
-@*         @if (Model.AppointmentsList != null && Model.AppointmentsList.Any()) *@
-@*         { *@
-@*             <table border="1"> *@
-@*                 <thead> *@
-@*                     <tr> *@
-@*                         <th>Appointment ID</th> *@
-@*                         <th>Patient Name</th> *@
-@*                         <th>Doctor Name</th> *@
-@*                         <th>Appointment Date</th> *@
-@*                         <th>Appointment Time</th> *@
-@*                         <th>Booked On</th> *@
-@*                     </tr> *@
-@*                 </thead> *@
-@*                 <tbody> *@
-@*                     @foreach (var item in Model.AppointmentsList) *@
-@*                     { *@
-@*                         <tr> *@
-@*                             <td><img src="/documant/@item.Doctor.profile_pic" alt=" @item.Doctor.first_name @item.Doctor.last_name" /></td> *@
-@*                             <td> *@
-@*                                 @item.User.first_name @item.User.last_name *@
-@*                             </td> *@
-@*                             <td> *@
-@*                                 @item.Doctor.first_name @item.Doctor.last_name *@
-@*                             </td> *@
-@*                             <td>@item.appointment_date</td> *@
-@*                             <td>@item.time_slot</td> *@
-@*                             <td>@item.book_date_time.ToString("yyyy-MM-dd HH:mm")</td> *@
-@*                         </tr> *@
-@*                     } *@
-@*                 </tbody> *@
-@*             </table> *@
-@*         } *@
-@*         else *@
-@*         { *@
-@*             <p>No appointments found.</p> *@
-@*         } *@
-@*     </div> *@
-@* </section> *@
+<div class="all_appointmant_title">
+    <h1 class="All_appointments_title">All Appointments</h1>
+</div>
 
 
 
 
+@if (Model.Role == "Doctor")
+{
 
+    <div class="appointmant_switch_buttons_container">
+        <div class="appointmant_switch_buttons">
+            <button class="UserAppointmant">User Appointmant</button>
+            <button class="YourAppointmant">Your Appointmant</button>
+        </div>
+    </div>
 
-<section class="explorer_doctor_section2">
-    <div class="all_doctor_div" id="doctorsList">
-        @if (Model.AppointmentsList != null && Model.AppointmentsList.Any())
-        {
+    <section class="all_appointmant_section_2">
+        <div class="all_appointmant_section_container">
             @foreach (var data in Model.AppointmentsList)
             {
-                <div class="all_doctor_single_div">
-                    <div class="all_doctor_single_div_sides">
-                        <div class="all_doctor_single_left">
+                @if (data.booking_user_role == "User")
+                {
+                    <div class="all_side_container" id="UserAppointmant">
+                        <div class="all_side">
+                            <div class="all_appointmant_side1">
+                                @if (string.IsNullOrEmpty(data.User.profile_pic))
+                                {
+                                    <b>@(data.User.first_name[0].ToString().ToUpper())</b>
+                                }
+                                else
+                                {
+
+                                    <img src="/documant/@data.User.profile_pic" alt="Dr. @data.Doctor.first_name @data.Doctor.last_name" />
+                                }
+                            </div>
+                            <div class="all_appointmant_side2">
+                                <h1>@data.User.first_name @data.User.last_name</h1>
+
+                                <address>
+                                    @data.User.House_number_and_Street_name,
+                                    @data.User.country, @data.User.state, @data.User.city
+                                </address>
+
+                                <p>@data.problem</p>
+                            </div>
+
+                            <div class="all_appointmant_side3">
+                                <p class="appointment_date"><b>Appointment Date:</b> <span>@data.appointment_date</span></p>
+                                <p class="appointment_time"><b>Appointment Time:</b> <span>@data.time_slot</span></p>
+                            </div>
+
+                            <div class="all_appointmant_side4">
+                                <div>
+                                    <p data-appointmant-id="@data.appointment_id" data-work-start="@data.Doctor.work_start_time" data-work-end="@data.Doctor.work_end_time"
+                                       data-weekly-work-days="@string.Join(", ", @data.Doctor.weekly_work_days)" data-email="@data.Doctor.email"
+                                       data-notice="You have to Pay fee direct Doctor on Video call"
+                                       data-max-time="@data.Doctor.max_time_per_appointments" data-breck-time="@data.Doctor.break_between_two_appointments" class="reschedule_appointmant" id="reschedule_appointmant">
+                                        <a href="#"><i class="fa-solid fa-clock"></i> Reschedule </a>
+                                    </p>
+
+
+
+                                    <p data-appointmant-id="@data.appointment_id" data-work-start="@data.Doctor.work_start_time" data-work-end="@data.Doctor.work_end_time"
+                                       data-weekly-work-days="@string.Join(", ", @data.Doctor.weekly_work_days)" data-email="@data.Doctor.email" data-consultancy="On site"
+                                       data-notice="You have to Pay fee direct Doctor on his site"
+                                       data-max-time="@data.Doctor.max_time_per_appointments" data-breck-time="@data.Doctor.break_between_two_appointments" class="cancle_Appointment">
+                                        <a href="#"><i class="fa-solid fa-calendar-xmark"></i> Cancle </a>
+                                    </p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                }
+                else
+                {
+                    <div class="all_side_container" id="YouAppointmant">
+                        <div class="all_side">
+                            <div class="all_appointmant_side1">
+                                <img src="/documant/@data.Doctor.profile_pic" alt="Dr. @data.Doctor.first_name @data.Doctor.last_name" />
+                            </div>
+                            <div class="all_appointmant_side2">
+                                <h1>Dr. @data.Doctor.first_name @data.Doctor.last_name</h1>
+
+                                <address>
+                                    @if (@data.Doctor.hospital_or_clinic == "Clinic")
+                                    {
+                                        <i class="fa-solid fa-house-chimney-medical"></i>
+                                    }
+                                    else
+                                    {
+                                        <i class="fa-solid fa-hospital"></i>
+
+                                    }
+                                    @data.Doctor.clinic_or_hospital_address
+                                </address>
+
+                                <p>@data.problem</p>
+                            </div>
+
+                            <div class="all_appointmant_side3">
+                                <p class="appointment_date"><b>Appointment Date:</b> <span>@data.appointment_date</span></p>
+                                <p class="appointment_time"><b>Appointment Time:</b> <span>@data.time_slot</span></p>
+                            </div>
+
+                            <div class="all_appointmant_side4">
+                                <div>
+                                    <p data-appointmant-id="@data.appointment_id" data-work-start="@data.Doctor.work_start_time" data-work-end="@data.Doctor.work_end_time"
+                                       data-weekly-work-days="@string.Join(", ", @data.Doctor.weekly_work_days)" data-email="@data.Doctor.email"
+                                       data-notice="You have to Pay fee direct Doctor on Video call"
+                                       data-max-time="@data.Doctor.max_time_per_appointments" data-breck-time="@data.Doctor.break_between_two_appointments" class="reschedule_appointmant" id="reschedule_appointmant">
+                                        <a href="#"><i class="fa-solid fa-clock"></i> Reschedule </a>
+                                    </p>
+
+
+
+                                    <p data-appointmant-id="@data.appointment_id" data-work-start="@data.Doctor.work_start_time" data-work-end="@data.Doctor.work_end_time"
+                                       data-weekly-work-days="@string.Join(", ", @data.Doctor.weekly_work_days)" data-email="@data.Doctor.email" data-consultancy="On site"
+                                       data-notice="You have to Pay fee direct Doctor on his site"
+                                       data-max-time="@data.Doctor.max_time_per_appointments" data-breck-time="@data.Doctor.break_between_two_appointments" class="cancle_Appointment">
+                                        <a href="#"><i class="fa-solid fa-calendar-xmark"></i> Cancle </a>
+                                    </p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                }
+            }
+        </div>
+    </section>
+
+
+}
+
+else
+{
+
+    <section class="all_appointmant_section_2">
+        <div class="all_appointmant_section_container">
+            @foreach (var data in Model.AppointmentsList)
+            {
+                <div class="all_side_container">
+                    <div class="all_side">
+                        <div class="all_appointmant_side1">
                             <img src="/documant/@data.Doctor.profile_pic" alt="Dr. @data.Doctor.first_name @data.Doctor.last_name" />
-                            <p><i class="fa-solid fa-location-dot"></i> @data.Doctor.country, @data.Doctor.state, @data.Doctor.city</p>
                         </div>
+                        <div class="all_appointmant_side2">
+                            <h1>Dr. @data.Doctor.first_name @data.Doctor.last_name</h1>
 
-                        <div class="all_doctor_single_middle">
-                            <h1>@data.Doctor.first_name @data.Doctor.last_name </h1>
-                            <p>@data.Doctor.doctor_specialitis </p>
-                            <p>@data.Doctor.medicine_type</p>
-                            <input type="hidden" id="max_time_per_appointments" value="@data.Doctor.max_time_per_appointments" />
-                            <input type="hidden" id="break_between_two_appointments" value="@data.Doctor.break_between_two_appointments" />
-
-
-                            <p>Experience: @data.Doctor.doctore_experience Years <span></span></p>
-                        </div>
-
-                        <div class="all_doctor_single_right_right">
-                            <p><i class="fa-solid fa-star"></i> 5 Star</p>
-                            <p><i class="fa-solid fa-comments"></i> 20 Review</p>
-
-                            @if (data.Doctor.hospital_or_clinic == "Clinic")
-                            {
-                                <p class="hospital_or_clinic"><i class="fa-solid fa-house-chimney-medical"></i> @data.Doctor.hospital_or_clinic</p>
-                            }
-                            else
-                            {
-                                <p class="hospital_or_clinic"><i class="fa-solid fa-hospital"></i> @data.Doctor.hospital_or_clinic</p>
-                            }
                             <address>
+                                @if (@data.Doctor.hospital_or_clinic == "Clinic")
+                                {
+                                    <i class="fa-solid fa-house-chimney-medical"></i>
+                                }
+                                else
+                                {
+                                    <i class="fa-solid fa-hospital"></i>
+
+                                }
                                 @data.Doctor.clinic_or_hospital_address
                             </address>
 
-                            @if (data.Doctor.on_site_consultation_fee != null)
-                            {
-                                <p class="fee"><strong data-currency_code="@data.Doctor.currency_code">@data.Doctor.on_site_consultation_fee</strong> On site consultation</p>
-                            }
+                            <p>@data.problem</p>
+                        </div>
 
-                            @if (data.Doctor.video_call_consultation_fee != null)
-                            {
-                                <p class="fee"><strong data-currency_code="@data.Doctor.currency_code">@data.Doctor.video_call_consultation_fee</strong> Video consultation</p>
-                            }
+                        <div class="all_appointmant_side3">
+                            <p class="appointment_date"><b>Appointment Date:</b> <span>@data.appointment_date</span></p>
+                            <p class="appointment_time"><b>Appointment Time:</b> <span>@data.time_slot</span></p>
+                        </div>
+
+                        <div class="all_appointmant_side4">
+                            <div>
+                                <p data-appointmant-id="@data.appointment_id" data-work-start="@data.Doctor.work_start_time" data-work-end="@data.Doctor.work_end_time"
+                                   data-weekly-work-days="@string.Join(", ", @data.Doctor.weekly_work_days)" data-email="@data.Doctor.email"
+                                   data-notice="You have to Pay fee direct Doctor on Video call"
+                                   data-max-time="@data.Doctor.max_time_per_appointments" data-breck-time="@data.Doctor.break_between_two_appointments" class="reschedule_appointmant" id="reschedule_appointmant">
+                                    <a href="#"><i class="fa-solid fa-clock"></i> Reschedule </a>
+                                </p>
+
+
+
+                                <p data-appointmant-id="@data.appointment_id" data-work-start="@data.Doctor.work_start_time" data-work-end="@data.Doctor.work_end_time"
+                                   data-weekly-work-days="@string.Join(", ", @data.Doctor.weekly_work_days)" data-email="@data.Doctor.email" data-consultancy="On site"
+                                   data-notice="You have to Pay fee direct Doctor on his site"
+                                   data-max-time="@data.Doctor.max_time_per_appointments" data-breck-time="@data.Doctor.break_between_two_appointments" class="cancle_Appointment">
+                                    <a href="#"><i class="fa-solid fa-calendar-xmark"></i> Cancle </a>
+                                </p>
+                            </div>
                         </div>
                     </div>
-
-                    <div class="all_doctor_single_div_comunication_option">
-
-                        @if (data.Doctor.hospital_or_clinic == "Clinic")
-                        {
-                            <p><span data-currency_code="@data.Doctor.currency_code">@data.Doctor.on_site_consultation_fee</span></p>
-                        }
-                        else
-                        {
-                            <p><span data-currency_code="@data.Doctor.currency_code">@data.Doctor.on_site_consultation_fee</span></p>
-                        }
-
-
-                        <p data-work-start="@data.Doctor.work_start_time" data-work-end="@data.Doctor.work_end_time" data-weekly-work-days="@data.Doctor.weekly_work_days"
-                           data-doctorId="@data.Doctor.id" data-consultancy="Video Call" data-email="@data.Doctor.email" data-fee="@data.Doctor.video_call_consultation_fee"
-                           data-notice="You have to Pay fee direct Doctor on Video call"
-                           data-max-time="@data.Doctor.max_time_per_appointments" data-breck-time="@data.Doctor.break_between_two_appointments" class="reschedule_appointmant" id="video-call">
-                            <a href="#"><i class="fa-solid fa-clock"></i> Reschedule </a>
-                        </p>
-
-
-
-                        <p data-work-start="@data.Doctor.work_start_time" data-work-end="@data.Doctor.work_end_time" data-fee="@data.Doctor.on_site_consultation_fee"
-                           data-weekly-work-days="@data.Doctor.weekly_work_days" data-doctorId="@data.Doctor.id" data-email="@data.Doctor.email" data-consultancy="On site"
-                           data-notice="You have to Pay fee direct Doctor on his site"
-                           data-max-time="@data.Doctor.max_time_per_appointments" data-breck-time="@data.Doctor.break_between_two_appointments" class="Book-Onsite-Appointment">
-                            <a href="#"><i class="fa-solid fa-calendar-xmark"></i> Cancle </a>
-                        </p>
-                        <p><a href="#"><i class="fa-solid fa-user-doctor"></i> View profile</a></p>
-                    </div>
                 </div>
+
             }
-        }
-        else
-        {
-            <p>No doctors found.</p>
-        }
+        </div>
+    </section>
+
+}
+
+<section class="explorer_doctor_section3" id="popup">
+    <div class="videocall_consultation_container">
+        <div class="videocall_consultation">
+            <i class="fa-solid fa-times" id="closePopup"></i>
+            <h1>Reschedule appointment</h1>
+            <form method="post" id="appointmentForm">
+
+                <div class="login_user_booking">
+
+                    <input type="hidden" value="@Model.UserId" />
+                    <input type="hidden" id="doctorIdInput" readonly>
+                    <input type="hidden" id="doctorEmail" readonly>
+                    <input type="hidden" id="max_time" readonly>
+                    <input type="hidden" id="brack_time" readonly>
+                    <input type="hidden" name="appointment_id" id="Appointmant_Id" readonly>
+
+                    <div class="notice">
+                        <span class="fa-regular fa-flag"></span>
+                        <p id="notice">You have to Pay fee direct Doctor on Video call</p>
+                    </div>
+
+                </div>
+
+                <div class="sloat_time_and_date">
+
+                    <label>Time slot</label>
+                    <select id="timeSlotsDropdown" name="time_slot"></select>
+
+
+                    <div id="messageContainer"></div>
+
+                    <label>Date</label>
+                    <input type="date" name="appointment_date" id="datePicker" placeholder="Select date" />
+                    <span id="dateError" style="color: red; display: none;">Doctor wash not available. Please select another date.</span>
+                    <p><span id="Error_appointment_date"></span></p>
+                </div>
+
+
+                <button type="submit" name="submit">Book now</button>
+
+
+            </form>
+
+        </div>
     </div>
 </section>
 
 
 
-<div style="display: none;" id="popup">
-    <p>Hello</p>
-    <iframe src="/"></iframe>
-</div>
 
+
+
+
+
+
+
+
+
+<script>
+    function validateAppointment() {
+        let appointment_date = document.getElementById("datePicker");
+        let Error_appointment_date = document.getElementById("Error_appointment_date");
+
+        if (!appointment_date.value.trim()) {
+            Error_appointment_date.innerText = "Please select an appointment date.";
+            Error_appointment_date.style.color = "red";
+            return false;
+        } else {
+            Error_appointment_date.innerText = "";
+            return true;
+        }
+    }
+</script>
 
 
 <script>
@@ -169,5 +293,126 @@
             });
         })
         .catch(error => console.error('Error loading JSON:', error));
+
+</script>
+
+
+<script>
+    document.addEventListener("DOMContentLoaded", function () {
+        var today = new Date().toISOString().split("T")[0];
+        document.getElementById("datePicker").setAttribute("min", today);
+    });
+
+    $(document).ready(function () {
+        $(".reschedule_appointmant, .cancle_Appointment").click(function (event) {
+            event.preventDefault();
+
+            var email = $(this).attr("data-email");
+            var WorkStart = $(this).attr("data-work-start");
+            var WorkEnd = $(this).attr("data-work-end");
+            var Bookingnotice = $(this).attr("data-notice");
+            var MaxTime = $(this).attr("data-max-time");
+            var BrackTime = $(this).attr("data-breck-time");
+            var AppointmantId = $(this).attr("data-appointmant-id");
+            var availableDaysString = $(this).attr("data-weekly-work-days");
+
+
+            if (!WorkStart || !WorkEnd) {
+                alert("Invalid work start or end time.");
+                return;
+            }
+
+            $("#doctorEmail").val(email);
+            $("#notice").text(Bookingnotice);
+            $("#max_time").val(MaxTime);
+            $("#brack_time").val(BrackTime);
+            $("#Appointmant_Id").val(AppointmantId);
+
+            generateTimeSlots(WorkStart, WorkEnd);
+
+            disableUnavailableDays(availableDaysString);
+        });
+
+        function generateTimeSlots(startTime, endTime) {
+            let max_time_per_appointments = parseInt($("#max_time").val());
+            let break_between_two_appointments = parseInt($("#brack_time").val());
+
+
+            if (isNaN(max_time_per_appointments) || isNaN(break_between_two_appointments)) {
+                console.error("Invalid values for max appointment time or break time.");
+                return;
+            }
+
+            var timeSlotsDropdown = $("#timeSlotsDropdown");
+            timeSlotsDropdown.empty();
+
+            var start = convertToMinutes(startTime);
+            var end = convertToMinutes(endTime);
+
+            for (var time = start; time < end; time += (max_time_per_appointments + break_between_two_appointments)) {
+                var slot = convertToTimeFormat(time) + " - " + convertToTimeFormat(time + max_time_per_appointments);
+                timeSlotsDropdown.append(`<option value="${slot}">${slot}</option>`);
+            }
+        }
+
+        function convertToMinutes(time) {
+            var parts = time.split(":");
+            return parseInt(parts[0]) * 60 + parseInt(parts[1]);
+        }
+
+        function convertToTimeFormat(minutes) {
+            var hours = Math.floor(minutes / 60);
+            var mins = minutes % 60;
+            return (hours < 10 ? "0" + hours : hours) + ":" + (mins < 10 ? "0" + mins : mins);
+        }
+
+        function disableUnavailableDays(availableDaysString) {
+            var availableDays = availableDaysString.split(",").map(day => day.trim());
+
+            $("#datePicker").off("change").on("change", function () {
+                var selectedDate = new Date(this.value);
+                var selectedDayName = selectedDate.toLocaleDateString("en-US", { weekday: "long" });
+
+
+                if (!availableDays.includes(selectedDayName)) {
+                    this.value = "";
+                    $("#dateError").show();
+                } else {
+                    $("#dateError").hide();
+                }
+            });
+        }
+
+
+    });
+</script>
+
+
+<script>
+        $(document).ready(function () {
+        $("#UserAppointmant").show();
+        $("#YouAppointmant").hide();
+
+        // Set initial active button styles
+        $(".UserAppointmant").addClass("appointmant-switch-active-button");
+
+        $(".YourAppointmant").click(function () {
+            $("#UserAppointmant").hide();
+            $("#YouAppointmant").show();
+
+            // Update button styles
+            $(".YourAppointmant").addClass("appointmant-switch-active-button");
+            $(".UserAppointmant").removeClass("appointmant-switch-active-button");
+        });
+
+        $(".UserAppointmant").click(function () {
+            $("#YouAppointmant").hide();
+            $("#UserAppointmant").show();
+
+            // Update button styles
+            $(".UserAppointmant").addClass("appointmant-switch-active-button");
+            $(".YourAppointmant").removeClass("appointmant-switch-active-button");
+        });
+    });
 
 </script>

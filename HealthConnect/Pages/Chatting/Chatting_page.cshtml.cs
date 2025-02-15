@@ -175,7 +175,7 @@ namespace HealthConnect.Pages.Chatting
                         {
                             Types_of_doctor.Add(new Types_of_Doctor
                             {
-                                doctor_type_id = reader.GetInt32(0),
+                                doctor_type_id = int.Parse(reader.GetString(0)),
                                 type_of_doctor = reader.GetString(1),
                             });
                         }

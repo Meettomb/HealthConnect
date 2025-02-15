@@ -6,6 +6,7 @@
 * {
     margin: 0;
     padding: 0;
+    scroll-behavior: smooth;
 }
 
 input[type=number]::-webkit-inner-spin-button,
@@ -18,9 +19,8 @@ input[type=number] {
     -moz-appearance: textfield;
 }
 
-
-.error_message {
-    color: red;
+.error_message, .success_message {
+    display: none;
     font-size: 14px;
     font-weight: 700;
     margin: 10px 0px;
@@ -28,13 +28,23 @@ input[type=number] {
     position: absolute;
     top: 15px;
     right: 15px;
-    background-color: #f8d7da;
     padding: 10px 20px;
     border-radius: 5px;
     animation: shake 5s;
     opacity: 0;
     z-index: 10000;
 }
+
+.error_message {
+    color: red;
+    background-color: #f8d7da;
+}
+
+.success_message {
+    color: green;
+    background-color: #d4edda;
+}
+
 
 @keyframes shake {
     0% {
@@ -93,23 +103,6 @@ input[type=number] {
         opacity: 0;
         display: none;
     }
-}
-
-.success_message {
-    color: green;
-    font-size: 14px;
-    font-weight: 700;
-    margin: 10px 0px;
-    text-align: center;
-    position: absolute;
-    top: 15px;
-    right: 15px;
-    background-color: #d4edda;
-    padding: 10px 20px;
-    border-radius: 5px;
-    animation: shake 5s;
-    opacity: 0;
-    z-index: 10000;
 }
 
 
@@ -1578,6 +1571,7 @@ header nav {
             border: 1px solid var(--default-color);
             padding: 7px 10px;
         }
+
             .filter_icon_container .filter_class .remove_filter_class:hover {
                 color: #d50a0a;
                 border: 1px solid #d50a0a;
@@ -2008,12 +2002,13 @@ header nav {
         max-width: 90%;
         min-width: 30%;
         height: auto;
-        background-image: linear-gradient(to bottom right, var(--accent-color), var(--header-text-color), var(--accent-color));
+        background-color: var(--surface-color);
         display: flex;
         -webkit-justify-content: center;
         justify-content: center;
-        box-shadow: 0 0 10px 5px var(--heading-color);
+        /*        box-shadow: 0 0 10px 5px var(--heading-color);*/
         border-radius: 10px;
+        border: 1px solid var(--accent-color);
         padding: 0px 0 10px 0;
     }
 
@@ -2035,7 +2030,7 @@ header nav {
                 text-align: center;
                 margin: 15px;
                 font-family: var(--heading-font);
-                color: var(--contrast-color);
+                color: var(--header-text-color);
             }
 
             .explorer_doctor_section3 .videocall_consultation_container .videocall_consultation i {
@@ -2087,7 +2082,7 @@ header nav {
                 }
 
                     .explorer_doctor_section3 .videocall_consultation_container .videocall_consultation form .sloat_time_and_date label {
-                        color: var(--contrast-color);
+                        color: var(--default-color);
                         font-family: var(--heading-font);
                         margin: 10px 0 0 0;
                     }
@@ -2112,6 +2107,12 @@ header nav {
                         border: none;
                     }
 
+                    .explorer_doctor_section3 .videocall_consultation_container .videocall_consultation form .sloat_time_and_date textarea {
+                        resize: none;
+                        color: var(--default-color);
+                        padding: 5px 5px;
+                    }
+
                 .explorer_doctor_section3 .videocall_consultation_container .videocall_consultation form button {
                     padding: 10px 20px;
                     margin-top: 30px;
@@ -2123,6 +2124,10 @@ header nav {
                     border: none;
                     font-size: 17px;
                 }
+
+                    .explorer_doctor_section3 .videocall_consultation_container .videocall_consultation form button:hover {
+                        background-color: var(--button-hover-bg-color);
+                    }
 
 .explorer_doctor_section4 {
     width: 100%;
@@ -2878,11 +2883,348 @@ header nav {
 }
 
 
+/*--------------------------------------------------------------------------------------------------------------*/
+/*--------------------------------------------------------------------------------------------------------------*/
+/*--------------------------------------------------------------------------------------------------------------*/
+/*--------------------------------------------------------------------------------------------------------------*/
+/*--------------------------------------------------------------------------------------------------------------*/
+/*                                                 Appointmant                                                  */
+/*--------------------------------------------------------------------------------------------------------------*/
+/*--------------------------------------------------------------------------------------------------------------*/
+/*--------------------------------------------------------------------------------------------------------------*/
+/*--------------------------------------------------------------------------------------------------------------*/
+/*--------------------------------------------------------------------------------------------------------------*/
 
-.All_appointments_title {
+
+.all_appointmant_title h1 {
     text-align: center;
     padding: 0 20px;
     color: var(--heading-color);
     font-family: var(--heading-font);
-    margin: 20px 0;
+    padding: 20px 0;
+}
+
+.appointmant_switch_buttons_container {
+    width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.appointmant_switch_buttons {
+    width: 95%;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+    .appointmant_switch_buttons button {
+        width: 45%;
+        border: 2px solid var(--header-text-color);
+        background-color: transparent;
+        color: var(--header-text-color);
+        font-family: var(--default-color);
+        cursor: pointer;
+        padding: 10px 0;
+        font-size: 18px;
+        font-weight: 900;
+        margin: 15px 0;
+        border-radius: 5px;
+        transition: 0.1s ease-in;
+    }
+
+        .appointmant_switch_buttons button:hover {
+            background-color: var(--header-text-color);
+            color: var(--contrast-color);
+        }
+
+.disabled-date {
+    pointer-events: none;
+    opacity: 0.5;
+    color: red !important;
+}
+
+.all_appointmant_section_2 {
+    width: 100%;
+    height: auto;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.all_appointmant_section_container {
+    width: 95%;
+    gap: 50px;
+}
+
+    .all_appointmant_section_container .all_side_container {
+        width: 100%;
+        background-color: var(--footer-bg-color);
+        margin: 20px 0;
+        border-radius: 5px;
+        padding: 15px 0;
+    }
+
+    .all_appointmant_section_container .all_side {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 10px;
+        flex-grow: 1;
+    }
+
+        .all_appointmant_section_container .all_side .all_appointmant_side1 {
+            width: 7%;
+            height: auto;
+            object-fit: contain;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            margin: 0 10px;
+            margin-left: 20px;
+        }
+
+            .all_appointmant_section_container .all_side .all_appointmant_side1 img {
+                width: 100%;
+                height: 100px;
+                border-radius: 50%;
+            }
+
+            .all_appointmant_section_container .all_side .all_appointmant_side1 b {
+                width: 100%;
+                height: 100px;
+                font-size: 30px;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                border: 3px solid var(--header-text-color);
+                color: var(--header-text-color);
+                border-radius: 50%;
+            }
+
+        .all_appointmant_section_container .all_side .all_appointmant_side2 {
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            font-family: var(--default-font);
+            color: var(--default-color);
+            gap: 10px 0;
+            width: 40%;
+            margin-left: -10px;
+        }
+
+            .all_appointmant_section_container .all_side .all_appointmant_side2 h1 {
+                font-size: 30px;
+                color: var(--accent-color);
+            }
+
+            .all_appointmant_section_container .all_side .all_appointmant_side2 address {
+                display: flex;
+                gap: 0 10px;
+                font-size: 15px;
+            }
+
+            .all_appointmant_section_container .all_side .all_appointmant_side2 p {
+                font-size: 14px;
+                width: 100%;
+                display: flex;
+                overflow: hidden;
+            }
+
+        .all_appointmant_section_container .all_side .all_appointmant_side3 {
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            font-family: var(--default-font);
+            gap: 15px 0;
+            width: 25%;
+        }
+
+            .all_appointmant_section_container .all_side .all_appointmant_side3 b {
+                font-size: 17px;
+                color: var(--heading-color);
+                font-family: var(--heading-font);
+            }
+
+            .all_appointmant_section_container .all_side .all_appointmant_side3 span {
+                color: var(--default-color);
+                font-family: 15px;
+            }
+
+        .all_appointmant_section_container .all_side .all_appointmant_side4 {
+            min-width: 8%;
+            max-width: auto;
+            display: flex;
+            flex-direction: column;
+            margin-left: 10%;
+        }
+
+            .all_appointmant_section_container .all_side .all_appointmant_side4 p {
+                width: 100%;
+                padding: 10px 10px 10px 10px;
+                margin: 20px 0;
+                border-radius: 5px;
+                background-color: var(--header-text-color);
+                cursor: pointer;
+            }
+
+                .all_appointmant_section_container .all_side .all_appointmant_side4 p:hover {
+                    background-color: var(--accent-color);
+                    transition: 0.1s ease-in;
+                }
+
+                .all_appointmant_section_container .all_side .all_appointmant_side4 p a {
+                    display: flex;
+                    align-items: center;
+                    gap: 0 10px;
+                    color: var(--contrast-color);
+                    text-decoration: none;
+                    text-align: center;
+                }
+
+@media (max-width:1272px) {
+    .all_appointmant_section_container .all_side .all_appointmant_side1 {
+        width: 10%;
+    }
+
+        .all_appointmant_section_container .all_side .all_appointmant_side1 img {
+            height: 90%;
+        }
+
+    .all_appointmant_section_container .all_side .all_appointmant_side2 {
+        width: 39%;
+    }
+
+    .all_appointmant_section_container .all_side .all_appointmant_side3 {
+        width: 26%;
+    }
+
+    .all_appointmant_section_container .all_side .all_appointmant_side4 {
+        margin-left: 30px;
+    }
+}
+
+
+@media (max-width:1144px) {
+    .all_appointmant_section_container .all_side .all_appointmant_side1 img {
+        height: 80%;
+    }
+}
+
+@media (max-width:1000px) {
+    .all_appointmant_section_container .all_side .all_appointmant_side1 {
+        width: 10%;
+    }
+
+        .all_appointmant_section_container .all_side .all_appointmant_side1 img {
+            height: 100%;
+        }
+
+    .all_appointmant_section_container .all_side .all_appointmant_side2 {
+        width: 70%;
+    }
+
+    .all_appointmant_section_container .all_side .all_appointmant_side3 {
+        width: 45%;
+        margin-left: 20px;
+    }
+
+    .all_appointmant_section_container .all_side .all_appointmant_side4 {
+        min-width: 10%;
+        margin-left: 30%;
+    }
+}
+
+@media (max-width:873px) {
+    .all_appointmant_section_container .all_side .all_appointmant_side1 {
+        width: 15%;
+        margin: 0 10px;
+    }
+
+        .all_appointmant_section_container .all_side .all_appointmant_side1 img {
+            height: 110px;
+        }
+
+    .all_appointmant_section_container .all_side .all_appointmant_side3 {
+        width: 45%;
+        margin-left: 10px;
+    }
+
+    .all_appointmant_section_container .all_side .all_appointmant_side4 {
+        min-width: 10%;
+        margin-left: 25%;
+    }
+}
+
+@media (max-width:634px) {
+    .all_appointmant_section_container .all_side .all_appointmant_side4 {
+        min-width: 10%;
+        margin-left: 20%;
+    }
+}
+
+@media (max-width:576px) {
+    .all_appointmant_section_container .all_side .all_appointmant_side1 {
+        width: 20%;
+        margin: 0 10px;
+    }
+
+        .all_appointmant_section_container .all_side .all_appointmant_side1 img {
+            height: 100px;
+        }
+
+    .all_appointmant_section_container .all_side .all_appointmant_side2 {
+        width: 75%;
+    }
+
+    .all_appointmant_section_container .all_side .all_appointmant_side3 {
+        width: 60%;
+        margin-left: 10px;
+    }
+
+    .all_appointmant_section_container .all_side .all_appointmant_side4 {
+        min-width: 10%;
+        margin-left: 0%;
+    }
+}
+
+@media (max-width:483px) {
+    .all_appointmant_section_container .all_side .all_appointmant_side1 {
+        width: 100%;
+        margin: 0 10px;
+    }
+
+        .all_appointmant_section_container .all_side .all_appointmant_side1 img {
+            height: 100px;
+            width: 100px;
+        }
+
+        .all_appointmant_section_container .all_side .all_appointmant_side1 b {
+            height: 100px;
+            display: none;
+            width: 100px;
+        }
+
+    .all_appointmant_section_container .all_side .all_appointmant_side2 {
+        width: 100%;
+        margin-left: 10px;
+    }
+
+    .all_appointmant_section_container .all_side .all_appointmant_side3 {
+        width: 100%;
+        margin-left: 10px;
+    }
+
+    .all_appointmant_section_container .all_side .all_appointmant_side4 {
+        width: 90%;
+        margin-left: 10px;
+    }
+
+    .appointmant_switch_buttons button {
+        font-size: 14px;
+    }
+}
+.appointmant-switch-active-button {
+    transition: all 0.3s ease-in-out;
+    background-color: var(--header-text-color) !important;
+    color: var(--contrast-color) !important;
 }
