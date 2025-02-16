@@ -3200,7 +3200,7 @@ header nav {
 
         .all_appointmant_section_container .all_side .all_appointmant_side1 b {
             height: 100px;
-            display: none;
+/*            display: none;*/
             width: 100px;
         }
 
@@ -3227,4 +3227,15 @@ header nav {
     transition: all 0.3s ease-in-out;
     background-color: var(--header-text-color) !important;
     color: var(--contrast-color) !important;
+}
+.appointmant_notfound{
+    width: 100%;
+    height: 90dvh;
+    display: flex;  
+    align-items: center;
+    justify-content: center;
+    font-size: 16px;
+}
+#popup2 p {
+    text-align: center;
 }

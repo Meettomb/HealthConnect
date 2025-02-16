@@ -139,8 +139,11 @@ document.addEventListener("DOMContentLoaded", function () {
 
 document.addEventListener("DOMContentLoaded", function () {
     var doctorStep = document.getElementById("popup");
+    var popup2 = document.getElementById("popup2");
     var closePopup = document.getElementById("closePopup");
+    var closePopup2 = document.getElementById("closePopup2");
     var consultancy = document.querySelectorAll(".video-call, .Book-Onsite-Appointment, .reschedule_appointmant");
+    var cancleAppointment = document.querySelectorAll(".cancle_Appointment");
 
     if (!doctorStep) return; // Exit if popup does not exist
 
@@ -151,11 +154,25 @@ document.addEventListener("DOMContentLoaded", function () {
             document.body.classList.add("no-scroll"); // Disable scrolling
         });
     });
+     // Open popup and disable scrolling
+    cancleAppointment.forEach(function (button) {
+        button.addEventListener("click", function () {
+            popup2.style.display = "flex";
+            document.body.classList.add("no-scroll"); // Disable scrolling
+        });
+    });
 
     // Close popup and enable scrolling
     if (closePopup) {
         closePopup.addEventListener("click", function () {
             doctorStep.style.display = "none";
+            document.body.classList.remove("no-scroll"); // Enable scrolling
+        });
+    }
+
+    if (closePopup2) {
+        closePopup2.addEventListener("click", function () {
+            popup2.style.display = "none";
             document.body.classList.remove("no-scroll"); // Enable scrolling
         });
     }

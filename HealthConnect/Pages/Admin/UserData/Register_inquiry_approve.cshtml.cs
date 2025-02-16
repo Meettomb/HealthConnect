@@ -289,13 +289,12 @@ namespace HealthConnect.Pages.Admin.UserData
                 connection.Open();
                 var command = new SqlCommand("UPDATE Doctor_approvel SET account_approve = @Approve WHERE doctor_approvel_id = @Id", connection);
 
-                command.Parameters.AddWithValue("@Approve", false);  // Set account_approve to false on rejection
+                command.Parameters.AddWithValue("@Approve", false);  
                 command.Parameters.AddWithValue("@Id", doctor_approvel_id);
                 command.ExecuteNonQuery();
 
-                // Retrieve the doctor's email before sending the rejection email
-                string email = GetDoctorEmail(doctor_approvel_id);  // Implement this method to fetch the email from the database
-                SendRejectionEmail(email);  // Now passing the correct email as a string parameter
+                string email = GetDoctorEmail(doctor_approvel_id);  
+                SendRejectionEmail(email);  
             }
             return RedirectToPage("/Admin/UserData/Register_inquiry");
         }

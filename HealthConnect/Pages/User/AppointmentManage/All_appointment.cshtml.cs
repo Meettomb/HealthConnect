@@ -5,6 +5,7 @@ using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.Data.SqlClient;
 using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Tokens;
+using static Microsoft.EntityFrameworkCore.DbLoggerCategory.Database;
 
 namespace HealthConnect.Pages.User.AppointmentManage
 {
@@ -219,10 +220,10 @@ namespace HealthConnect.Pages.User.AppointmentManage
                                 appointment_date = reader.GetString(5),
                                 appointment_approve = reader.GetBoolean(6),
                                 book_date_time = reader.GetDateTime(7),
-                                
+
 
                                 booking_user_role = reader.GetString(8),
-                                
+
                                 problem = reader.IsDBNull(9) ? null : reader.GetString(9),
                                 User = new User_Table(),
                                 Doctor = new User_Table()
@@ -275,6 +276,181 @@ namespace HealthConnect.Pages.User.AppointmentManage
                 Console.WriteLine($"Appointment ID: {app.appointment_id}, User: {app.User?.first_name}, Doctor: {app.Doctor?.first_name}");
             }
         }
+
+
+        public async Task<IActionResult> OnPost()
+        {
+            string action = Request.Form["action"];
+
+            if (action == "reschedule")
+            {
+                return await OnPostRescheduleAppointment();
+            }
+            else if (action == "cancel")
+            {
+                return await OnPostCancleAppointmant();
+            }
+
+            return RedirectToPage();
+        }
+
+
+        public async Task<IActionResult> OnPostRescheduleAppointment()
+        {
+            if (Appointments == null || Appointments.appointment_id == 0)
+            {
+                TempData["ErrorMessage"] = "Invalid appointment details.";
+                return RedirectToPage();
+            }
+
+            using (SqlConnection connection = new SqlConnection(_connectionString))
+            {
+                await connection.OpenAsync();
+
+                string updateQuery = "UPDATE Appointments SET time_slot = @TimeSlot, appointment_date = @AppointmentDate WHERE appointment_id = @AppointmentId";
+                using (SqlCommand updateCommand = new SqlCommand(updateQuery, connection))
+                {
+                    updateCommand.Parameters.AddWithValue("@TimeSlot", Appointments.time_slot);
+                    updateCommand.Parameters.AddWithValue("@AppointmentDate", Appointments.appointment_date);
+                    updateCommand.Parameters.AddWithValue("@AppointmentId", Appointments.appointment_id);
+
+                    int rowsAffected = await updateCommand.ExecuteNonQueryAsync();
+
+                    if (rowsAffected > 0)
+                    {
+
+                        int userId = 0, doctorId = 0;
+                        string fetchQuery = "SELECT user_id, doctor_id FROM Appointments WHERE appointment_id = @AppointmentId";
+                        using (SqlCommand fetchCommand = new SqlCommand(fetchQuery, connection))
+                        {
+                            fetchCommand.Parameters.AddWithValue("@AppointmentId", Appointments.appointment_id);
+
+                            using (SqlDataReader reader = await fetchCommand.ExecuteReaderAsync())
+                            {
+                                if (await reader.ReadAsync())
+                                {
+                                    userId = Convert.ToInt32(reader["user_id"]);
+                                    doctorId = Convert.ToInt32(reader["doctor_id"]);
+                                }
+                            }
+                        }
+                        string userEmail = "";
+                        string userEmailQuery = "SELECT email FROM User_Table WHERE id = @UserId";
+                        using (SqlCommand userEmailCommand = new SqlCommand(userEmailQuery, connection))
+                        {
+                            userEmailCommand.Parameters.AddWithValue("@UserId", userId);
+                            userEmail = (await userEmailCommand.ExecuteScalarAsync())?.ToString();
+                        }
+
+                        string doctorEmail = "";
+                        string doctorEmailQuery = "SELECT email FROM User_Table WHERE id = @DoctorId";
+                        using (SqlCommand doctorEmailCommand = new SqlCommand(doctorEmailQuery, connection))
+                        {
+                            doctorEmailCommand.Parameters.AddWithValue("@DoctorId", doctorId);
+                            doctorEmail = (await doctorEmailCommand.ExecuteScalarAsync())?.ToString();
+                        }
+
+
+                        string subjectUser = "Appointment Rescheduled";
+                        string bodyUser = $"Dear User, your appointment has been rescheduled to {Appointments.appointment_date:yyyy-MM-dd} at {Appointments.time_slot}.";
+
+                        string subjectDoctor = "Appointment Confirmation";
+                        string bodyDoctor = $"Dear Doctor, an appointment has been rescheduled for {Appointments.appointment_date:yyyy-MM-dd} at {Appointments.time_slot}.";
+
+                        if (!string.IsNullOrEmpty(userEmail))
+                        {
+                            await _emailService.SendEmailAsync(userEmail, subjectUser, bodyUser);
+                        }
+
+                        if (!string.IsNullOrEmpty(doctorEmail))
+                        {
+                            await _emailService.SendEmailAsync(doctorEmail, subjectDoctor, bodyDoctor);
+                            _logger.LogInformation($"Email sent to doctor: {doctorEmail}");
+                        }
+
+
+
+                        TempData["SuccessMessage"] = "Appointment rescheduled successfully!";
+                    }
+                    else
+                    {
+                        TempData["ErrorMessage"] = "Failed to reschedule appointment.";
+
+                    }
+                }
+            }
+
+
+            return RedirectToPage();
+        }
+
+        public async Task<IActionResult> OnPostCancleAppointmant()
+        {
+            using (SqlConnection connection = new SqlConnection(_connectionString))
+            {
+                await connection.OpenAsync();
+
+                string deleteQuery = "DELETE FROM Appointments OUTPUT DELETED.user_id, DELETED.doctor_id FROM Appointments WHERE appointment_id = @AppointmentId";
+                int userId = 0, doctorId = 0;
+
+                using (SqlCommand deleteCommand = new SqlCommand(deleteQuery, connection))
+                {
+                    deleteCommand.Parameters.AddWithValue("@AppointmentId", Appointments.appointment_id);
+
+                    using (SqlDataReader reader = await deleteCommand.ExecuteReaderAsync())
+                    {
+                        if (await reader.ReadAsync())
+                        {
+                            userId = Convert.ToInt32(reader["user_id"]);
+                            doctorId = Convert.ToInt32(reader["doctor_id"]);
+                        }
+                        else
+                        {
+                            TempData["ErrorMessage"] = "Failed to cancel appointment.";
+                            return RedirectToPage();
+                        }
+                    }
+                }
+
+                string userEmail = "", doctorEmail = "";
+
+                string userEmailQuery = "SELECT email FROM User_Table WHERE id = @UserId";
+                using (SqlCommand userEmailCommand = new SqlCommand(userEmailQuery, connection))
+                {
+                    userEmailCommand.Parameters.AddWithValue("@UserId", userId);
+                    userEmail = (await userEmailCommand.ExecuteScalarAsync())?.ToString();
+                }
+
+                string doctorEmailQuery = "SELECT email FROM User_Table WHERE id = @DoctorId";
+                using (SqlCommand doctorEmailCommand = new SqlCommand(doctorEmailQuery, connection))
+                {
+                    doctorEmailCommand.Parameters.AddWithValue("@DoctorId", doctorId);
+                    doctorEmail = (await doctorEmailCommand.ExecuteScalarAsync())?.ToString();
+                }
+
+                string subjectUser = "Appointment Cancellation";
+                string bodyUser = $"Dear User,\n\nYour appointment on {Appointments.appointment_date:yyyy-MM-dd} at {Appointments.time_slot} has been successfully canceled.\n\nThank you.";
+
+                string subjectDoctor = "Appointment Cancellation Notification";
+                string bodyDoctor = $"Dear Doctor,\n\nThe appointment scheduled on {Appointments.appointment_date:yyyy-MM-dd} at {Appointments.time_slot} has been canceled by the user.\n\nBest regards.";
+
+                if (!string.IsNullOrEmpty(userEmail))
+                {
+                    await _emailService.SendEmailAsync(userEmail, subjectUser, bodyUser);
+                }
+
+                if (!string.IsNullOrEmpty(doctorEmail))
+                {
+                    await _emailService.SendEmailAsync(doctorEmail, subjectDoctor, bodyDoctor);
+                }
+
+                TempData["SuccessMessage"] = "Appointment canceled successfully!";
+            }
+
+            return RedirectToPage();
+        }
+
+
 
     }
 }
