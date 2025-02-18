@@ -6,22 +6,22 @@
 }
 
 
-<div class="doctor_search_div">
-    <div class="search_doctore">
-        <input type="text" name="name" id="myInput" value="" autocomplete="off" placeholder="Search doctor name" />
-    </div>
-</div>
-
 
 <div class="filter_icon_container">
     <div class="filter_class">
-        <div class="add_filter_class">
-            <i class="fa-solid fa-filter"></i> Filter
+        <div class="search_doctore">
+            <input type="text" name="name" id="myInput" value="" autocomplete="off" placeholder="Search doctor name" />
         </div>
+        
         <div class="remove_filter_class">
             <i class="fa-solid fa-filter-circle-xmark"></i>Remove all Filter
         </div>
+        <div class="add_filter_class">
+            <i class="fa-solid fa-filter"></i> Filter
+        </div>
+       
     </div>
+
 </div>
 
 
@@ -276,13 +276,14 @@
         if (!appointment_date.value.trim()) {
             Error_appointment_date.innerText = "Please select an appointment date.";
             Error_appointment_date.style.color = "red";
-            return false; 
+            return false;
         } else {
-            Error_appointment_date.innerText = ""; 
+            Error_appointment_date.innerText = "";
             return true;
         }
     }
 </script>
+
 
 <script>
     fetch('/js/allcurrency.json')
@@ -447,10 +448,10 @@
                 console.log("Selected Day:", selectedDayName);
 
                 if (!availableDays.includes(selectedDayName)) {
-                    this.value = ""; 
-                    $("#dateError").show(); 
+                    this.value = "";
+                    $("#dateError").show();
                 } else {
-                    $("#dateError").hide(); 
+                    $("#dateError").hide();
                 }
             });
         }

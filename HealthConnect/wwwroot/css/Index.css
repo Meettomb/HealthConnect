@@ -132,7 +132,7 @@ header {
 #header.scrolled {
     background-color: #F5F5F5;
     color: var(--header-text-color);
-    transition: 0.5s;
+    transition: 0s inherit;
     position: fixed;
     z-index: 1000;
 }
@@ -1539,14 +1539,27 @@ header nav {
     width: 100%;
     display: flex;
     justify-content: center;
-    margin: 15px 0;
 }
 
     .filter_icon_container .filter_class {
         width: 95%;
         display: flex;
-        gap: 50px;
+        gap: 20px;
+        flex-wrap: wrap;
+        justify-content: space-between;
+        margin: 10px 0;
     }
+
+        .filter_icon_container .filter_class .search_doctore {
+            width: 63.5%;
+        }
+
+            .filter_icon_container .filter_class .search_doctore input {
+                width: 50%;
+                padding: 10px 5px;
+                border-radius: 5px;
+                border: 1px solid var(--default-color);
+            }
 
         .filter_icon_container .filter_class .add_filter_class {
             color: var(--default-color);
@@ -1581,6 +1594,10 @@ header nav {
                 font-size: 20px;
             }
 
+.explorer_doctor_section1::-webkit-scrollbar {
+    display: none;
+}
+
 .explorer_doctor_section1 {
     width: 100%;
     height: auto;
@@ -1588,6 +1605,11 @@ header nav {
     justify-content: center;
     padding: 15px 0;
     margin: 15px 0;
+    /*    position: absolute;
+    top: 28%;
+    padding: 20px 0px;
+    z-index: 10000;
+    background-color: var(--contrast-color);*/
 }
 
     .explorer_doctor_section1 .filtre_doctor_div {
@@ -1610,9 +1632,10 @@ header nav {
 
         .explorer_doctor_section1 .filtre_doctor_div select {
             outline: none;
-            padding: 2px 20px 2px 2px;
+            padding: 2px 2px 2px 2px;
             font-size: 13px;
             margin-top: 2px;
+            width: 200px;
         }
 
             .explorer_doctor_section1 .filtre_doctor_div select option {
@@ -1826,6 +1849,13 @@ header nav {
 }
 
 @media (max-width: 999px) {
+    .filter_icon_container .filter_class .search_doctore {
+        width: 50%;
+    }
+
+        .filter_icon_container .filter_class .search_doctore input {
+            width: 100%;
+        }
 
     .explorer_doctor_section2 .all_doctor_div .all_doctor_single_div {
         width: 100%;
@@ -1838,6 +1868,36 @@ header nav {
             .explorer_doctor_section2 .all_doctor_div .all_doctor_single_div .all_doctor_single_div_sides .all_doctor_single_right_right .hospital_or_clinic:focus + address {
                 display: block;
             }
+}
+
+@media (max-width: 731px) {
+    .filter_icon_container .filter_class .search_doctore {
+        width: 40%;
+    }
+
+        .filter_icon_container .filter_class .search_doctore input {
+            width: 100%;
+        }
+}
+
+@media (max-width: 606px) {
+    .filter_icon_container .filter_class .search_doctore {
+        width: 35%;
+    }
+
+        .filter_icon_container .filter_class .search_doctore input {
+            width: 100%;
+        }
+}
+
+@media (max-width: 561px) {
+    .filter_icon_container .filter_class .search_doctore {
+        width: 100%;
+    }
+
+        .filter_icon_container .filter_class .search_doctore input {
+            width: 90%;
+        }
 }
 
 @media (max-width: 690px) {
@@ -1917,6 +1977,22 @@ header nav {
     .explorer_doctor_section2 .all_doctor_div .all_doctor_single_div .all_doctor_single_div_comunication_option p:first-child {
         font-size: 10px;
     }
+}
+
+@media (max-width: 453px) {
+    .explorer_doctor_section1 {
+        height: 200px;
+        overflow-y: scroll;
+        margin: 0;
+    }
+
+        .explorer_doctor_section1 .filtre_doctor_div {
+            justify-content: center;
+        }
+
+            .explorer_doctor_section1 .filtre_doctor_div select {
+                width: 300px;
+            }
 }
 
 @media (max-width: 433px) {
@@ -3200,7 +3276,7 @@ header nav {
 
         .all_appointmant_section_container .all_side .all_appointmant_side1 b {
             height: 100px;
-/*            display: none;*/
+            /*            display: none;*/
             width: 100px;
         }
 
@@ -3223,19 +3299,368 @@ header nav {
         font-size: 14px;
     }
 }
+
 .appointmant-switch-active-button {
     transition: all 0.3s ease-in-out;
     background-color: var(--header-text-color) !important;
     color: var(--contrast-color) !important;
 }
-.appointmant_notfound{
+
+.appointmant_notfound {
     width: 100%;
     height: 90dvh;
-    display: flex;  
+    display: flex;
     align-items: center;
     justify-content: center;
     font-size: 16px;
 }
+
 #popup2 p {
     text-align: center;
+}
+
+
+
+
+
+/*--------------------------------------------------------------------------------------------------------------*/
+/*--------------------------------------------------------------------------------------------------------------*/
+/*--------------------------------------------------------------------------------------------------------------*/
+/*--------------------------------------------------------------------------------------------------------------*/
+/*--------------------------------------------------------------------------------------------------------------*/
+/*                                                   Setting                                                    */
+/*--------------------------------------------------------------------------------------------------------------*/
+/*--------------------------------------------------------------------------------------------------------------*/
+/*--------------------------------------------------------------------------------------------------------------*/
+/*--------------------------------------------------------------------------------------------------------------*/
+/*--------------------------------------------------------------------------------------------------------------*/
+
+
+
+.overview_header_contant {
+    width: 100%;
+    background-color: var(--footer-bg-color);
+    display: flex;
+    justify-content: center;
+}
+
+    .overview_header_contant .overview_header {
+        background-color: transparent;
+        width: 75%;
+        display: flex;
+        justify-content: space-between;
+    }
+
+.overview_all_contant .setting_back_button {
+    width: auto;
+    margin: 10px 0;
+}
+
+    .overview_all_contant .setting_back_button i {
+        cursor: pointer;
+        color: var(--accent-color);
+        font-size: 30px;
+    }
+
+        .overview_all_contant .setting_back_button i:hover {
+            color: var(--header-text-color);
+            transform: scale(1.1);
+            transition: 0.2s ease-in;
+        }
+
+.overview_header_contant .overview_profile_icon .header_user_services {
+    display: none;
+    position: absolute;
+    top: 60px;
+    right: 5%;
+    background-color: #f9f9f9;
+    border: 1px solid #ccc;
+    padding: 10px 15px 10px 10px;
+    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
+    width: auto;
+}
+
+.overview_all_contant .overview_profile_icon .header_user_services section {
+    list-style-type: none;
+    display: flex;
+    flex-direction: column;
+    row-gap: 20px;
+    font-family: var(--nav-font);
+    font-size: 14px;
+}
+
+    .overview_all_contant .overview_profile_icon .header_user_services section a i {
+        margin: 0 15px 0 0;
+    }
+
+    .overview_all_contant .overview_profile_icon .header_user_services section a {
+        -webkit-text-decoration: inherit;
+        text-decoration: inherit;
+        width: 100%;
+        color: var(--header-text-color);
+        font-family: var(--nav-font);
+    }
+
+.overview_all_contant .overview_profile_icon .header_user_icon_drop_down .header_user_icon {
+    border: 2px solid var(--button-bg-color);
+    background-color: var(--button-bg-color);
+    color: white;
+    padding: 5px 8px;
+    border-radius: 50%;
+    cursor: pointer;
+}
+
+    .overview_all_contant .overview_profile_icon .header_user_icon_drop_down .header_user_icon:hover {
+        background-color: var(--button-hover-bg-color);
+    }
+
+.overview_all_contant .overview_profile_icon .header_user_icon_drop_down .header_user_image {
+    border: 2px solid var(--button-bg-color);
+    color: white;
+    border-radius: 50%;
+    cursor: pointer;
+    width: 31.2px;
+    height: 31.2px;
+}
+
+    .overview_all_contant .overview_profile_icon .header_user_icon_drop_down .header_user_image img {
+        width: 100%;
+        height: 100%;
+        border-radius: 50%;
+    }
+
+
+
+
+.overview_container {
+    width: 100%;
+    display: flex;
+    justify-content: center;
+}
+
+
+    .overview_container .overview_all_contant {
+        width: 75%;
+        display: flex;
+    }
+
+        .overview_container .overview_all_contant .overview_content {
+            width: 100%;
+            height: auto;
+            margin-top: 30px;
+            display: flex;
+            column-gap: 5%;
+        }
+
+            .overview_container .overview_all_contant .overview_content .overview_nav {
+                width: 25%;
+            }
+
+                .overview_container .overview_all_contant .overview_content .overview_nav h4 {
+                    font-family: var(--default-font);
+                    color: var(--header-text-color);
+                    display: flex;
+                    align-items: center;
+                    column-gap: 10px;
+                    cursor: pointer;
+                    padding: 12px 10px;
+                    font-size: 16px;
+                    font-weight: 500;
+                }
+
+                    .overview_container .overview_all_contant .overview_content .overview_nav h4:hover {
+                        background-color: var(--footer-bg-color);
+                        border-radius: 5px;
+                        color: var(--accent-color);
+                        font-weight: 500;
+                    }
+
+                .overview_container .overview_all_contant .overview_content .overview_nav ul {
+                    list-style: none;
+                    width: 100%;
+                    margin-top: 30px;
+                }
+
+
+
+                    .overview_container .overview_all_contant .overview_content .overview_nav ul li {
+                        width: 98%;
+                        margin: 10px 0;
+                        padding: 12px 10px;
+                        color: var(--default-color);
+                        font-family: var(--nav-font);
+                        cursor: pointer;
+                        font-size: 20px;
+                    }
+
+                        .overview_container .overview_all_contant .overview_content .overview_nav ul li i {
+                            padding: 0 10px 0 0;
+                        }
+
+                        .overview_container .overview_all_contant .overview_content .overview_nav ul li:hover {
+                            background-color: var(--footer-bg-color);
+                            border-radius: 5px;
+                            color: var(--accent-color);
+                            font-weight: 500;
+                        }
+
+
+            .overview_container .overview_all_contant .overview_content .overview_content_container {
+                width: 70%;
+                height: auto;
+                padding: 0px 0 20px 0;
+            }
+
+.overview_content_container .manage_profile_container {
+    width: 100%;
+    height: auto;
+    padding: 0 0 60px 0;
+}
+
+    .overview_content_container .manage_profile_container h1 {
+        font-size: 45px;
+        color: var(--header-text-color);
+        font-family: var(--heading-font);
+        font-weight: 700;
+        letter-spacing: 2px;
+    }
+
+    .overview_content_container .manage_profile_container h4 {
+        font-family: var(--default-color);
+        color: var(--default-color);
+        font-weight: 450;
+        margin: 10px 0;
+        font-size: 17px;
+    }
+
+    .overview_content_container .manage_profile_container .all_quick_links {
+        width: 100%;
+        background-color: var(--contrast-color);
+        border: 1px solid gray;
+        border-radius: 10px;
+        margin: 30px 0;
+    }
+
+        .overview_content_container .manage_profile_container .all_quick_links p {
+            margin: 0px 0;
+            border-radius: 5px;
+            display: flex;
+            justify-content: center;
+            gap: 10px;
+            margin: 5px 0;
+        }
+
+        .overview_content_container .manage_profile_container .all_quick_links hr {
+            width: 93%;
+            margin: 5px 0;
+            display: flex;
+            justify-self: center;
+        }
+
+        .overview_content_container .manage_profile_container .all_quick_links .account_link {
+            border-radius: 5px;
+            padding: 18px 0;
+            width: 97%;
+            margin: 0px 1.5%;
+            font-size: 18px;
+            cursor: pointer;
+        }
+
+            .overview_content_container .manage_profile_container .all_quick_links .account_link:hover {
+                background-color: var(--footer-bg-color);
+            }
+
+            .overview_content_container .manage_profile_container .all_quick_links .account_link i {
+                padding: 0 15px 0 0;
+            }
+
+            .overview_content_container .manage_profile_container .all_quick_links .account_link span {
+                float: right;
+            }
+
+        .overview_content_container .manage_profile_container .all_quick_links a {
+            color: var(--header-text-color);
+            text-decoration: none;
+            font-family: var(--default-font);
+            margin-left: 20px;
+        }
+
+@media(max-width:1000px) {
+    .overview_header_contant .overview_header {
+        width: 95%;
+    }
+
+    .overview_container .overview_all_contant {
+        width: 100%;
+    }
+
+        .overview_container .overview_all_contant .overview_content {
+            display: block;
+            margin: 0;
+            padding: 0;
+        }
+
+            .overview_container .overview_all_contant .overview_content .overview_nav h4 {
+                display: none;
+            }
+
+            .overview_container .overview_all_contant .overview_content .overview_nav {
+                width: 100%;
+                background-color: var(--header-text-color);
+                height: 50px;
+                display: flex;
+                justify-content: center;
+                overflow-x: scroll;
+            }
+
+                .overview_container .overview_all_contant .overview_content .overview_nav ul {
+                    width: 95%;
+                    display: flex;
+                    column-gap: 10px;
+                    padding: 0;
+                    margin: 0;
+                    overflow-x: scroll;
+                    height: 100%;
+                }
+
+                    .overview_container .overview_all_contant .overview_content .overview_nav ul::-webkit-scrollbar {
+                        display: none;
+                    }
+
+                    .overview_container .overview_all_contant .overview_content .overview_nav ul li {
+                        font-size: 16px;
+                        color: var(--contrast-color);
+                        display: flex;
+                        align-items: center;
+                        justify-content: flex-start;
+                        width: auto;
+                    }
+
+            .overview_container .overview_all_contant .overview_content .overview_content_container {
+                width: 100%;
+                height: auto;
+                padding: 0px 0 20px 0;
+                display: flex;
+                justify-content: center;
+            }
+
+    .overview_content_container .manage_profile_container {
+        margin-top: 50px;
+        width: 95%;
+    }
+}
+
+@media (max-width: 533px) {
+    .overview_container .overview_all_contant .overview_content .overview_nav {
+        max-height: 30px;
+    }
+
+        .overview_container .overview_all_contant .overview_content .overview_nav ul li {
+            font-size: 13px;
+            margin: 0;
+        }
+
+    .overview_content_container .manage_profile_container .all_quick_links .account_link {
+        font-size: 16px;
+    }
 }

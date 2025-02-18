@@ -401,13 +401,11 @@
 
 
     <script>
-                $(document).ready(function () {
+        $(document).ready(function () {
             $("#myInput").on("keyup", function () {
                 var value = $(this).val().toLowerCase();
 
-                // Update the selector to target list items (li)
                 $("#receiverList li").filter(function () {
-                    // Toggle visibility based on whether the search term is found in the receiver's name
                     $(this).toggle($(this).text().toLowerCase().indexOf(value) > -1);
                 });
             });
@@ -428,7 +426,6 @@
             chattingSetting.style.display = "none";
 
 
-            // Function to check screen width
             function checkScreenSize() {
                 return window.innerWidth <= 1000;
             }

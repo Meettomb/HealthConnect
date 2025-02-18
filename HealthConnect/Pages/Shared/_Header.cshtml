@@ -115,8 +115,8 @@
                             }
                             <div class="header_user_services">
                                 <section>
-                                    <a href="#">
-                                        <i class="fa-solid fa-gear"></i> Settings
+                                    <a href="/Account/Overview">
+                                        <i class="fa-solid fa-user"></i> Account
                                     </a>
 
                                     <a href="/Chatting/Chatting_page">
@@ -161,7 +161,7 @@
                         <ul>
                             @foreach (var item in Model.Types_of_doctor)
                             {
-                                <a href="#">
+                                <a href="/User/Explore_doctors?Type=@item.type_of_doctor">
                                 <li>@item.type_of_doctor</li>
                                 </a>
                             }
@@ -179,7 +179,7 @@
                         <ul>
                             @foreach (var item in Model.doctorSpecialitiesList)
                             {
-                                <a href="#">
+                                <a href="/User/Explore_doctors?Speciality=@item.doctor_specialitis">
                                 <li>@item.doctor_specialitis</li>
                                 </a>
                             }
@@ -215,8 +215,8 @@
                         }
                         <div class="header_user_services2">
                             <section>
-                                <a href="#">
-                                    <i class="fa-solid fa-gear"></i> Settings
+                                <a href="/Account/Overview">
+                                    <i class="fa-solid fa-user"></i> Account
                                 </a>
                                 <a href="/Chatting/Chatting_page">
                                     <i class="fa-solid fa-message"></i> Message
@@ -388,14 +388,14 @@
     </script>
 
 
-            <script>
+    <script>
         document.addEventListener("DOMContentLoaded", function () {
             function hideMessageAfterDelay(elementId) {
                 let element = document.getElementById(elementId);
                 if (element && element.innerText.trim() !== "") {
                     element.style.display = "block";
                     setTimeout(() => {
-                        element.style.display = "none"; 
+                        element.style.display = "none";
                     }, 5000);
                 }
             }

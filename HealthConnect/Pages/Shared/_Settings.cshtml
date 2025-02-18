@@ -1,0 +1,76 @@
+﻿<!DOCTYPE html>
+
+<html>
+<head>
+    <meta name="viewport" content="width=device-width" />
+    <title>Health Connect - @ViewBag.Title</title>
+
+    <link href="/images/HealthConnectTabLogo.png" rel="icon" />
+    <link href="/css/Index.css" rel="stylesheet" />
+
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css">
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="/js/jQuery.js"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@100..900&family=Sofia+Sans+Condensed:ital,wght@0,1..1000;1,1..1000&display=swap" rel="stylesheet">
+
+</head>
+<body>
+    <!--
+    <div class="setting_container">
+        <div class="setting_all_contant">
+            <div class="setting_back_button">
+                <i class="fa-solid fa-house" onclick="redirectToHomepage()" title="Home"></i>
+            </div>
+            <div class="setting_hamburgur">
+                <i class="fa-solid fa-bars"></i>
+                <i class="fa-solid fa-bars-staggered"></i>
+            </div>
+            <div class="setting_content">
+                <nav class="setting_nav">
+                    <ul>
+                        <a href="/Settings/Manage_profile">
+                        <li> Manage Profile </li>
+                        </a>
+
+                        <a href="/Settings/Change_chat_theam">
+                        <li> Chat Theams </li>
+                        </a>
+
+
+                    </ul>
+                </nav>
+                <div class="setting_content_container">
+                    @RenderBody()
+                </div>
+            </div>
+        </div>
+    </div>
+
+    -->
+    <script src="/js/Script.js"></script>
+    <script src="/js/jQuery"></script>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+
+    <script>
+        document.addEventListener("DOMContentLoaded", function () {
+            function hideMessageAfterDelay(elementId) {
+                let element = document.getElementById(elementId);
+                if (element && element.innerText.trim() !== "") {
+                    element.style.display = "block";
+                    setTimeout(() => {
+                        element.style.display = "none";
+                    }, 5000);
+                }
+            }
+
+            hideMessageAfterDelay("errorMessage");
+            hideMessageAfterDelay("successMessage");
+            hideMessageAfterDelay("tempSuccessMessage");
+            hideMessageAfterDelay("tempErrorMessage");
+        });
+    </script>
+
+</body>
+</html>
