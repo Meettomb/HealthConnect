@@ -123,8 +123,8 @@ namespace HealthConnect.Pages.User
         {
             if (string.IsNullOrEmpty(User.email) || string.IsNullOrEmpty(User.password))
             {
-                ModelState.AddModelError(string.Empty, "Email and Password are required.");
                 ErrorMessage = "Email and Password are required.";
+                ModelState.AddModelError(string.Empty, "Email and Password are required.");
                 return Page();
             }
 

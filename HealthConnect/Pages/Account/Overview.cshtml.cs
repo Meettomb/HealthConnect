@@ -54,7 +54,7 @@ namespace HealthConnect.Pages.User.Account
             _connectionString = configuration.GetConnectionString("HealthConnect");
         }
 
-        public void OnGet()
+        public IActionResult OnGet()
         {
             string roleInSession = HttpContext.Session.GetString("UserRole");
             UserId = HttpContext.Session.GetInt32("Id");
@@ -62,6 +62,11 @@ namespace HealthConnect.Pages.User.Account
             {
                 OnGetLoginUserDetail();
             }
+            else
+            {
+                return RedirectToPage("/User/Sign_in");
+            }
+            return Page();
         }
 
         public void OnGetLoginUserDetail()
@@ -94,5 +99,7 @@ namespace HealthConnect.Pages.User.Account
                 }
             }
         }
+    
+    
     }
 }

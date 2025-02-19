@@ -12,14 +12,14 @@
         <div class="search_doctore">
             <input type="text" name="name" id="myInput" value="" autocomplete="off" placeholder="Search doctor name" />
         </div>
-        
+
         <div class="remove_filter_class">
             <i class="fa-solid fa-filter-circle-xmark"></i>Remove all Filter
         </div>
         <div class="add_filter_class">
             <i class="fa-solid fa-filter"></i> Filter
         </div>
-       
+
     </div>
 
 </div>
@@ -175,26 +175,38 @@
 
                         <p><a href="/User/Chat?id=@data.id"><i class="fa-brands fa-rocketchat"></i> Chat</a></p>
 
-                        @if (data.video_call_consultation_fee != null)
+                        @if (Model.UserId == null)
                         {
-                            <p data-work-start="@data.work_start_time" data-work-end="@data.work_end_time" data-weekly-work-days="@string.Join(", ", @data.weekly_work_days)"
-                               data-doctorId="@data.id" data-consultancy="Video Call" data-email="@data.email" data-fee="@data.video_call_consultation_fee"
-                               data-notice="You have to Pay fee direct Doctor on Video call"
-                               data-max-time="@data.max_time_per_appointments" data-breck-time="@data.break_between_two_appointments" class="video-call" id="video-call">
-                                <a href="#"><i class="fa-solid fa-video"></i> Video call</a>
-                            </p>
+
+                            <p><a href="/User/Sign_in"><i class="fa-solid fa-video"></i> Video call</a></p>
+                            <p> <a href="/User/Sign_in"><i class="fa-regular fa-calendar-days"></i> Book Appointment</a></p>
                         }
                         else
                         {
-                            <p><a href="#" class="disabled-link"><i class="fa-solid fa-video"></i> Video call</a></p>
-                        }
 
-                        <p data-work-start="@data.work_start_time" data-work-end="@data.work_end_time" data-fee="@data.on_site_consultation_fee"
-                           data-weekly-work-days="@string.Join(", ", @data.weekly_work_days)" data-doctorId="@data.id" data-email="@data.email" data-consultancy="On site"
-                           data-notice="You have to Pay fee direct Doctor on his site"
-                           data-max-time="@data.max_time_per_appointments" data-breck-time="@data.break_between_two_appointments" class="Book-Onsite-Appointment">
-                            <a href="#"><i class="fa-regular fa-calendar-days"></i> Book Appointment</a>
-                        </p>
+
+
+                            @if (data.video_call_consultation_fee != null)
+                            {
+                                <p data-work-start="@data.work_start_time" data-work-end="@data.work_end_time" data-weekly-work-days="@string.Join(", ", @data.weekly_work_days)"
+                                   data-doctorId="@data.id" data-consultancy="Video Call" data-email="@data.email" data-fee="@data.video_call_consultation_fee"
+                                   data-notice="You have to Pay fee direct Doctor on Video call"
+                                   data-max-time="@data.max_time_per_appointments" data-breck-time="@data.break_between_two_appointments" class="video-call" id="video-call">
+                                    <a href="#"><i class="fa-solid fa-video"></i> Video call</a>
+                                </p>
+                            }
+                            else
+                            {
+                                <p><a href="#" class="disabled-link"><i class="fa-solid fa-video"></i> Video call</a></p>
+                            }
+
+                            <p data-work-start="@data.work_start_time" data-work-end="@data.work_end_time" data-fee="@data.on_site_consultation_fee"
+                               data-weekly-work-days="@string.Join(", ", @data.weekly_work_days)" data-doctorId="@data.id" data-email="@data.email" data-consultancy="On site"
+                               data-notice="You have to Pay fee direct Doctor on his site"
+                               data-max-time="@data.max_time_per_appointments" data-breck-time="@data.break_between_two_appointments" class="Book-Onsite-Appointment">
+                                <a href="#"><i class="fa-regular fa-calendar-days"></i> Book Appointment</a>
+                            </p>
+                        }
                         <p><a href="#"><i class="fa-solid fa-user-doctor"></i> View profile</a></p>
                     </div>
                 </div>
@@ -382,9 +394,7 @@
             var BrackTime = $(this).attr("data-breck-time");
             var availableDaysString = $(this).attr("data-weekly-work-days");
 
-            console.log("Start Time:", WorkStart);
-            console.log("End Time:", WorkEnd);
-            console.log("Available Days:", availableDaysString);
+
 
             if (!WorkStart || !WorkEnd) {
                 alert("Invalid work start or end time.");
@@ -407,8 +417,7 @@
             let max_time_per_appointments = parseInt(document.getElementById("max_time").value);
             let break_between_two_appointments = parseInt(document.getElementById("brack_time").value);
 
-            console.log("Max Appointment Time:", max_time_per_appointments);
-            console.log("Break Between Appointments:", break_between_two_appointments);
+
 
             if (isNaN(max_time_per_appointments) || isNaN(break_between_two_appointments)) {
                 console.error("Invalid values for max appointment time or break time.");
@@ -445,7 +454,6 @@
                 var selectedDate = new Date(this.value);
                 var selectedDayName = selectedDate.toLocaleDateString("en-US", { weekday: "long" });
 
-                console.log("Selected Day:", selectedDayName);
 
                 if (!availableDays.includes(selectedDayName)) {
                     this.value = "";
@@ -456,10 +464,7 @@
             });
         }
 
-        window.onload = function () {
-            console.log("Max Time:", document.getElementById("max_time").value);
-            console.log("Break Time:", document.getElementById("brack_time").value);
-        };
+
     });
 </script>
 
@@ -648,8 +653,7 @@
                 const selectedCountryCode = countrySelect.value;
                 const selectedCountryName = countrySelect.options[countrySelect.selectedIndex].text;
 
-                console.log('Selected Country Code:', selectedCountryCode);
-                console.log('Selected Country Name:', selectedCountryName);
+
 
                 if (selectedCountryCode) {
                     stateSelect.innerHTML = '<option disabled selected>Select your State</option>';
@@ -689,8 +693,6 @@
 
                 const selectedStateName = stateSelect.options[stateSelect.selectedIndex].text;
 
-                console.log('Selected State Code:', selectedStateCode);
-                console.log('Selected State Name:', selectedStateName);
 
                 if (selectedCountryCode && selectedStateCode) {
                     citySelect.innerHTML = '<option disabled selected>Select your City</option>';
@@ -728,8 +730,7 @@
                 const selectedCityName = citySelect.options[citySelect.selectedIndex].text;
                 const selectedCityCode = citySelect.value;
 
-                console.log('Selected City Name:', selectedCityName);
-                console.log('Selected City Code:', selectedCityCode);
+
             });
 
 </script>

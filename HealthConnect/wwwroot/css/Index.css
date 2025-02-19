@@ -1605,11 +1605,6 @@ header nav {
     justify-content: center;
     padding: 15px 0;
     margin: 15px 0;
-    /*    position: absolute;
-    top: 28%;
-    padding: 20px 0px;
-    z-index: 10000;
-    background-color: var(--contrast-color);*/
 }
 
     .explorer_doctor_section1 .filtre_doctor_div {
@@ -3328,7 +3323,7 @@ header nav {
 /*--------------------------------------------------------------------------------------------------------------*/
 /*--------------------------------------------------------------------------------------------------------------*/
 /*--------------------------------------------------------------------------------------------------------------*/
-/*                                                   Setting                                                    */
+/*                                                   Overview                                                   */
 /*--------------------------------------------------------------------------------------------------------------*/
 /*--------------------------------------------------------------------------------------------------------------*/
 /*--------------------------------------------------------------------------------------------------------------*/
@@ -3546,8 +3541,8 @@ header nav {
             border-radius: 5px;
             display: flex;
             justify-content: center;
-            gap: 10px;
-            margin: 5px 0;
+            gap: 10px 0;
+            margin: 5px 0 0 0;
         }
 
         .overview_content_container .manage_profile_container .all_quick_links hr {
@@ -3555,6 +3550,15 @@ header nav {
             margin: 5px 0;
             display: flex;
             justify-self: center;
+        }
+
+        .overview_content_container .manage_profile_container .all_quick_links a {
+            color: var(--header-text-color);
+            text-decoration: none;
+            font-family: var(--default-font);
+            margin-left: 20px;
+            padding: 5px 0;
+            width: 100%;
         }
 
         .overview_content_container .manage_profile_container .all_quick_links .account_link {
@@ -3572,18 +3576,12 @@ header nav {
 
             .overview_content_container .manage_profile_container .all_quick_links .account_link i {
                 padding: 0 15px 0 0;
+                margin-left: 15px;
             }
 
             .overview_content_container .manage_profile_container .all_quick_links .account_link span {
                 float: right;
             }
-
-        .overview_content_container .manage_profile_container .all_quick_links a {
-            color: var(--header-text-color);
-            text-decoration: none;
-            font-family: var(--default-font);
-            margin-left: 20px;
-        }
 
 @media(max-width:1000px) {
     .overview_header_contant .overview_header {
@@ -3663,4 +3661,232 @@ header nav {
     .overview_content_container .manage_profile_container .all_quick_links .account_link {
         font-size: 16px;
     }
+}
+
+
+
+
+/*--------------------------------------------------------------------------------------------------------------*/
+/*--------------------------------------------------------------------------------------------------------------*/
+/*--------------------------------------------------------------------------------------------------------------*/
+/*--------------------------------------------------------------------------------------------------------------*/
+/*--------------------------------------------------------------------------------------------------------------*/
+/*                                              Edit_personel_detail                                            */
+/*--------------------------------------------------------------------------------------------------------------*/
+/*--------------------------------------------------------------------------------------------------------------*/
+/*--------------------------------------------------------------------------------------------------------------*/
+/*--------------------------------------------------------------------------------------------------------------*/
+/*--------------------------------------------------------------------------------------------------------------*/
+
+
+
+.edit_user_detail_container {
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    user-select: none;
+}
+
+    .edit_user_detail_container .user_details {
+        width: 75%;
+        display: flex;
+        justify-content: space-between;
+        margin-top: 40px;
+    }
+
+        .edit_user_detail_container .user_details .profilepic_section {
+            width: 20%;
+            height: auto;
+        }
+
+            .edit_user_detail_container .user_details .profilepic_section img {
+                width: 130px;
+                height: 130px;
+                border-radius: 5px;
+            }
+
+            .edit_user_detail_container .user_details .profilepic_section .user_name_tag {
+                width: 130px;
+                height: 130px;
+                display: flex;
+                justify-content: center;
+                align-items: center;
+                background-color: var(--header-text-color);
+                color: var(--contrast-color);
+                font-weight: 800;
+                font-size: 50px;
+                border-radius: 5px;
+                font-family: var(--heading-font);
+            }
+
+            .edit_user_detail_container .user_details .profilepic_section p {
+                margin-top: 15px;
+                color: var(--default-color);
+                font-family: var(--default-font);
+                cursor: pointer;
+                font-size: 14px;
+            }
+
+                .edit_user_detail_container .user_details .profilepic_section p:hover {
+                    color: var(--accent-color);
+                }
+
+        .edit_user_detail_container .user_details .user_main_details {
+            width: 75%;
+        }
+
+            .edit_user_detail_container .user_details .user_main_details h1 {
+                color: var(--accent-color);
+                font-family: var(--heading-font);
+            }
+
+            .edit_user_detail_container .user_details .user_main_details h5 {
+                color: var(--default-color);
+                font-family: var(--heading-font);
+                font-weight: 400;
+                margin: 10px 0;
+            }
+
+            .edit_user_detail_container .user_details .user_main_details form {
+                width: 100%;
+                display: flex;
+                justify-content: space-between;
+                flex-wrap: wrap;
+                gap: 20px 0;
+                flex-grow: 1;
+                margin: 20px 0;
+            }
+
+                .edit_user_detail_container .user_details .user_main_details form .user_main_details_input_filds {
+                    width: 48%;
+                    display: flex;
+                    flex-direction: column;
+                }
+
+                    .edit_user_detail_container .user_details .user_main_details form .user_main_details_input_filds label {
+                        width: 100%;
+                        color: var(--header-text-color);
+                        font-family: var(--default-font);
+                    }
+
+                    .edit_user_detail_container .user_details .user_main_details form .user_main_details_input_filds input {
+                        margin: 5px 0;
+                        padding: 7px 5px;
+                        font-family: var(--default-font);
+                        color: var(--default-color);
+                        font-size: 17px;
+                    }
+
+                    .edit_user_detail_container .user_details .user_main_details form .user_main_details_input_filds textarea {
+                        margin: 5px 0;
+                        padding: 3px 5px;
+                        font-family: var(--default-font);
+                        color: var(--default-color);
+                        resize: none;
+                    }
+
+                        .edit_user_detail_container .user_details .user_main_details form .user_main_details_input_filds textarea::-webkit-scrollbar {
+                            display: none;
+                        }
+
+                    .edit_user_detail_container .user_details .user_main_details form .user_main_details_input_filds select {
+                        margin: 5px 0;
+                        padding: 7px 5px;
+                        font-family: var(--default-font);
+                        color: var(--default-color);
+                        font-size: 17px;
+                    }
+
+                    .edit_user_detail_container .user_details .user_main_details form .user_main_details_input_filds input:focus {
+                        border: none;
+                        outline: 1.8px solid var(--accent-color);
+                    }
+
+                    .edit_user_detail_container .user_details .user_main_details form .user_main_details_input_filds select:focus {
+                        border: none;
+                        outline: 1.8px solid var(--accent-color);
+                    }
+
+                    .edit_user_detail_container .user_details .user_main_details form .user_main_details_input_filds textarea:focus {
+                        border: none;
+                        outline: 1.8px solid var(--accent-color);
+                    }
+
+                .edit_user_detail_container .user_details .user_main_details form .user_main_details_save_button {
+                    width: 100%;
+                }
+
+                    .edit_user_detail_container .user_details .user_main_details form .user_main_details_save_button button {
+                        width: 20%;
+                        padding: 10px 0;
+                        font-size: 16px;
+                        cursor: pointer;
+                        background-color: var(--accent-color);
+                        color: var(--contrast-color);
+                        border: none;
+                        border-radius: 2px;
+                        transition: background-color 0.3s ease, color 0.3s ease, border-radius 0.3s ease;
+                    }
+
+                        .edit_user_detail_container .user_details .user_main_details form .user_main_details_save_button button:hover {
+                            background: color-mix(in srgb, var(--contrast-color), transparent 80%);
+                            color: var(--default-color);
+                            border: 1px solid var(--accent-color);
+                            border-radius: 5px;
+                        }
+
+            .edit_user_detail_container .user_details .user_main_details .doctor_form {
+                margin-top: 50px;
+            }
+
+.previewImage {
+  
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+    .previewImage img {
+        display: none;
+        width: 200px;
+        height: 200px;
+    }
+
+@media (max-width:1000px) {
+    .edit_user_detail_container .user_details {
+        display: block;
+        width: 93%;
+    }
+
+        .edit_user_detail_container .user_details .user_main_details {
+            margin-top: 50px;
+            width: 100%;
+        }
+}
+
+@media (max-width:694px) {
+    .edit_user_detail_container .user_details .profilepic_section {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        width: 100%;
+    }
+
+    .edit_user_detail_container .user_details .user_main_details form {
+        display: block;
+        width: 100%;
+    }
+
+        .edit_user_detail_container .user_details .user_main_details form .user_main_details_input_filds {
+            width: 100%;
+            margin: 20px 0;
+        }
+
+        .edit_user_detail_container .user_details .user_main_details form .user_main_details_save_button {
+            margin-top: 10px;
+        }
+
+            .edit_user_detail_container .user_details .user_main_details form .user_main_details_save_button button {
+                width: 50%;
+            }
 }

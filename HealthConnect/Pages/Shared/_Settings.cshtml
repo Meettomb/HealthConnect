@@ -17,40 +17,79 @@
 
 </head>
 <body>
-    <!--
-    <div class="setting_container">
-        <div class="setting_all_contant">
-            <div class="setting_back_button">
-                <i class="fa-solid fa-house" onclick="redirectToHomepage()" title="Home"></i>
-            </div>
-            <div class="setting_hamburgur">
-                <i class="fa-solid fa-bars"></i>
-                <i class="fa-solid fa-bars-staggered"></i>
-            </div>
-            <div class="setting_content">
-                <nav class="setting_nav">
-                    <ul>
-                        <a href="/Settings/Manage_profile">
-                        <li> Manage Profile </li>
-                        </a>
 
-                        <a href="/Settings/Change_chat_theam">
-                        <li> Chat Theams </li>
-                        </a>
-
-
-                    </ul>
-                </nav>
-                <div class="setting_content_container">
-                    @RenderBody()
-                </div>
-            </div>
-        </div>
+    <div class="loder" id="loder">
+        <img src="/Loder.gif" alt="Alternate Text" />
     </div>
 
-    -->
+    <div class="overview_header_contant" id="header">
+        <header class="overview_header">
+            <div class="overview_back_button">
+                <img src="/images/HealthConnectLogo.png" onclick="redirectToHomepage()" />
+            </div>
+
+            <div class="overview_profile_icon">
+
+                <div class="login_and_profile">
+
+                    @if (Model.UserId == null)
+                    {
+                        <a class="header_login_button" href="/User/Sign_in">Login</a>
+                    }
+                    else
+                    {
+                        <div class="header_user_icon_drop_down">
+                            @if (!string.IsNullOrEmpty(Model.ProfilePic))
+                            {
+                                <div class="header_user_image">
+                                    <img src="/documant/@Model.ProfilePic" />
+                                </div>
+                            }
+                            else
+                            {
+                                <div class="header_user_icon">
+                                    @Model.FirstName[0].ToString().ToUpper()
+                                </div>
+
+                            }
+                            <div class="header_user_services">
+                                <section>
+                                    <a href="/Account/Overview">
+                                        <i class="fa-solid fa-user"></i> Account
+                                    </a>
+
+                                    <a href="/Chatting/Chatting_page">
+                                        <i class="fa-solid fa-message"></i> Message
+                                    </a>
+
+                                    <a href="/User/AppointmentManage/All_appointment">
+                                        <i class="fa-solid fa-calendar-day"></i> Appointment
+                                    </a>
+
+                                    @if (Model.Role == "Admin")
+                                    {
+                                        <a href="/Admin/Admin_index">
+                                            <i class="fa-solid fa-user-tie"></i> Admin side
+                                        </a>
+                                    }
+                                    <a href="/User/Logout">
+                                        <i class="fa-solid fa-right-from-bracket"></i> Logout
+                                    </a>
+                                </section>
+                            </div>
+                        </div>
+                    }
+
+                </div>
+            </div>
+        </header>
+    </div>
+
+    <div>
+        @RenderBody()
+    </div>
+
     <script src="/js/Script.js"></script>
-    <script src="/js/jQuery"></script>
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 
     <script>
@@ -71,6 +110,42 @@
             hideMessageAfterDelay("tempErrorMessage");
         });
     </script>
+
+    <script>
+        $(".header_user_icon").on("click", function () {
+            $(".header_user_services").slideToggle();
+
+            $(".Search_by_Speciality, .Search_by_Type, .Search_by_city").slideUp();
+        });
+        $(".header_user_image").on("click", function () {
+            $(".header_user_services").slideToggle();
+
+            $(".Search_by_Speciality, .Search_by_Type, .Search_by_city").slideUp();
+        });
+    </script>
+
+
+    <script>
+        document.getElementById("profile_pic").addEventListener("change", function (event) {
+            const file = event.target.files[0];
+            const preview = document.getElementById("previewImage");
+
+            if (file) {
+                if (file.type.startsWith("image/")) {
+                    const reader = new FileReader();
+                    reader.onload = function (e) {
+                        preview.src = e.target.result;
+                        preview.style.display = "block";
+                    };
+                    reader.readAsDataURL(file);
+                } else {
+                    alert("Please select a valid image file.");
+                    event.target.value = "";
+                }
+            }
+        });
+    </script>
+
 
 </body>
 </html>

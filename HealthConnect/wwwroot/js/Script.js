@@ -8,17 +8,26 @@ function redirectToExplorepage() {
 // Loder Script
 document.addEventListener('DOMContentLoaded', () => {
     const loader = document.getElementById('loder');
-    loader.classList.remove('hidden');
+    if (loader) {
+
+        loader.classList.remove('hidden');
+    }
 });
 
 window.addEventListener('load', () => {
     const loader = document.getElementById('loder');
-    loader.classList.add('hidden'); 
+    if (loader) {
+
+        loader.classList.add('hidden');
+    }
 });
 
 window.addEventListener('focus', () => {
     const loader = document.getElementById('loder');
-    loader.classList.add('hidden');
+    if (loader) {
+
+        loader.classList.add('hidden');
+    }
 });
 
 
@@ -26,6 +35,7 @@ window.addEventListener('focus', () => {
 // header Scroll script
 const header = document.querySelector('#header');
 const hamburgerLink = document.querySelector('.hamburger_container_link');
+if (header) {
 
 window.addEventListener('scroll', () => {
     const scrollPosition = window.pageYOffset || document.documentElement.scrollTop;
@@ -36,6 +46,7 @@ window.addEventListener('scroll', () => {
         header.classList.remove('scrolled');
     }
 });
+}
 
 
 
@@ -43,14 +54,24 @@ document.addEventListener('DOMContentLoaded', () => {
     const passwordInput = document.getElementById('password');
     const toggleIcon = document.querySelector('.fa-eye');
 
-    toggleIcon.addEventListener('click', () => {
-        const isPasswordVisible = passwordInput.type === 'text';
-        passwordInput.type = isPasswordVisible ? 'password' : 'text';
-        toggleIcon.classList.toggle('fa-eye-slash', !isPasswordVisible);
-        toggleIcon.classList.toggle('fa-eye', isPasswordVisible);
-    });
+    if (passwordInput && toggleIcon) {
+        toggleIcon.addEventListener('click', () => {
+            const isPasswordVisible = passwordInput.type === 'text';
+            passwordInput.type = isPasswordVisible ? 'password' : 'text';
+            toggleIcon.classList.toggle('fa-eye-slash', !isPasswordVisible);
+            toggleIcon.classList.toggle('fa-eye', isPasswordVisible);
+        });
+    }
 });
 
+
+//document.addEventListener('DOMContentLoaded', () => {
+//    document.querySelectorAll('a[href=""]'). forEach(anchor => {
+//        anchor.addEventListener("click", function (event) {
+//            event.preventDefault();
+//        });
+//    })
+//});
 
 
 
@@ -60,8 +81,8 @@ document.addEventListener("DOMContentLoaded", function () {
     var popup2 = document.getElementById("popup2");
     var closePopup = document.getElementById("closePopup");
     var closePopup2 = document.getElementById("closePopup2");
-    var consultancy = document.querySelectorAll(".video-call, .Book-Onsite-Appointment, .reschedule_appointmant");
-    var cancleAppointment = document.querySelectorAll(".cancle_Appointment");
+    var consultancy = document.querySelectorAll(".video-call, .Book-Onsite-Appointment, .reschedule_appointmant, .edit_profilepic");
+    var cancleAppointment = document.querySelectorAll(".cancle_Appointment, .remove_profilepic");
 
     if (!doctorStep) return; // Exit if popup does not exist
 
@@ -72,7 +93,7 @@ document.addEventListener("DOMContentLoaded", function () {
             document.body.classList.add("no-scroll"); // Disable scrolling
         });
     });
-     // Open popup and disable scrolling
+    // Open popup and disable scrolling
     cancleAppointment.forEach(function (button) {
         button.addEventListener("click", function () {
             popup2.style.display = "flex";
@@ -132,7 +153,7 @@ document.addEventListener("DOMContentLoaded", function () {
 document.addEventListener("DOMContentLoaded", function () {
     let detailsLeft = document.querySelector(".why_choose_us_left");
     let detailsRight = document.querySelectorAll(".why_choose_us_detail");
-    let welcomeTexts = document.querySelectorAll("#welcome_text1, #welcome_text2"); 
+    let welcomeTexts = document.querySelectorAll("#welcome_text1, #welcome_text2");
     let DownUpAnimation = document.querySelectorAll(".DownUpAnimation");
 
     let observer = new IntersectionObserver((entries, observer) => {
@@ -140,7 +161,7 @@ document.addEventListener("DOMContentLoaded", function () {
             if (entry.isIntersecting) {
                 entry.target.style.transitionDelay = index * 300 + "ms";
                 entry.target.classList.add("visible");
-                observer.unobserve(entry.target); 
+                observer.unobserve(entry.target);
             }
         });
     }, { threshold: 0.5 });
@@ -154,7 +175,7 @@ document.addEventListener("DOMContentLoaded", function () {
             }
         });
     }, { threshold: 0.5 });
-    
+
     let observer3 = new IntersectionObserver((entries, observer3) => {
         entries.forEach((entry, index) => {
             if (entry.isIntersecting) {
