@@ -3,6 +3,8 @@ using Microsoft.AspNetCore.Mvc.RazorPages;
 using HealthConnect.Models;
 using Microsoft.Data.SqlClient;
 using static HealthConnect.Pages.IndexModel;
+using static Microsoft.EntityFrameworkCore.DbLoggerCategory;
+using static Microsoft.EntityFrameworkCore.DbLoggerCategory.Database;
 
 namespace HealthConnect.Pages.Settings
 {
@@ -13,6 +15,8 @@ namespace HealthConnect.Pages.Settings
         private readonly string _connectionString;
 
 
+        [BindProperty]
+        public int id { get; set; }
         public int? UserId { get; set; }
         public string FirstName { get; set; }
         public string LastName { get; set; }
@@ -106,7 +110,7 @@ namespace HealthConnect.Pages.Settings
             }
         }
 
-        private void GetUserDetailsForUpdaeDetails(int UserId) // Pass user ID as a parameter
+        private void GetUserDetailsForUpdaeDetails(int UserId)
         {
             using (SqlConnection connection = new SqlConnection(_connectionString))
             {
@@ -144,7 +148,7 @@ GROUP BY u.id, u.first_name, u.last_name, u.email, u.mobil_no,
 
                 using (SqlCommand cmd = new SqlCommand(query, connection))
                 {
-                    cmd.Parameters.AddWithValue("@UserId", UserId); // Using the passed userId
+                    cmd.Parameters.AddWithValue("@UserId", UserId);
                     connection.Open();
 
                     using (SqlDataReader reader = cmd.ExecuteReader())
@@ -208,5 +212,242 @@ GROUP BY u.id, u.first_name, u.last_name, u.email, u.mobil_no,
         }
 
 
+
+
+
+        public async Task<IActionResult> OnPostUpdateProfilePicAsync()
+        {
+            var profilePic = Request.Form.Files["profile_pic"];
+            var idValue = Request.Form["id"];
+
+            if (profilePic == null || string.IsNullOrEmpty(idValue))
+            {
+                TempData["ErrorMessage"] = "Profile picture and ID are required.";
+                return Page();
+            }
+
+            int userId = Convert.ToInt32(idValue);
+
+            var folderPath = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot", "documant");
+            if (!Directory.Exists(folderPath))
+            {
+                Directory.CreateDirectory(folderPath);
+            }
+
+            var profilePicPath = Path.Combine(folderPath, profilePic.FileName);
+
+            using (var stream = new FileStream(profilePicPath, FileMode.Create))
+            {
+                await profilePic.CopyToAsync(stream);
+            }
+
+            User_Table updatedUser = new User_Table
+            {
+                id = userId,
+                profile_pic = profilePic.FileName
+            };
+
+            bool isProfilePicUpdated = await UpdateProfilePicAsync(updatedUser);
+
+            if (isProfilePicUpdated)
+            {
+                TempData["SuccessMessage"] = "Profile picture updated successfully.";
+            }
+            else
+            {
+                TempData["ErrorMessage"] = "Failed to update profile picture.";
+            }
+
+            return RedirectToPage("/Account/Settings/Edit_personel_detail");
+        }
+        private async Task<bool> UpdateProfilePicAsync(User_Table updatedUser)
+        {
+            using (var connection = new SqlConnection(_connectionString))
+            {
+                await connection.OpenAsync();
+                string query = "UPDATE User_Table SET profile_pic = @profilePic WHERE id = @id";
+
+                using (var command = new SqlCommand(query, connection))
+                {
+                    command.Parameters.AddWithValue("@profilePic", updatedUser.profile_pic ?? (object)DBNull.Value);
+                    command.Parameters.AddWithValue("@id", updatedUser.id);
+
+                    int rowsAffected = await command.ExecuteNonQueryAsync();
+                    return rowsAffected > 0;
+                }
+            }
+        }
+
+
+
+        public async Task<IActionResult> OnPostAsync()
+        {
+            var idValue = Request.Form["id"];
+            if (string.IsNullOrEmpty(idValue))
+            {
+                return Page();
+            }
+
+            int userId = Convert.ToInt32(idValue);
+
+            User_Table user = new User_Table
+            {
+                id = userId,
+                first_name = Request.Form["first_name"],
+                last_name = Request.Form["last_name"],
+                dob = Request.Form["dob"],
+                state = Request.Form["state"],
+                city = Request.Form["city"],
+                House_number_and_Street_name = Request.Form["House_number_and_Street_name"],
+                pincode = Request.Form["pincode"]
+            };
+
+            bool isBasicDetailUpdated = await UpdateBasicDetailAsync(user);
+            if (isBasicDetailUpdated)
+            {
+                TempData["SuccessMessage"] = "Basic detail updated successfully.";
+            }
+
+            return RedirectToPage("/Account/Settings/Edit_personel_detail");
+        }
+        private async Task<bool> UpdateBasicDetailAsync(User_Table user)
+        {
+            using (var connection = new SqlConnection(_connectionString))
+            {
+                await connection.OpenAsync();
+                string query = @"UPDATE User_Table 
+                         SET first_name = @first_name, 
+                             last_name = @last_name, 
+                             dob = @dob, 
+                             state = @state, 
+                             city = @city, 
+                             House_number_and_Street_name = @House_number_and_Street_name, 
+                             pincode = @pincode 
+                         WHERE id = @id";
+
+                using (var command = new SqlCommand(query, connection))
+                {
+                    command.Parameters.AddWithValue("@first_name", user.first_name ?? (object)DBNull.Value);
+                    command.Parameters.AddWithValue("@last_name", user.last_name ?? (object)DBNull.Value);
+                    command.Parameters.AddWithValue("@dob", user.dob ?? (object)DBNull.Value);
+                    command.Parameters.AddWithValue("@state", user.state ?? (object)DBNull.Value);
+                    command.Parameters.AddWithValue("@city", user.city ?? (object)DBNull.Value);
+                    command.Parameters.AddWithValue("@House_number_and_Street_name", user.House_number_and_Street_name ?? (object)DBNull.Value);
+                    command.Parameters.AddWithValue("@pincode", user.pincode ?? (object)DBNull.Value);
+                    command.Parameters.AddWithValue("@id", user.id);
+
+                    int rowsAffected = await command.ExecuteNonQueryAsync();
+                    return rowsAffected > 0;
+                }
+            }
+        }
+
+
+
+        public async Task<IActionResult> OnPostRemoveProfilePicAsync()
+        {
+            var idValue = Request.Form["id"];
+
+            if (string.IsNullOrEmpty(idValue))
+            {
+                TempData["ErrorMessage"] = "User ID is required.";
+                return Page();
+            }
+
+            int userId = Convert.ToInt32(idValue);
+            User_Table removeUser = new User_Table { id = userId };
+
+            bool isPicRemoved = await RemovePicAsync(removeUser);
+
+            if (isPicRemoved)
+            {
+                TempData["SuccessMessage"] = "Profile picture removed successfully.";
+            }
+            else
+            {
+                TempData["ErrorMessage"] = "Failed to remove profile picture.";
+            }
+
+            return RedirectToPage("/Account/Settings/Edit_personel_detail");
+        }
+        private async Task<bool> RemovePicAsync(User_Table removeUserPic)
+        {
+            using (var connection = new SqlConnection(_connectionString))
+            {
+                await connection.OpenAsync();
+                string query = "UPDATE User_Table SET profile_pic = NULL WHERE id = @id";
+
+                using (var command = new SqlCommand(query, connection))
+                {
+                    command.Parameters.AddWithValue("@id", removeUserPic.id);
+
+                    int rowsAffected = await command.ExecuteNonQueryAsync();
+                    return rowsAffected > 0;
+                }
+            }
+        }
+
+
+
+
+        public async Task<IActionResult> OnPostUpdateDoctorInfoAsync()
+        {
+            var idValue = Request.Form["id"];
+            if (string.IsNullOrEmpty(idValue))
+            {
+                return Page();
+            }
+
+            int userId = Convert.ToInt32(idValue);
+
+            User_Table user = new User_Table
+            {
+                id = userId,
+                hospital_or_clinic = Request.Form["hospital_or_clinic"],
+                clinic_or_hospital_address = Request.Form["clinic_or_hospital_address"],
+                on_site_consultation_fee = Request.Form["on_site_consultation_fee"],
+                video_call_consultation_fee = Request.Form["video_call_consultation_fee"],
+            };
+
+            bool isUpdateDoctorInfo = await UpdateDoctorInfo(user);
+            if (isUpdateDoctorInfo)
+            {
+                TempData["SuccessMessage"] = "Doctore detail updated successfully.";
+            }
+
+            return RedirectToPage("/Account/Settings/Edit_personel_detail");
+        }
+        private async Task<bool> UpdateDoctorInfo(User_Table UpdateDoctorInfo)
+        {
+            using (var connection = new SqlConnection(_connectionString))
+            {
+                await connection.OpenAsync();
+                string query = @"UPDATE User_Table 
+                         SET hospital_or_clinic = @hospital_or_clinic, 
+                             clinic_or_hospital_address = @clinic_or_hospital_address, 
+                             on_site_consultation_fee = @on_site_consultation_fee, 
+                             video_call_consultation_fee = @video_call_consultation_fee
+                         WHERE id = @id";
+
+                using (var command = new SqlCommand(query, connection))
+                {
+                    command.Parameters.AddWithValue("@hospital_or_clinic", UpdateDoctorInfo.hospital_or_clinic ?? (object)DBNull.Value);
+                    command.Parameters.AddWithValue("@clinic_or_hospital_address", UpdateDoctorInfo.clinic_or_hospital_address ?? (object)DBNull.Value);
+                    command.Parameters.AddWithValue("@on_site_consultation_fee", UpdateDoctorInfo.on_site_consultation_fee ?? (object)DBNull.Value);
+                    command.Parameters.AddWithValue("@video_call_consultation_fee", UpdateDoctorInfo.video_call_consultation_fee ?? (object)DBNull.Value);
+                    command.Parameters.AddWithValue("@id", UpdateDoctorInfo.id);
+
+                    int rowsAffected = await command.ExecuteNonQueryAsync();
+                    return rowsAffected > 0;
+                }
+            }
+        }
+
+
     }
+
+
+
+
 }
+

@@ -15,8 +15,34 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@100..900&family=Sofia+Sans+Condensed:ital,wght@0,1..1000;1,1..1000&display=swap" rel="stylesheet">
 
+
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/cropperjs/1.5.13/cropper.min.css" rel="stylesheet">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/cropperjs/1.5.13/cropper.min.js"></script>
+
+
 </head>
 <body>
+
+    @if (!string.IsNullOrEmpty(Model.ErrorMessage))
+    {
+        <div class="error_message" id="errorMessage">@Model.ErrorMessage</div>
+    }
+
+    @if (!string.IsNullOrEmpty(Model.SuccessMessage))
+    {
+        <p class="success_message" id="successMessage">@Model.SuccessMessage</p>
+    }
+
+    @if (TempData["SuccessMessage"] != null)
+    {
+        <div class="success_message" id="tempSuccessMessage">@TempData["SuccessMessage"]</div>
+    }
+
+    @if (TempData["ErrorMessage"] != null)
+    {
+        <div class="error_message" id="tempErrorMessage">@TempData["ErrorMessage"]</div>
+    }
+
 
     <div class="loder" id="loder">
         <img src="/Loder.gif" alt="Alternate Text" />
@@ -128,19 +154,20 @@
     <script>
         document.getElementById("profile_pic").addEventListener("change", function (event) {
             const file = event.target.files[0];
-            const preview = document.getElementById("previewImage");
+            const preview = document.getElementById("previewImageTag"); // Fixed the ID
 
             if (file) {
                 if (file.type.startsWith("image/")) {
                     const reader = new FileReader();
                     reader.onload = function (e) {
                         preview.src = e.target.result;
-                        preview.style.display = "block";
+                        preview.style.display = "block"; // Make the image visible
                     };
                     reader.readAsDataURL(file);
                 } else {
                     alert("Please select a valid image file.");
-                    event.target.value = "";
+                    event.target.value = ""; // Reset file input
+                    preview.style.display = "none"; // Hide preview if invalid file
                 }
             }
         });
