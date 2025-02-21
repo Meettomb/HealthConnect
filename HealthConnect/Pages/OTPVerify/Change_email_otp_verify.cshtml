@@ -1,9 +1,10 @@
 ﻿@page
-@model HealthConnect.Pages.OTPVerify.Doctor_opt_verifyModel
+@model HealthConnect.Pages.OTPVerify.Change_email_otp_verifyModel
 @{
-    ViewData["Title"] = "Sign_up_otp_verify";
-    Layout = "~/Pages/Shared/_OtpVerify.cshtml";
+    Layout = "_OtpVerify";
+    ViewData["Title"] = "Verify you OTP";
 }
+
 
 <style>
     #timer {
@@ -38,7 +39,6 @@
 
 <script>
     function resendOTP() {
-        // You can add a confirmation or processing indication here if needed
         fetch('@Url.Page("/OTPVerify/Sign_up_otp_verify", new { handler = "ResendOTP" })', {
             method: 'POST',
             headers: {

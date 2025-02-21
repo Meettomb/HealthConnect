@@ -22,7 +22,7 @@ input[type=number] {
 .error_message, .success_message {
     display: none;
     font-size: 14px;
-    font-weight: 700;
+    font-weight: 500;
     margin: 10px 0px;
     text-align: center;
     position: absolute;
@@ -3775,6 +3775,7 @@ header nav {
                         font-family: var(--default-font);
                         color: var(--default-color);
                         font-size: 17px;
+                        outline-color: var(--accent-color);
                     }
 
                     .edit_user_detail_container .user_details .user_main_details form .user_main_details_input_filds textarea {
@@ -3795,11 +3796,11 @@ header nav {
                         font-family: var(--default-font);
                         color: var(--default-color);
                         font-size: 17px;
+                        outline-color: var(--accent-color);
                     }
 
                     .edit_user_detail_container .user_details .user_main_details form .user_main_details_input_filds input:focus {
                         border: none;
-                        outline: 1.8px solid var(--accent-color);
                     }
 
                     .edit_user_detail_container .user_details .user_main_details form .user_main_details_input_filds select:focus {
@@ -3840,7 +3841,6 @@ header nav {
             }
 
 .previewImage {
-  
     display: flex;
     justify-content: center;
     align-items: center;
@@ -3889,4 +3889,112 @@ header nav {
             .edit_user_detail_container .user_details .user_main_details form .user_main_details_save_button button {
                 width: 50%;
             }
+}
+
+
+
+
+/*--------------------------------------------------------------------------------------------------------------*/
+/*--------------------------------------------------------------------------------------------------------------*/
+/*--------------------------------------------------------------------------------------------------------------*/
+/*--------------------------------------------------------------------------------------------------------------*/
+/*--------------------------------------------------------------------------------------------------------------*/
+/*                                                  Change_email                                                */
+/*--------------------------------------------------------------------------------------------------------------*/
+/*--------------------------------------------------------------------------------------------------------------*/
+/*--------------------------------------------------------------------------------------------------------------*/
+/*--------------------------------------------------------------------------------------------------------------*/
+/*--------------------------------------------------------------------------------------------------------------*/
+
+
+
+.change_email_container {
+    width: 100%;
+    display: flex;
+    justify-content: center;
+}
+
+    .change_email_container .change_email {
+        width: 75%;
+        margin: 30px 0;
+    }
+
+        .change_email_container .change_email h1 {
+            color: var(--heading-color);
+            font-family: var(--heading-font);
+        }
+
+        .change_email_container .change_email form {
+            width: 40%;
+            margin: 30px 0;
+        }
+
+            .change_email_container .change_email form .user_input {
+                display: flex;
+                flex-direction: column;
+            }
+
+                .change_email_container .change_email form .user_input label {
+                    color: var(--accent-color);
+                    font-size: 17px;
+                    font-weight: 500;
+                }
+
+                .change_email_container .change_email form .user_input input {
+                    margin-top: 10px;
+                    padding: 7px 5px;
+                    font-family: var(--default-font);
+                    color: var(--default-color);
+                    font-size: 17px;
+                    outline-color: var(--accent-color);
+                }
+
+            .change_email_container .change_email form .form_button {
+                width: 100%;
+                margin-top: 30px;
+            }
+
+                .change_email_container .change_email form .form_button button {
+                    width: 20%;
+                    padding: 10px 0;
+                    font-size: 16px;
+                    cursor: pointer;
+                    background-color: var(--accent-color);
+                    color: var(--contrast-color);
+                    border: none;
+                    border-radius: 2px;
+                    transition: background-color 0.3s ease, color 0.3s ease, border-radius 0.3s ease;
+                }
+
+                    .change_email_container .change_email form .form_button button:hover {
+                        background: color-mix(in srgb, var(--contrast-color), transparent 80%);
+                        color: var(--default-color);
+                        border: 1px solid var(--accent-color);
+                        border-radius: 5px;
+                    }
+
+@media (max-width:1000px) {
+    .change_email_container .change_email {
+        width: 90%;
+        margin: 30px 0;
+    }
+
+        .change_email_container .change_email form {
+            width: 50%;
+        }
+
+            .change_email_container .change_email form .form_button button {
+                width: 50%;
+            }
+}
+
+@media (max-width:507px) {
+    .change_email_container .change_email {
+        width: 95%;
+        margin: 30px 0;
+    }
+
+        .change_email_container .change_email form {
+            width: 90%;
+        }
 }

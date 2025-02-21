@@ -86,9 +86,7 @@ namespace HealthConnect.Pages.OTPVerify
                 return Page();
             }
 
-            Console.WriteLine($"Session OTP: {sessionOtp}");
-            Console.WriteLine($"Entered OTP: {EnteredOTP}");
-            Console.WriteLine($"OTP Generated Time: {otpGeneratedTimeString}");
+         
 
             if (string.IsNullOrEmpty(otpGeneratedTimeString))
             {
