@@ -3919,6 +3919,14 @@ header nav {
         margin: 30px 0;
     }
 
+        .change_email_container .change_email a {
+            font-family: var(--default-font);
+            color: var(--accent-color);
+        }
+            .change_email_container .change_email a:hover {
+                color: var(--header-text-color);
+            }
+
         .change_email_container .change_email h1 {
             color: var(--heading-color);
             font-family: var(--heading-font);
@@ -3926,18 +3934,27 @@ header nav {
 
         .change_email_container .change_email form {
             width: 40%;
-            margin: 30px 0;
+            margin: 10px 0;
         }
 
             .change_email_container .change_email form .user_input {
                 display: flex;
                 flex-direction: column;
+                position: relative;
             }
+
+                .change_email_container .change_email form .user_input i {
+                    position: absolute;
+                    left: 92%;
+                    top: 73%;
+                    cursor: pointer;
+                }
 
                 .change_email_container .change_email form .user_input label {
                     color: var(--accent-color);
                     font-size: 17px;
                     font-weight: 500;
+                    margin-top: 30px;
                 }
 
                 .change_email_container .change_email form .user_input input {
@@ -3952,6 +3969,7 @@ header nav {
             .change_email_container .change_email form .form_button {
                 width: 100%;
                 margin-top: 30px;
+                margin-bottom: 20px;
             }
 
                 .change_email_container .change_email form .form_button button {
