@@ -76,9 +76,10 @@ namespace HealthConnect.Pages.OTPVerify
 
                 await _emailService.SendEmailAsync(HttpContext.Session.GetString("email"), subject, combinedBody);
 
-                return RedirectToPage("/Account/Settings/Change_email");
+                return RedirectToPage("/Account/Overview");
             }
 
+            TempData["ErrorMessage"] = "Invalid OTP. Please try again.";
             ErrorMessage = "Invalid OTP. Please try again.";
             return Page();
         }

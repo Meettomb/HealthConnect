@@ -19,6 +19,11 @@ input[type=number] {
     -moz-appearance: textfield;
 }
 
+input[type="search"]::-webkit-search-cancel-button {
+    display: none;
+}
+
+
 .error_message, .success_message {
     display: none;
     font-size: 14px;
@@ -114,7 +119,7 @@ body {
     background-color: var(--header-bg-color);
 }
 
-header {
+#header {
     width: 100%;
     height: auto;
     padding: 10px 0px;
@@ -129,13 +134,13 @@ header {
     font-weight: 400;
 }
 
-#header.scrolled {
-    background-color: #F5F5F5;
-    color: var(--header-text-color);
-    transition: 0s inherit;
-    position: fixed;
-    z-index: 1000;
-}
+    #header.scrolled {
+        background-color: #F5F5F5;
+        color: var(--header-text-color);
+        transition: 0s inherit;
+        position: fixed;
+        z-index: 1000;
+    }
 
 header img {
     width: 140px;
@@ -143,7 +148,7 @@ header img {
     cursor: pointer;
 }
 
-header nav {
+#header nav {
     width: 95%;
     display: flex;
     justify-content: space-between;
@@ -1062,6 +1067,15 @@ header nav {
 
 .regi_form_container form .doctor_radio::after {
     content: 'Doctor';
+    padding: 15px 10px;
+    background-color: white;
+    margin: 10px 0px 10px 0px;
+    border: 1px dashed var(--heading-color);
+    cursor: pointer;
+}
+
+.regi_form_container form .pharmacist_radio::after {
+    content: 'Pharmacist';
     padding: 15px 10px;
     background-color: white;
     margin: 10px 0px 10px 0px;
@@ -3923,6 +3937,7 @@ header nav {
             font-family: var(--default-font);
             color: var(--accent-color);
         }
+
             .change_email_container .change_email a:hover {
                 color: var(--header-text-color);
             }
@@ -4015,4 +4030,445 @@ header nav {
         .change_email_container .change_email form {
             width: 90%;
         }
+}
+
+
+
+
+/*--------------------------------------------------------------------------------------------------------------*/
+/*--------------------------------------------------------------------------------------------------------------*/
+/*--------------------------------------------------------------------------------------------------------------*/
+/*--------------------------------------------------------------------------------------------------------------*/
+/*--------------------------------------------------------------------------------------------------------------*/
+/*                                                Pharmacy Header                                               */
+/*--------------------------------------------------------------------------------------------------------------*/
+/*--------------------------------------------------------------------------------------------------------------*/
+/*--------------------------------------------------------------------------------------------------------------*/
+/*--------------------------------------------------------------------------------------------------------------*/
+/*--------------------------------------------------------------------------------------------------------------*/
+
+
+
+.pharmacy_header_container {
+    width: 100%;
+    background-color: var(--contrast-color);
+    height: auto;
+    display: flex;
+    justify-content: center;
+    z-index: 999;
+}
+
+    .pharmacy_header_container.pharmacy_header_scrolled {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        z-index: 1000;
+        background-color: var(--contrast-color);
+        box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
+    }
+
+    .pharmacy_header_container header {
+        width: 90%;
+        background-color: transparent;
+        display: flex;
+        justify-content: space-between;
+        padding: 10px 0;
+        color: var(--header-text-color);
+    }
+
+        .pharmacy_header_container header .pharmacy_header_left_side {
+            width: 40%;
+            display: flex;
+            align-items: center;
+            column-gap: 50px;
+            font-family: var(--heading-font);
+        }
+
+            .pharmacy_header_container header .pharmacy_header_left_side .pharmacy_logo img {
+                width: 140px;
+                height: 55px;
+            }
+
+            .pharmacy_header_container header .pharmacy_header_left_side .header_deliver_location {
+                display: flex;
+                align-items: center;
+                column-gap: 10px;
+                cursor: pointer;
+            }
+
+                .pharmacy_header_container header .pharmacy_header_left_side .header_deliver_location i {
+                    font-size: 30px;
+                }
+
+                .pharmacy_header_container header .pharmacy_header_left_side .header_deliver_location p {
+                    font-weight: 400;
+                    font-size: 12px;
+                }
+
+                .pharmacy_header_container header .pharmacy_header_left_side .header_deliver_location b {
+                    font-weight: 600;
+                    font-size: 15px;
+                }
+
+                .pharmacy_header_container header .pharmacy_header_left_side .header_deliver_location .mdi-chevron-down {
+                    display: flex;
+                    align-self: flex-end;
+                    margin-left: 15px;
+                    font-size: 23px;
+                }
+
+        .pharmacy_header_container header .header_search_section {
+            width: 40%;
+            align-items: center;
+            display: flex;
+            opacity: 0;
+            visibility: hidden;
+            transition: opacity 0.3s ease-in-out, visibility 0.3s ease-in-out;
+            position: relative;
+        }
+
+/* Make it visible when the header gets scrolled */
+.pharmacy_header_scrolled header .header_search_section {
+    opacity: 1;
+    visibility: visible;
+}
+
+
+.pharmacy_header_container header .header_search_section i {
+    font-size: 30px;
+    position: absolute;
+    top: 15px;
+    left: 10px;
+}
+
+.pharmacy_header_container header .header_search_section input {
+    width: 70%;
+    padding: 10px 10px 10px 40px;
+    font-size: 17px;
+    border-radius: 5px;
+    border: 1px solid var(--header-text-color);
+    outline-color: var(--accent-color);
+}
+
+
+.pharmacy_header_container header .pharmacy_header_right_side {
+    width: 20%;
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+    column-gap: 40px;
+}
+
+    .pharmacy_header_container header .pharmacy_header_right_side a {
+        color: var(--header-text-color);
+        text-decoration: none;
+    }
+
+        .pharmacy_header_container header .pharmacy_header_right_side a i {
+            font-size: 30px;
+            display: flex;
+            align-self: center;
+        }
+
+    .pharmacy_header_container header .pharmacy_header_right_side .header_login_button {
+        color: var(--contrast-color);
+    }
+
+    .pharmacy_header_container header .pharmacy_header_right_side .pharmacy_header_user_icon {
+        position: relative;
+    }
+
+        .pharmacy_header_container header .pharmacy_header_right_side .pharmacy_header_user_icon .pharmacy_header_user_services {
+            position: absolute;
+            top: 50px;
+            right: 0px;
+            background-color: var(--contrast-color);
+            width: auto;
+            box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
+            border: 1px solid #ccc;
+            padding: 0px 15px 0px 10px;
+            z-index: 500;
+            display: none;
+        }
+
+            .pharmacy_header_container header .pharmacy_header_right_side .pharmacy_header_user_icon .pharmacy_header_user_services section {
+                width: 110px;
+                height: auto;
+            }
+
+                .pharmacy_header_container header .pharmacy_header_right_side .pharmacy_header_user_icon .pharmacy_header_user_services section a {
+                    display: flex;
+                    margin: 18px 0;
+                    column-gap: 15px;
+                    font-size: 13.5px;
+                    width: 100%;
+                }
+
+            .pharmacy_header_container header .pharmacy_header_right_side .pharmacy_header_user_icon .pharmacy_header_user_services i {
+                font-size: 14px;
+            }
+
+    .pharmacy_header_container header .pharmacy_header_right_side .user_profile_icon {
+        width: 40px;
+        height: 40px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        border-radius: 50%;
+        object-fit: contain;
+        border: 2px solid var(--accent-color);
+        background-color: var(--accent-color);
+        color: var(--contrast-color);
+        cursor: pointer;
+    }
+
+        .pharmacy_header_container header .pharmacy_header_right_side .user_profile_icon img {
+            width: 100%;
+            height: 100%;
+            border-radius: 50%;
+        }
+
+        .pharmacy_header_container header .pharmacy_header_right_side .user_profile_icon p {
+            text-align: center;
+            font-weight: 900;
+            font-size: 17px;
+        }
+
+.extar_search_area_container {
+    width: 100%;
+    height: 100px;
+    padding: 20px 0;
+    background-image: url('../images/extra_search_background.jpg');
+    background-repeat: no-repeat;
+    object-fit: cover;
+    background-size: cover;
+    background-position: center;
+}
+
+    .extar_search_area_container p {
+        text-align: center;
+        font-size: 30px;
+        font-weight: 800;
+        color: var(--accent-color);
+    }
+
+.extar_search_area {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+    position: relative;
+    margin-top: 20px;
+}
+
+.extar_search_area_container .cart_icon {
+    display: none;
+}
+
+.extar_search_area i {
+    position: absolute;
+    left: 31%;
+    top: 5px;
+    font-size: 30px;
+}
+
+.extar_search_area input {
+    width: 40%;
+    padding: 10px 45px;
+    font-size: 17px;
+    border-radius: 5px;
+    border: 2px solid var(--accent-color);
+    outline-color: var(--accent-color);
+}
+
+@media (max-width:1132px) {
+    .pharmacy_header_container header .pharmacy_header_left_side {
+        width: 45%;
+    }
+
+    .pharmacy_header_container header .header_search_section {
+        width: 30%;
+        margin-left: 20px;
+    }
+
+        .pharmacy_header_container header .header_search_section input {
+            width: 100%;
+        }
+}
+
+@media (max-width: 1000px) {
+
+    .pharmacy_header_container.pharmacy_header_scrolled {
+        position:relative;
+        width: 100%;
+        z-index: 1000;
+        background-color: var(--contrast-color);
+        box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
+    }
+
+
+    .pharmacy_header_container header .pharmacy_header_left_side {
+        width: 85%;
+        column-gap: 20px;
+    }
+
+    .pharmacy_header_container header .header_search_section {
+        display: none;
+    }
+
+    .pharmacy_header_container header .pharmacy_header_right_side .cart_icon {
+        display: none;
+    }
+
+    .extar_search_area_container {
+        background-color: var(--accent-color);
+        background-image: none;
+        padding: 5px 0;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        width: 100%;
+        height: 50px;
+        position: sticky;
+        top: 0;
+        left: 0;
+    }
+
+        .extar_search_area_container p {
+            display: none;
+        }
+
+        .extar_search_area_container .extar_search_area {
+            width: 50%;
+            margin: 0;
+        }
+
+            .extar_search_area_container .extar_search_area i {
+                left: 12%;
+                top: 8px;
+            }
+
+            .extar_search_area_container .extar_search_area input {
+                width: 80%;
+            }
+
+        .extar_search_area_container .cart_icon {
+            width: 10%;
+            display: block;
+        }
+
+            .extar_search_area_container .cart_icon a {
+                width: 100%;
+                font-size: 30px;
+                color: var(--contrast-color);
+                text-decoration: none;
+            }
+}
+
+@media (max-width: 622px) {
+    .pharmacy_header_container header .pharmacy_header_right_side .user_profile_icon {
+        width: 40px;
+        height: 40px;
+    }
+
+    .pharmacy_header_container header .pharmacy_header_right_side {
+        width: 25%;
+    }
+
+    .extar_search_area_container p {
+        font-size: 25px;
+    }
+
+    .extar_search_area i {
+        left: 12%;
+    }
+
+    .extar_search_area_container .extar_search_area {
+        width: 80%;
+    }
+
+    .extar_search_area input {
+        width: 80%;
+    }
+
+    .extar_search_area_container .cart_icon {
+        margin-right: 20px;
+    }
+}
+
+@media (max-width: 585px) {
+    .pharmacy_header_container header .pharmacy_header_left_side .header_deliver_location i {
+        font-size: 25px;
+    }
+
+    .pharmacy_header_container header .pharmacy_header_left_side .header_deliver_location p {
+        font-size: 13px;
+    }
+
+    .pharmacy_header_container header .pharmacy_header_left_side .header_deliver_location b {
+        font-size: 14px;
+    }
+
+    .pharmacy_header_container header .pharmacy_header_left_side .header_deliver_location .mdi-chevron-down {
+        margin: 0;
+    }
+
+    .extar_search_area_container {
+        height: 40px;
+    }
+
+        .extar_search_area_container .extar_search_area i {
+            top: 4px;
+            left: 8%;
+            font-size: 25px;
+        }
+
+        .extar_search_area_container .extar_search_area input {
+            padding: 5px 40px;
+            width: 92%;
+            font-size: 15px;
+        }
+}
+
+@media (max-width: 538px) {
+    .pharmacy_header_container header .pharmacy_header_left_side {
+        width: 30%;
+    }
+
+    .pharmacy_header_container header .pharmacy_header_right_side {
+        width: 50%;
+    }
+
+    .pharmacy_header_container header .pharmacy_header_left_side .header_deliver_location {
+        display: none;
+    }
+}
+
+@media (max-width: 454px) {
+    .extar_search_area_container p {
+        font-size: 20px;
+    }
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+.pharmacy_index_container {
+   
 }

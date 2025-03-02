@@ -194,6 +194,18 @@ namespace HealthConnect.Pages.User
                 return RedirectToPage("/OTPVerify/Doctor_opt_verify");
             }
 
+            else if(user.role == "Pharmacist")
+            {
+                var otp = new Random().Next(100000, 999999).ToString();
+                HttpContext.Session.SetString("OTP", otp);
+                HttpContext.Session.SetString("OtpGeneratedTime", DateTime.Now.ToString("o"));
+
+                string subject = "Your OTP for HealthConnect Registration";
+                string body = $"Your OTP is: {otp}";
+                await _emailService.SendEmailAsync(user.email, subject, body);
+
+                return RedirectToPage("/OTPVerify/Pharmacist_opt_verify");
+            }
             return Page();
         }
 

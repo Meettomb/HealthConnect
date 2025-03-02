@@ -1,0 +1,102 @@
+﻿@page
+@model HealthConnect.Pages.User.Pharmacist_sign_upModel
+@{
+    Layout = null;
+    ViewData["Title"] = "Doctor Sign up";
+}
+
+
+<!DOCTYPE html>
+<html>
+<head>
+    <meta name="viewport" content="width=device-width" />
+    <title>@ViewBag.Title</title>
+    <link rel="stylesheet" href="/css/Doctor_Sign_up.css">
+    <link href="/images/HealthConnectTabLogo.png" rel="icon" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css">
+
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+
+</head>
+<body class="login_body">
+        <div class="back_button" onclick="history.back()"><i class="fa-solid fa-arrow-left"></i></div>
+
+
+        <div class="regi_form_container">
+            <form id="doctor-signup-form" method="post" enctype="multipart/form-data">
+                <div class="from_heading">
+                    <h4>Continue yor Registration process</h4>
+                </div>
+                <div class="user_filsd_wrep">
+                    
+                    <div class="user_input_box">
+                        <input type="file" id="licensePhotoInput" name="shop_licence" accept="image/*" required>
+                    </div>
+                    <p class="error"></p>
+                </div>
+                <div class="pic_view">
+                    <div id="licensePhotoPreview" class="file-preview"></div>
+                </div>
+
+
+                <div class="user_filsd_wrep">
+                    <div class="user_input_box">
+                        <input type="text" name="shop_name" placeholder="Shop name" required>
+                        <label>Shop name</label>
+                    </div>
+                    <p class="error"></p>
+
+                    <div class="user_input_box">
+                        <input type="text" name="shop_address" placeholder="Shop address" required>
+                        <label>Shop address</label>
+                    </div>
+                    <p class="error"></p>
+                </div>
+
+
+                <div class="login_button">
+                    <button type="submit" id="submitButton">Verify Account</button>
+                </div>
+                <div class="user_input_box">
+                    <a href="/User/Sign_in">Already have an account? Sign in</a>
+                </div>
+            </form>
+        </div>
+
+
+
+        <div id="error-message" style="color: red; display: none;"></div>
+        <div id="success-message" style="color: green; display: none;"></div>
+
+
+        <script>
+                    function previewFile(inputElementId, previewContainerId) {
+                const inputElement = document.getElementById(inputElementId);
+                const previewContainer = document.getElementById(previewContainerId);
+
+                inputElement.addEventListener('change', function () {
+                    previewContainer.innerHTML = '';  
+                    const file = this.files[0];
+
+                    if (file) {
+                        const reader = new FileReader();
+
+                        reader.onload = function (e) {
+                            const img = document.createElement('img');
+                            img.src = e.target.result;
+                            img.alt = 'Selected Image Preview';
+                            previewContainer.appendChild(img);
+                        };
+
+                        reader.readAsDataURL(file);
+                    }
+                });
+            }
+
+            previewFile('licensePhotoInput', 'licensePhotoPreview');
+
+        </script>
+    </body>
+
+</html>
+

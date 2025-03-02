@@ -6,13 +6,13 @@ using Microsoft.Extensions.Options;
 
 namespace HealthConnect.Pages.OTPVerify
 {
-    public class Doctor_opt_verifyModel : PageModel
+    public class Pharmacist_opt_verifyModel : PageModel
     {
         private readonly IEmailService _emailService;
         private readonly EmailSettings _emailSettings;
         private readonly string _connectionString;
 
-        public Doctor_opt_verifyModel(IEmailService emailService, IOptions<EmailSettings> emailSettings, IConfiguration configuration)
+        public Pharmacist_opt_verifyModel(IEmailService emailService, IOptions<EmailSettings> emailSettings, IConfiguration configuration)
         {
             _emailService = emailService;
             _emailSettings = emailSettings.Value;
@@ -115,8 +115,5 @@ namespace HealthConnect.Pages.OTPVerify
                 return Page();
             }
         }
-
-
-
     }
 }

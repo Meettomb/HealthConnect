@@ -3,6 +3,16 @@
 @{
     ViewData["Title"] = "Sign_up_otp_verify";
     Layout = "~/Pages/Shared/_OtpVerify.cshtml";
+
+    var sessionOtp = Model.HttpContext.Session.GetString("OTP");
+    var otpGeneratedTimeString = Model.HttpContext.Session.GetString("OtpGeneratedTime");
+    var otpGeneratedTime = otpGeneratedTimeString != null ? DateTime.Parse(otpGeneratedTimeString) : (DateTime?)null;
+    var maxTimeInSeconds = 120;
+
+    var timeLeft = otpGeneratedTime.HasValue
+        ? maxTimeInSeconds - (int)(DateTime.Now - otpGeneratedTime.Value).TotalSeconds
+        : 0;
+
 }
 <style>
     #timer{
@@ -21,7 +31,37 @@
 
         <button type="submit" name="submit">Verify</button>
 
-        <div id="timer"></div>
+        @if (!string.IsNullOrEmpty(sessionOtp) && timeLeft > 0)
+        {
+            <div id="timer"></div>
+
+            <script>
+                window.onload = function() {
+                    let timeLeft = @timeLeft;
+                    const timerDisplay = document.getElementById('timer');
+
+                    if (timeLeft <= 0) {
+                        timerDisplay.textContent = "Time Expired";
+                        return;
+                    }
+
+                    const timerInterval = setInterval(function() {
+                        const minutes = Math.floor(timeLeft / 60);
+                        const seconds = timeLeft % 60;
+
+                        timerDisplay.textContent = `Time Left: ${minutes}:${seconds < 10 ? '0' : ''}${seconds}`;
+
+                        if (timeLeft <= 0) {
+                            clearInterval(timerInterval);
+                            timerDisplay.textContent = "Time Expired";
+                        }
+
+                        timeLeft--;
+                    }, 1000);
+                };
+            </script>
+        }
+
     </form>
 </div>
 @if (!string.IsNullOrEmpty(Model.ErrorMessage))

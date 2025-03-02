@@ -1,6 +1,11 @@
 ﻿function redirectToHomepage() {
     window.location.href = "/";
 }
+
+function redirectToPharmacyPage() {
+    window.location.href = "/Pharmacy";
+}
+
 function redirectToExplorepage() {
     window.location.href = "/User/Explore_doctors";
 }

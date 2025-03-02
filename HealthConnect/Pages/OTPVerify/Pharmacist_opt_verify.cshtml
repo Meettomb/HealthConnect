@@ -1,7 +1,7 @@
 ﻿@page
-@model HealthConnect.Pages.OTPVerify.Doctor_opt_verifyModel
+@model HealthConnect.Pages.OTPVerify.Pharmacist_opt_verifyModel
 @{
-    ViewData["Title"] = "Pharmacist otp verifay";
+    ViewData["Title"] = "Sign_up_otp_verify";
     Layout = "~/Pages/Shared/_OtpVerify.cshtml";
 
     var sessionOtp = Model.HttpContext.Session.GetString("OTP");
@@ -95,6 +95,3 @@
         });
     }
 </script>
-
-
-

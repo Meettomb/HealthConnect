@@ -413,9 +413,10 @@ GROUP BY u.id, u.first_name, u.last_name, u.email, u.mobil_no,
             if (isUpdateDoctorInfo)
             {
                 TempData["SuccessMessage"] = "Doctore detail updated successfully.";
+                SuccessMessage = "Doctore detail updated successfully.";
             }
 
-            return RedirectToPage("/Account/Settings/Edit_personel_detail");
+            return RedirectToPage("/Account/Overview");
         }
         private async Task<bool> UpdateDoctorInfo(User_Table UpdateDoctorInfo)
         {
