@@ -54,6 +54,13 @@ namespace HealthConnect.Models
         public string? break_between_two_appointments { get; set; }
 
 
+        // For pharmasisit
+
+        public string? shop_licence { get; set; }
+        public string? shop_name { get; set; }
+        public string? shop_address { get; set; }
+
+
 
         public virtual ICollection<Appointments> UserAppointments { get; set; } 
         public virtual ICollection<Appointments> DoctorAppointments { get; set; }
