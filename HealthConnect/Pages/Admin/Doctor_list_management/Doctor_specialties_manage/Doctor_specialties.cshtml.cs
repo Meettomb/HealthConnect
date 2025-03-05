@@ -152,31 +152,31 @@ namespace HealthConnect.Pages.Admin.Doctor_list_management.Doctor_specialties_ma
             {
                 ModelState.AddModelError(nameof(SpecialitisOfDoctor.doctor_specialitis), "Doctor specialization cannot be empty.");
                 TempData["ErrorMessage"] = "Doctor specialization cannot be empty.";
-                return RedirectToPage(); 
+                return RedirectToPage();
             }
 
             if (SpecialitisOfDoctor.doctor_type_id == 0)
             {
                 ModelState.AddModelError(nameof(SpecialitisOfDoctor.doctor_type_id), "Doctor type cannot be empty.");
                 TempData["ErrorMessage"] = "Doctor type cannot be empty.";
-                return RedirectToPage(); 
+                return RedirectToPage();
             }
 
-               using (SqlConnection connection = new SqlConnection(_connectionString))
+            using (SqlConnection connection = new SqlConnection(_connectionString))
+            {
+                connection.Open();
+                string query = "INSERT INTO Doctor_Specialitis (doctor_type_id, doctor_specialitis) VALUES (@Doctor_type_id, @Doctor_specialitis)";
+
+                using (SqlCommand command = new SqlCommand(query, connection))
                 {
-                    connection.Open();
-                    string query = "INSERT INTO Doctor_Specialitis (doctor_type_id, doctor_specialitis) VALUES (@Doctor_type_id, @Doctor_specialitis)";
-
-                    using (SqlCommand command = new SqlCommand(query, connection))
-                    {
-                        command.Parameters.AddWithValue("@Doctor_type_id", SpecialitisOfDoctor.doctor_type_id);
-                        command.Parameters.AddWithValue("@Doctor_specialitis", SpecialitisOfDoctor.doctor_specialitis);
-                        command.ExecuteNonQuery();
-                    }
+                    command.Parameters.AddWithValue("@Doctor_type_id", SpecialitisOfDoctor.doctor_type_id);
+                    command.Parameters.AddWithValue("@Doctor_specialitis", SpecialitisOfDoctor.doctor_specialitis);
+                    command.ExecuteNonQuery();
                 }
+            }
 
-                TempData["SuccessMessage"] = "Doctor specialization added successfully.";
-                return RedirectToPage("/Admin/Doctor_list_management/Doctor_specialties_manage/Doctor_specialties");            
+            TempData["SuccessMessage"] = "Doctor specialization added successfully.";
+            return RedirectToPage("/Admin/Doctor_list_management/Doctor_specialties_manage/Doctor_specialties");
         }
 
 

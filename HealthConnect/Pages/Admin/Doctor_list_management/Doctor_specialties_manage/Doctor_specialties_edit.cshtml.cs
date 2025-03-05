@@ -140,7 +140,7 @@ namespace HealthConnect.Pages.Admin.Doctor_list_management
 
         public IActionResult OnPost()
         {
-         
+
 
             using (SqlConnection connection = new SqlConnection(_connectionString))
             {

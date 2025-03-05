@@ -99,7 +99,8 @@ namespace HealthConnect.Pages.Admin.UserData.UserList
                                 doctore_experience = !reader.IsDBNull(19) ? reader.GetString(19) : null,
                                 hospital_or_clinic = !reader.IsDBNull(20) ? reader.GetString(20) : null,
                                 doctor_qualifications = !reader.IsDBNull(21) ? reader.GetString(21) : null,
-                                doctor_type = !reader.IsDBNull(22) ? reader.GetString(22) : null,
+                                doctor_type = !reader.IsDBNull(22) ? reader.GetInt32(22).ToString() : null,
+
                                 //doctor_type = !reader.IsDBNull(22) ? int.Parse(reader.GetString(22)) : (int?)null,
 
 

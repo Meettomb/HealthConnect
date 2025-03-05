@@ -118,7 +118,8 @@ namespace HealthConnect.Pages.Admin.UserData
                                 medicine_type = doctorReader.GetString(29),
                                 currency_code = doctorReader.GetString(30),
                                 video_call_consultation_fee = doctorReader.GetString(31),
-                                doctor_type = doctorReader.GetString(22),
+                                doctor_type = doctorReader.IsDBNull(22) ? null : doctorReader.GetInt32(22).ToString(),
+
                                 doctor_specialitis = doctorReader.GetString(32)
                             };
                         }

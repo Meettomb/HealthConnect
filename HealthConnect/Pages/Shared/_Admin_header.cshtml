@@ -60,12 +60,12 @@
                                     <span class="name_first_latter">
                                         @Model.FirstName[0].ToString().ToUpper()
                                     </span>
-                                   
+
                                 }
                                 else
                                 {
                                     <img class="img-xs rounded-circle" src="/documant/@Model.ProfilePic" alt="image" />
-                                   
+
                                 }
 
                                 <span class="count bg-success"></span>
@@ -129,7 +129,8 @@
                                 </a>
 
                             }
-                            else{
+                            else
+                            {
                                 <a class="dropdown-item preview-item" href="/User/Logout">
                                     <div class="preview-thumbnail">
                                         <div class="preview-icon bg-dark rounded-circle">
@@ -178,7 +179,7 @@
                     </div>
                 </li>
 
-                
+
                 <li class="nav-item menu-items">
                     <a class="nav-link" data-toggle="collapse" href="#doctor-list-management" aria-expanded="false" aria-controls="user-management">
                         <span class="menu-icon">
@@ -195,8 +196,24 @@
                     </div>
                 </li>
 
+                <li class="nav-item menu-items">
+                    <a class="nav-link" data-toggle="collapse" href="#medicine-list-management" aria-expanded="false" aria-controls="user-management">
+                        <span class="menu-icon">
+                            <i class="fa-solid fa-pills"></i>
+                        </span>
+                        <span class="menu-title">Medicine Manage</span>
+                        <i class="menu-arrow"></i>
+                    </a>
+                    <div class="collapse" id="medicine-list-management">
+                        <ul class="nav flex-column sub-menu">
+                            <li class="nav-item"><a class="nav-link" href="/Admin/Medicine_list_management/Medicine_Main_Category_manage/Medicine_Main_Category">Medicine main catagory</a></li>
+                            <li class="nav-item"><a class="nav-link" href="/Admin/Medicine_list_management/Medicine_Main_Category_manage/Medicine_Sub_Category">Medicine sub catagory</a></li>
+                        </ul>
+                    </div>
+                </li>
 
-               
+
+
 
 
 
@@ -276,7 +293,7 @@
                                         <p class="preview-subject ellipsis mb-1 text-small">Change Password</p>
                                     </div>
                                 </a>
-                                <div class="dropdown-divider"></div> 
+                                <div class="dropdown-divider"></div>
                                 <a href="/" class="dropdown-item preview-item">
                                     <div class="preview-thumbnail">
                                         <div class="preview-icon bg-dark rounded-circle">
