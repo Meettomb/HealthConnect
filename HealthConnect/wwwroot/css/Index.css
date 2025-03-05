@@ -724,13 +724,11 @@ header img {
     z-index: 1000;
     position: absolute;
     top: 0;
-    &:hover
-
-{
-    background-color: var(--button-hover-bg-color);
 }
 
-}
+    .back_button i :hover {
+        background-color: var(--button-hover-bg-color);
+    }
 
 .loging_container {
     width: 100%;
@@ -873,239 +871,146 @@ header img {
 /*--------------------------------------------------------------------------------------------------------------*/
 /*--------------------------------------------------------------------------------------------------------------*/
 /*--------------------------------------------------------------------------------------------------------------*/
-.regi_form_container {
+
+
+
+
+
+.regi_body {
     width: 100%;
-    height: 90vh;
-    justify-content: space-evenly;
-}
-
-.user_filsd_wrep {
-    display: flex;
-    margin: 30px 0;
-    position: relative;
-}
-
-    .user_filsd_wrep .user_input_box input {
-        padding: 10px 1px;
-    }
-
-        .user_filsd_wrep .user_input_box input[type=date] {
-            padding: 10px 50px;
-        }
-
-
-@media (max-width: 683px) {
-    .user_filsd_wrep .user_input_box input[type=date] {
-        padding: 10px 40px;
-    }
-
-    .user_filsd_wrep {
-        flex-wrap: wrap;
-        margin: 10px 0;
-    }
-
-    .back_button i {
-        margin: 5px;
-    }
-}
-
-.regi_form_container .form_container {
-    width: 95%;
+    height: auto;
     display: flex;
     justify-content: center;
-}
-
-.regi_form_container form {
-    max-width: 100%;
-    min-width: 30%;
-    border-radius: 10px;
-    padding: 20px;
-    display: flex;
-    flex-direction: column;
     align-items: center;
 }
 
-    .regi_form_container form .from_heading {
-        font-size: 30px;
-        font-weight: 600;
-        color: var(--heading-color);
-        text-align: center;
-        margin: 30px 0 70px 0;
-    }
-
-    .regi_form_container form .user_input_box {
-        width: 100%;
-        padding: 10px 20px;
-        position: relative;
+    .regi_body .regi_form_container {
+        width: 95%;
         display: flex;
         justify-content: center;
+        margin-top: 60px;
+        padding: 50px 0;
     }
 
-        .regi_form_container form .user_input_box input {
-            width: 90%;
-            padding: 10px 15px;
-            border: none;
-            border: 2px solid #ccc;
-            border-radius: 5px;
-            background-color: #F5F5F5;
-            font-size: 16px;
-            color: var(--accent-color);
+        .regi_body .regi_form_container .from_heading {
+            text-align: center;
+            color: var(--heading-color);
+            font-size: 30px;
+            font-family: var(--heading-font);
         }
 
-        .regi_form_container form .user_input_box select {
-            width: 100%;
-            padding: 10px 0px 10px 0px;
-            border: none;
-            border-bottom: 2px solid #ccc;
-            font-size: 16px;
+        .regi_body .regi_form_container form {
+            width: 50%;
         }
 
+            .regi_body .regi_form_container form .user_filsd_wrep {
+                width: 100%;
+                display: flex;
+                justify-content: space-between;
+                margin-top: 30px;
+            }
 
-        .regi_form_container form .user_input_box label {
-            position: absolute;
-            top: 35%;
-            left: 9%;
-            transition: all 0.3s ease;
+                .regi_body .regi_form_container form .user_filsd_wrep .user_input_box input {
+                    width: 90%;
+                    padding: 7px 10px;
+                    font-size: 17px;
+                    margin-top: 10px;
+                    color: var(--default-color);
+                    font-family: var(--default-font);
+                }
+
+                .regi_body .regi_form_container form .user_filsd_wrep .user_input_box i {
+                    margin-left: 89%;
+                    position: relative;
+                    top: -28px;
+                    cursor: pointer;
+                    font-size: 17px;
+                    color: var(--accent-color);
+                }
+
+                .regi_body .regi_form_container form .user_filsd_wrep .user_input_box {
+                    width: 45%;
+                }
+
+                .regi_body .regi_form_container form .user_filsd_wrep label {
+                    width: 100%;
+                    color: var(--accent-color);
+                    font-family: var(--heading-font);
+                    font-size: 16.5px;
+                }
+
+                .regi_body .regi_form_container form .user_filsd_wrep .user_input_box select {
+                    width: 97%;
+                    padding: 7px 10px;
+                    font-size: 17px;
+                    margin-top: 10px;
+                    color: var(--default-color);
+                    font-family: var(--default-font);
+                }
+
+            .regi_body .regi_form_container form .login_button {
+                width: 100%;
+                display: flex;
+                justify-content: center;
+            }
+
+
+            .regi_body .regi_form_container form a {
+                display: flex;
+                justify-self: center;
+                margin: 10px 0;
+            }
+
+@media(max-width: 1000px) {
+    .regi_body .regi_form_container form {
+        width: 70%;
+    }
+
+        .regi_body .regi_form_container form .user_filsd_wrep .user_input_box i {
+            margin-left: 88%;
+            top: -28px;
+        }
+}
+
+@media(max-width: 710px) {
+    .regi_body .regi_form_container form {
+        width: 90%;
+    }
+
+        .regi_body .regi_form_container form .user_filsd_wrep {
+            -ms-flex-direction: column;
+            -webkit-flex-direction: column;
+            flex-direction: column;
+            row-gap: 10px;
         }
 
-        .regi_form_container form .user_input_box input:focus {
-            outline: none;
-            border-bottom: 2px solid var(--accent-color);
-        }
+            .regi_body .regi_form_container form .user_filsd_wrep .user_input_box {
+                width: 100%;
+            }
 
-    .regi_form_container form p {
-        color: red;
-        margin: 10px 0 10px 10px;
-        font-size: 14px;
-        font-weight: 500;
-        align-self: flex-start;
-    }
+                .regi_body .regi_form_container form .user_filsd_wrep .user_input_box input {
+                    width: 93%;
+                }
 
-    .regi_form_container form .user_input_box i {
-        position: absolute;
-        top: 35%;
-        right: 10%;
-        font-size: 20px;
-        color: var(--accent-color);
-    }
-
-    .regi_form_container form .user_input_box input:focus + label,
-    .regi_form_container form .user_input_box input + label {
-        top: -10px;
-        font-size: 14px;
-        color: var(--accent-color);
-        font-weight: 600;
-    }
-
-.regi_form_container button {
-    background-color: var(--accent-color);
-    color: var(--contrast-color);
-    padding: 10px 100px;
-    border-radius: 5px;
-    cursor: pointer;
-    -webkit-text-decoration: inherit;
-    text-decoration: inherit;
-    margin: 15px 0px 20px 0px;
-    border: none;
-    font-size: 16px;
-    &:hover
-
-{
-    background-color: var(--button-hover-bg-color);
+                .regi_body .regi_form_container form .user_filsd_wrep .user_input_box select {
+                    width: 100%;
+                }
+                .regi_body .regi_form_container form .user_filsd_wrep .user_input_box i {
+                    margin-left: 90%;
+                    top: -28px;
+                }
 }
-
-}
-
-.regi_form_container form a {
-    color: var(--accent-color);
-    text-decoration: none;
-    font-weight: 600;
-    font-size: 14px;
-    margin: 5px 0px 20px 0px;
-    &:hover
-
-{
-    color: var(--accent-color);
-    text-decoration: underline;
-}
-
-}
-
-.user_filsd_wrep .radio {
-    display: flex;
-    justify-content: center;
-    gap: 180px;
-    margin-left: -33px;
-}
-
-.regi_form_container form .male_radio::after {
-    content: 'Male';
-    padding: 15px 20px;
-    background-color: white;
-    margin: 10px 0px 10px 0px;
-    border: 1px dashed var(--heading-color);
-    cursor: pointer;
-}
-
-.regi_form_container form .female_radio::after {
-    content: 'Female';
-    padding: 15px 6px;
-    background-color: white;
-    margin: 10px 0px 10px 0px;
-    border: 1px dashed var(--heading-color);
-    cursor: pointer;
-}
-
-.regi_form_container form .patient_radio::after {
-    content: 'User';
-    padding: 15px 13px;
-    background-color: white;
-    margin: 10px 0px 10px 0px;
-    border: 1px dashed var(--heading-color);
-    cursor: pointer;
-}
-
-.regi_form_container form .doctor_radio::after {
-    content: 'Doctor';
-    padding: 15px 10px;
-    background-color: white;
-    margin: 10px 0px 10px 0px;
-    border: 1px dashed var(--heading-color);
-    cursor: pointer;
-}
-
-.regi_form_container form .pharmacist_radio::after {
-    content: 'Pharmacist';
-    padding: 15px 10px;
-    background-color: white;
-    margin: 10px 0px 10px 0px;
-    border: 1px dashed var(--heading-color);
-    cursor: pointer;
-}
-
-.user_filsd_wrep .user_input_box select {
-    max-width: 100%;
-    min-width: 100%;
-    outline: 1px solid #ccc;
-    background-color: red;
-    border-radius: 5px;
-    border-bottom: none;
-}
-
-    .user_filsd_wrep .user_input_box select option {
-        background-color: #F5F5F5;
-        color: black;
-        font-weight: 500;
-        font-size: 15px;
-    }
-
-
-
-
-
-
-
-
+/*--------------------------------------------------------------------------------------------------------------*/
+/*--------------------------------------------------------------------------------------------------------------*/
+/*--------------------------------------------------------------------------------------------------------------*/
+/*--------------------------------------------------------------------------------------------------------------*/
+/*--------------------------------------------------------------------------------------------------------------*/
+/*                                                  Index                                                       */
+/*--------------------------------------------------------------------------------------------------------------*/
+/*--------------------------------------------------------------------------------------------------------------*/
+/*--------------------------------------------------------------------------------------------------------------*/
+/*--------------------------------------------------------------------------------------------------------------*/
+/*--------------------------------------------------------------------------------------------------------------*/
 .index_section_1 {
     height: 100vh;
     font-family: var(--default-font);
@@ -4300,7 +4205,7 @@ header img {
 @media (max-width: 1000px) {
 
     .pharmacy_header_container.pharmacy_header_scrolled {
-        position:relative;
+        position: relative;
         width: 100%;
         z-index: 1000;
         background-color: var(--contrast-color);
@@ -4470,5 +4375,4 @@ header img {
 
 
 .pharmacy_index_container {
-   
 }

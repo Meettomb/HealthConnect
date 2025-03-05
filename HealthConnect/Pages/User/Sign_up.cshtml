@@ -19,7 +19,7 @@
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 
 </head>
-<body class="login_body">
+<body class="regi_body">
 
     <div class="back_button" onclick="history.back()"><i class="fa-solid fa-arrow-left"></i></div>
 
@@ -31,41 +31,41 @@
 
             <div class="user_filsd_wrep">
                 <div class="user_input_box">
-                    <input type="text" name="first_name" placeholder="First Name" required>
                     <label>First Name</label>
+                    <input type="text" name="first_name" placeholder="First Name" required>
                 </div>
                 <p class="error"></p>
 
                 <div class="user_input_box">
-                    <input type="text" name="last_name" placeholder="Last Name" required>
                     <label>Last Name</label>
+                    <input type="text" name="last_name" placeholder="Last Name" required>
                 </div>
                 <p class="error"></p>
             </div>
 
             <div class="user_filsd_wrep">
                 <div class="user_input_box">
-                    <input type="email" name="email" placeholder="Email" required>
                     <label>Email</label>
+                    <input type="email" name="email" placeholder="Email" required>
                 </div>
                 <p class="error"></p>
 
                 <div class="user_input_box">
-                    <input type="text" name="mobil_no" maxlength="10" placeholder="Mobil Number" required>
                     <label>Mobil Number</label>
+                    <input type="text" name="mobil_no" maxlength="10" placeholder="Mobil Number" required>
                 </div>
                 <p class="error"></p>
             </div>
 
             <div class="user_filsd_wrep">
                 <div class="user_input_box">
-                    <input type="date" name="dob" placeholder="Date of Birth" required>
                     <label>Date of Birth</label>
+                    <input type="date" name="dob" placeholder="Date of Birth" required>
                 </div>
                 <p class="error"></p>
                 <div class="user_input_box">
-                    <input type="text" name="House_number_and_Street_name" placeholder="Address" required>
                     <label>House number & Street name</label>
+                    <input type="text" name="House_number_and_Street_name" placeholder="Address" required>
                 </div>
                 <p class="error"></p>
 
@@ -73,6 +73,7 @@
 
             <div class="user_filsd_wrep">
                 <div class="user_input_box">
+                    <label>Select your country</label>
                     <select id="country-select" style="background-color: transparent;" name="country" required>
                         <option disabled selected>-- Select your Country --</option>
                     </select>
@@ -82,6 +83,7 @@
                 <p class="error"></p>
 
                 <div class="user_input_box">
+                    <label>Select your state</label>
                     <select id="state-select" style="background-color: transparent;" name="state" required>
                         <option disabled selected>-- Select your State --</option>
                     </select>
@@ -93,6 +95,7 @@
 
             <div class="user_filsd_wrep">
                 <div class="user_input_box">
+                    <label>Select your city</label>
                     <select id="city-select" style="background-color: transparent;" name="city" required>
                         <option disabled selected>-- Select your City --</option>
                     </select>
@@ -100,37 +103,18 @@
                 <p class="error"></p>
 
                 <div class="user_input_box">
+                    <label>Enter your pincode</label>
                     <input type="text" name="pincode" maxlength="12" min="4" placeholder="Pincode" required>
-                    <label>Pincode</label>
                 </div>
                 <p class="error"></p>
             </div>
 
 
-            @* <div>Gender</div> *@
-            @* <div class="user_filsd_wrep"> *@
-            @*     <div class="user_input_box radio"> *@
-            @*         <input class="male_radio" type="radio" name="gender" value="Male" required /> *@
-            @*         <input class="female_radio" type="radio" name="gender" value="Female" required /> *@
-            @*     </div> *@
-            @*     <p class="error"></p> *@
-
-            @* </div> *@
-
-            @* <div>Role</div> *@
-            @* <div class="user_filsd_wrep"> *@
-            @*     <div class="user_input_box radio"> *@
-            @*         <input class="patient_radio" type="radio" name="role" value="User" required /> *@
-            @*         <input class="doctor_radio" type="radio" name="role" value="Doctor" required /> *@
-            @*         <input class="pharmacist_radio" type="radio" name="role" value="Pharmacist" required /> *@
-            @*     </div> *@
-            @*     <p class="error"></p> *@
-            @* </div> *@
-
 
 
             <div class="user_filsd_wrep">
                 <div class="user_input_box">
+                    <label>Select your Gender</label>
                     <select style="background-color: transparent;" name="gender" required>
                         <option selected disabled value="">-- Select your Gender --</option>
                         <option value="Male">Male</option>
@@ -140,6 +124,7 @@
                 <p class="error"></p>
 
                 <div class="user_input_box">
+                    <label>Select your role</label>
                     <select style="background-color: transparent;" name="role" required>
                         <option selected disabled value="">-- Select your Role --</option>
                         <option value="User">User</option>
@@ -153,15 +138,15 @@
 
             <div class="user_filsd_wrep">
                 <div class="user_input_box">
-                    <input type="password" class="password-input" name="password" placeholder="Password" required>
                     <label>Password</label>
+                    <input type="password" class="password-input" name="password" placeholder="Password" required>
                     <i class="fa-regular fa-eye"></i>
                 </div>
                 <p class="error"></p>
 
                 <div class="user_input_box">
-                    <input type="password" class="password-input" name="confirm_password" placeholder="Confirm Password" required>
                     <label>Confirm Password</label>
+                    <input type="password" class="password-input" name="confirm_password" placeholder="Confirm Password" required>
                     <i class="fa-regular fa-eye"></i>
                 </div>
                 <p class="error"></p>
@@ -187,7 +172,7 @@
 
 
 
-
+    <!--
     <script>
 
 
@@ -351,7 +336,7 @@
 
     </script>
 
-
+    -->
     <script>
                 document.addEventListener('DOMContentLoaded', () => {
             const passwordInputs = document.querySelectorAll('.password-input');
