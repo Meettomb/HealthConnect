@@ -130,7 +130,7 @@ namespace HealthConnect.Pages.Admin.Medicine_list_management
         {
             if (id <= 0)
             {
-                ModelState.AddModelError(string.Empty, "Invalid doctor type ID.");
+                ModelState.AddModelError(string.Empty, "Invalid Medicine main category id.");
                 return Page();
             }
 

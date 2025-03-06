@@ -5,20 +5,23 @@ using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.Data.SqlClient;
 using Microsoft.Extensions.Options;
 
-namespace HealthConnect.Pages.Admin.Doctor_list_management.Doctor_types_manage
+namespace HealthConnect.Pages.Admin.Medicine_list_management.Medicine_Sub_Category_manage
 {
-    public class Doctor_typesModel : PageModel
+    public class Medicine_Sub_Category_EditModel : PageModel
     {
         private readonly IEmailService _emailService;
         private readonly EmailSettings _emailSettings;
         private readonly string _connectionString;
 
         [BindProperty]
-        public Types_of_Doctor TypesOfDoctor { get; set; } = new Types_of_Doctor();
+        public Medicine_Main_Category MedicineMainCategory { get; set; } = new Medicine_Main_Category();
 
-        public List<Types_of_Doctor> Types_of_doctor { get; set; } = new List<Types_of_Doctor>();
+        public List<Medicine_Main_Category> Medicine_Main_Category { get; set; } = new List<Medicine_Main_Category>();
 
+        [BindProperty]
+        public Medicine_Sub_Category MedicineSubCategory { get; set; } = new Medicine_Sub_Category();
 
+        public List<Medicine_Sub_Category> Medicine_Sub_Category { get; set; } = new List<Medicine_Sub_Category>();
 
         public string? FirstName { get; set; }
         public string? LastName { get; set; }
@@ -28,14 +31,14 @@ namespace HealthConnect.Pages.Admin.Doctor_list_management.Doctor_types_manage
         public string? ErrorMessage { get; set; }
         public string SuccessMessage { get; set; }
 
-        public Doctor_typesModel(IEmailService emailService, IOptions<EmailSettings> emailSettings, IConfiguration configuration)
+        public Medicine_Sub_Category_EditModel(IEmailService emailService, IOptions<EmailSettings> emailSettings, IConfiguration configuration)
         {
             _emailService = emailService;
             _emailSettings = emailSettings.Value;
             _connectionString = configuration.GetConnectionString("HealthConnect");
         }
 
-        public IActionResult OnGet()
+        public IActionResult OnGet(int medicine_sub_category_id)
         {
             UserId = HttpContext.Session.GetInt32("Id");
             if (UserId.HasValue)
@@ -79,7 +82,7 @@ namespace HealthConnect.Pages.Admin.Doctor_list_management.Doctor_types_manage
 
             using (SqlConnection connection = new SqlConnection(_connectionString))
             {
-                string query = "SELECT * FROM Types_of_Doctor";
+                string query = "SELECT * FROM Medicine_Main_Category";
                 using (SqlCommand command = new SqlCommand(query, connection))
                 {
                     connection.Open();
@@ -87,76 +90,81 @@ namespace HealthConnect.Pages.Admin.Doctor_list_management.Doctor_types_manage
                     {
                         while (reader.Read())
                         {
-                            Types_of_Doctor doctorType = new Types_of_Doctor();
-                            doctorType.doctor_type_id = reader.GetInt32(0);
-                            doctorType.type_of_doctor = reader.GetString(1);
-
-                            Types_of_doctor.Add(doctorType);
+                            Medicine_Main_Category.Add(new Medicine_Main_Category
+                            {
+                                medicine_main_category_id = reader.GetInt32(0),
+                                medicine_main_category_name = reader.GetString(1)
+                            });
                         }
                     }
-                    connection.Close();
                 }
+            }
+
+            using (SqlConnection connection = new SqlConnection(_connectionString))
+            {
+                string query = "SELECT * FROM Medicine_Sub_Category WHERE medicine_sub_category_id = @medicine_sub_category_id";
+                using (SqlCommand command = new SqlCommand(query, connection))
+                {
+                    command.Parameters.AddWithValue("@medicine_sub_category_id", medicine_sub_category_id);
+                    connection.Open();
+                    using (SqlDataReader reader = command.ExecuteReader())
+                    {
+                        if (reader.Read())
+                        {
+                            MedicineSubCategory = new Medicine_Sub_Category
+                            {
+                                medicine_sub_category_id = reader.GetInt32(0),
+                                medicine_main_category_id = reader.GetInt32(1),
+                                medicine_sub_category_name = reader.GetString(2)
+                            };
+                        }
+                        else
+                        {
+                            TempData["ErrorMessage"] = "Medicine sub category not found.";
+                            return RedirectToPage("/Error");
+                        }
+                    }
+                }
+            }
+
+            if (MedicineSubCategory == null)
+            {
+                ErrorMessage = "Medicine sub category not found.";
+                return RedirectToPage("/Error");
             }
 
             return Page();
         }
 
 
+
         public IActionResult OnPost()
         {
-            if (string.IsNullOrWhiteSpace(TypesOfDoctor.type_of_doctor))
-            {
-                ModelState.AddModelError(string.Empty, "Doctor type cannot be empty.");
-                return Page();
-            }
+
 
             using (SqlConnection connection = new SqlConnection(_connectionString))
             {
-                connection.Open();
-                string query = "INSERT INTO Types_of_Doctor (type_of_doctor) VALUES (@Type_of_doctor)";
-
+                string query = "UPDATE Medicine_Sub_Category SET medicine_sub_category_name = @medicine_sub_category_name, medicine_main_category_id = @medicine_main_category_id WHERE medicine_sub_category_id = @medicine_sub_category_id";
                 using (SqlCommand command = new SqlCommand(query, connection))
                 {
-                    command.Parameters.AddWithValue("@Type_of_doctor", TypesOfDoctor.type_of_doctor);
-                    command.ExecuteNonQuery();
-                }
-            }
+                    command.Parameters.AddWithValue("@medicine_sub_category_name", MedicineSubCategory.medicine_sub_category_name);
+                    command.Parameters.AddWithValue("@medicine_main_category_id", MedicineSubCategory.medicine_main_category_id);
+                    command.Parameters.AddWithValue("@medicine_sub_category_id", MedicineSubCategory.medicine_sub_category_id);
 
-            TempData["SuccessMessage"] = "Doctor type added successfully.";
-            return RedirectToPage("/Admin/Doctor_list_management/Doctor_types_manage/Doctor_types");
-        }
-
-        // OnPostDelete method to handle delete operation
-        public IActionResult OnPostDelete(int id)
-        {
-            if (id <= 0)
-            {
-                ModelState.AddModelError(string.Empty, "Invalid doctor type ID.");
-                return Page();
-            }
-
-            using (SqlConnection connection = new SqlConnection(_connectionString))
-            {
-                string query = "DELETE FROM Types_of_Doctor WHERE doctor_type_id = @doctor_type_id";
-                using (SqlCommand command = new SqlCommand(query, connection))
-                {
-                    command.Parameters.AddWithValue("@doctor_type_id", id);
                     connection.Open();
                     int result = command.ExecuteNonQuery();
-                    connection.Close();
-
                     if (result > 0)
                     {
-                        TempData["SuccessMessage"] = "Doctor type deleted successfully.";
+                        TempData["SuccessMessage"] = "Medicine sub category updated successfully.";
+                        return RedirectToPage("/Admin/Medicine_list_management/Medicine_Sub_Category_manage/Medicine_Sub_Category");
                     }
                     else
                     {
-                        ModelState.AddModelError(string.Empty, "Error deleting doctor type.");
+                        TempData["ErrorMessage"] = "Error updating Medicine sub category.";
+                        return Page();
                     }
                 }
             }
-
-            return RedirectToPage("/Admin/Doctor_list_management/Doctor_types_manage/Doctor_types");
         }
 
     }

@@ -37,6 +37,26 @@
 </head>
 <body>
 
+    @if (!string.IsNullOrEmpty(Model.ErrorMessage))
+    {
+        <div class="error_message" id="errorMessage">@Model.ErrorMessage</div>
+    }
+
+    @if (!string.IsNullOrEmpty(Model.SuccessMessage))
+    {
+        <p class="success_message" id="successMessage">@Model.SuccessMessage</p>
+    }
+
+    @if (TempData["SuccessMessage"] != null)
+    {
+        <div class="success_message" id="tempSuccessMessage">@TempData["SuccessMessage"]</div>
+    }
+
+    @if (TempData["ErrorMessage"] != null)
+    {
+        <div class="error_message" id="tempErrorMessage">@TempData["ErrorMessage"]</div>
+    }
+
     <div class="loder" id="loder">
         <img src="/Loder.gif" alt="Alternate Text" />
     </div>
@@ -207,7 +227,7 @@
                     <div class="collapse" id="medicine-list-management">
                         <ul class="nav flex-column sub-menu">
                             <li class="nav-item"><a class="nav-link" href="/Admin/Medicine_list_management/Medicine_Main_Category_manage/Medicine_Main_Category">Medicine main catagory</a></li>
-                            <li class="nav-item"><a class="nav-link" href="/Admin/Medicine_list_management/Medicine_Main_Category_manage/Medicine_Sub_Category">Medicine sub catagory</a></li>
+                            <li class="nav-item"><a class="nav-link" href="/Admin/Medicine_list_management/Medicine_Sub_Category_manage/Medicine_Sub_Category">Medicine sub catagory</a></li>
                         </ul>
                     </div>
                 </li>

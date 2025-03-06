@@ -19,6 +19,10 @@ namespace HealthConnect.Pages.Admin.UserData.UserList
         public string Role { get; set; }
         public int? UserId { get; set; }
 
+        public string? ErrorMessage { get; set; }
+        public string SuccessMessage { get; set; }
+
+
         private readonly IEmailService _emailService;
         private readonly EmailSettings _emailSettings;
         private readonly string _connectionString;

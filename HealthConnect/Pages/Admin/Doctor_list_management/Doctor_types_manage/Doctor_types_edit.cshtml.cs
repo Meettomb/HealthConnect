@@ -23,6 +23,7 @@ namespace HealthConnect.Pages.Admin.Doctor_list_management.Doctor_types_manage
         public string? Role { get; set; }
         public int? UserId { get; set; }
         public string? ErrorMessage { get; set; }
+        public string SuccessMessage { get; set; }
 
         public Doctor_types_editModel(IEmailService emailService, IOptions<EmailSettings> emailSettings, IConfiguration configuration)
         {

@@ -27,6 +27,9 @@ namespace HealthConnect.Pages.Admin.UserData.UserList
         public string? LastName { get; set; }
         public string? Role { get; set; }
         public string? ProfilePic { get; set; }
+
+        public string? ErrorMessage { get; set; }
+        public string SuccessMessage { get; set; }
         public IActionResult OnGet(int id)
         {
             UserId = HttpContext.Session.GetInt32("Id");

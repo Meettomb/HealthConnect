@@ -25,6 +25,9 @@ namespace HealthConnect.Pages.Admin.UserData
         public string LastName { get; set; }
         public string Role { get; set; }
         public string ProfilePic { get; set; }
+
+        public string? ErrorMessage { get; set; }
+        public string SuccessMessage { get; set; }
         public Register_inquiry_approveModel(IEmailService emailService, IOptions<EmailSettings> emailSettings, IConfiguration configuration)
         {
             _emailService = emailService;

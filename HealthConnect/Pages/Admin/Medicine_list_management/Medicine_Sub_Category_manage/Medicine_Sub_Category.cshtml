@@ -1,8 +1,8 @@
 ﻿@page
-@model Doctor_specialtiesModel
+@model HealthConnect.Pages.Admin.Medicine_list_management.Medicine_Sub_Category_manage.Medicine_Sub_CategoryModel
 @{
     Layout = "_Admin_header";
-    ViewData["Title"] = "Doctor Specialitis list";
+    ViewData["Title"] = "Medicine Sub Category";
 }
 
 
@@ -11,24 +11,24 @@
 <div class="col-md-6 grid-margin stretch-card">
     <div class="card">
         <div class="card-body">
-            <h4 class="card-title">Add doctor specialitis of doctor</h4>
+            <h4 class="card-title">Add medicine sub category</h4>
             <form method="post" asp-page-handler="RoleUpdate">
                 <div class="col-md-12">
                     <div class="form-group row">
                         <div class="col-sm-12">
 
                             <div class="form-group">
-                                <select class="form-control" name="doctor_type_id">
+                                <select class="form-control" name="medicine_main_category_id">
                                     <option selected disabled>Select Doctor Type</option>
-                                    @foreach (var item in Model.Types_of_doctor)
+                                    @foreach (var item in Model.Medicine_Main_Category)
                                     {
-                                        <option value="@item.doctor_type_id">@item.type_of_doctor</option>
+                                        <option value="@item.medicine_main_category_id">@item.medicine_main_category_name</option>
                                     }
                                 </select>
                             </div>
                             <div class="form-group">
-                                <label for="doctor_specialitis">Specialitis of doctor</label>
-                                <input type="text" class="form-control" name="doctor_specialitis" id="doctor_specialitis" placeholder="Specialitis of doctor">
+                                <label for="medicine_sub_category_name">Specialitis of doctor</label>
+                                <input type="text" class="form-control" name="medicine_sub_category_name" id="medicine_sub_category_name" placeholder="Medicine sub category name">
                             </div>
 
                         </div>
@@ -45,7 +45,6 @@
 
 
 
-
 <div class="col-md-12 grid-margin stretch-card">
     <div class="card">
         <div class="card-body">
@@ -54,29 +53,28 @@
                 <table class="table">
                     <thead>
                         <tr>
-                            <th> Id </th>
-                            <th> Doctor Type Id </th>
-                            <th> Type of Doctor </th>
-                            <th> Specialitis of Doctor </th>
+                            <th> Medicine sub category id </th>
+                            <th> Medicine main category id </th>
+                            <th> Medicine main category name </th>
+                            <th> Medicine sub category name </th>
 
                         </tr>
                     </thead>
                     <tbody>
 
-                        @foreach (var item in Model.doctorSpecialitiesList)
+                        @foreach (var item in Model.Medicine_Sub_Category)
                         {
                             <tr class="data">
-                                <td> @item.doctor_specialitis_id </td>
-                                <td> @item.doctor_type_id </td>
-                                <td> @item.Types_of_Doctor.type_of_doctor </td>
-                                <td> @item.doctor_specialitis </td>
+                                <td> @item.medicine_sub_category_id </td>
+                                <td> @item.medicine_main_category_id </td>
+                                <td> @item.Medicine_Main_Category.medicine_main_category_name </td>
+                                <td> @item.medicine_sub_category_name </td>
                                 <td>
-                                    <a class="edit_icon" href="/Admin/Doctor_list_management/Doctor_specialties_manage/Doctor_specialties_edit?doctor_specialitis_id=@item.doctor_specialitis_id"><i class="fa-regular fa-pen-to-square"></i></a>
-
+                                    <a class="edit_icon" href="/Admin/Medicine_list_management/Medicine_Sub_Category_manage/Medicine_Sub_Category_Edit?medicine_sub_category_id=@item.medicine_sub_category_id"><i class="fa-regular fa-pen-to-square"></i></a>
                                 </td>
                                 <td>
                                     <form method="post" asp-page-handler="Delete">
-                                        <input type="hidden" name="id" value="@item.doctor_specialitis_id" />
+                                        <input type="hidden" name="id" value="@item.medicine_sub_category_id" />
                                         <button class="btn btn-danger"><i class="fa-solid fa-trash-can"></i></button>
                                     </form>
                                 </td>
@@ -88,5 +86,3 @@
         </div>
     </div>
 </div>
-
-

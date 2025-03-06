@@ -5,37 +5,40 @@ using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.Data.SqlClient;
 using Microsoft.Extensions.Options;
 
-namespace HealthConnect.Pages.Admin.Doctor_list_management.Doctor_specialties_manage
+namespace HealthConnect.Pages.Admin.Medicine_list_management.Medicine_Sub_Category_manage
 {
-    public class Doctor_specialtiesModel : PageModel
+    public class Medicine_Sub_CategoryModel : PageModel
     {
         private readonly IEmailService _emailService;
         private readonly EmailSettings _emailSettings;
         private readonly string _connectionString;
+
+        [BindProperty]
+        public Medicine_Main_Category MedicineMainCategory { get; set; } = new Medicine_Main_Category();
+
+        public List<Medicine_Main_Category> Medicine_Main_Category { get; set; } = new List<Medicine_Main_Category>();
+
+        [BindProperty]
+        public Medicine_Sub_Category MedicineSubCategory { get; set; } = new Medicine_Sub_Category();
+
+        public List<Medicine_Sub_Category> Medicine_Sub_Category { get; set; } = new List<Medicine_Sub_Category>();
+
+
 
         public string? FirstName { get; set; }
         public string? LastName { get; set; }
         public string? ProfilePic { get; set; }
         public string? Role { get; set; }
         public int? UserId { get; set; }
-        public string ErrorMessage { get; set; }
+        public string? ErrorMessage { get; set; }
         public string SuccessMessage { get; set; }
 
-        public Doctor_specialtiesModel(IEmailService emailService, IOptions<EmailSettings> emailSettings, IConfiguration configuration)
+        public Medicine_Sub_CategoryModel(IEmailService emailService, IOptions<EmailSettings> emailSettings, IConfiguration configuration)
         {
             _emailService = emailService;
             _emailSettings = emailSettings.Value;
             _connectionString = configuration.GetConnectionString("HealthConnect");
         }
-        [BindProperty]
-        public Types_of_Doctor TypesOfDoctor { get; set; } = new Types_of_Doctor();
-
-        public List<Types_of_Doctor> Types_of_doctor { get; set; } = new List<Types_of_Doctor>();
-
-        [BindProperty]
-        public Doctor_Specialitis SpecialitisOfDoctor { get; set; } = new Doctor_Specialitis();
-
-        public List<Doctor_Specialitis> doctorSpecialitiesList = new List<Doctor_Specialitis>();
 
         public IActionResult OnGet()
         {
@@ -81,7 +84,7 @@ namespace HealthConnect.Pages.Admin.Doctor_list_management.Doctor_specialties_ma
 
             using (SqlConnection connection = new SqlConnection(_connectionString))
             {
-                string query = "SELECT * FROM Types_of_Doctor";
+                string query = "SELECT * FROM Medicine_Main_Category";
                 using (SqlCommand command = new SqlCommand(query, connection))
                 {
                     connection.Open();
@@ -90,11 +93,11 @@ namespace HealthConnect.Pages.Admin.Doctor_list_management.Doctor_specialties_ma
 
                         while (reader.Read())
                         {
-                            Types_of_Doctor doctorType = new Types_of_Doctor();
-                            doctorType.doctor_type_id = reader.GetInt32(0);
-                            doctorType.type_of_doctor = reader.GetString(1);
+                            Medicine_Main_Category MedicineMainCategory = new Medicine_Main_Category();
+                            MedicineMainCategory.medicine_main_category_id = reader.GetInt32(0);
+                            MedicineMainCategory.medicine_main_category_name = reader.GetString(1);
 
-                            Types_of_doctor.Add(doctorType);
+                            Medicine_Main_Category.Add(MedicineMainCategory);
                         }
                     }
                     connection.Close();
@@ -105,16 +108,16 @@ namespace HealthConnect.Pages.Admin.Doctor_list_management.Doctor_specialties_ma
             {
                 string query = @"
         SELECT 
-            DS.doctor_specialitis_id,
-            DS.doctor_type_id,
-            DS.doctor_specialitis,
-            TD.type_of_doctor
+            MS.medicine_sub_category_id,
+            MS.medicine_main_category_id,
+            MS.medicine_sub_category_name,
+            MM.medicine_main_category_name
         FROM 
-            Doctor_Specialitis DS
+            Medicine_Sub_Category MS
         JOIN 
-            Types_of_Doctor TD
+            Medicine_Main_Category MM
         ON 
-            DS.doctor_type_id = TD.doctor_type_id";
+            MS.medicine_main_category_id = MM.medicine_main_category_id";
 
                 using (SqlCommand command = new SqlCommand(query, connection))
                 {
@@ -123,19 +126,19 @@ namespace HealthConnect.Pages.Admin.Doctor_list_management.Doctor_specialties_ma
                     {
                         while (reader.Read())
                         {
-                            Doctor_Specialitis doctorSpecialitis = new Doctor_Specialitis
+                            Medicine_Sub_Category MedicineMainCategory = new Medicine_Sub_Category
                             {
-                                doctor_specialitis_id = reader.GetInt32(0),
-                                doctor_type_id = reader.GetInt32(1),
-                                doctor_specialitis = reader.GetString(2),
-                                Types_of_Doctor = new Types_of_Doctor
+                                medicine_sub_category_id = reader.GetInt32(0),
+                                medicine_main_category_id = reader.GetInt32(1),
+                                medicine_sub_category_name = reader.GetString(2),
+                                Medicine_Main_Category = new Medicine_Main_Category
                                 {
-                                    doctor_type_id = reader.GetInt32(1),
-                                    type_of_doctor = reader.GetString(3)
+                                    medicine_main_category_id = reader.GetInt32(1),
+                                    medicine_main_category_name = reader.GetString(3)
                                 }
                             };
 
-                            doctorSpecialitiesList.Add(doctorSpecialitis);
+                            Medicine_Sub_Category.Add(MedicineMainCategory);
                         }
                     }
                     connection.Close();
@@ -149,35 +152,35 @@ namespace HealthConnect.Pages.Admin.Doctor_list_management.Doctor_specialties_ma
 
         public IActionResult OnPost()
         {
-            if (string.IsNullOrWhiteSpace(SpecialitisOfDoctor.doctor_specialitis))
+            if (string.IsNullOrWhiteSpace(MedicineSubCategory.medicine_sub_category_name))
             {
-                ModelState.AddModelError(nameof(SpecialitisOfDoctor.doctor_specialitis), "Doctor specialization cannot be empty.");
-                TempData["ErrorMessage"] = "Doctor specialization cannot be empty.";
+                ModelState.AddModelError(nameof(MedicineSubCategory.medicine_sub_category_name), "medicine sub category name cannot be empty.");
+                TempData["ErrorMessage"] = "medicine sub category name cannot be empty.";
                 return RedirectToPage();
             }
 
-            if (SpecialitisOfDoctor.doctor_type_id == 0)
+            if (MedicineSubCategory.medicine_main_category_id == 0)
             {
-                ModelState.AddModelError(nameof(SpecialitisOfDoctor.doctor_type_id), "Doctor type cannot be empty.");
-                TempData["ErrorMessage"] = "Doctor type cannot be empty.";
+                ModelState.AddModelError(nameof(MedicineSubCategory.medicine_main_category_id), "medicine main category name cannot be empty.");
+                TempData["ErrorMessage"] = "medicine main category name cannot be empty.";
                 return RedirectToPage();
             }
 
             using (SqlConnection connection = new SqlConnection(_connectionString))
             {
                 connection.Open();
-                string query = "INSERT INTO Doctor_Specialitis (doctor_type_id, doctor_specialitis) VALUES (@Doctor_type_id, @Doctor_specialitis)";
+                string query = "INSERT INTO Medicine_Sub_Category (medicine_main_category_id, medicine_sub_category_name) VALUES (@medicine_main_category_id, @medicine_sub_category_name)";
 
                 using (SqlCommand command = new SqlCommand(query, connection))
                 {
-                    command.Parameters.AddWithValue("@Doctor_type_id", SpecialitisOfDoctor.doctor_type_id);
-                    command.Parameters.AddWithValue("@Doctor_specialitis", SpecialitisOfDoctor.doctor_specialitis);
+                    command.Parameters.AddWithValue("@medicine_main_category_id", MedicineSubCategory.medicine_main_category_id);
+                    command.Parameters.AddWithValue("@medicine_sub_category_name", MedicineSubCategory.medicine_sub_category_name);
                     command.ExecuteNonQuery();
                 }
             }
 
-            TempData["SuccessMessage"] = "Doctor specialization added successfully.";
-            return RedirectToPage("/Admin/Doctor_list_management/Doctor_specialties_manage/Doctor_specialties");
+            TempData["SuccessMessage"] = "Medicine main category added successfully.";
+            return RedirectToPage("/Admin/Medicine_list_management/Medicine_Sub_Category_manage/Medicine_Sub_Category");
         }
 
 
@@ -185,23 +188,23 @@ namespace HealthConnect.Pages.Admin.Doctor_list_management.Doctor_specialties_ma
         {
             if (id <= 0)
             {
-                ModelState.AddModelError(string.Empty, "Invalid doctor type ID.");
+                ModelState.AddModelError(string.Empty, "Invalid medicine sub category id.");
                 return Page();
             }
 
             using (SqlConnection connection = new SqlConnection(_connectionString))
             {
-                string query = "DELETE FROM Doctor_Specialitis WHERE doctor_specialitis_id = @doctor_specialitis_id";
+                string query = "DELETE FROM Medicine_Sub_Category WHERE medicine_sub_category_id = @medicine_sub_category_id";
                 using (SqlCommand command = new SqlCommand(query, connection))
                 {
-                    command.Parameters.AddWithValue("@doctor_specialitis_id", id);
+                    command.Parameters.AddWithValue("@medicine_sub_category_id", id);
                     connection.Open();
                     int result = command.ExecuteNonQuery();
                     connection.Close();
 
                     if (result > 0)
                     {
-                        TempData["SuccessMessage"] = "Doctor specialiti deleted successfully.";
+                        TempData["SuccessMessage"] = "Medicine sub category deleted successfully.";
                     }
                     else
                     {
@@ -210,7 +213,7 @@ namespace HealthConnect.Pages.Admin.Doctor_list_management.Doctor_specialties_ma
                 }
             }
 
-            return RedirectToPage("/Admin/Doctor_list_management/Doctor_specialties_manage/Doctor_specialties");
+            return RedirectToPage("/Admin/Medicine_list_management/Medicine_Sub_Category_manage/Medicine_Sub_Category");
         }
 
 

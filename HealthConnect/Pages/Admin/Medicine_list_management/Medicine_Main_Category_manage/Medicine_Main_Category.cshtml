@@ -6,29 +6,6 @@
 }
 
 
-
-@if (!string.IsNullOrEmpty(Model.ErrorMessage))
-{
-    <div class="error_message" id="errorMessage">@Model.ErrorMessage</div>
-}
-
-@if (!string.IsNullOrEmpty(Model.SuccessMessage))
-{
-    <p class="success_message" id="successMessage">@Model.SuccessMessage</p>
-}
-
-@if (TempData["SuccessMessage"] != null)
-{
-    <div class="success_message" id="tempSuccessMessage">@TempData["SuccessMessage"]</div>
-}
-
-@if (TempData["ErrorMessage"] != null)
-{
-    <div class="error_message" id="tempErrorMessage">@TempData["ErrorMessage"]</div>
-}
-
-
-
 <div class="col-md-6 grid-margin stretch-card">
     <div class="card">
         <div class="card-body">
