@@ -5,9 +5,9 @@ using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.Data.SqlClient;
 using Microsoft.Extensions.Options;
 
-namespace HealthConnect.Pages.Admin.Medicine_list_management
+namespace HealthConnect.Pages.Admin.Medicine_list_management.Medicine_Main_Category_manage
 {
-    public class Medicine_Main_CategoryModel : PageModel
+    public class Medicine_Main_Category_EditModel : PageModel
     {
         private readonly IEmailService _emailService;
         private readonly EmailSettings _emailSettings;
@@ -15,10 +15,6 @@ namespace HealthConnect.Pages.Admin.Medicine_list_management
 
         [BindProperty]
         public Medicine_Main_Category MedicineMainCategory { get; set; } = new Medicine_Main_Category();
-
-        public List<Medicine_Main_Category> Medicine_Main_Category { get; set; } = new List<Medicine_Main_Category>();
-
-
 
         public string? FirstName { get; set; }
         public string? LastName { get; set; }
@@ -28,14 +24,14 @@ namespace HealthConnect.Pages.Admin.Medicine_list_management
         public string? ErrorMessage { get; set; }
         public string SuccessMessage { get; set; }
 
-        public Medicine_Main_CategoryModel(IEmailService emailService, IOptions<EmailSettings> emailSettings, IConfiguration configuration)
+        public Medicine_Main_Category_EditModel(IEmailService emailService, IOptions<EmailSettings> emailSettings, IConfiguration configuration)
         {
             _emailService = emailService;
             _emailSettings = emailSettings.Value;
             _connectionString = configuration.GetConnectionString("HealthConnect");
         }
 
-        public IActionResult OnGet()
+        public IActionResult OnGet(int medicine_main_category_id)
         {
             UserId = HttpContext.Session.GetInt32("Id");
             if (UserId.HasValue)
@@ -79,83 +75,72 @@ namespace HealthConnect.Pages.Admin.Medicine_list_management
 
             using (SqlConnection connection = new SqlConnection(_connectionString))
             {
-                string query = "SELECT * FROM Medicine_Main_Category";
+                string query = "SELECT * FROM Medicine_Main_Category WHERE medicine_main_category_id = @medicine_main_category_id";
                 using (SqlCommand command = new SqlCommand(query, connection))
                 {
+                    command.Parameters.AddWithValue("@medicine_main_category_id", medicine_main_category_id);
                     connection.Open();
+
                     using (SqlDataReader reader = command.ExecuteReader())
                     {
-                        while (reader.Read())
+                        if (reader.Read())
                         {
-                            Medicine_Main_Category medicine_main_category = new Medicine_Main_Category();
-                            medicine_main_category.medicine_main_category_id = reader.GetInt32(0);
-                            medicine_main_category.medicine_main_category_name = reader.GetString(1);
-
-                            Medicine_Main_Category.Add(medicine_main_category);
+                            MedicineMainCategory = new Medicine_Main_Category
+                            {
+                                medicine_main_category_id = reader.GetInt32(0),
+                                medicine_main_category_name = reader.GetString(1),
+                            };
                         }
                     }
+
                     connection.Close();
                 }
+            }
+
+            if (MedicineMainCategory == null)
+            {
+                ErrorMessage = "Medicine Main Category not found.";
+                return RedirectToPage("/Error");
             }
 
             return Page();
         }
 
 
+
         public IActionResult OnPost()
         {
-            if (string.IsNullOrWhiteSpace(MedicineMainCategory.medicine_main_category_name))
+            if (!ModelState.IsValid)
             {
-                ModelState.AddModelError(string.Empty, "medicine main category name cannot be empty.");
                 return Page();
             }
 
             using (SqlConnection connection = new SqlConnection(_connectionString))
             {
-                connection.Open();
-                string query = "INSERT INTO Medicine_Main_Category (medicine_main_category_name) VALUES (@medicine_main_category_name)";
-
+                string query = "UPDATE Medicine_Main_Category SET medicine_main_category_name = @medicine_main_category_name WHERE medicine_main_category_id = @medicine_main_category_id";
                 using (SqlCommand command = new SqlCommand(query, connection))
                 {
                     command.Parameters.AddWithValue("@medicine_main_category_name", MedicineMainCategory.medicine_main_category_name);
-                    command.ExecuteNonQuery();
-                }
-            }
+                    command.Parameters.AddWithValue("@medicine_main_category_id", MedicineMainCategory.medicine_main_category_id);
 
-            TempData["SuccessMessage"] = "Medicine Main Category added successfully.";
-            return RedirectToPage("/Admin/Medicine_list_management/Medicine_Main_Category_manage/Medicine_Main_Category");
-        }
-
-        public IActionResult OnPostDelete(int id)
-        {
-            if (id <= 0)
-            {
-                ModelState.AddModelError(string.Empty, "Invalid doctor type ID.");
-                return Page();
-            }
-
-            using (SqlConnection connection = new SqlConnection(_connectionString))
-            {
-                string query = "DELETE FROM Medicine_Main_Category WHERE medicine_main_category_id = @medicine_main_category_id";
-                using (SqlCommand command = new SqlCommand(query, connection))
-                {
-                    command.Parameters.AddWithValue("@medicine_main_category_id", id);
                     connection.Open();
                     int result = command.ExecuteNonQuery();
                     connection.Close();
 
                     if (result > 0)
                     {
-                        TempData["SuccessMessage"] = "Medicine main category deleted successfully.";
+                        TempData["SuccessMessage"] = "Medicine list updated successfully";
+                        return RedirectToPage("/Admin/Medicine_list_management/Medicine_Main_Category_manage/Medicine_Main_Category");
                     }
                     else
                     {
-                        ModelState.AddModelError(string.Empty, "Error deleting doctor type.");
+                        ErrorMessage = "Error updating the medicine list.";
                     }
                 }
             }
 
-            return RedirectToPage("/Admin/Medicine_list_management/Medicine_Main_Category_manage/Medicine_Main_Category");
+            return Page();
         }
+
     }
 }

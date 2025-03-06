@@ -198,6 +198,10 @@ namespace HealthConnect.Pages.User
                             {
                                 return RedirectToPage("/index");
                             }
+                            else if (role == "Pharmacist")
+                            {
+                                return RedirectToPage("/Pharmacy");
+                            }
                             else
                             {
                                 ModelState.AddModelError(string.Empty, "Invalid role.");
