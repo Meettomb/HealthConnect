@@ -1,0 +1,72 @@
+﻿@page
+@model HealthConnect.Pages.Admin.Medicine_list_management.Medicine_Finel_Category_manage.Medicine_Finel_Category_EditModel
+@{
+    Layout = "_Admin_header";
+    ViewData["Title"] = "Medicine Finel Category";
+}
+
+
+<div class="col-md-6 grid-margin stretch-card">
+    <div class="card">
+        <div class="card-body">
+            <h4 class="card-title">Add medicine sub category</h4>
+            <form method="post">
+                <input type="hidden" name="medicine_finel_category_id" value="@Model.MedicineFinelCategory.medicine_finel_category_id" />
+                <div class="col-md-12">
+                    <div class="form-group row">
+                        <div class="col-sm-12">
+                            <div class="form-group">
+                                <label for="medicine_finel_category_name">Medicine Main Category</label>
+                                <select class="form-control" id="mainCategoryDropdown" name="medicine_main_category_id">
+
+                                    @foreach (var category in Model.Medicine_Finel_Category)
+                                    {
+                                        <option value="@category.medicine_main_category_id">
+                                            @category.Medicine_Main_Category?.medicine_main_category_name
+                                        </option>
+                                    }
+                                    @foreach (var item in Model.Medicine_Main_Category)
+                                    {
+                                        <option value="@item.medicine_main_category_id">@item.medicine_main_category_name</option>
+                                    }
+                                </select>
+                            </div>
+
+                            <div class="form-group">
+                                <label for="medicine_finel_category_name">Medicine Sub Category</label>
+
+                                <select class="form-control" id="subCategoryDropdown" name="medicine_sub_category_id">
+
+                                    @foreach (var category in Model.Medicine_Finel_Category)
+                                    {
+                                        <option value="@category.medicine_sub_category_id">
+                                            @category.Medicine_Sub_Category?.medicine_sub_category_name
+                                        </option>
+                                    }
+
+
+                                    @foreach (var item in Model.Medicine_Sub_Category)
+                                    {
+                                        <option value="@item.medicine_sub_category_id">@item.medicine_sub_category_name</option>
+                                    }
+
+                                </select>
+                            </div>
+
+
+
+                            <div class="form-group">
+                                <label for="medicine_finel_category_name">Medicine finel category</label>
+                                <input type="text" class="form-control" name="medicine_finel_category_name" id="medicine_finel_category_name" value="@Model.MedicineFinelCategory.medicine_finel_category_name" placeholder="Medicine finel category name">
+                            </div>
+
+                        </div>
+                    </div>
+                    <button type="submit" class="btn btn-primary mr-2">Submit</button>
+                    <button type="button" class="btn btn-dark" onclick="history.back()">Cancel</button>
+                </div>
+            </form>
+
+        </div>
+    </div>
+</div>
