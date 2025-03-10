@@ -86,8 +86,8 @@ document.addEventListener("DOMContentLoaded", function () {
     var popup2 = document.getElementById("popup2");
     var closePopup = document.getElementById("closePopup");
     var closePopup2 = document.getElementById("closePopup2");
-    var consultancy = document.querySelectorAll(".video-call, .Book-Onsite-Appointment, .reschedule_appointmant, .edit_profilepic");
-    var cancleAppointment = document.querySelectorAll(".cancle_Appointment, .remove_profilepic");
+    var consultancy = document.querySelectorAll(".video-call, .Book-Onsite-Appointment, .reschedule_appointmant, .edit_profilepic, .give_feedback");
+    var cancleAppointment = document.querySelectorAll(".cancle_Appointment, .remove_profilepic, .give_report");
 
     if (!doctorStep) return; // Exit if popup does not exist
 

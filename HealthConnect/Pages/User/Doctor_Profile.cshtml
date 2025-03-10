@@ -1,0 +1,206 @@
+﻿@page
+@model HealthConnect.Pages.User.Docter_ProfileModel
+@{
+    Layout = "_Header";
+    ViewData["Title"] = "Doctor Profile";
+}
+@foreach (var data in Model.User_list)
+{
+
+    <div class="doctor_profile_container">
+        <main>
+
+            <section class="section_1">
+
+                <div class="section_1_left">
+                    <div class="Doctor_pic">
+                        <img src="/documant/@data.profile_pic" alt="@data.first_name @data.last_name" loading="lazy" />
+                    </div>
+
+                    <div class="doctor_name">
+                        <p>Dr. @data.first_name @data.last_name</p>
+                    </div>
+                </div>
+
+                <div class="section_1_right">
+                    <div class="total_rating_review">
+                        <p>
+                            <i class="mdi mdi-star"></i> <span>5 Star</span>
+                        </p>
+                        <p>
+                            <i class="mdi mdi-message-text"></i> <span>20 Feedback</span>
+                        </p>
+                    </div>
+                </div>
+
+            </section>
+
+            <section class="section_2">
+                <div class="section_2_left">
+                    <div class="licence_photo">
+                        <img src="/documant/@data.doctore_medical_license_photo" alt="Licence photo" />
+                    </div>
+                    <p class="give_feedback">Give feedback</p>
+                    <p class="give_report">Give report</p>
+                </div>
+
+                <div class="section_2_right">
+
+                    <table>
+
+                        <tr>
+                            <th>Medical Registration Numbar</th>
+                            <td>@data.medical_registration_no</td>
+                        </tr>
+
+                        <tr>
+                            <th>State medical council</th>
+                            <td>@data.state_medical_council</td>
+                        </tr>
+
+                        <tr>
+                            <th>Regitration year</th>
+                            <td>@data.year_of_registration</td>
+                        </tr>
+
+                        <tr>
+                            <th>Hospital or Clinic</th>
+                            @if (data.hospital_or_clinic == "Hospital")
+                            {
+                                <td><i class="mdi mdi-hospital-building"></i> @data.hospital_or_clinic</td>
+                            }
+                            else
+                            {
+                                <td><i class="fa-solid fa-house-chimney-medical"></i> @data.hospital_or_clinic</td>
+                            }
+                        </tr>
+
+                        <tr>
+                            <th>Hospital or Clinic address</th>
+                            <td>@data.clinic_or_hospital_address</td>
+                        </tr>
+
+                        <tr>
+                            <th>Qualification</th>
+                            <td>@data.doctor_qualifications</td>
+                        </tr>
+
+                        <tr>
+                            <th>Doctor type</th>
+                            <td>@data.doctor_type</td>
+                        </tr>
+
+                        <tr>
+                            <th>Doctor specialty</th>
+                            <td>@data.doctor_specialitis</td>
+                        </tr>
+
+                        <tr>
+                            <th>Language spoken</th>
+                            <td>@data.languages_spoken</td>
+                        </tr>
+
+                        <tr>
+                            <th>Video calling fee</th>
+                            <td><i class="mdi mdi-video"></i> @data.video_call_consultation_fee</td>
+                        </tr>
+
+                        <tr>
+                            <th>On site fee</th>
+                            <td><i class="mdi mdi-map-marker"></i> @data.on_site_consultation_fee</td>
+                        </tr>
+
+                        <tr>
+                            <th>Working dayes</th>
+                            <td>@string.Join(", ", data.weekly_work_days)</td>
+                        </tr>
+
+                    </table>
+                </div>
+            </section>
+
+
+            <section class="section_3">
+                <div class="feedbacks_container">
+
+                    <div class="single_feedback">
+                        <div class="user_image">
+                            <img src="" alt="" />
+                        </div>
+
+                        <div class="feedback_message">
+                            <p></p>
+                        </div>
+
+                    </div>
+
+                </div>
+            </section>
+
+        </main>
+    </div>
+
+
+    <section class="explorer_doctor_section3" id="popup">
+        <div class="videocall_consultation_container">
+            <div class="videocall_consultation">
+                <i class="fa-solid fa-times" id="closePopup"></i>
+                <h1>Feedback</h1>
+                <form method="post" id="GiveFeedback" onsubmit="return validateFeedback()">
+                    <input type="hidden" name="user_id" value="@Model.UserId" readonly />
+                    <input type="hidden" name="doctor_id" value="@data.id" readonly>
+
+                    <div class="sloat_time_and_date">
+                        <label>Feedback message</label>
+                        <textarea name="feedback_message" id="feedback_message" rows="5" placeholder="Feedback message"></textarea>
+                        <p id="error" class="error" style="color: red; display: none;"></p>
+                    </div>
+
+                    <button type="submit" name="action" value="feedback">Submit</button>
+                </form>
+
+                <script>
+                    function validateFeedback() {
+                        let feedbackMessage = document.getElementById("feedback_message").value.trim();
+                        let errorMessage = document.getElementById("error");
+
+                        if (feedbackMessage === "") {
+                            errorMessage.textContent = "Feedback message is required.";
+                            errorMessage.style.display = "block";
+                            return false;
+                        } else {
+                            errorMessage.style.display = "none";
+                            return true;
+                        }
+                    }
+                </script>
+
+
+            </div>
+        </div>
+    </section>
+
+    
+    <section class="explorer_doctor_section3" id="popup2">
+        <div class="videocall_consultation_container">
+            <div class="videocall_consultation">
+                <i class="fa-solid fa-times" id="closePopup2"></i>
+                <h1>Report</h1>
+                <form method="post" id="GiveReport" onsubmit="return validateReport()">
+                    <input type="hidden" name="user_id" value="@Model.UserId" readonly />
+                    <input type="hidden" name="doctor_id" value="@data.id" readonly>
+
+                    <div class="sloat_time_and_date">
+                        <label>Report message</label>
+                        <textarea name="feedback_message" id="report_message" rows="5" placeholder="Report message"></textarea>
+                    </div>
+
+                    <button type="submit" name="action" value="report">Submit</button>
+                </form>
+
+            </div>
+        </div>
+    </section>
+
+
+}
