@@ -4469,6 +4469,12 @@ header img {
         .doctor_profile_container main .section_2_left {
             width: 45%;
         }
+            .doctor_profile_container main .section_2_left p {
+                cursor: pointer;
+                font-family: var(--default-font);
+                color: var(--default-color);
+                padding: 10px 0;
+            }
 
             .doctor_profile_container main .section_2_left .licence_photo {
                 width: 100%;

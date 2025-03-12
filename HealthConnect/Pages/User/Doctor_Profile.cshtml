@@ -180,7 +180,7 @@
         </div>
     </section>
 
-    
+
     <section class="explorer_doctor_section3" id="popup2">
         <div class="videocall_consultation_container">
             <div class="videocall_consultation">
@@ -191,12 +191,29 @@
                     <input type="hidden" name="doctor_id" value="@data.id" readonly>
 
                     <div class="sloat_time_and_date">
-                        <label>Report message</label>
-                        <textarea name="feedback_message" id="report_message" rows="5" placeholder="Report message"></textarea>
+                        <label for="report_message">Report message</label>
+                        <textarea name="report_message" id="report_message" rows="5" placeholder="Report message"></textarea>
+
+                        <p id="error2" class="error2" style="color: red; display: none;"></p>
                     </div>
 
                     <button type="submit" name="action" value="report">Submit</button>
                 </form>
+                <script>
+                    function validateReport() {
+                        let reportMessage = document.getElementById("report_message").value.trim();
+                        let errorMessage = document.getElementById("error2");
+
+                        if (reportMessage  === "") {
+                            errorMessage.textContent = "Report message is required.";
+                            errorMessage.style.display = "block";
+                            return false;
+                        } else {
+                            errorMessage.style.display = "none";
+                            return true;
+                        }
+                    }
+                </script>
 
             </div>
         </div>

@@ -61,6 +61,11 @@ namespace HealthConnect.Pages.User
         public List<Doctor_Feedback> Doctor_Feedback = new List<Doctor_Feedback>();
 
 
+        [BindProperty] public Doctor_Feedback doctorReport { get; set; }
+
+        public List<Doctor_Feedback> Doctor_Report = new List<Doctor_Feedback>();
+
+
         public IActionResult OnGet()
         {
             string roleInSession = HttpContext.Session.GetString("UserRole");
@@ -272,7 +277,11 @@ namespace HealthConnect.Pages.User
             {
                 return await OnPostGiveFeedback();
             }
-            return Page();
+            else if(action == "report")
+            {
+                return await OnPostGiveReport();
+            }
+                return Page();
         }
 
         public async Task<IActionResult> OnPostGiveFeedback()
@@ -348,6 +357,75 @@ namespace HealthConnect.Pages.User
         }
 
 
+        public async Task<IActionResult> OnPostGiveReport()
+        {
+
+            string userId = Request.Form["user_id"];
+            string doctorId = Request.Form["doctor_id"];
+            string reportMessage = Request.Form["report_message"];
+
+           
+            using (SqlConnection connection = new SqlConnection(_connectionString))
+            {
+                await connection.OpenAsync();
+
+                string checkQuery = "SELECT COUNT(*) FROM Doctor_Report WHERE user_id = @user_id AND doctor_id = @doctor_id";
+                using (SqlCommand checkCommand = new SqlCommand(checkQuery, connection))
+                {
+                    checkCommand.Parameters.AddWithValue("@user_id", userId);
+                    checkCommand.Parameters.AddWithValue("@doctor_id", doctorId);
+                    int existingReportCount = (int)await checkCommand.ExecuteScalarAsync();
+
+                    if (existingReportCount > 0)
+                    {
+                        string updateQuery = "UPDATE Doctor_Report SET report_message = @report_message WHERE user_id = @user_id AND doctor_id = @doctor_id";
+                        using (SqlCommand updateCommand = new SqlCommand(updateQuery, connection))
+                        {
+                            updateCommand.Parameters.AddWithValue("@user_id", userId);
+                            updateCommand.Parameters.AddWithValue("@doctor_id", doctorId);
+                            updateCommand.Parameters.AddWithValue("@report_message", reportMessage);
+                            await updateCommand.ExecuteNonQueryAsync();
+                        }
+                        TempData["SuccessMessage"] = "Report updated successfully.";
+                    }
+                    else
+                    {
+                        string insertQuery = "INSERT INTO Doctor_Report (user_id, doctor_id, report_message) VALUES (@user_id, @doctor_id, @report_message)";
+                        using (SqlCommand insertCommand = new SqlCommand(insertQuery, connection))
+                        {
+                            insertCommand.Parameters.AddWithValue("@user_id", userId);
+                            insertCommand.Parameters.AddWithValue("@doctor_id", doctorId);
+                            insertCommand.Parameters.AddWithValue("@report_message", reportMessage);
+                            await insertCommand.ExecuteNonQueryAsync();
+                        }
+                        TempData["SuccessMessage"] = "Report submitted successfully.";
+                    }
+                }
+            }
+
+            string userEmail = "";
+            using (SqlConnection connection = new SqlConnection(_connectionString))
+            {
+                await connection.OpenAsync();
+                string userEmailQuery = "SELECT email FROM User_Table WHERE id = @UserId";
+                using (SqlCommand userEmailCommand = new SqlCommand(userEmailQuery, connection))
+                {
+                    userEmailCommand.Parameters.AddWithValue("@UserId", userId);
+                    userEmail = (await userEmailCommand.ExecuteScalarAsync())?.ToString();
+                }
+            }
+
+            if (!string.IsNullOrEmpty(userEmail))
+            {
+                string subjectUser = "Report Submitted";
+                string bodyUser = $"Dear User, your report has been submitted:\n\n{reportMessage}.";
+                await _emailService.SendEmailAsync(userEmail, subjectUser, bodyUser);
+            }
+
+            return Redirect($"/User/Doctor_Profile?doctor_id={doctorId}");
+
+
+        }
 
 
 
