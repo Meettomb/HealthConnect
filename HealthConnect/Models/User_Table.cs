@@ -64,6 +64,8 @@ namespace HealthConnect.Models
 
         public virtual ICollection<Appointments> UserAppointments { get; set; } 
         public virtual ICollection<Appointments> DoctorAppointments { get; set; }
+
+        public virtual ICollection<Doctor_Feedback> FeedbackList { get; set; }
         public virtual Types_of_Doctor Types_of_Doctor { get; set; }
 
     }

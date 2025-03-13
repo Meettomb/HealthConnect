@@ -54,6 +54,7 @@ namespace HealthConnect.Pages.User
         public Doctor_Specialitis SpecialitisOfDoctor { get; set; } = new Doctor_Specialitis();
 
         public List<Doctor_Specialitis> doctorSpecialitiesList = new List<Doctor_Specialitis>();
+        public List<Doctor_Feedback> Doctor_Feedbacks = new List<Doctor_Feedback>();
 
 
         [BindProperty] public Doctor_Feedback doctorFeedback { get; set; }
@@ -75,8 +76,6 @@ namespace HealthConnect.Pages.User
             if (UserId.HasValue)
             {
                 OnGetLoginUserData();
-
-
             }
 
             using (SqlConnection connection = new SqlConnection(_connectionString))
@@ -124,19 +123,24 @@ namespace HealthConnect.Pages.User
 
             int? doctorId = null;
 
-            if (Request.Query.ContainsKey("doctor_id"))
+            if (Request.Query.ContainsKey("doctor_id") && int.TryParse(Request.Query["doctor_id"], out int queryDoctorId))
             {
-                doctorId = int.Parse(Request.Query["doctor_id"]);
+                doctorId = queryDoctorId;
             }
-            else if (HttpContext.Session.GetInt32("DoctorId") != null)
+            else
             {
-                doctorId = HttpContext.Session.GetInt32("DoctorId");
+                int? sessionDoctorId = HttpContext.Session.GetInt32("DoctorId");
+                if (sessionDoctorId.HasValue)
+                {
+                    doctorId = sessionDoctorId.Value;
+                }
             }
 
             if (doctorId.HasValue)
             {
                 GetDoctorsList(doctorId.Value);
             }
+                GetDoctorFeedback();
 
             return Page();
         }
@@ -169,12 +173,13 @@ namespace HealthConnect.Pages.User
                 }
             }
         }
+       
         private void GetDoctorsList(int doctor_id)
         {
             using (SqlConnection connection = new SqlConnection(_connectionString))
             {
                 string query = @"
-        SELECT u.id, u.first_name, u.last_name, u.email, u.mobil_no, 
+            SELECT u.id, u.first_name, u.last_name, u.email, u.mobil_no, 
             u.dob, u.House_number_and_Street_name, u.country, u.city, 
             u.state, u.pincode, u.gender, u.role, u.password, 
             u.profile_pic, u.doctore_medical_license_photo, u.medical_registration_no, 
@@ -188,12 +193,12 @@ namespace HealthConnect.Pages.User
             STRING_AGG(ds.doctor_specialitis, ', ') AS doctor_specialitis_list, 
             u.work_start_time, u.work_end_time, u.weekly_work_days, 
             u.max_time_per_appointments, u.break_between_two_appointments
-        FROM User_Table u
-        LEFT JOIN Types_of_Doctor t ON u.doctor_type = t.doctor_type_id
-        LEFT JOIN Doctor_Specialitis ds 
-            ON ds.doctor_specialitis_id IN (SELECT value FROM STRING_SPLIT(u.doctor_specialitis, ','))
-        WHERE u.role = 'Doctor' AND u.doctor_profile_complete = 1 AND u.isactive = 1 AND u.id = @doctor_id
-        GROUP BY u.id, u.first_name, u.last_name, u.email, u.mobil_no, 
+                FROM User_Table u
+                LEFT JOIN Types_of_Doctor t ON u.doctor_type = t.doctor_type_id
+                LEFT JOIN Doctor_Specialitis ds 
+                    ON ds.doctor_specialitis_id IN (SELECT value FROM STRING_SPLIT(u.doctor_specialitis, ','))
+                WHERE u.role = 'Doctor' AND u.doctor_profile_complete = 1 AND u.isactive = 1 AND u.id = @doctor_id
+                GROUP BY u.id, u.first_name, u.last_name, u.email, u.mobil_no, 
             u.dob, u.House_number_and_Street_name, u.country, u.city, 
             u.state, u.pincode, u.gender, u.role, u.password, 
             u.profile_pic, u.doctore_medical_license_photo, u.medical_registration_no, 
@@ -270,6 +275,71 @@ namespace HealthConnect.Pages.User
         }
 
 
+        private void GetDoctorFeedback()
+        {
+            int? doctorId = null;
+
+            if (Request.Query.ContainsKey("doctor_id"))
+            {
+                doctorId = int.TryParse(Request.Query["doctor_id"], out int id) ? id : (int?)null;
+            }
+
+            if (!doctorId.HasValue)
+            {
+                Doctor_Feedbacks = new List<Doctor_Feedback>(); // Initialize with an empty list
+                return;
+            }
+
+            using (SqlConnection connection = new SqlConnection(_connectionString))
+            {
+                string query = @"
+        SELECT 
+            df.doctor_feedback_id, 
+            df.user_id, 
+            df.doctor_id, 
+            df.feedback_message, 
+            u.first_name, 
+            u.last_name, 
+            u.profile_pic
+        FROM Doctor_Feedback df
+        JOIN User_Table u ON df.user_id = u.id
+        WHERE df.doctor_id = @doctor_id";
+
+                using (SqlCommand cmd = new SqlCommand(query, connection))
+                {
+                    cmd.Parameters.AddWithValue("@doctor_id", doctorId.Value);
+                    connection.Open();
+
+                    Doctor_Feedbacks = new List<Doctor_Feedback>();
+
+                    using (SqlDataReader reader = cmd.ExecuteReader())
+                    {
+                        while (reader.Read())
+                        {
+                            var feedback = new Doctor_Feedback
+                            {
+                                doctor_feedback_id = reader.GetInt32(0),
+                                user_id = reader.GetInt32(1),
+                                doctor_id = reader.GetInt32(2),
+                                feedback_message = reader.GetString(3),
+                                User = new User_Table
+                                {
+                                    first_name = reader.IsDBNull(4) ? "" : reader.GetString(4),
+                                    last_name = reader.IsDBNull(5) ? "" : reader.GetString(5),
+                                    profile_pic = reader.IsDBNull(6) ? "" : reader.GetString(6)
+                                }
+                            };
+                            Doctor_Feedbacks.Add(feedback);
+                        }
+                    }
+                }
+            }
+        }
+
+
+
+
+
         public async Task<IActionResult> OnPost()
         {
             string action = Request.Form["action"];
@@ -277,11 +347,11 @@ namespace HealthConnect.Pages.User
             {
                 return await OnPostGiveFeedback();
             }
-            else if(action == "report")
+            else if (action == "report")
             {
                 return await OnPostGiveReport();
             }
-                return Page();
+            return Page();
         }
 
         public async Task<IActionResult> OnPostGiveFeedback()
@@ -355,8 +425,6 @@ namespace HealthConnect.Pages.User
 
             return Redirect($"/User/Doctor_Profile?doctor_id={doctorId}");
         }
-
-
         public async Task<IActionResult> OnPostGiveReport()
         {
 
@@ -364,7 +432,7 @@ namespace HealthConnect.Pages.User
             string doctorId = Request.Form["doctor_id"];
             string reportMessage = Request.Form["report_message"];
 
-           
+
             using (SqlConnection connection = new SqlConnection(_connectionString))
             {
                 await connection.OpenAsync();

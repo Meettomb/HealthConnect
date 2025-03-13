@@ -10,7 +10,7 @@ namespace HealthConnect.Models
         public int doctor_id { get; set; }
         public string feedback_message { get; set; }
 
-        public virtual User_Table UserId { get; set; }
-        public virtual User_Table DoctorId { get; set; }
+        public virtual User_Table User { get; set; }
+        public virtual User_Table DoctorUser { get; set; }
     }
 }

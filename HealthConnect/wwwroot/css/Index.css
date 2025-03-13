@@ -1997,7 +1997,6 @@ header img {
         display: flex;
         -webkit-justify-content: center;
         justify-content: center;
-        /*        box-shadow: 0 0 10px 5px var(--heading-color);*/
         border-radius: 10px;
         border: 1px solid var(--accent-color);
         padding: 0px 0 10px 0;
@@ -4469,6 +4468,7 @@ header img {
         .doctor_profile_container main .section_2_left {
             width: 45%;
         }
+
             .doctor_profile_container main .section_2_left p {
                 cursor: pointer;
                 font-family: var(--default-font);
@@ -4518,6 +4518,74 @@ header img {
                     font-size: 14px;
                     color: var(--accent-color);
                 }
+
+
+        .doctor_profile_container main .section_3 {
+            margin-top: 50px;
+            display: flex;
+            justify-content: center;
+            padding-bottom: 50px;
+        }
+
+            .doctor_profile_container main .section_3 .feedbacks_container {
+                width: 100%;
+            }
+
+                .doctor_profile_container main .section_3 .feedbacks_container h1 {
+                    color: var(--header-text-color);
+                    font-family: var(--heading-font);
+                    margin-bottom: 20px;
+                }
+
+                .doctor_profile_container main .section_3 .feedbacks_container .single_feedback {
+                    display: flex;
+                    height: auto;
+                    align-items: center;
+                    margin-top: 10px;
+                    background-color: var(--footer-bg-color);
+                    padding: 10px 0;
+                }
+
+                    .doctor_profile_container main .section_3 .feedbacks_container .single_feedback .user_image {
+                        padding: 0 20px;
+                        display: flex;
+                        align-items: center;
+                        height: auto;
+                    }
+
+                        .doctor_profile_container main .section_3 .feedbacks_container .single_feedback .user_image p {
+                            background-color: var(--accent-color);
+                            color: var(--contrast-color);
+                            font-size: 25px;
+                            font-weight: 800;
+                            border-radius: 50%;
+                            width: 50px;
+                            height: 50px;
+                            display: flex;
+                            align-items: center;
+                            justify-content: center;
+                        }
+
+                        .doctor_profile_container main .section_3 .feedbacks_container .single_feedback .user_image img {
+                            width: 50px;
+                            height: 50px;
+                            border-radius: 50%;
+                        }
+
+                    .doctor_profile_container main .section_3 .feedbacks_container .single_feedback .feedback_message {
+                        width: 100%;
+                    }
+
+                        .doctor_profile_container main .section_3 .feedbacks_container .single_feedback .feedback_message strong {
+                            font-size: 17px;
+                            color: var(--accent-color);
+                            font-family: var(--heading-font);
+                        }
+
+                        .doctor_profile_container main .section_3 .feedbacks_container .single_feedback .feedback_message p {
+                            margin-top: 5px;
+                            color: var(--default-color);
+                        }
 
 @media(max-width:1000px) {
 
@@ -4573,6 +4641,7 @@ header img {
     .doctor_profile_container main .section_2_right table tr {
         height: 50px;
     }
+
     .doctor_profile_container main .section_2_right table th {
         font-size: 14px;
     }
