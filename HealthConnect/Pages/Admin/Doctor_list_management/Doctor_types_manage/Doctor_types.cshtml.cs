@@ -126,7 +126,6 @@ namespace HealthConnect.Pages.Admin.Doctor_list_management.Doctor_types_manage
             return RedirectToPage("/Admin/Doctor_list_management/Doctor_types_manage/Doctor_types");
         }
 
-        // OnPostDelete method to handle delete operation
         public IActionResult OnPostDelete(int id)
         {
             if (id <= 0)
