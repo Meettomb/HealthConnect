@@ -4391,7 +4391,6 @@ header img {
             display: flex;
             justify-content: space-between;
             align-items: center;
-            /*            background-color: var(--footer-bg-color);*/
             padding-inline: 10px;
             padding-top: 10px;
             padding-bottom: 10px;
@@ -4660,4 +4659,145 @@ header img {
     .doctor_profile_container main .section_2_right table td {
         font-size: 12px;
     }
+}
+
+
+/*--------------------------------------------------------------------------------------------------------------*/
+/*--------------------------------------------------------------------------------------------------------------*/
+/*--------------------------------------------------------------------------------------------------------------*/
+/*--------------------------------------------------------------------------------------------------------------*/
+/*--------------------------------------------------------------------------------------------------------------*/
+/*                                                    Footer                                                    */
+/*--------------------------------------------------------------------------------------------------------------*/
+/*--------------------------------------------------------------------------------------------------------------*/
+/*--------------------------------------------------------------------------------------------------------------*/
+/*--------------------------------------------------------------------------------------------------------------*/
+/*--------------------------------------------------------------------------------------------------------------*/
+.footer {
+    width: 100%;
+    height: auto;
+    background-color: var(--footer-bg-color);
+    display: flex;
+    justify-content: center;
+    margin-top: 30px;
+}
+
+    .footer .footer_container {
+        width: 95%;
+        display: flex;
+        justify-content: space-between;
+        flex-wrap: wrap;
+        margin: 30px 0;
+        padding-bottom: 30px;
+    }
+
+        .footer .footer_container .footer_section {
+            width: 20%;
+        }
+
+            .footer .footer_container .footer_section h1 {
+                color: var(--header-text-color);
+                font-family: var(--heading-font);
+            }
+
+
+            .footer .footer_container .footer_section .footer_section_links {
+                width: 100%;
+                display: flex;
+                flex-direction: column;
+                margin-top: 20px;
+                row-gap: 15px;
+            }
+
+                .footer .footer_container .footer_section .footer_section_links a {
+                    color: var(--default-color);
+                    font-family: var(--default-font);
+                    text-decoration: none;
+                    font-size: 15px;
+                }
+
+
+            .footer .footer_container .footer_section .footer_logo {
+                width: 200px;
+            }
+
+                .footer .footer_container .footer_section .footer_logo img {
+                    width: 100%;
+                    height: 80%;
+                }
+
+            .footer .footer_container .footer_section .footer_social_links {
+                margin-top: 30px;
+                display: flex;
+                gap: 0px 20px;
+            }
+
+                .footer .footer_container .footer_section .footer_social_links a {
+                    -webkit-text-decoration: none;
+                    text-decoration: none;
+                    color: var(--contrast-color);
+                    background-color: var(--header-text-color);
+                    padding: 10px;
+                    -moz-border-radius: 50%;
+                    -webkit-border-radius: 50%;
+                    border-radius: 50%;
+                    font-size: 12px;
+                }
+
+                    .footer .footer_container .footer_section .footer_social_links a:hover {
+                        color: var(--accent-color);
+                        background-color: var(--contrast-color);
+                    }
+
+
+@media(max-width:1000px) {
+    .footer .footer_container {
+        row-gap: 30px;
+    }
+
+        .footer .footer_container .footer_section {
+            width: 45%;
+        }
+}
+
+@media(max-width:500px) {
+
+    .footer .footer_container .footer_section h1 {
+    
+        font-size: 16px;
+    }
+
+    .footer .footer_container .footer_section .footer_section_links a {
+      
+        font-size: 12px;
+    }
+
+
+    .footer .footer_container .footer_section .footer_logo {
+        width: 120px;
+    }
+
+        .footer .footer_container .footer_section .footer_logo img {
+            width: 100%;
+            height: 44%;
+        }
+
+    .footer .footer_container .footer_section .footer_social_links {
+        margin-top: 10px;
+        display: flex;
+        justify-content: space-between;
+        -ms-flex-wrap: wrap;
+        -webkit-flex-wrap: wrap;
+        flex-wrap: wrap;
+        gap: 10px 10px;
+        padding: 5px;
+    }        
+}
+
+
+
+
+.pharmacy_index_container {
+    height: auto;
+    margin: 30px 0;
 }

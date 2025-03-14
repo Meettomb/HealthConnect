@@ -4,7 +4,7 @@
 <head>
     <meta name="viewport" content="width=device-width" />
     <title>@ViewBag.Title - Health Connect</title>
-    
+
     <link rel="stylesheet" href="/css/Index.css" asp-append-version="true">
     <link href="/images/HealthConnectTabLogo.png" rel="icon" />
 
@@ -267,6 +267,55 @@
         @RenderBody()
     </div>
 
+    <footer class="footer">
+        <div class="footer_container">
+            <section class="footer_section">
+                <h1>About Health Connect</h1>
+                <div class="footer_section_links">
+                    <a href="">About Us</a>
+                    <a href="">FAQs</a>
+                    <a href="">Contact US</a>
+                    <a href="">Blogs</a>
+                    <a href="">Terms & Condition</a>
+                    <a href="">Return & Refund</a>
+                    <a href="">Privacy & policy</a>
+                </div>
+            </section>
+
+            <section class="footer_section">
+                <h1>Services</h1>
+                <div class="footer_section_links">
+                    <a href="/User/Explore_doctors">Find a doctor</a>
+                    <a href="/Pharmacy">Online pharmacy</a>
+                    <a href="">Health checkup</a>
+                    <a href="">Health insurance</a>
+                    <a href="">Health blog</a>
+                </div>
+            </section>
+
+            <section class="footer_section">
+                <h1>Product Category</h1>
+                <div class="footer_section_links">
+                    <a href="">View all Category</a>
+                    <a href="">View all Brands</a>
+                    <a href=""></a>
+                </div>
+            </section>
+
+            <section class="footer_section">
+                <div class="footer_logo">
+                    <img src="/images/HealthConnectLogo.png" />
+                </div>
+                <div class="footer_social_links">
+                    <a href=""><i class="fab fa-facebook"></i></a>
+                    <a href=""><i class="fab fa-instagram"></i></a>
+                    <a href=""><i class="fa-brands fa-x-twitter"></i></a>
+                    <a href=""><i class="fa-brands fa-youtube"></i></a>
+                </div>
+            </section>
+
+        </div>
+    </footer>
 
     <script src="/js/Script.js"></script>
 
@@ -381,7 +430,7 @@
                 var value = $(this).val().toLowerCase();
                 if (value.length > 0) {
                     $(".explorer_doctor_section1").hide();
-                } 
+                }
                 else {
                     $(".explorer_doctor_section1").show();
                 }
