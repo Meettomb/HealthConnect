@@ -12,5 +12,7 @@ namespace HealthConnect.Models
 
         public virtual Medicine_Main_Category Medicine_Main_Category { get; set; }
 
+        public List<Medicine_Finel_Category> Medicine_Finel_Categories { get; set; } = new List<Medicine_Finel_Category>();
+
     }
 }

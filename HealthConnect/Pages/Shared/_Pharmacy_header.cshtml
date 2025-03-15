@@ -139,6 +139,44 @@
     </div>
 
 
+    <div class="Pharmacy_nav_container">
+
+        <nav class="pharmacy_nav">
+            <ul class="medicine_main_category">
+                @foreach (var main in Model.Medicine_Main_CategoryList)
+                {
+                    <li class="medicine_main_category_li">
+                        <span>@main.medicine_main_category_name</span>
+                        @if (main.medicineSubCategories != null && main.medicineSubCategories.Count > 0)
+                        {
+                            <ul class="medicine_sub_category" id="medicine_sub_category" style="display: none;">
+                                @foreach (var sub in main.medicineSubCategories)
+                                {
+                                    <li class="medicine_sub_category_li" id="medicine_sub_category_li">
+                                        <a href="#" class="medicine_sub_category_li_a"><p>@sub.medicine_sub_category_name</p></a>
+                                        @if (sub.Medicine_Finel_Categories != null && sub.Medicine_Finel_Categories.Count > 0)
+                                        {
+                                            <ul class="medicine_finel_category" id="medicine_finel_category">
+                                                @foreach (var finel in sub.Medicine_Finel_Categories)
+                                                {
+                                                    <li class="medicine_finel_category_li"><a href="#" class="medicine_finel_category_li_a"><p>@finel.medicine_finel_category_name</p></a></li>
+                                                }
+                                            </ul>
+                                        }
+                                    </li>
+                                }
+                            </ul>
+                        }
+                    </li>
+                }
+            </ul>
+        </nav>
+
+    </div>
+
+
+
+
     <div class="extar_search_area_container">
         <p>Buy Medicines and Essentials</p>
 
@@ -215,6 +253,22 @@
     <script src="/js/Script.js"></script>
 
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+
+    <script>
+        $(document).ready(function() {
+            $('.medicine_main_category_li').click(function(event) {
+                event.stopPropagation();
+                $('.medicine_sub_category').not($(this).find('.medicine_sub_category')).slideUp(300);
+                $(this).find('.medicine_sub_category').stop(true, true).slideToggle(300);
+            });
+
+            $(document).click(function() {
+                $('.medicine_sub_category').slideUp(300);
+            });
+        });
+    </script>
+
+
 
     <script>
         document.addEventListener("DOMContentLoaded", function () {

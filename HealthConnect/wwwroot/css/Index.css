@@ -3406,6 +3406,7 @@ header img {
                         font-family: var(--nav-font);
                         cursor: pointer;
                         font-size: 20px;
+                        white-space: nowrap;
                     }
 
                         .overview_container .overview_all_contant .overview_content .overview_nav ul li i {
@@ -4187,6 +4188,115 @@ header img {
     outline-color: var(--accent-color);
 }
 
+.Pharmacy_nav_container {
+    width: 100%;
+    padding: 10px 0;
+    height: auto;
+    background-color: var(--header-text-color);
+    color: var(--contrast-color);
+    display: flex;
+    justify-content: center;
+}
+
+    .Pharmacy_nav_container .pharmacy_nav {
+        width: 90%;
+        padding: 10px 0;
+        height: auto;
+        background-color: transparent;
+        color: var(--contrast-color);
+        display: flex;
+        position: relative;
+        justify-content: center;
+    }
+
+        .Pharmacy_nav_container .pharmacy_nav::-webkit-scrollbar {
+            display: none;
+        }
+
+.pharmacy_nav .medicine_main_category {
+    width: 100%;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    list-style: none;
+    overflow-x: scroll;
+}
+
+    .pharmacy_nav .medicine_main_category::-webkit-scrollbar {
+        display: none;
+    }
+
+    .pharmacy_nav .medicine_main_category .medicine_main_category_li span {
+        text-decoration: none;
+        color: var(--contrast-color);
+        font-family: var(--heading-font);
+        cursor: pointer;
+        white-space: nowrap;
+    }
+
+.pharmacy_nav .medicine_sub_category {
+    background-color: var(--contrast-color);
+    position: absolute;
+    top: 40px;
+    max-width: 50%;
+    min-width: auto;
+    overflow-x: scroll;
+    height: auto;
+    display: flex;
+    justify-content: space-between;
+    z-index: 1000;
+    list-style: none;
+    column-gap: 25px;
+}
+
+.pharmacy_nav .medicine_main_category_li:last-child .medicine_sub_category,
+.pharmacy_nav .medicine_main_category_li:nth-last-child(2) .medicine_sub_category {
+    right: 0;
+    left: auto;
+}
+
+.pharmacy_nav .medicine_sub_category .medicine_sub_category_li {
+    padding: 20px;
+}
+
+    .pharmacy_nav .medicine_sub_category .medicine_sub_category_li:nth-child(odd) {
+        background-color: var(--footer-bg-color);
+    }
+
+    .pharmacy_nav .medicine_sub_category .medicine_sub_category_li:nth-child(even) {
+        background-color: var(--contrast-color);
+    }
+
+    .pharmacy_nav .medicine_sub_category .medicine_sub_category_li .medicine_sub_category_li_a {
+        text-decoration: none;
+        width: auto;
+    }
+
+        .pharmacy_nav .medicine_sub_category .medicine_sub_category_li .medicine_sub_category_li_a p {
+            color: var(--header-text-color);
+            font-family: var(--nav-font);
+            width: 100px;
+            font-weight: 600;
+            font-size: 17px;
+        }
+
+.pharmacy_nav .medicine_finel_category {
+    margin-top: 20px;
+    list-style: none;
+}
+
+    .pharmacy_nav .medicine_finel_category .medicine_finel_category_li .medicine_finel_category_li_a {
+        text-decoration: none;
+        width: auto;
+    }
+
+        .pharmacy_nav .medicine_finel_category .medicine_finel_category_li .medicine_finel_category_li_a p {
+            margin: 10px 0;
+            font-size: 15px;
+            color: var(--default-color);
+            font-family: var(--default-font);
+        }
+
 @media (max-width:1132px) {
     .pharmacy_header_container header .pharmacy_header_left_side {
         width: 45%;
@@ -4236,7 +4346,7 @@ header img {
         width: 100%;
         height: 50px;
         position: sticky;
-        top: 0;
+        top: 60px;
         left: 0;
     }
 
@@ -4269,6 +4379,70 @@ header img {
                 color: var(--contrast-color);
                 text-decoration: none;
             }
+
+    .Pharmacy_nav_container {
+        position: sticky;
+        top: 0;
+        left: 0;
+        z-index: 1000;
+    }
+
+    .pharmacy_nav .medicine_sub_category {
+        max-width: 100%;
+        min-width: auto;
+        margin: 0 10px;
+    }
+
+    .pharmacy_nav .medicine_main_category_li:last-child .medicine_sub_category, .pharmacy_nav .medicine_main_category_li:nth-last-child(2) .medicine_sub_category {
+        right: auto;
+        left: 0;
+    }
+
+    .pharmacy_nav .medicine_main_category_li .medicine_sub_category {
+        right: auto;
+        left: -10px;
+    }
+}
+
+@media (max-width: 798px) {
+    .extar_search_area_container {
+        top: 49px;
+    }
+
+    .Pharmacy_nav_container {
+        padding: 5px 0;
+    }
+
+        .Pharmacy_nav_container .pharmacy_nav {
+            width: 95%;
+        }
+
+
+    .pharmacy_nav .medicine_main_category {
+        justify-content: flex-start;
+        gap: 30px;
+    }
+
+    .pharmacy_nav .medicine_main_category_li .medicine_sub_category {
+        gap: 5px;
+    }
+
+    .pharmacy_nav .medicine_main_category .medicine_main_category_li span {
+        font-size: 14px;
+    }
+
+    .pharmacy_nav .medicine_sub_category .medicine_sub_category_li {
+        padding: 10px;
+    }
+
+        .pharmacy_nav .medicine_sub_category .medicine_sub_category_li .medicine_sub_category_li_a p {
+            font-size: 12px;
+            width: 70px;
+        }
+
+    .pharmacy_nav .medicine_finel_category .medicine_finel_category_li .medicine_finel_category_li_a p {
+        font-size: 10px;
+    }
 }
 
 @media (max-width: 622px) {
@@ -4354,13 +4528,12 @@ header img {
     .extar_search_area_container p {
         font-size: 20px;
     }
+
+    .pharmacy_nav .medicine_main_category {
+        justify-content: flex-start;
+        gap: 20px;
+    }
 }
-
-
-
-
-
-
 /*--------------------------------------------------------------------------------------------------------------*/
 /*--------------------------------------------------------------------------------------------------------------*/
 /*--------------------------------------------------------------------------------------------------------------*/
@@ -4763,12 +4936,10 @@ header img {
 @media(max-width:500px) {
 
     .footer .footer_container .footer_section h1 {
-    
         font-size: 16px;
     }
 
     .footer .footer_container .footer_section .footer_section_links a {
-      
         font-size: 12px;
     }
 
@@ -4791,7 +4962,7 @@ header img {
         flex-wrap: wrap;
         gap: 10px 10px;
         padding: 5px;
-    }        
+    }
 }
 
 

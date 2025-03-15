@@ -10,5 +10,6 @@ namespace HealthConnect.Models
         public string medicine_main_category_name { get; set; }
 
         public List<Medicine_Sub_Category> medicineSubCategories { get; set; } = new List<Medicine_Sub_Category>();
+
     }
 }
