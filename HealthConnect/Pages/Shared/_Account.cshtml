@@ -75,6 +75,13 @@
                                         <i class="fa-solid fa-calendar-day"></i> Appointment
                                     </a>
 
+                                    @if (Model.Role == "Pharmacist")
+                                    {
+                                        <a href="/User/Saler/Saler_Dashbord">
+                                            <i class="fa-solid fa-chart-line"></i> Your Dashbord
+                                        </a>
+                                    }
+
                                     @if (Model.Role == "Admin")
                                     {
                                         <a href="/Admin/Admin_index">

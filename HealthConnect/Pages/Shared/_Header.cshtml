@@ -2,7 +2,12 @@
 
 <html>
 <head>
+
+    <meta charset="utf-8">
     <meta name="viewport" content="width=device-width" />
+    <meta content="" name="keywords">
+    <meta content="" name="description">
+
     <title>@ViewBag.Title - Health Connect</title>
 
     <link rel="stylesheet" href="/css/Index.css" asp-append-version="true">
@@ -143,6 +148,13 @@
                                         <i class="fa-solid fa-calendar-day"></i> Appointment
                                     </a>
 
+                                    @if (Model.Role == "Pharmacist")
+                                    {
+                                        <a href="/User/Saler/Saler_Dashbord">
+                                            <i class="fa-solid fa-chart-line"></i> Your Dashbord
+                                        </a>
+                                    }
+
                                     @if (Model.Role == "Admin")
                                     {
                                         <a href="/Admin/Admin_index">
@@ -241,6 +253,13 @@
                                 <a href="/User/AppointmentManage/All_appointment">
                                     <i class="fa-solid fa-calendar-day"></i> Appointment
                                 </a>
+
+                                @if (Model.Role == "Pharmacist")
+                                {
+                                    <a href="/User/Saler/Saler_Dashbord">
+                                        <i class="fa-solid fa-chart-line"></i> Your Dashbord
+                                    </a>
+                                }
 
                                 @if (Model.Role == "Admin")
                                 {

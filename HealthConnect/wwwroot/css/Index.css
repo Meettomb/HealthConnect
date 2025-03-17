@@ -311,6 +311,7 @@ header img {
             width: 100%;
             color: var(--header-text-color);
             font-family: var(--nav-font);
+            white-space: nowrap;
         }
 
 .header_user_icon_drop_down .header_user_icon {
@@ -4109,6 +4110,7 @@ header img {
                     column-gap: 15px;
                     font-size: 13.5px;
                     width: 100%;
+                    white-space: nowrap;
                 }
 
             .pharmacy_header_container header .pharmacy_header_right_side .pharmacy_header_user_icon .pharmacy_header_user_services i {

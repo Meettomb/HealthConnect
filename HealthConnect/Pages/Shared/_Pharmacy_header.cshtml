@@ -121,6 +121,13 @@
                                     </a>
                                 }
 
+                                @if (Model.Role == "Pharmacist")
+                                {
+                                    <a href="/User/Saler/Saler_Dashbord">
+                                        <i class="fa-solid fa-chart-line"></i> Your Dashbord
+                                    </a>
+                                }
+
                                 <a href="/User/Logout">
                                     <i class="fa-solid fa-right-from-bracket"></i> Logout
                                 </a>
