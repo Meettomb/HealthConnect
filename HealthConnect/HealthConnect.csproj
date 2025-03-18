@@ -28,6 +28,7 @@
 
   <ItemGroup>
     <Folder Include="wwwroot\documant\" />
+    <Folder Include="wwwroot\ProductImage\" />
     <Folder Include="wwwroot\PharmaceuticalBrandsImage\" />
   </ItemGroup>
 
