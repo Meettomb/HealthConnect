@@ -21,5 +21,9 @@ namespace HealthConnect.Models
         public string product_how_to_use { get; set; }
         public string product_exp_date { get; set; }
         public DateOnly product_add_date { get; set; }
+
+        public User_Table Seller { get; set; }
+        public Pharmaceutical_Brands Brand { get; set; }
+        public Medicine_Finel_Category FinelCategory { get; set; }
     }
 }
