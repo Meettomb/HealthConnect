@@ -127,7 +127,7 @@ namespace HealthConnect.Pages.User.Saler.Manage_Products
             using (SqlConnection connection = new SqlConnection(_connectionString))
             {
                 string query = @"SELECT PT.product_id, PT.saler_id, PT.brande_id, PT.product_image, PT.product_name,
-                        PT.product_category_id, PT.product_price, PT.product_discount, PT.product_qantity, 
+                        PT.product_category_id, PT.product_price, PT.product_discount, PT.discounted_price, PT.product_qantity, 
                         PT.product_description, PT.product_features, PT.product_benefits, PT.product_how_to_use,
                         PT.product_exp_date, PT.product_add_date, PB.pharmaceutical_brands_id, PB.pharmaceutical_brands_name,
                         UT.id, UT.first_name, UT.last_name, UT.profile_pic, UT.shop_name, UT.shop_address,
@@ -160,45 +160,46 @@ namespace HealthConnect.Pages.User.Saler.Manage_Products
                                 product_category_id = reader.GetInt32(5),
                                 product_price = reader.GetInt32(6),
                                 product_discount = reader.IsDBNull(7) ? (int?)null : reader.GetInt32(7),
-                                product_qantity = reader.GetInt32(8),
-                                product_description = reader.GetString(9),
-                                product_features = reader.IsDBNull(10) ? null : reader.GetString(10),
-                                product_benefits = reader.GetString(11),
-                                product_how_to_use = reader.GetString(12),
-                                product_exp_date = reader.GetString(13),
-                                product_add_date = DateOnly.FromDateTime(reader.GetDateTime(14)),
+                                discounted_price = reader.IsDBNull(8) ? (int?)null : reader.GetInt32(8),
+                                product_qantity = reader.GetInt32(9),
+                                product_description = reader.GetString(10),
+                                product_features = reader.IsDBNull(11) ? null : reader.GetString(11),
+                                product_benefits = reader.GetString(12),
+                                product_how_to_use = reader.GetString(13),
+                                product_exp_date = reader.GetString(14),
+                                product_add_date = DateOnly.FromDateTime(reader.GetDateTime(15)),
 
                                 Brand = new Pharmaceutical_Brands
                                 {
-                                    pharmaceutical_brands_id = reader.GetInt32(15),
-                                    pharmaceutical_brands_name = reader.GetString(16)
+                                    pharmaceutical_brands_id = reader.GetInt32(16),
+                                    pharmaceutical_brands_name = reader.GetString(17)
                                 },
 
                                 Seller = new User_Table
                                 {
-                                    id = reader.GetInt32(17),
-                                    first_name = reader.GetString(18),
-                                    last_name = reader.GetString(19),
-                                    profile_pic = reader.IsDBNull(20) ? null : reader.GetString(20),
-                                    shop_name = reader.IsDBNull(21) ? null : reader.GetString(21),
-                                    shop_address = reader.IsDBNull(22) ? null : reader.GetString(22)
+                                    id = reader.GetInt32(18),
+                                    first_name = reader.GetString(19),
+                                    last_name = reader.GetString(20),
+                                    profile_pic = reader.IsDBNull(21) ? null : reader.GetString(21),
+                                    shop_name = reader.IsDBNull(22) ? null : reader.GetString(22),
+                                    shop_address = reader.IsDBNull(23) ? null : reader.GetString(23)
                                 },
 
                                 FinelCategory = new Medicine_Finel_Category
                                 {
-                                    medicine_finel_category_id = reader.GetInt32(23),
-                                    medicine_finel_category_name = reader.GetString(24),
+                                    medicine_finel_category_id = reader.GetInt32(24),
+                                    medicine_finel_category_name = reader.GetString(25),
 
                                     Medicine_Sub_Category = new Medicine_Sub_Category
                                     {
-                                        medicine_sub_category_id = reader.GetInt32(25),
-                                        medicine_sub_category_name = reader.GetString(26)
+                                        medicine_sub_category_id = reader.GetInt32(26),
+                                        medicine_sub_category_name = reader.GetString(27)
                                     },
 
                                     Medicine_Main_Category = new Medicine_Main_Category
                                     {
-                                        medicine_main_category_id = reader.GetInt32(27),
-                                        medicine_main_category_name = reader.GetString(28)
+                                        medicine_main_category_id = reader.GetInt32(28),
+                                        medicine_main_category_name = reader.GetString(29)
                                     }
                                 }
                             };

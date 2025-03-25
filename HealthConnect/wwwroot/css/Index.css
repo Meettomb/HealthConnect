@@ -34,7 +34,6 @@ input[type="search"]::-webkit-search-cancel-button {
     top: 15px;
     right: 15px;
     padding: 10px 20px;
-    border-radius: 5px;
     animation: shake 5s;
     opacity: 0;
     z-index: 10000;
@@ -4350,6 +4349,7 @@ header img {
         position: sticky;
         top: 60px;
         left: 0;
+        z-index: 2;
     }
 
         .extar_search_area_container p {
@@ -4409,6 +4409,7 @@ header img {
 @media (max-width: 798px) {
     .extar_search_area_container {
         top: 49px;
+        z-index: 2;
     }
 
     .Pharmacy_nav_container {
@@ -4497,6 +4498,7 @@ header img {
 
     .extar_search_area_container {
         height: 40px;
+        z-index: 2;
     }
 
         .extar_search_area_container .extar_search_area i {
@@ -4972,5 +4974,185 @@ header img {
 
 .pharmacy_index_container {
     height: auto;
+    width: 100%;
     margin: 30px 0;
+    display: flex;
+    -webkit-justify-content: center;
+    justify-content: center;
+}
+
+    .pharmacy_index_container .pharmacy_index_container_section_1 {
+        width: 95%;
+        position: relative;
+    }
+
+        .pharmacy_index_container .pharmacy_index_container_section_1 h2 {
+            margin: 10px 0;
+            color: var(--header-text-color);
+            font-family: var(--heading-font);
+        }
+
+        .pharmacy_index_container .pharmacy_index_container_section_1 .slide_left {
+            position: absolute;
+            padding: 50px 10px;
+            font-size: 30px;
+            font-weight: 700;
+            left: 0;
+            top: 50%;
+            background: color-mix(in srgb, var(--accent-color), transparent 80%);
+            display: flex;
+            align-self: center;
+            cursor: pointer;
+            border-radius: 10px;
+            color: var(--contrast-color);
+            transform: translateY(-50%);
+            z-index: 1;
+            user-select: none;
+        }
+
+        .pharmacy_index_container .pharmacy_index_container_section_1 .slide_right {
+            position: absolute;
+            display: none;
+            padding: 50px 10px;
+            font-size: 30px;
+            font-weight: 700;
+            right: 0;
+            top: 50%;
+            background: color-mix(in srgb, var(--accent-color), transparent 80%);
+            align-self: center;
+            cursor: pointer;
+            border-radius: 10px;
+            color: var(--contrast-color);
+            transform: translateY(-50%);
+            z-index: 1;
+            user-select: none;
+        }
+
+.slide_left {
+    left: 10px;
+}
+
+.slide_right {
+    right: 10px;
+}
+
+.pharmacy_index_container .pharmacy_index_container_section_1 .slider_container {
+    display: flex;
+    -moz-column-gap: 20px;
+    -ms-column-gap: 20px;
+    -webkit-column-gap: 20px;
+    column-gap: 20px;
+    overflow-x: auto;
+    white-space: nowrap;
+    scroll-behavior: smooth;
+    position: relative;
+}
+
+    .pharmacy_index_container .pharmacy_index_container_section_1 .slider_container::-webkit-scrollbar {
+        display: none;
+    }
+
+.pharmacy_index_container .pharmacy_index_container_section_1 .product_section {
+    background-color: var(--footer-bg-color);
+    -moz-border-radius: 10px;
+    -webkit-border-radius: 10px;
+    border-radius: 10px;
+    width: 15%;
+}
+
+    .pharmacy_index_container .pharmacy_index_container_section_1 .product_section img {
+        width: 95%;
+        height: 200px;
+        object-fit: fill;
+        display: flex;
+        justify-self: center;
+        padding: 3px;
+        -moz-border-radius: 10px;
+        -webkit-border-radius: 10px;
+        border-radius: 10px;
+    }
+
+
+    .pharmacy_index_container .pharmacy_index_container_section_1 .product_section a {
+        text-decoration: none;
+        font-family: var(--default-font);
+    }
+
+    .pharmacy_index_container .pharmacy_index_container_section_1 .product_section .priceing_div {
+        color: var(--accent-color);
+        padding: 0 10px;
+        margin-top: 10px;
+        font-family: var(--default-font);
+    }
+
+        .pharmacy_index_container .pharmacy_index_container_section_1 .product_section .priceing_div .product_name {
+            width: 100%;
+            font-size: 16px;
+            overflow: hidden;
+            color: var(--default-color);
+            text-overflow: ellipsis;
+            white-space: nowrap;
+        }
+
+        .pharmacy_index_container .pharmacy_index_container_section_1 .product_section .priceing_div .price {
+            font-weight: 600;
+            margin-top: 10px;
+        }
+
+            .pharmacy_index_container .pharmacy_index_container_section_1 .product_section .priceing_div .price del {
+                color: red;
+                font-size: 17px;
+            }
+
+            .pharmacy_index_container .pharmacy_index_container_section_1 .product_section .priceing_div .price span {
+                color: green;
+                font-size: 25px;
+                margin-left: 5px;
+            }
+
+    .pharmacy_index_container .pharmacy_index_container_section_1 .product_section button {
+        background-color: var(--header-text-color);
+        color: var(--contrast-color);
+        width: 100%;
+        padding: 10px 5px;
+        font-size: 18px;
+        border: none;
+        border-radius: 10px;
+        margin-top: 20px;
+        cursor: pointer;
+        font-weight: 600;
+    }
+
+
+@media(max-width:1000px) {
+
+    .pharmacy_index_container .pharmacy_index_container_section_1 .product_section {
+        width: 25%;
+    }
+
+        .pharmacy_index_container .pharmacy_index_container_section_1 .product_section img {
+            object-fit: fill;
+        }
+}
+
+@media(max-width:700px) {
+
+    .pharmacy_index_container .pharmacy_index_container_section_1 .product_section {
+        width: 30%;
+    }
+
+        .pharmacy_index_container .pharmacy_index_container_section_1 .product_section img {
+            object-fit: fill;
+        }
+}
+
+@media(max-width:550px) {
+
+    .pharmacy_index_container .pharmacy_index_container_section_1 .product_section {
+        width: 43%;
+    }
+
+        .pharmacy_index_container .pharmacy_index_container_section_1 .product_section img {
+            object-fit: fill;
+        }
 }

@@ -6,6 +6,72 @@
 }
 
 <div class="pharmacy_index_container">
-    <p class=""> hello </p>
+
+    <section class="pharmacy_index_container_section_1">
+        <h2>Minimum 50% discount</h2>
+        <p class="slide_left mdi mdi-chevron-left" id="slide_left"></p>
+        <p class="slide_right mdi mdi-chevron-right" id="slide_right"></p>
+
+        <div class="slider_container">
+
+            @foreach (var fiftyDiscountProduct in Model.FifityDiscountProductList)
+            {
+                <div class="product_section">
+                    <a href="#">
+
+                        <img src="/ProductImage/@fiftyDiscountProduct.product_image.Split(',')[0]" alt="medicine1" />
+
+                        <div class="priceing_div">
+                            <p class="product_name">@fiftyDiscountProduct.product_name</p>
+                            @if (fiftyDiscountProduct.product_discount != null || fiftyDiscountProduct.product_discount > 0)
+                            {
+                                <p class="price"> <del>&#8377;@fiftyDiscountProduct.product_price</del> <span> &#8377;@fiftyDiscountProduct.discounted_price </span></p>
+                            }
+                        </div>
+                    </a>
+
+                    <form id="cartForm" method="post">
+                        <input type="hidden" name="user_id" id="user_id" value="@Model.UserId" />
+                        <input type="hidden" name="product_id" id="product_id" value="@fiftyDiscountProduct.product_id" />
+                        <button type="submit" name="addToCart" id="addToCart">Add</button>
+                    </form>
+
+
+                </div>
+            }
+
+
+        </div>
+    </section>
 
 </div>
+
+
+
+<script>
+    document.addEventListener("DOMContentLoaded", function () {
+        const container = document.querySelector(".slider_container");
+        const leftButton = document.getElementById("slide_left");
+        const rightButton = document.getElementById("slide_right");
+
+        if (!container || !leftButton || !rightButton) return;
+
+        function toggleButtons() {
+            leftButton.style.display = container.scrollLeft > 0 ? "block" : "none";
+            rightButton.style.display = container.scrollWidth > container.clientWidth + container.scrollLeft ? "block" : "none";
+        }
+
+        rightButton.addEventListener("click", function () {
+            container.scrollBy({ left: 250, behavior: "smooth" });
+        });
+
+        leftButton.addEventListener("click", function () {
+            container.scrollBy({ left: -250, behavior: "smooth" });
+        });
+
+        container.addEventListener("scroll", toggleButtons);
+        window.addEventListener("resize", toggleButtons);
+        toggleButtons();
+    });
+</script>
+

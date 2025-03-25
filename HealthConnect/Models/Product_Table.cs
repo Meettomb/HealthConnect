@@ -4,7 +4,7 @@ namespace HealthConnect.Models
 {
     public class Product_Table
     {
-        
+
         [Key]
         public int product_id { get; set; }
         public int saler_id { get; set; }
@@ -21,6 +21,7 @@ namespace HealthConnect.Models
         public string product_how_to_use { get; set; }
         public string product_exp_date { get; set; }
         public DateOnly product_add_date { get; set; }
+        public int? discounted_price { get; set; }
 
         public User_Table Seller { get; set; }
         public Pharmaceutical_Brands Brand { get; set; }

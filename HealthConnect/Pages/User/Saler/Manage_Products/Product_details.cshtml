@@ -74,6 +74,10 @@
                     <tr>
                         <th>Product Discount</th>
                         <td>@(Model.Product.product_discount ?? 0)%</td>
+                    </tr>  
+                    <tr>
+                        <th>Discount Price</th>
+                        <td>@Model.Product.discounted_price</td>
                     </tr>
                     <tr>
                         <th>Product Quantity</th>
@@ -104,19 +108,7 @@
                         <td>@Model.Product.product_add_date</td>
                     </tr>
 
-                    <tr>
-                        <th>Seller Profile Picture</th>
-                        <td>
-                            @if (!string.IsNullOrEmpty(Model.Product.Seller.profile_pic))
-                            {
-                                <img src="/documant/@Model.Product.Seller.profile_pic" alt="Seller Profile" width="100" />
-                            }
-                            else
-                            {
-                                <span>@Model.Product.Seller.first_name[0].ToString().ToUpper()</span>
-                            }
-                        </td>
-                    </tr>
+                   
                     <tr>
                         <th>Shop Name</th>
                         <td>@(Model.Product.Seller.shop_name ?? "N/A")</td>

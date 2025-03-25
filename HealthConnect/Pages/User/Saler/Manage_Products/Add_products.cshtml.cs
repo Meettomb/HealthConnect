@@ -265,15 +265,21 @@ namespace HealthConnect.Pages.User.Saler.Manage_Products
                     (saler_id, brande_id, product_name, product_description, product_price, 
                     product_discount, product_exp_date, product_qantity, 
                     product_category_id, product_image, product_add_date, product_features, 
-                    product_benefits, product_how_to_use) 
+                    product_benefits, product_how_to_use, discounted_price) 
                     VALUES 
                     (@saler_id, @brande_id, @product_name, @product_description, @product_price, 
                     @product_discount, @product_exp_date, @product_qantity, 
                     @product_category_id, @product_image, @product_add_date, @product_features, 
-                    @product_benefits, @product_how_to_use)";
+                    @product_benefits, @product_how_to_use, @discounted_price)";
 
                 using (SqlCommand cmd = new SqlCommand(query, con))
                 {
+                    int originalPrice = Product.product_price;
+                    int? discount = Product.product_discount;
+                    int discountedPrice = discount.HasValue
+                        ? originalPrice - (originalPrice * discount.Value / 100)
+                        : originalPrice;
+
                     cmd.Parameters.AddWithValue("@saler_id", Product.saler_id);
                     cmd.Parameters.AddWithValue("@brande_id", Product.brande_id);
                     cmd.Parameters.AddWithValue("@product_image", string.Join(",", productImages));
@@ -288,6 +294,7 @@ namespace HealthConnect.Pages.User.Saler.Manage_Products
                     cmd.Parameters.AddWithValue("@product_how_to_use", Product.product_how_to_use);
                     cmd.Parameters.AddWithValue("@product_exp_date", Product.product_exp_date);
                     cmd.Parameters.AddWithValue("@product_add_date", DateOnly.FromDateTime(DateTime.Now));
+                    cmd.Parameters.AddWithValue("@discounted_price", discountedPrice);
 
                     con.Open();
                     int rowsAffected = cmd.ExecuteNonQuery();
