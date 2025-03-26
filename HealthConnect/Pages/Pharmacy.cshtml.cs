@@ -78,7 +78,7 @@ namespace HealthConnect.Pages
             OnGetLoginUserDetail();
 
             OnGetPharmacyFiftyPercentDiscountedProducts();
-            OnGetProducts();
+            OnGetPharmacyCategory();
             return Page();
         }
 
@@ -120,7 +120,7 @@ namespace HealthConnect.Pages
         }
 
 
-        public void OnGetPharmacyFiftyPercentDiscountedProducts()
+        public void OnGetPharmacyCategory()
         {
             using (SqlConnection connection = new SqlConnection(_connectionString))
             {
@@ -210,7 +210,7 @@ namespace HealthConnect.Pages
             }
         }
 
-        private void OnGetProducts()
+        private void OnGetPharmacyFiftyPercentDiscountedProducts()
         {
             using (SqlConnection connection = new SqlConnection(_connectionString))
             {
@@ -300,9 +300,7 @@ namespace HealthConnect.Pages
 
         public async Task<IActionResult> OnPost()
         {
-            int userId, productId;
-
-            if (!int.TryParse(Request.Form["user_id"], out userId) || !int.TryParse(Request.Form["product_id"], out productId))
+            if (!int.TryParse(Request.Form["user_id"], out int userId) || !int.TryParse(Request.Form["product_id"], out int productId))
             {
                 TempData["ErrorMessage"] = "Invalid user or product.";
                 return RedirectToPage("/Pharmacy");
@@ -311,19 +309,6 @@ namespace HealthConnect.Pages
             using (SqlConnection connection = new SqlConnection(_connectionString))
             {
                 await connection.OpenAsync();
-
-                string checkProductQuery = "SELECT COUNT(*) FROM Product_Table WHERE product_id = @ProductId";
-                using (SqlCommand checkProductCommand = new SqlCommand(checkProductQuery, connection))
-                {
-                    checkProductCommand.Parameters.AddWithValue("@ProductId", productId);
-                    int productExists = (int)await checkProductCommand.ExecuteScalarAsync();
-
-                    if (productExists == 0)
-                    {
-                        TempData["ErrorMessage"] = "Invalid product selected.";
-                        return RedirectToPage("/Pharmacy");
-                    }
-                }
 
                 string checkCartQuery = "SELECT COUNT(*) FROM Cart WHERE user_id = @UserId AND product_id = @ProductId";
                 using (SqlCommand checkCartCommand = new SqlCommand(checkCartQuery, connection))
@@ -340,12 +325,11 @@ namespace HealthConnect.Pages
                     }
                 }
 
-                string insertQuery = "INSERT INTO Cart (user_id, product_id, cart_added_date) VALUES (@UserId, @ProductId, @CartDate)";
+                string insertQuery = "INSERT INTO Cart (user_id, product_id) VALUES (@UserId, @ProductId)";
                 using (SqlCommand insertCommand = new SqlCommand(insertQuery, connection))
                 {
                     insertCommand.Parameters.AddWithValue("@UserId", userId);
                     insertCommand.Parameters.AddWithValue("@ProductId", productId);
-                    insertCommand.Parameters.AddWithValue("@CartDate", DateTime.Now.Date);
 
                     await insertCommand.ExecuteNonQueryAsync();
                     TempData["SuccessMessage"] = "Item added to cart successfully.";
@@ -354,7 +338,6 @@ namespace HealthConnect.Pages
 
             return RedirectToPage("/Pharmacy");
         }
-
 
 
 
