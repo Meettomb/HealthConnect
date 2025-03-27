@@ -1,0 +1,84 @@
+﻿@page
+@model HealthConnect.Pages.Ecom.Single_ProductModel
+@{
+    Layout = "_Pharmacy_header";
+    ViewData["Title"] = "Single Product";
+}
+
+<div class="single_product_container">
+    <main class="single_product_main">
+        <section class="single_product_section1">
+
+            <div class="other_image_div">
+                <img src="/ProductImage/Dhootapapeshwar Pittashekhar Rasa_1.jpg" />
+                <img src="/ProductImage/Dhootapapeshwar Pittashekhar Rasa_2.jpg" />
+                <img src="/ProductImage/Dhootapapeshwar Pittashekhar Rasa_3.jpg" />
+            </div>
+
+            <div class="main_image_div">
+                <img src="/ProductImage/Dhootapapeshwar Pittashekhar Rasa_1.jpg" />
+            </div>
+
+            <div class="product_little_info_div">
+                <div class="product_little_info_section">
+                    <p class="product_name">@Model.Product.product_name</p>
+                    <p class="menufacturer">
+                        <h3>Menufacturer Compony</h3>
+                        <a href=""></a>
+                    </p>
+                    <p class="seller">
+                        <h3>Sller shop name</h3>
+                        <span class="shop_adressh"></span>
+                    </p>
+
+                    <p class="exp_date">
+                        <h3>Expires on or after</h3>
+                        <span>@Model.Product.product_exp_date</span>
+                    </p>
+
+                </div>
+            </div>
+
+            <div class="billing_container">
+                <form method="post">
+                    <div class="row">
+                        <div class="row_content">
+                            <input type="radio" checked />
+                            @if (Model.Product.product_discount != null && Model.Product.product_discount > 0)
+                            {
+                                <del>@Model.Product.product_price</del>
+                                <span class="dis_price">@Model.Product.discounted_price</span>
+                            }
+                            else
+                            {
+                                <span class="org_price">@Model.Product.product_price</span>
+                            }
+
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <div class="row_content">
+                            <p>@Model.House_number_and_Street_name @Model.City @Model.State @Model.Country</p>
+                            <input type="checkbox" name="change-addresh" id="change-addresh" />
+                            <address></address>
+                        </div>
+                    </div>
+
+                    <div class="row">
+
+                        <div class="row_content">
+                            <input type="number" name="quantity" value="" />
+                            <button type="submit" name="addCart" id="addCart">Add to cart</button>
+                            <button type="button" name="buy" id="addCart">Buy</button>
+                        </div>
+
+                    </div>
+
+                </form>
+            </div>
+
+        </section>
+    </main>
+</div>
+

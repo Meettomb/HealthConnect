@@ -17,7 +17,7 @@
             @foreach (var fiftyDiscountProduct in Model.FifityDiscountProductList)
             {
                 <div class="product_section">
-                    <a href="#">
+                    <a href="/Ecom/Single_Product?product_id=@fiftyDiscountProduct.product_id">
 
                         <img src="/ProductImage/@fiftyDiscountProduct.product_image.Split(',')[0]" alt="medicine1" />
 

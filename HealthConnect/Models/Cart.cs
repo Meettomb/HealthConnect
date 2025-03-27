@@ -11,7 +11,7 @@ namespace HealthConnect.Models
         public int user_id { get; set; }
 
         public int product_id { get; set; }
+        public int quantity { get; set; }
 
-        public DateOnly cart_added_date { get; set; }
     }
 }

@@ -9,5 +9,8 @@
 
         public virtual User_Table UserId { get; set; }
         public virtual User_Table DoctorId { get; set; }
+
+        public User_Table UserList { get; set; }
+        public User_Table DoctorList { get; set; }
     }
 }

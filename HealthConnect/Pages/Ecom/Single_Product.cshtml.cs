@@ -1,15 +1,11 @@
-using HealthConnect.Models;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
+using HealthConnect.Models;
 using Microsoft.Data.SqlClient;
-using MimeKit.Encodings;
-using static HealthConnect.Pages.IndexModel;
-using System.Text.Json;
 
-
-namespace HealthConnect.Pages
+namespace HealthConnect.Pages.Ecom
 {
-    public class PharmacyModel : PageModel
+    public class Single_ProductModel : PageModel
     {
 
         private readonly ILogger<IndexModel> _logger;
@@ -22,6 +18,7 @@ namespace HealthConnect.Pages
         public string LastName { get; set; }
         public string ProfilePic { get; set; }
         public string Role { get; set; }
+        public string House_number_and_Street_name { get; set; }
         public string Country { get; set; }
         public string State { get; set; }
         public string City { get; set; }
@@ -63,7 +60,7 @@ namespace HealthConnect.Pages
         [BindProperty]
         public Cart Cart { get; set; }
 
-        public PharmacyModel(ILogger<IndexModel> logger, IConfiguration configuration)
+        public Single_ProductModel(ILogger<IndexModel> logger, IConfiguration configuration)
         {
             _logger = logger;
             _configuration = configuration;
@@ -77,8 +74,14 @@ namespace HealthConnect.Pages
 
             OnGetLoginUserDetail();
 
-            OnGetPharmacyFiftyPercentDiscountedProducts();
             OnGetPharmacyCategory();
+
+            int? ProductId = null;
+            if (Request.Query.ContainsKey("product_id") && int.TryParse(Request.Query["product_id"], out int parsedProductId))
+            {
+                ProductId = parsedProductId;
+            }
+            OnGetProducts(ProductId);
             return Page();
         }
 
@@ -102,6 +105,7 @@ namespace HealthConnect.Pages
                                 LastName = reader["last_name"].ToString();
                                 ProfilePic = reader["profile_pic"].ToString();
                                 Role = reader["role"].ToString();
+                                House_number_and_Street_name = reader["House_number_and_Street_name"].ToString();
                                 Country = reader["country"].ToString();
                                 State = reader["state"].ToString();
                                 City = reader["city"].ToString();
@@ -118,7 +122,6 @@ namespace HealthConnect.Pages
             }
 
         }
-
 
         public void OnGetPharmacyCategory()
         {
@@ -210,7 +213,8 @@ namespace HealthConnect.Pages
             }
         }
 
-        private void OnGetPharmacyFiftyPercentDiscountedProducts()
+
+        private void OnGetProducts(int? product_id)
         {
             using (SqlConnection connection = new SqlConnection(_connectionString))
             {
@@ -228,13 +232,14 @@ namespace HealthConnect.Pages
                         Left JOIN Medicine_Finel_Category MFC ON PT.product_category_id = MFC.medicine_finel_category_id
                         LEFT JOIN Medicine_Sub_Category MSC ON MFC.medicine_sub_category_id = MSC.medicine_sub_category_id
                         LEFT JOIN Medicine_Main_Category MMC ON MSC.medicine_main_category_id = MMC.medicine_main_category_id
-                        WHERE PT.product_discount >= 50";
+                        WHERE PT.product_id = @product_id";
                 using (SqlCommand command = new SqlCommand(query, connection))
                 {
+                    command.Parameters.AddWithValue("@product_id", product_id);
                     connection.Open();
                     using (SqlDataReader reader = command.ExecuteReader())
                     {
-                        while (reader.Read())
+                        if (reader.Read())
                         {
                             Product = new Product_Table
                             {
@@ -289,57 +294,13 @@ namespace HealthConnect.Pages
                                     }
                                 }
                             };
-                            FifityDiscountProductList.Add(Product);
+
                         }
                     }
                 }
             }
 
         }
-
-
-        public async Task<IActionResult> OnPost()
-        {
-            if (!int.TryParse(Request.Form["user_id"], out int userId) || !int.TryParse(Request.Form["product_id"], out int productId))
-            {
-                TempData["ErrorMessage"] = "Invalid user or product.";
-                return RedirectToPage("/Pharmacy");
-            }
-
-            using (SqlConnection connection = new SqlConnection(_connectionString))
-            {
-                await connection.OpenAsync();
-
-                string checkCartQuery = "SELECT COUNT(*) FROM Cart WHERE user_id = @UserId AND product_id = @ProductId";
-                using (SqlCommand checkCartCommand = new SqlCommand(checkCartQuery, connection))
-                {
-                    checkCartCommand.Parameters.AddWithValue("@UserId", userId);
-                    checkCartCommand.Parameters.AddWithValue("@ProductId", productId);
-
-                    int count = (int)await checkCartCommand.ExecuteScalarAsync();
-
-                    if (count > 0)
-                    {
-                        TempData["ErrorMessage"] = "Item is already in your cart.";
-                        return RedirectToPage("/Pharmacy");
-                    }
-                }
-
-                string insertQuery = "INSERT INTO Cart (user_id, product_id, quantity) VALUES (@UserId, @ProductId, @quantity)";
-                using (SqlCommand insertCommand = new SqlCommand(insertQuery, connection))
-                {
-                    insertCommand.Parameters.AddWithValue("@UserId", userId);
-                    insertCommand.Parameters.AddWithValue("@ProductId", productId);
-                    insertCommand.Parameters.AddWithValue("@quantity", 1);
-
-                    await insertCommand.ExecuteNonQueryAsync();
-                    TempData["SuccessMessage"] = "Item added to cart successfully.";
-                }
-            }
-
-            return RedirectToPage("/Pharmacy");
-        }
-
 
 
 

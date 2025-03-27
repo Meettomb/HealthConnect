@@ -1,0 +1,59 @@
+﻿@page
+@model HealthConnect.Pages.Admin.DoctorReportsManage.Doctor_all_reportsModel
+@{
+    Layout = "_Admin_header";
+    ViewData["Title"] = "Doctor Reports";
+}
+
+
+<div class="row">
+    <div class="col-12 grid-margin">
+        <div class="card">
+            <div class="card-body">
+                <h4 class="card-title">Doctor Register inquiry</h4>
+                <div class="table-responsive">
+                    <table class="table">
+                        <thead>
+                            <tr>
+                                <th> User Name </th>
+                                <th> Message </th>
+                            </tr>
+                        </thead>
+                        <tbody>
+
+                            @foreach (var dodctor_reports in Model.DoctorReport)
+                            {
+                                <tr class="data">
+                                    <td class="if_account_block">
+                                        @if (string.IsNullOrEmpty(dodctor_reports.UserList.profile_pic))
+                                        {
+                                            <span class="name_first_latter">
+                                                @dodctor_reports.UserList.first_name[0].ToString().ToUpper()
+                                            </span>
+                                        }
+                                        else
+                                        {
+                                            <img src="/documant/@dodctor_reports.UserList.profile_pic" alt="image" />
+
+                                        }
+
+
+                                        <span class="pl-2">@dodctor_reports.UserList.first_name @dodctor_reports.UserList.last_name</span>
+
+                                    </td>
+
+                                    <td> @dodctor_reports.report_message</td>
+                                    <td>
+
+                                        <a class="info_icon" href="/Admin/DoctorReportsManage/Report_detail?doctor_report_id=@dodctor_reports.doctor_report_id"><i class="fa-solid fa-circle-info"></i></a>
+
+                                    </td>
+                                </tr>
+                            }
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
