@@ -213,7 +213,6 @@ namespace HealthConnect.Pages.Ecom
             }
         }
 
-
         private void OnGetProducts(int? product_id)
         {
             using (SqlConnection connection = new SqlConnection(_connectionString))
@@ -301,6 +300,57 @@ namespace HealthConnect.Pages.Ecom
             }
 
         }
+
+
+
+        public IActionResult OnPost()
+        {
+
+            string product_id = Request.Form["product_id"];
+            int? UserId = HttpContext.Session.GetInt32("Id");
+            if (UserId == null)
+            {
+                return RedirectToPage("/User/Sign_in");
+            }
+
+
+            using (SqlConnection connection = new SqlConnection(_connectionString))
+            {
+                connection.Open();
+
+
+                string checkQuery = "SELECT COUNT(*) FROM Cart WHERE user_id = @user_id AND product_id = @product_id";
+                using (SqlCommand checkCommand = new SqlCommand(checkQuery, connection))
+                {
+                    checkCommand.Parameters.AddWithValue("@user_id", UserId.Value);
+                    checkCommand.Parameters.AddWithValue("@product_id", product_id);
+                    int count = (int)checkCommand.ExecuteScalar();
+
+                    if (count > 0)
+                    {
+                        TempData["ErrorMessage"] = "Product already exists in cart!";
+                        return Redirect($"/Ecom/Single_Product?product_id={product_id}");
+                    }
+                }
+
+
+                string insertQuery = "INSERT INTO Cart (user_id, product_id, quantity) VALUES (@user_id, @product_id, @quantity)";
+                using (SqlCommand insertCommand = new SqlCommand(insertQuery, connection))
+                {
+                    insertCommand.Parameters.AddWithValue("@user_id", Request.Form["user_id"].ToString());
+                    insertCommand.Parameters.AddWithValue("@product_id", Request.Form["product_id"].ToString());
+                    insertCommand.Parameters.AddWithValue("@quantity", Request.Form["quantity"].ToString());
+                    insertCommand.ExecuteNonQuery();
+                }
+
+                TempData["SuccessMessage"] = "Product added to cart successfully!";
+            }
+
+            return Redirect($"/Ecom/Single_Product?product_id={product_id}");
+        }
+
+
+
 
 
 

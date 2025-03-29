@@ -98,17 +98,19 @@
                                 </select>
 
                                 <form method="post">
-                                    <input type="hidden" name="name" value="@Model.UserId" />
-                                    <input type="hidden" name="name" value="@Model.Product.product_id" />
-                                    <input type="hidden" name="quantity" id="cart_quantity" value="1" readonly />
+                                    <input type="text" name="user_id" value="@Model.UserId" />
+                                    <input type="text" name="product_id" value="@Model.Product?.product_id" />
+                                    <input type="text" name="quantity" value="1" readonly />
 
                                     <button type="submit" name="addCart" id="addCart">Add to cart</button>
                                 </form>
 
-                                <form method="post">
+                                <form method="post" id="Buy">
                                     <input type="hidden" name="name" value="@Model.UserId" />
                                     <input type="hidden" name="name" value="@Model.Product.product_id" />
                                     <input type="hidden" name="quantity" id="buying_quantity" value="1" readonly />
+                                    <input type="hidden" name="address" id="hidden_address" value="@Model.House_number_and_Street_name @Model.City @Model.State @Model.Country - @Model.Pincode" />
+
 
                                     @if (Model.Product.product_discount != null && Model.Product.product_discount > 0)
                                     {
@@ -119,7 +121,7 @@
                                         <input type="hidden" name="name" value="@Model.Product.product_price" />
                                     }
 
-                                    <button type="button" name="buy" id="addCart">Buy</button>
+                                    <button type="button" name="buy" id="Buy">Buy</button>
                                 </form>
                             </div>
 
@@ -202,15 +204,28 @@
     }
 </script>
 
-
 <script>
-    document.getElementById("change-address").addEventListener("change", function() {
-    var addressField = document.getElementById("address");
-    var addressP = document.getElementById("addre");
-    addressField.style.display = this.checked ? "block" : "none";
-    addressP.style.display = this.checked ? "none" : "block";
+    document.getElementById("change-address").addEventListener("change", function () {
+        var addressText = document.getElementById("addre");
+        var addressInput = document.getElementById("address");
+        var hiddenAddress = document.getElementById("hidden_address");
+
+        if (this.checked) {
+            addressText.style.display = "none";
+            addressInput.style.display = "block";
+            hiddenAddress.value = ""; 
+        } else {
+            addressText.style.display = "block";
+            addressInput.style.display = "none";
+            hiddenAddress.value = addressText.innerText; 
+        }
+    });
+
+    document.getElementById("address").addEventListener("input", function () {
+        document.getElementById("hidden_address").value = this.value;
     });
 </script>
+
 
 <script>
     document.getElementById("quantity_select").addEventListener("change", function () {
