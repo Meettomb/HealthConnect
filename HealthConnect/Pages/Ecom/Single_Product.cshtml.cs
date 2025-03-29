@@ -305,41 +305,62 @@ namespace HealthConnect.Pages.Ecom
 
         public IActionResult OnPost()
         {
-
             string product_id = Request.Form["product_id"];
             int? UserId = HttpContext.Session.GetInt32("Id");
+
             if (UserId == null)
             {
                 return RedirectToPage("/User/Sign_in");
             }
 
-
             using (SqlConnection connection = new SqlConnection(_connectionString))
             {
                 connection.Open();
 
+                string checkQuery = "SELECT quantity FROM Cart WHERE user_id = @user_id AND product_id = @product_id";
+                int cartQuantity = 0;
 
-                string checkQuery = "SELECT COUNT(*) FROM Cart WHERE user_id = @user_id AND product_id = @product_id";
                 using (SqlCommand checkCommand = new SqlCommand(checkQuery, connection))
                 {
                     checkCommand.Parameters.AddWithValue("@user_id", UserId.Value);
                     checkCommand.Parameters.AddWithValue("@product_id", product_id);
-                    int count = (int)checkCommand.ExecuteScalar();
+                    object result = checkCommand.ExecuteScalar();
 
-                    if (count > 0)
+                    if (result != null)
                     {
-                        TempData["ErrorMessage"] = "Product already exists in cart!";
-                        return Redirect($"/Ecom/Single_Product?product_id={product_id}");
+                        cartQuantity = Convert.ToInt32(result);
                     }
                 }
 
+                string productQuery = "SELECT product_qantity FROM Product_Table WHERE product_id = @product_id";
+                int availableQuantity = 0;
+
+                using (SqlCommand productCommand = new SqlCommand(productQuery, connection))
+                {
+                    productCommand.Parameters.AddWithValue("@product_id", product_id);
+                    object result = productCommand.ExecuteScalar();
+
+                    if (result != null)
+                    {
+                        availableQuantity = Convert.ToInt32(result);
+                    }
+                }
+
+                int requestedQuantity = Convert.ToInt32(Request.Form["quantity"]);
+                int totalCartQuantity = cartQuantity + requestedQuantity;
+
+                if (totalCartQuantity > availableQuantity)
+                {
+                    TempData["ErrorMessage"] = $"You can't add this product to cart. Available stock: {availableQuantity}.";
+                    return Redirect($"/Ecom/Single_Product?product_id={product_id}");
+                }
 
                 string insertQuery = "INSERT INTO Cart (user_id, product_id, quantity) VALUES (@user_id, @product_id, @quantity)";
                 using (SqlCommand insertCommand = new SqlCommand(insertQuery, connection))
                 {
-                    insertCommand.Parameters.AddWithValue("@user_id", Request.Form["user_id"].ToString());
-                    insertCommand.Parameters.AddWithValue("@product_id", Request.Form["product_id"].ToString());
-                    insertCommand.Parameters.AddWithValue("@quantity", Request.Form["quantity"].ToString());
+                    insertCommand.Parameters.AddWithValue("@user_id", UserId.Value);
+                    insertCommand.Parameters.AddWithValue("@product_id", product_id);
+                    insertCommand.Parameters.AddWithValue("@quantity", requestedQuantity);
                     insertCommand.ExecuteNonQuery();
                 }
 
@@ -348,6 +369,7 @@ namespace HealthConnect.Pages.Ecom
 
             return Redirect($"/Ecom/Single_Product?product_id={product_id}");
         }
+
 
 
 
