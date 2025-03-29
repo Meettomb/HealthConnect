@@ -1,7 +1,7 @@
 ﻿@page
 @model HealthConnect.Pages.Ecom.Single_ProductModel
 @{
-    Layout = "_Pharmacy_header";
+    Layout = "_Pharmacy_header2";
     ViewData["Title"] = "Single Product";
 }
 
@@ -9,76 +9,213 @@
     <main class="single_product_main">
         <section class="single_product_section1">
 
-            <div class="other_image_div">
-                <img src="/ProductImage/Dhootapapeshwar Pittashekhar Rasa_1.jpg" />
-                <img src="/ProductImage/Dhootapapeshwar Pittashekhar Rasa_2.jpg" />
-                <img src="/ProductImage/Dhootapapeshwar Pittashekhar Rasa_3.jpg" />
-            </div>
+            <div class="left_side">
+                <div class="other_image_div">
+                    @if (!string.IsNullOrEmpty(Model.Product.product_image))
+                    {
+                        var images = Model.Product.product_image.Split(',');
+                        @foreach (var image in images)
+                        {
+                            <img src="/ProductImage/@image.Trim()"
+                                 alt="Product Image"
+                                 width="100"
+                                 onclick="changeMainImage(this)" />
+                        }
+                    }
+                </div>
 
-            <div class="main_image_div">
-                <img src="/ProductImage/Dhootapapeshwar Pittashekhar Rasa_1.jpg" />
-            </div>
-
-            <div class="product_little_info_div">
-                <div class="product_little_info_section">
-                    <p class="product_name">@Model.Product.product_name</p>
-                    <p class="menufacturer">
-                        <h3>Menufacturer Compony</h3>
-                        <a href=""></a>
-                    </p>
-                    <p class="seller">
-                        <h3>Sller shop name</h3>
-                        <span class="shop_adressh"></span>
-                    </p>
-
-                    <p class="exp_date">
-                        <h3>Expires on or after</h3>
-                        <span>@Model.Product.product_exp_date</span>
-                    </p>
-
+                <div class="main_image_div">
+                    <img id="mainImage" src="/ProductImage/@(Model.Product.product_image.Split(',').First().Trim())" />
                 </div>
             </div>
 
-            <div class="billing_container">
-                <form method="post">
-                    <div class="row">
-                        <div class="row_content">
-                            <input type="radio" checked />
-                            @if (Model.Product.product_discount != null && Model.Product.product_discount > 0)
-                            {
-                                <del>@Model.Product.product_price</del>
-                                <span class="dis_price">@Model.Product.discounted_price</span>
-                            }
-                            else
-                            {
-                                <span class="org_price">@Model.Product.product_price</span>
-                            }
+            <div class="right_side">
+                <div class="product_little_info_div">
+                    <div class="product_little_info_section">
+                        <p class="product_name">@Model.Product.product_name</p>
+                        <p class="menufacturer">
+                            <h3>Menufacturer Compony</h3>
+                            <a href="">@Model.Product.Brand.pharmaceutical_brands_name</a>
+                        </p>
+                        <p class="seller">
+                            <h3>Sller shop name</h3>
+                            <span class="shop_adressh">@Model.Product.Seller.shop_name</span>
+                        </p>
 
-                        </div>
-                    </div>
-
-                    <div class="row">
-                        <div class="row_content">
-                            <p>@Model.House_number_and_Street_name @Model.City @Model.State @Model.Country</p>
-                            <input type="checkbox" name="change-addresh" id="change-addresh" />
-                            <address></address>
-                        </div>
-                    </div>
-
-                    <div class="row">
-
-                        <div class="row_content">
-                            <input type="number" name="quantity" value="" />
-                            <button type="submit" name="addCart" id="addCart">Add to cart</button>
-                            <button type="button" name="buy" id="addCart">Buy</button>
-                        </div>
+                        <p class="exp_date">
+                            <h3>Expires on or after</h3>
+                            <span>@Model.Product.product_exp_date</span>
+                        </p>
 
                     </div>
+                </div>
 
-                </form>
+                <div class="billing_container">
+                    <div class="form_type_design">
+                        <div class="row">
+                            <h3>Price: </h3>
+                            <div class="row_content">
+                                @if (Model.Product.product_discount != null && Model.Product.product_discount > 0)
+                                {
+                                    <del>&#8377;@Model.Product.product_price</del>
+                                    <span class="dis_price">&#8377;@Model.Product.discounted_price</span>
+
+                                }
+                                else
+                                {
+                                    <span class="org_price">&#8377;@Model.Product.product_price</span>
+                                }
+
+                            </div>
+                        </div>
+
+                        <div class="row">
+                            <h3>Address: </h3>
+                            <div class="row_content">
+                                <p id="addre">@Model.House_number_and_Street_name @Model.City @Model.State @Model.Country - @Model.Pincode</p>
+                                <textarea rows="3" id="address" style="display: none;" placeholder="Enter new address here..."></textarea>
+                                <input type="checkbox" name="change-address" id="change-address" /> Change Address
+                            </div>
+
+                        </div>
+
+                        <div class="row">
+
+                            <div class="row_content last-row-contant">
+
+                                <select name="quantity" id="quantity_select">
+                                    <option disabled selected>Select Quantity</option>
+                                    <option value="1" selected>1</option>
+                                    <option value="2">2</option>
+                                    <option value="3">3</option>
+                                    <option value="4">4</option>
+                                    <option value="5">5</option>
+                                    <option value="6">6</option>
+                                    <option value="7">7</option>
+                                    <option value="8">8</option>
+                                    <option value="9">9</option>
+                                    <option value="10">10</option>
+                                </select>
+
+                                <form method="post">
+                                    <input type="hidden" name="name" value="@Model.UserId" />
+                                    <input type="hidden" name="name" value="@Model.Product.product_id" />
+                                    <input type="hidden" name="quantity" id="cart_quantity" value="1" readonly />
+
+                                    <button type="submit" name="addCart" id="addCart">Add to cart</button>
+                                </form>
+
+                                <form method="post">
+                                    <input type="hidden" name="name" value="@Model.UserId" />
+                                    <input type="hidden" name="name" value="@Model.Product.product_id" />
+                                    <input type="hidden" name="quantity" id="buying_quantity" value="1" readonly />
+
+                                    @if (Model.Product.product_discount != null && Model.Product.product_discount > 0)
+                                    {
+                                        <input type="hidden" name="name" value="@Model.Product.discounted_price" />
+                                    }
+                                    else
+                                    {
+                                        <input type="hidden" name="name" value="@Model.Product.product_price" />
+                                    }
+
+                                    <button type="button" name="buy" id="addCart">Buy</button>
+                                </form>
+                            </div>
+
+                        </div>
+
+                    </div>
+                </div>
             </div>
 
         </section>
+
+        <section class="single_product_section2">
+
+            <a href="#Description">Description</a>
+            @if (Model.Product.product_features != null)
+            {
+                <a href="#Features">Features</a>
+            }
+
+            <a href="#Benefits">Benefits</a>
+            <a href="#how_to_use">how to use</a>
+
+        </section>
+
+        <section class="single_product_section3">
+            <div class="dstail" id="Description">
+                <h1>Description</h1>
+                <p>@Model.Product.product_description</p>
+            </div>
+
+            @if (Model.Product.product_features != null)
+            {
+                <div class="dstail" id="Features">
+                    <h1>Features</h1>
+
+                    <ul>
+                        @foreach (var feature in Model.Product.product_features.Split(","))
+                        {
+                            <li>@feature.Trim()</li>
+                        }
+                    </ul>
+
+                </div>
+            }
+
+            <div class="dstail" id="Benefits">
+                <h1>Benefits</h1>
+
+                <ul>
+                    @foreach (var benefits in Model.Product.product_benefits.Split(","))
+                    {
+                        <li>@benefits.Trim()</li>
+                    }
+                </ul>
+
+            </div>
+
+            <div class="dstail" id="how_to_use">
+                <h1>How to use</h1>
+
+                <ul>
+                    @foreach (var product_how_to_use in Model.Product.product_how_to_use.Split(","))
+                    {
+                        <li>@product_how_to_use.Trim()</li>
+                    }
+                </ul>
+
+
+            </div>
+
+        </section>
+
     </main>
 </div>
 
+
+<script>
+    function changeMainImage(element) {
+        document.getElementById("mainImage").src = element.src;
+    }
+</script>
+
+
+<script>
+    document.getElementById("change-address").addEventListener("change", function() {
+    var addressField = document.getElementById("address");
+    var addressP = document.getElementById("addre");
+    addressField.style.display = this.checked ? "block" : "none";
+    addressP.style.display = this.checked ? "none" : "block";
+    });
+</script>
+
+<script>
+    document.getElementById("quantity_select").addEventListener("change", function () {
+        let selectedValue = this.value;
+        document.getElementById("cart_quantity").value = selectedValue;
+        document.getElementById("buying_quantity").value = selectedValue;
+    });
+</script>

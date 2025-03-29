@@ -325,17 +325,15 @@ namespace HealthConnect.Pages.User.Saler.Manage_Products
 
         public async Task<IActionResult> OnPost(int product_id)
         {
+            var productImages = Request.Form.Files;
+            string newImages = null;
 
-            var productImage = Request.Form.Files["product_image"];
             using (SqlConnection connection = new SqlConnection(_connectionString))
             {
                 connection.Open();
 
                 string selectQuery = "SELECT product_image FROM Product_Table WHERE product_id = @product_id";
-                string oldImage = null;
-
-
-                string newImage = null;
+                string oldImages = null;
 
                 using (SqlCommand selectCommand = new SqlCommand(selectQuery, connection))
                 {
@@ -344,50 +342,59 @@ namespace HealthConnect.Pages.User.Saler.Manage_Products
                     {
                         if (reader.Read())
                         {
-                            oldImage = reader["product_image"]?.ToString();
+                            oldImages = reader["product_image"]?.ToString();
                         }
                     }
                 }
 
-                if (productImage != null && productImage.Length > 0)
+                if (productImages.Count > 0)
                 {
+                    List<string> imageFileNames = new List<string>();
                     string uploadsFolder = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot", "ProductImage");
+
                     if (!Directory.Exists(uploadsFolder))
                     {
                         Directory.CreateDirectory(uploadsFolder);
                     }
 
-                    string fileName = productImage.FileName;
-                    string filePath = Path.Combine(uploadsFolder, fileName);
-
-                    using (var fileStream = new FileStream(filePath, FileMode.Create))
+                    foreach (var productImage in productImages)
                     {
-                        await productImage.CopyToAsync(fileStream);
+                        string fileName = productImage.FileName;
+                        string filePath = Path.Combine(uploadsFolder, fileName);
+
+                        using (var fileStream = new FileStream(filePath, FileMode.Create))
+                        {
+                            await productImage.CopyToAsync(fileStream);
+                        }
+
+                        imageFileNames.Add(fileName);
                     }
 
-                    newImage = fileName;
+                    // Save only new images, discard old ones
+                    newImages = string.Join(",", imageFileNames);
                 }
                 else
                 {
-                    newImage = oldImage;
-
+                    // Keep old images if no new images are uploaded
+                    newImages = oldImages;
                 }
 
                 string query = @"UPDATE Product_Table SET 
-                        brande_id = @brande_id, 
-                        product_image = @product_image, 
-                        product_name = @product_name, 
-                        product_category_id = @product_category_id, 
-                        product_price = @product_price, 
-                        product_discount = @product_discount, 
-                        product_qantity = @product_qantity, 
-                        product_description = @product_description, 
-                        product_features = @product_features, 
-                        product_benefits = @product_benefits, 
-                        product_how_to_use = @product_how_to_use, 
-                        product_exp_date = @product_exp_date,
-                        discounted_price = @discounted_price
-                        WHERE product_id = @product_id";
+                brande_id = @brande_id, 
+                product_image = @product_image, 
+                product_name = @product_name, 
+                product_category_id = @product_category_id, 
+                product_price = @product_price, 
+                product_discount = @product_discount, 
+                product_qantity = @product_qantity, 
+                product_description = @product_description, 
+                product_features = @product_features, 
+                product_benefits = @product_benefits, 
+                product_how_to_use = @product_how_to_use, 
+                product_exp_date = @product_exp_date,
+                discounted_price = @discounted_price
+                WHERE product_id = @product_id";
+
                 using (SqlCommand command = new SqlCommand(query, connection))
                 {
                     int originalPrice = Product.product_price;
@@ -409,7 +416,7 @@ namespace HealthConnect.Pages.User.Saler.Manage_Products
                     command.Parameters.AddWithValue("@product_how_to_use", Request.Form["product_how_to_use"].ToString());
                     command.Parameters.AddWithValue("@product_exp_date", Request.Form["product_exp_date"].ToString());
 
-                    command.Parameters.AddWithValue("@product_image", newImage ?? (object)DBNull.Value);
+                    command.Parameters.AddWithValue("@product_image", string.IsNullOrEmpty(newImages) ? (object)DBNull.Value : newImages);
                     command.Parameters.AddWithValue("@discounted_price", discountedPrice);
 
                     int result = command.ExecuteNonQuery();
@@ -424,13 +431,12 @@ namespace HealthConnect.Pages.User.Saler.Manage_Products
                         TempData["ErrorMessage"] = "Something went wrong. Please try again.";
                     }
                 }
-
-
             }
-
 
             return Page();
         }
+
+
 
     }
 }
