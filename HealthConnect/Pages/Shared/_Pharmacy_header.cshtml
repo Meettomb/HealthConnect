@@ -77,8 +77,8 @@
 
             <div class="pharmacy_header_right_side">
                 <div class="cart_icon">
-                    <a href="/Index">
-                        <i class="mdi mdi-cart-outline"></i>
+                    <a href="/Ecom/Cart">
+                        <i class="mdi mdi-cart-outline"><span class="cart-count">@Model.CartCount</span></i>
                     </a>
                 </div>
                 @if (Model.UserId == null)
@@ -193,8 +193,8 @@
         </div>
 
         <div class="cart_icon">
-            <a href="/Index">
-                <i class="mdi mdi-cart-outline"></i>
+            <a href="/Ecom/Cart">
+                <i class="mdi mdi-cart-outline"><span>@Model.CartCount</span></i>
             </a>
         </div>
 

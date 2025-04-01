@@ -2,16 +2,13 @@ using HealthConnect.Models;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.Data.SqlClient;
-using MimeKit.Encodings;
-using static HealthConnect.Pages.IndexModel;
-using System.Text.Json;
+using Org.BouncyCastle.Asn1.Cmp;
+using static Microsoft.EntityFrameworkCore.DbLoggerCategory.Database;
 
-
-namespace HealthConnect.Pages
+namespace HealthConnect.Pages.Ecom
 {
-    public class PharmacyModel : PageModel
+    public class CartModel : PageModel
     {
-
         private readonly ILogger<IndexModel> _logger;
         private readonly IConfiguration _configuration;
         private readonly string _connectionString;
@@ -22,6 +19,7 @@ namespace HealthConnect.Pages
         public string LastName { get; set; }
         public string ProfilePic { get; set; }
         public string Role { get; set; }
+        public string House_number_and_Street_name { get; set; }
         public string Country { get; set; }
         public string State { get; set; }
         public string City { get; set; }
@@ -63,9 +61,11 @@ namespace HealthConnect.Pages
         [BindProperty]
         public Cart Cart { get; set; }
 
+        public List<Cart> CartList { get; set; } = new List<Cart>();
+
         public int CartCount { get; set; }
 
-        public PharmacyModel(ILogger<IndexModel> logger, IConfiguration configuration)
+        public CartModel(ILogger<IndexModel> logger, IConfiguration configuration)
         {
             _logger = logger;
             _configuration = configuration;
@@ -75,16 +75,14 @@ namespace HealthConnect.Pages
         {
             string roleInSession = HttpContext.Session.GetString("UserRole");
             UserId = HttpContext.Session.GetInt32("Id");
-
-            if (UserId.HasValue)
+            if (UserId == null)
             {
-
-                OnGetLoginUserDetail();
-                OnCartGet(UserId.Value);
+                return RedirectToPage("/User/Sign_in");
             }
-           
-            OnGetPharmacyFiftyPercentDiscountedProducts();
+            OnGetLoginUserDetail();
             OnGetPharmacyCategory();
+            OnCartGet(UserId.Value);
+            OnGetCart();
             return Page();
         }
 
@@ -124,6 +122,7 @@ namespace HealthConnect.Pages
                                 LastName = reader["last_name"].ToString();
                                 ProfilePic = reader["profile_pic"].ToString();
                                 Role = reader["role"].ToString();
+                                House_number_and_Street_name = reader["House_number_and_Street_name"].ToString();
                                 Country = reader["country"].ToString();
                                 State = reader["state"].ToString();
                                 City = reader["city"].ToString();
@@ -140,8 +139,6 @@ namespace HealthConnect.Pages
             }
 
         }
-
-
         public void OnGetPharmacyCategory()
         {
             using (SqlConnection connection = new SqlConnection(_connectionString))
@@ -232,55 +229,67 @@ namespace HealthConnect.Pages
             }
         }
 
-        private void OnGetPharmacyFiftyPercentDiscountedProducts()
+        public void OnGetCart()
         {
-            using (SqlConnection connection = new SqlConnection(_connectionString))
+            UserId = HttpContext.Session.GetInt32("Id");
+            if (UserId == null) return;
+
+            using (SqlConnection con = new SqlConnection(_connectionString))
             {
-                string query = @"SELECT PT.product_id, PT.saler_id, PT.brande_id, PT.product_image, PT.product_name,
-                        PT.product_category_id, PT.product_price, PT.product_discount, PT.discounted_price, PT.product_qantity, 
-                        PT.product_description, PT.product_features, PT.product_benefits, PT.product_how_to_use,
-                        PT.product_exp_date, PT.product_add_date, PB.pharmaceutical_brands_id, PB.pharmaceutical_brands_name,
-                        UT.id, UT.first_name, UT.last_name, UT.profile_pic, UT.shop_name, UT.shop_address,
-                        MFC.medicine_finel_category_id, MFC.medicine_finel_category_name,
-                        MSC.medicine_sub_category_id, MSC.medicine_sub_category_name, 
-                        MMC.medicine_main_category_id, MMC.medicine_main_category_name
-                        FROM Product_Table PT
-                        LEFT JOIN Pharmaceutical_Brands PB ON PT.brande_id = PB.pharmaceutical_brands_id
-                        LEFT JOIN User_Table UT ON PT.saler_id = UT.id
-                        Left JOIN Medicine_Finel_Category MFC ON PT.product_category_id = MFC.medicine_finel_category_id
-                        LEFT JOIN Medicine_Sub_Category MSC ON MFC.medicine_sub_category_id = MSC.medicine_sub_category_id
-                        LEFT JOIN Medicine_Main_Category MMC ON MSC.medicine_main_category_id = MMC.medicine_main_category_id
-                        WHERE PT.product_discount >= 50";
-                using (SqlCommand command = new SqlCommand(query, connection))
+                string query = @"SELECT C.cart_id, C.user_id, C.product_id, C.quantity,
+                PT.product_id, PT.saler_id, PT.brande_id, PT.product_image, PT.product_name,
+                PT.product_category_id, PT.product_price, PT.product_discount, PT.discounted_price, 
+                PT.product_qantity, PT.product_exp_date, PT.product_add_date,
+                PB.pharmaceutical_brands_id, PB.pharmaceutical_brands_name,
+                UT.id, UT.first_name, UT.last_name, UT.profile_pic, UT.shop_name, UT.shop_address,
+                MFC.medicine_finel_category_id, MFC.medicine_finel_category_name,
+                MSC.medicine_sub_category_id, MSC.medicine_sub_category_name, 
+                MMC.medicine_main_category_id, MMC.medicine_main_category_name 
+            FROM Cart C
+            JOIN Product_Table PT ON C.product_id = PT.product_id
+            JOIN Pharmaceutical_Brands PB ON PT.brande_id = PB.pharmaceutical_brands_id
+            JOIN User_Table UT ON PT.saler_id = UT.id
+            JOIN Medicine_Finel_Category MFC ON PT.product_category_id = MFC.medicine_finel_category_id
+            JOIN Medicine_Sub_Category MSC ON MFC.medicine_sub_category_id = MSC.medicine_sub_category_id
+            JOIN Medicine_Main_Category MMC ON MSC.medicine_main_category_id = MMC.medicine_main_category_id
+            WHERE C.user_id = @UserId";
+
+                using (SqlCommand cmd = new SqlCommand(query, con))
                 {
-                    connection.Open();
-                    using (SqlDataReader reader = command.ExecuteReader())
+                    cmd.Parameters.AddWithValue("@UserId", UserId.Value);
+                    con.Open();
+                    using (SqlDataReader reader = cmd.ExecuteReader())
                     {
                         while (reader.Read())
                         {
-                            Product = new Product_Table
+                            Cart cartItem = new Cart
                             {
-                                product_id = reader.GetInt32(0),
-                                saler_id = reader.GetInt32(1),
-                                brande_id = reader.GetInt32(2),
-                                product_image = reader.GetString(3),
-                                product_name = reader.GetString(4),
-                                product_category_id = reader.GetInt32(5),
-                                product_price = reader.GetInt32(6),
-                                product_discount = reader.IsDBNull(7) ? (int?)null : reader.GetInt32(7),
-                                discounted_price = reader.IsDBNull(8) ? (int?)null : reader.GetInt32(8),
-                                product_qantity = reader.GetInt32(9),
-                                product_description = reader.GetString(10),
-                                product_features = reader.IsDBNull(11) ? null : reader.GetString(11),
-                                product_benefits = reader.GetString(12),
-                                product_how_to_use = reader.GetString(13),
-                                product_exp_date = reader.GetString(14),
-                                product_add_date = DateOnly.FromDateTime(reader.GetDateTime(15)),
+                                cart_id = reader.GetInt32(0),
+                                user_id = reader.GetInt32(1),
+                                product_id = reader.GetInt32(2),
+                                quantity = reader.GetInt32(3),
+
+                                Product = new Product_Table
+                                {
+                                    product_id = reader.GetInt32(4),
+                                    saler_id = reader.GetInt32(5),
+                                    brande_id = reader.GetInt32(6),
+                                    product_image = reader.GetString(7),
+                                    product_name = reader.GetString(8),
+                                    product_category_id = reader.GetInt32(9),
+                                    product_price = reader.GetInt32(10),
+                                    product_discount = reader.IsDBNull(11) ? (int?)null : reader.GetInt32(11),
+                                    discounted_price = reader.IsDBNull(12) ? (int?)null : reader.GetInt32(12),
+                                    product_qantity = reader.GetInt32(13),
+                                    product_exp_date = reader.GetString(14),
+                                    product_add_date = DateOnly.FromDateTime(reader.GetDateTime(15)),
+
+                                },
 
                                 Brand = new Pharmaceutical_Brands
                                 {
                                     pharmaceutical_brands_id = reader.GetInt32(16),
-                                    pharmaceutical_brands_name = reader.GetString(17)
+                                    pharmaceutical_brands_name = reader.GetString(17),
                                 },
 
                                 Seller = new User_Table
@@ -289,8 +298,8 @@ namespace HealthConnect.Pages
                                     first_name = reader.GetString(19),
                                     last_name = reader.GetString(20),
                                     profile_pic = reader.IsDBNull(21) ? null : reader.GetString(21),
-                                    shop_name = reader.IsDBNull(22) ? null : reader.GetString(22),
-                                    shop_address = reader.IsDBNull(23) ? null : reader.GetString(23)
+                                    shop_name = reader.GetString(22),
+                                    shop_address = reader.GetString(23),
                                 },
 
                                 FinelCategory = new Medicine_Finel_Category
@@ -301,67 +310,117 @@ namespace HealthConnect.Pages
                                     Medicine_Sub_Category = new Medicine_Sub_Category
                                     {
                                         medicine_sub_category_id = reader.GetInt32(26),
-                                        medicine_sub_category_name = reader.GetString(27)
+                                        medicine_sub_category_name = reader.GetString(27),
                                     },
 
                                     Medicine_Main_Category = new Medicine_Main_Category
                                     {
                                         medicine_main_category_id = reader.GetInt32(28),
-                                        medicine_main_category_name = reader.GetString(29)
+                                        medicine_main_category_name = reader.GetString(29),
                                     }
                                 }
                             };
-                            FifityDiscountProductList.Add(Product);
+
+                            CartList.Add(cartItem);
                         }
                     }
+                    con.Close();
                 }
             }
-
         }
 
 
-        public async Task<IActionResult> OnPost()
+
+
+        public IActionResult OnPost(string action, int cart_id, int quantity)
         {
-            if (!int.TryParse(Request.Form["user_id"], out int userId) || !int.TryParse(Request.Form["product_id"], out int productId))
+            if (action == "remove")
             {
-                TempData["ErrorMessage"] = "Invalid user or product.";
-                return RedirectToPage("/Pharmacy");
+                return OnPostDelete(cart_id);
+            }
+            else if (action == "update")
+            {
+                return Updatecart(cart_id, quantity);
             }
 
-            using (SqlConnection connection = new SqlConnection(_connectionString))
+            return RedirectToPage("/Ecom/Cart");
+        }
+
+        public IActionResult OnPostDelete(int cart_id)
+        {
+            using (SqlConnection con = new SqlConnection(_connectionString))
             {
-                await connection.OpenAsync();
-
-                string checkCartQuery = "SELECT COUNT(*) FROM Cart WHERE user_id = @UserId AND product_id = @ProductId";
-                using (SqlCommand checkCartCommand = new SqlCommand(checkCartQuery, connection))
+                string query = "DELETE FROM Cart WHERE cart_id = @cart_id";
+                using (SqlCommand cmd = new SqlCommand(query, con))
                 {
-                    checkCartCommand.Parameters.AddWithValue("@UserId", userId);
-                    checkCartCommand.Parameters.AddWithValue("@ProductId", productId);
+                    cmd.Parameters.AddWithValue("@cart_id", cart_id);
+                    con.Open();
+                    cmd.ExecuteNonQuery();
+                    con.Close();
+                }
+            }
+            return RedirectToPage("/Ecom/Cart");
+        }
 
-                    int count = (int)await checkCartCommand.ExecuteScalarAsync();
+        public IActionResult Updatecart(int cart_id, int quantity)
+        {
+            string product_id = Request.Form["product_id"];
+            int? UserId = HttpContext.Session.GetInt32("Id");
 
-                    if (count > 0)
+            using (SqlConnection con = new SqlConnection(_connectionString))
+            {
+                con.Open();
+                string checkQuery = "SELECT quantity FROM Cart WHERE user_id = @user_id AND product_id = @product_id";
+                int cartQuantity = 0;
+
+                using (SqlCommand checkCommand = new SqlCommand(checkQuery, con))
+                {
+                    checkCommand.Parameters.AddWithValue("@user_id", UserId.Value);
+                    checkCommand.Parameters.AddWithValue("@product_id", product_id);
+                    object result = checkCommand.ExecuteScalar();
+
+                    if (result != null)
                     {
-                        TempData["ErrorMessage"] = "Item is already in your cart.";
-                        return RedirectToPage("/Pharmacy");
+                        cartQuantity = Convert.ToInt32(result);
                     }
                 }
 
-                string insertQuery = "INSERT INTO Cart (user_id, product_id, quantity) VALUES (@UserId, @ProductId, @quantity)";
-                using (SqlCommand insertCommand = new SqlCommand(insertQuery, connection))
-                {
-                    insertCommand.Parameters.AddWithValue("@UserId", userId);
-                    insertCommand.Parameters.AddWithValue("@ProductId", productId);
-                    insertCommand.Parameters.AddWithValue("@quantity", 1);
+                string productQuery = "SELECT product_qantity FROM Product_Table WHERE product_id = @product_id";
+                int availableQuantity = 0;
 
-                    await insertCommand.ExecuteNonQueryAsync();
-                    TempData["SuccessMessage"] = "Item added to cart successfully.";
+                using (SqlCommand productCommand = new SqlCommand(productQuery, con))
+                {
+                    productCommand.Parameters.AddWithValue("@product_id", product_id);
+                    object result = productCommand.ExecuteScalar();
+
+                    if (result != null)
+                    {
+                        availableQuantity = Convert.ToInt32(result);
+                    }
+                }
+
+                int requestedQuantity = Convert.ToInt32(Request.Form["quantity"]);
+                int totalCartQuantity = cartQuantity + requestedQuantity;
+
+                if (totalCartQuantity > availableQuantity)
+                {
+                    TempData["ErrorMessage"] = $"You can't add this product to cart. Available stock: {availableQuantity}.";
+                    return Redirect("/Ecom/Cart");
+                }
+
+
+                string query = "UPDATE Cart SET quantity = @quantity WHERE cart_id = @cart_id";
+                using (SqlCommand cmd = new SqlCommand(query, con))
+                {
+                    cmd.Parameters.AddWithValue("@quantity", quantity);
+                    cmd.Parameters.AddWithValue("@cart_id", cart_id);
+                 
+                    cmd.ExecuteNonQuery();
                 }
             }
-
-            return RedirectToPage("/Pharmacy");
+            TempData["SuccessMessage"] = "Cart updated successfully!";
+            return RedirectToPage("/Ecom/Cart");
         }
-
 
 
 

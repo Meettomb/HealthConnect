@@ -4,7 +4,7 @@
 <head>
     <meta name="viewport" content="width=device-width" />
 
-    <title>@ViewBag.Title</title>
+    <title>@ViewBag.Title - Health Connect</title>
 
     <link rel="stylesheet" href="/css/Index.css" asp-append-version="true">
     <link href="/images/HealthConnectTabLogo.png" rel="icon" />
@@ -72,9 +72,9 @@
 
          
             <div class="pharmacy_header_right_side">
-                <div class="cart_icon">
-                    <a href="/Index">
-                        <i class="mdi mdi-cart-outline"></i>
+                <div class="cart_icon2">
+                    <a href="/Ecom/Cart">
+                        <i class="mdi mdi-cart-outline"><span class="cart-count">@Model.CartCount</span></i>
                     </a>
                 </div>
                 @if (Model.UserId == null)
@@ -237,8 +237,8 @@
 
 
     <script src="/js/Script.js"></script>
-
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="/js/jQuery.js"></script>
 
     <script>
         $(document).ready(function() {

@@ -1,0 +1,168 @@
+﻿@page
+@model HealthConnect.Pages.Ecom.CartModel
+@{
+    Layout = "_Pharmacy_header";
+    ViewData["Title"] = "Cart";
+}
+
+
+<div class="cart_container">
+    @if (Model.CartCount > 0)
+    {
+        <main class="cart_main">
+            <div class="cart_main_section">
+                @foreach (var cart in Model.CartList)
+                {
+                    <section class="cart_section1">
+                        <div class="cart_section1_left">
+                            <a href="/Ecom/Single_Product?product_id=@cart.Product.product_id"><img src="/ProductImage/@cart.Product.product_image.Split(',')[0]" alt="Alternate Text" /></a>
+                        </div>
+
+                        <div class="cart_section1_right">
+
+                            <h2><a href="/Ecom/Single_Product?product_id=@cart.Product.product_id">@cart.Product.product_name</a></h2>
+                            @if (cart.Product.product_discount != null && cart.Product.product_discount > 0)
+                            {
+                                <p class="price">&#8377;@cart.Product.discounted_price</p>
+                            }
+                            else
+                            {
+                                <p class="price">&#8377;@cart.Product.product_price</p>
+                            }
+                            <select class="quan" onchange="updateInputField(this)">
+                                <option value="@cart.quantity" selected>Qty @cart.quantity</option>
+                                <option value="1">Qty 1</option>
+                                <option value="2">Qty 2</option>
+                                <option value="3">Qty 3</option>
+                                <option value="4">Qty 4</option>
+                                <option value="5">Qty 5</option>
+                                <option value="6">Qty 6</option>
+                            </select>
+
+
+                            <span class="total-price" style="display: none;" id="finel_price">₹@((cart.Product.product_discount != null && cart.Product.product_discount > 0) ? cart.Product.discounted_price * cart.quantity : cart.Product.product_price * cart.quantity)</span>
+
+                            <p class="exp_date">Expires on or after: <span>@cart.Product.product_exp_date</span></p>
+
+                            <div class="two_form">
+
+                                <form method="post" class="delete_form">
+                                    <input type="hidden" name="cart_id" value="@cart.cart_id" />
+                                    <button type="submit" name="action" value="remove" class="remove_from_cart">Remove</button>
+                                </form>
+
+                                <form method="post" class="uptade_form">
+                                    <input type="hidden" name="cart_id" value="@cart.cart_id" />
+                                    <input type="hidden" name="product_id" value="@cart.product_id" />
+                                    <input type="hidden" class="selectedQuantity" name="quantity" value="@cart.quantity" readonly>
+                                    <button type="submit" name="action" value="update" class="update_cart">Update</button>
+                                </form>
+
+                            </div>
+
+                        </div>
+                    </section>
+                }
+
+            </div>
+
+            <section class="cart_section2">
+                <form method="post">
+                    <h1>Finel Chack out</h1>
+                    <section class="form_section">
+                        <div class="address_section">
+                            <h4>Shipping Address</h4>
+                            <p id="addre">@Model.House_number_and_Street_name @Model.City @Model.State @Model.Country - @Model.Pincode</p>
+                            <textarea rows="3" id="address" style="display: none;" placeholder="Enter new address here..."></textarea>
+                            <input type="checkbox" name="change-address" id="change-address" /> Change Address
+                            <input type="hidden" name="address" id="hidden_address" value="@Model.House_number_and_Street_name @Model.City @Model.State @Model.Country - @Model.Pincode" />
+                        </div>
+
+                        <div class="cart_breakdown">
+                            <h4>Cart Breakdown</h4>
+                            <div class="detail_breakdown">
+                                <p>Cart Total <span id="CartTotal"></span></p>
+                                <p>Packaging Fee <span id="PackagingFee"></span></p>
+                                <p>Platform Fee <span id="PlatformFee"></span></p>
+                                <p>Delivery Charges <span id="DeliveryCharges"></span></p>
+                            </div>
+                            <div class="to_pay">
+                                <p>To Pay: <span id="ToPay"></span></p>
+                            </div>
+                        </div>
+                    </section>
+
+                    <div class="chack_out_button">
+                        <input type="hidden" name="price" id="ToPay" value="" />
+
+                        <p class="chack_out_p" id="checkout">Checkout</p>
+                    </div>
+                </form>
+            </section>
+        </main>
+    }
+    else
+    {
+        <div class="empty_cart">
+            <img src="/images/Empty_Cart.gif" />
+            <h2>Your cart is empty</h2>
+        </div>
+    }
+
+</div>
+
+
+<script>
+    document.addEventListener("DOMContentLoaded", function () {
+        var cartTotal = 0;
+        var packagingFee = 10;
+        var platformFee = 5;
+        var deliveryCharges = 20;
+        document.querySelectorAll("#finel_price").forEach(function (priceElement) {
+            cartTotal += parseInt(priceElement.innerText.replace("₹", ""));
+        });
+        document.getElementById("CartTotal").innerText = "₹" + cartTotal;
+        document.getElementById("PackagingFee").innerText = "₹" + packagingFee;
+        document.getElementById("PlatformFee").innerText = "₹" + platformFee;
+        document.getElementById("DeliveryCharges").innerText = "₹" + deliveryCharges;
+        document.getElementById("ToPay").innerText = "₹" + (cartTotal + packagingFee + platformFee + deliveryCharges);
+    });
+</script>
+
+
+<script>
+    document.addEventListener("DOMContentLoaded", function () {
+        document.querySelectorAll(".quan").forEach(function (selectElement) {
+            var inputField = selectElement.closest("div").querySelector(".selectedQuantity");
+            inputField.value = selectElement.value;
+        });
+    });
+
+    function updateInputField(selectElement) {
+        var inputField = selectElement.closest("div").querySelector(".selectedQuantity");
+        inputField.value = selectElement.value;
+    }
+</script>
+
+
+<script>
+    document.getElementById("change-address").addEventListener("change", function () {
+        var addressText = document.getElementById("addre");
+        var addressInput = document.getElementById("address");
+        var hiddenAddress = document.getElementById("hidden_address");
+
+        if (this.checked) {
+            addressText.style.display = "none";
+            addressInput.style.display = "block";
+            hiddenAddress.value = "";
+        } else {
+            addressText.style.display = "block";
+            addressInput.style.display = "none";
+            hiddenAddress.value = addressText.innerText;
+        }
+    });
+
+    document.getElementById("address").addEventListener("input", function () {
+        document.getElementById("hidden_address").value = this.value;
+    });
+</script>

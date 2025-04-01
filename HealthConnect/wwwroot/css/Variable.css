@@ -13,7 +13,6 @@
     --heading-color: #2c4964;
     --header-text-color: #2c4964;
     --footer-bg-color: #f1f7fc;
-    /*    --button-hover-bg-color: #0d6efd;*/
     --button-hover-bg-color: #53a8f5;
     --default-color: #444444;
     --heading-color: #2c4964;
@@ -23,4 +22,6 @@
     --default-font: "Roboto", serif;
     --heading-font: "Gabarito", serif;
     --nav-font: "Gabarito", serif;
+    --dark-emerald-color: #12403e;
+    --border-color: #f1f1f1;
 }

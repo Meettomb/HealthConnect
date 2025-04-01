@@ -60,6 +60,8 @@ namespace HealthConnect.Pages.Ecom
         [BindProperty]
         public Cart Cart { get; set; }
 
+        public int CartCount { get; set; }
+
         public Single_ProductModel(ILogger<IndexModel> logger, IConfiguration configuration)
         {
             _logger = logger;
@@ -72,10 +74,15 @@ namespace HealthConnect.Pages.Ecom
             string roleInSession = HttpContext.Session.GetString("UserRole");
             UserId = HttpContext.Session.GetInt32("Id");
 
-            OnGetLoginUserDetail();
+            if (UserId.HasValue)
+            {
+
+                OnGetLoginUserDetail();
+                OnCartGet(UserId.Value);
+            }
+
 
             OnGetPharmacyCategory();
-
             int? ProductId = null;
             if (Request.Query.ContainsKey("product_id") && int.TryParse(Request.Query["product_id"], out int parsedProductId))
             {
@@ -301,7 +308,22 @@ namespace HealthConnect.Pages.Ecom
 
         }
 
+        public void OnCartGet(int user_id)
+        {
+            int cartCount = 0;
+            using (SqlConnection connection = new SqlConnection(_connectionString))
+            {
+                connection.Open();
 
+                string getDoctorCount = "SELECT COUNT(*) FROM Cart WHERE user_id = @UserId";
+                using (SqlCommand command = new SqlCommand(getDoctorCount, connection))
+                {
+                    command.Parameters.AddWithValue("@UserId", user_id);
+                    CartCount = (int)command.ExecuteScalar();
+                }
+
+            }
+        }
 
         public IActionResult OnPost()
         {
@@ -316,6 +338,21 @@ namespace HealthConnect.Pages.Ecom
             using (SqlConnection connection = new SqlConnection(_connectionString))
             {
                 connection.Open();
+
+                string checkCartQuery = "SELECT COUNT(*) FROM Cart WHERE user_id = @user_id AND product_id = @product_id";
+                using (SqlCommand checkCartCommand = new SqlCommand(checkCartQuery, connection))
+                {
+                    checkCartCommand.Parameters.AddWithValue("@user_id", UserId.Value);
+                    checkCartCommand.Parameters.AddWithValue("@product_id", product_id);
+
+                    int count = (int)checkCartCommand.ExecuteScalar();
+
+                    if (count > 0)
+                    {
+                        TempData["ErrorMessage"] = "Item is already in your cart.";
+                        return Redirect($"/Ecom/Single_Product?product_id={product_id}");
+                    }
+                }
 
                 string checkQuery = "SELECT quantity FROM Cart WHERE user_id = @user_id AND product_id = @product_id";
                 int cartQuantity = 0;
