@@ -227,15 +227,41 @@ namespace HealthConnect.Pages.User.Saler.Manage_Products
                 {
                     using (SqlConnection connection = new SqlConnection(_connectionString))
                     {
-                        string query = "DELETE FROM Product_Table WHERE product_id = @product_id";
-                        using (SqlCommand command = new SqlCommand(query, connection))
+                        connection.Open();
+                        using (SqlTransaction transaction = connection.BeginTransaction())
                         {
-                            command.Parameters.AddWithValue("@product_id", productId);
-                            connection.Open();
-                            command.ExecuteNonQuery();
+                            try
+                            {
+                                // Delete from Cart table
+                                string deleteCartQuery = "DELETE FROM Cart WHERE product_id = @product_id";
+                                using (SqlCommand cartCommand = new SqlCommand(deleteCartQuery, connection, transaction))
+                                {
+                                    cartCommand.Parameters.AddWithValue("@product_id", productId);
+                                    cartCommand.ExecuteNonQuery();
+                                }
+
+                                // Delete from Product_Table
+                                string deleteProductQuery = "DELETE FROM Product_Table WHERE product_id = @product_id";
+                                using (SqlCommand productCommand = new SqlCommand(deleteProductQuery, connection, transaction))
+                                {
+                                    productCommand.Parameters.AddWithValue("@product_id", productId);
+                                    productCommand.ExecuteNonQuery();
+                                }
+
+                                // Commit the transaction
+                                transaction.Commit();
+                                TempData["SuccessMessage"] = "Product and associated cart items deleted successfully.";
+                            }
+                            catch (Exception ex)
+                            {
+                                // Rollback if an error occurs
+                                transaction.Rollback();
+                                TempData["ErrorMessage"] = "An error occurred while deleting the product.";
+                                Console.WriteLine(ex.Message); // Log error for debugging
+                            }
                         }
                     }
-                    TempData["SuccessMessage"] = "Product Deleted.";
+
                     return RedirectToPage("/User/Saler/Manage_Products/View_products");
                 }
                 else
@@ -250,6 +276,7 @@ namespace HealthConnect.Pages.User.Saler.Manage_Products
                 return RedirectToPage("/User/Saler/Manage_Products/View_products");
             }
         }
+
 
 
     }

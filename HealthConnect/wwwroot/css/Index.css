@@ -5751,6 +5751,10 @@ header img {
                 border: 1px solid var(--dark-emerald-color);
                 border-radius: 10px;
                 padding: 20px;
+                position: relative;
+                display: flex;
+                flex-direction: column;
+                justify-content: space-between;
             }
 
                 .cart_container .cart_main .cart_section2 form h1 {
@@ -5836,17 +5840,21 @@ header img {
                     -webkit-justify-content: center;
                     justify-content: center;
                     margin-top: 50px;
+                    position: sticky;
+                    bottom: 10px;
+                    left: 0;
                 }
                     .cart_container .cart_main .cart_section2 form .chack_out_button p {
                         width: 100%;
                         background-color: var(--dark-emerald-color);
                         color: var(--contrast-color);
-                        padding: 10px 0;
+                        padding: 15px 0;
                         font-size: 20px;
                         text-align: center;
                         cursor: pointer;
-                        border-radius: 10px;
+                        border-radius: 5px;
                         font-family: var(--default-font);
+                       
                     }
 
     .cart_container .empty_cart {
