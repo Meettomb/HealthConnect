@@ -111,7 +111,12 @@ namespace HealthConnect.Pages.User.Saler.Manage_Products
                 {
                     ProductId = parsedProductId;
                 }
-                OnGetProducts(UserId.Value, ProductId);
+
+                if (UserId.HasValue)
+                {
+                    OnGetProducts(UserId.Value, ProductId);
+                }
+
             }
             else
             {
@@ -127,29 +132,34 @@ namespace HealthConnect.Pages.User.Saler.Manage_Products
             using (SqlConnection connection = new SqlConnection(_connectionString))
             {
                 string query = @"SELECT PT.product_id, PT.saler_id, PT.brande_id, PT.product_image, PT.product_name,
-                        PT.product_category_id, PT.product_price, PT.product_discount, PT.discounted_price, PT.product_qantity, 
-                        PT.product_description, PT.product_features, PT.product_benefits, PT.product_how_to_use,
-                        PT.product_exp_date, PT.product_add_date, PB.pharmaceutical_brands_id, PB.pharmaceutical_brands_name,
-                        UT.id, UT.first_name, UT.last_name, UT.profile_pic, UT.shop_name, UT.shop_address,
-                        MFC.medicine_finel_category_id, MFC.medicine_finel_category_name,
-                        MSC.medicine_sub_category_id, MSC.medicine_sub_category_name, 
-                        MMC.medicine_main_category_id, MMC.medicine_main_category_name
-                        FROM Product_Table PT
-                        LEFT JOIN Pharmaceutical_Brands PB ON PT.brande_id = PB.pharmaceutical_brands_id
-                        LEFT JOIN User_Table UT ON PT.saler_id = UT.id
-                        Left JOIN Medicine_Finel_Category MFC ON PT.product_category_id = MFC.medicine_finel_category_id
-                        LEFT JOIN Medicine_Sub_Category MSC ON MFC.medicine_sub_category_id = MSC.medicine_sub_category_id
-                        LEFT JOIN Medicine_Main_Category MMC ON MSC.medicine_main_category_id = MMC.medicine_main_category_id
-                        WHERE PT.saler_id = @UserId OR PT.product_id = @product_id";
-                using (SqlCommand command = new SqlCommand(query, connection))
+                PT.product_category_id, PT.product_price, PT.product_discount, PT.discounted_price, PT.product_qantity, 
+                PT.product_description, PT.product_features, PT.product_benefits, PT.product_how_to_use,
+                PT.product_exp_date, PT.product_add_date, PB.pharmaceutical_brands_id, PB.pharmaceutical_brands_name,
+                UT.id, UT.first_name, UT.last_name, UT.profile_pic, UT.shop_name, UT.shop_address,
+                MFC.medicine_finel_category_id, MFC.medicine_finel_category_name,
+                MSC.medicine_sub_category_id, MSC.medicine_sub_category_name, 
+                MMC.medicine_main_category_id, MMC.medicine_main_category_name
+                FROM Product_Table PT
+                LEFT JOIN Pharmaceutical_Brands PB ON PT.brande_id = PB.pharmaceutical_brands_id
+                LEFT JOIN User_Table UT ON PT.saler_id = UT.id
+                LEFT JOIN Medicine_Finel_Category MFC ON PT.product_category_id = MFC.medicine_finel_category_id
+                LEFT JOIN Medicine_Sub_Category MSC ON MFC.medicine_sub_category_id = MSC.medicine_sub_category_id
+                LEFT JOIN Medicine_Main_Category MMC ON MSC.medicine_main_category_id = MMC.medicine_main_category_id
+                WHERE (@product_id IS NOT NULL AND PT.product_id = @product_id) 
+                      OR (@product_id IS NULL AND PT.saler_id = @UserId)";
+        
+        using (SqlCommand command = new SqlCommand(query, connection))
                 {
                     command.Parameters.AddWithValue("@UserId", UserId);
-                    command.Parameters.AddWithValue("@product_id", product_id);
+                    command.Parameters.AddWithValue("@product_id", (object)product_id ?? DBNull.Value);
+
                     connection.Open();
                     using (SqlDataReader reader = command.ExecuteReader())
                     {
                         if (reader.Read())
                         {
+                            Console.WriteLine($"Fetched product_id: {reader.GetInt32(0)}"); 
+
                             Product = new Product_Table
                             {
                                 product_id = reader.GetInt32(0),
@@ -203,13 +213,44 @@ namespace HealthConnect.Pages.User.Saler.Manage_Products
                                     }
                                 }
                             };
-
                         }
                     }
                 }
             }
-
         }
+
+        public IActionResult OnPost()
+        {
+            if (Request.Form.ContainsKey("product_id"))
+            {
+                if (int.TryParse(Request.Form["product_id"], out int productId))
+                {
+                    using (SqlConnection connection = new SqlConnection(_connectionString))
+                    {
+                        string query = "DELETE FROM Product_Table WHERE product_id = @product_id";
+                        using (SqlCommand command = new SqlCommand(query, connection))
+                        {
+                            command.Parameters.AddWithValue("@product_id", productId);
+                            connection.Open();
+                            command.ExecuteNonQuery();
+                        }
+                    }
+                    TempData["SuccessMessage"] = "Product Deleted.";
+                    return RedirectToPage("/User/Saler/Manage_Products/View_products");
+                }
+                else
+                {
+                    TempData["ErrorMessage"] = "Invalid Product ID.";
+                    return RedirectToPage("/User/Saler/Manage_Products/View_products");
+                }
+            }
+            else
+            {
+                TempData["ErrorMessage"] = "Product ID is missing.";
+                return RedirectToPage("/User/Saler/Manage_Products/View_products");
+            }
+        }
+
 
     }
 }

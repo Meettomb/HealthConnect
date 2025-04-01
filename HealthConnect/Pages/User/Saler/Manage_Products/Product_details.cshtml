@@ -12,9 +12,12 @@
 
         <div class="d-flex gap-2">
             <form method="post">
-                <button type="submit" class="btn btn-danger">Delete</button>
-            </form>
+                <input type="hidden" name="product_id" value="@Model.Product.product_id" />
+                <button type="submit" name="submit" class="btn btn-danger">Delete</button>
+            </form> 
             <a href="/User/Saler/Manage_Products/Product_edit?product_id=@Model.Product.product_id" class="btn btn-success">Edit product details</a>
+            <a href="javascript:void(0);" onclick="history.back()" class="btn btn-secondary">Back to List</a>
+
         </div>
         <div class="table-responsive">
             <table class="table">
@@ -119,8 +122,7 @@
                     </tr>
                 </tbody>
             </table>
-            <a href="javascript:void(0);" onclick="history.back()" class="btn btn-secondary">Back to List</a>
-
+           
         </div>
     </div>
 </div>

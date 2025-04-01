@@ -160,17 +160,25 @@
                                 @foreach (var sub in main.medicineSubCategories)
                                 {
                                     <li class="medicine_sub_category_li" id="medicine_sub_category_li">
-                                        <a href="#" class="medicine_sub_category_li_a"><p>@sub.medicine_sub_category_name</p></a>
+                                        <a href="/Ecom/Filter?Filter=@sub.medicine_sub_category_id" class="medicine_sub_category_li_a">
+                                            <p>@sub.medicine_sub_category_name</p>
+                                        </a>
+
                                         @if (sub.Medicine_Finel_Categories != null && sub.Medicine_Finel_Categories.Count > 0)
                                         {
                                             <ul class="medicine_finel_category" id="medicine_finel_category">
                                                 @foreach (var finel in sub.Medicine_Finel_Categories)
                                                 {
-                                                    <li class="medicine_finel_category_li"><a href="#" class="medicine_finel_category_li_a"><p>@finel.medicine_finel_category_name</p></a></li>
+                                                    <li class="medicine_finel_category_li">
+                                                        <a href="/Ecom/Filter?Filter=@finel.medicine_finel_category_id" class="medicine_finel_category_li_a">
+                                                            <p>@finel.medicine_finel_category_name</p>
+                                                        </a>
+                                                    </li>
                                                 }
                                             </ul>
                                         }
                                     </li>
+
                                 }
                             </ul>
                         }

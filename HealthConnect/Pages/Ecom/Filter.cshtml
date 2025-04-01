@@ -1,0 +1,20 @@
+﻿@page
+@model HealthConnect.Pages.Ecom.FilterModel
+@{
+    Layout = "_Pharmacy_header";
+    ViewData["Title"] = "Filter";
+}
+
+@if (Model.FilterProduct != null && Model.FilterProduct.Any())
+{
+    @foreach (var Filter in Model.FilterProduct)
+    {
+        <p>@Filter.product_name</p>
+    }
+}
+else
+{
+    <p>No products found.</p>
+}
+
+

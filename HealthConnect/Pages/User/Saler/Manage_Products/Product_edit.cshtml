@@ -15,6 +15,7 @@
                 
                 <form method="post" enctype="multipart/form-data" id="updateProductForm">
                     <input type="hidden" name="saler_id" value="@Model.UserId" />
+                    <input type="hidden" name="product_id" value="@Model.Product.product_id" />
 
                     <div class="mb-3">
                         <label for="brande_id" class="form-label">Select brand</label>

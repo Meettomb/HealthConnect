@@ -278,6 +278,11 @@
     </div>
 </section>
 
+<h2 id="noResultsMessage" style="display: none; text-align: center; margin-top: 20px; color: red;">
+    No doctors found.
+</h2>
+
+
 
 
 <script>
@@ -497,68 +502,76 @@
             });
         });
 
-        function filterDoctors() {
-            var selectedSpeciality = specialityFilter?.value.toLowerCase() || "all";
-            var selectedType = typeFilter?.value.toLowerCase() || "all";
-            var selectedGender = document.getElementById("gender")?.value.toLowerCase() || "all";
-            var searchQuery = document.getElementById("myInput")?.value.toLowerCase() || "";
-            var selectedMinExperience = document.getElementById("experience")?.value.toLowerCase() || "all";
-            var selectedCountry = document.getElementById("country-select")?.value.toUpperCase() || "ALL";
-            var selectedState = document.getElementById("state-select")?.value.toUpperCase() || "ALL";
-            var selectedCity = document.getElementById("city-select")?.value.toLowerCase() || "all";
-            var selectedWeeklyWorkDays = document.getElementById("weekly-work-days")?.value.toLowerCase() || "all";
+           function filterDoctors() {
+        var selectedSpeciality = specialityFilter?.value.toLowerCase() || "all";
+        var selectedType = typeFilter?.value.toLowerCase() || "all";
+        var selectedGender = document.getElementById("gender")?.value.toLowerCase() || "all";
+        var searchQuery = document.getElementById("myInput")?.value.toLowerCase() || "";
+        var selectedMinExperience = document.getElementById("experience")?.value.toLowerCase() || "all";
+        var selectedCountry = document.getElementById("country-select")?.value.toUpperCase() || "ALL";
+        var selectedState = document.getElementById("state-select")?.value.toUpperCase() || "ALL";
+        var selectedCity = document.getElementById("city-select")?.value.toLowerCase() || "all";
+        var selectedWeeklyWorkDays = document.getElementById("weekly-work-days")?.value.toLowerCase() || "all";
 
-            var doctors = document.querySelectorAll(".all_doctor_single_div");
-            let anyFilterApplied = false;
+        var doctors = document.querySelectorAll(".all_doctor_single_div");
+        let anyDoctorFound = false;
 
-            doctors.forEach(function (doctor) {
-                var doctorSpecialities = doctor.getAttribute("data-speciality")?.toLowerCase().split(", ") || [];
-                var doctorGender = doctor.getAttribute("data-gender")?.toLowerCase() || "";
-                var doctorFullName = doctor.getAttribute("data-name")?.toLowerCase() || "";
-                var doctorExperience = doctor.getAttribute("data-experience")?.toLowerCase() || "0";
-                var country = doctor.getAttribute("data-country")?.toUpperCase() || "ALL";
-                var state = doctor.getAttribute("data-state")?.toUpperCase() || "ALL";
-                var city = doctor.getAttribute("data-city")?.toLowerCase() || "all";
-                var weeklyWorkDays = doctor.getAttribute("data-weekly-work-days")?.toLowerCase().split(", ") || [];
-                var doctorType = doctor.getAttribute("data-types")?.toLowerCase() || "all";
+        doctors.forEach(function (doctor) {
+            var doctorSpecialities = doctor.getAttribute("data-speciality")?.toLowerCase().split(", ") || [];
+            var doctorGender = doctor.getAttribute("data-gender")?.toLowerCase() || "";
+            var doctorFullName = doctor.getAttribute("data-name")?.toLowerCase() || "";
+            var doctorExperience = doctor.getAttribute("data-experience")?.toLowerCase() || "0";
+            var country = doctor.getAttribute("data-country")?.toUpperCase() || "ALL";
+            var state = doctor.getAttribute("data-state")?.toUpperCase() || "ALL";
+            var city = doctor.getAttribute("data-city")?.toLowerCase() || "all";
+            var weeklyWorkDays = doctor.getAttribute("data-weekly-work-days")?.toLowerCase().split(", ") || [];
+            var doctorType = doctor.getAttribute("data-types")?.toLowerCase() || "all";
 
-                var matchesType = selectedType === "all" || doctorType === selectedType;
-                var matchesSpeciality = selectedSpeciality === "all" || doctorSpecialities.includes(selectedSpeciality);
-                var matchesGender = selectedGender === "all" || doctorGender === selectedGender;
-                var matchesName = searchQuery === "" || doctorFullName.includes(searchQuery);
-                var matchesExperience = selectedMinExperience === "all" || parseInt(doctorExperience) >= parseInt(selectedMinExperience);
-                var matchesCountry = selectedCountry === "ALL" || country === selectedCountry;
-                var matchesState = selectedState === "ALL" || state === selectedState;
-                var matchesCity = selectedCity === "all" || city === selectedCity;
-                var matchesWeeklyWorkDays = selectedWeeklyWorkDays === "all" || weeklyWorkDays.includes(selectedWeeklyWorkDays);
+            var matchesType = selectedType === "all" || doctorType === selectedType;
+            var matchesSpeciality = selectedSpeciality === "all" || doctorSpecialities.includes(selectedSpeciality);
+            var matchesGender = selectedGender === "all" || doctorGender === selectedGender;
+            var matchesName = searchQuery === "" || doctorFullName.includes(searchQuery);
+            var matchesExperience = selectedMinExperience === "all" || parseInt(doctorExperience) >= parseInt(selectedMinExperience);
+            var matchesCountry = selectedCountry === "ALL" || country === selectedCountry;
+            var matchesState = selectedState === "ALL" || state === selectedState;
+            var matchesCity = selectedCity === "all" || city === selectedCity;
+            var matchesWeeklyWorkDays = selectedWeeklyWorkDays === "all" || weeklyWorkDays.includes(selectedWeeklyWorkDays);
 
-                if (matchesType && matchesSpeciality && matchesGender && matchesName && matchesExperience && matchesCountry && matchesState && matchesCity && matchesWeeklyWorkDays) {
-                    doctor.style.display = "block";
-                    anyFilterApplied = true;
-                } else {
-                    doctor.style.display = "none";
-                }
-            });
+            if (matchesType && matchesSpeciality && matchesGender && matchesName && matchesExperience && matchesCountry && matchesState && matchesCity && matchesWeeklyWorkDays) {
+                doctor.style.display = "block";
+                anyDoctorFound = true;
+            } else {
+                doctor.style.display = "none";
+            }
+        });
 
-            // Show or hide the remove filter button
-               let removeFilterButton = document.querySelector(".remove_filter_class");
-                if (removeFilterButton) {
-                    let allFiltersAreDefault = (
-                        selectedSpeciality === "all" &&
-                        selectedType === "all" &&
-                        selectedGender === "all" &&
-                        searchQuery === "" &&
-                        selectedMinExperience === "all" &&
-                        selectedCountry === "ALL" &&
-                        selectedState === "ALL" &&
-                        selectedCity === "all" &&
-                        selectedWeeklyWorkDays === "all"
-                    );
-
-                    removeFilterButton.style.display = allFiltersAreDefault ? "none" : "block";
-                }
-
+        // Show or hide "No doctors found" message
+        let noResultsMessage = document.getElementById("noResultsMessage");
+        if (!anyDoctorFound) {
+            noResultsMessage.style.display = "block";
+        } else {
+            noResultsMessage.style.display = "none";
         }
+
+        // Show or hide the remove filter button
+        let removeFilterButton = document.querySelector(".remove_filter_class");
+        if (removeFilterButton) {
+            let allFiltersAreDefault = (
+                selectedSpeciality === "all" &&
+                selectedType === "all" &&
+                selectedGender === "all" &&
+                searchQuery === "" &&
+                selectedMinExperience === "all" &&
+                selectedCountry === "ALL" &&
+                selectedState === "ALL" &&
+                selectedCity === "all" &&
+                selectedWeeklyWorkDays === "all"
+            );
+
+            removeFilterButton.style.display = allFiltersAreDefault ? "none" : "block";
+        }
+    }
+
 
         function resetFilters() {
             let filterFields = [

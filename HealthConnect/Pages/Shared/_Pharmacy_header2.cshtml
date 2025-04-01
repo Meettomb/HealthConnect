@@ -148,29 +148,37 @@
             <ul class="medicine_main_category">
                 @foreach (var main in Model.Medicine_Main_CategoryList)
                 {
-                        <li class="medicine_main_category_li">
-                            <span>@main.medicine_main_category_name</span>
+                    <li class="medicine_main_category_li">
+                        <span>@main.medicine_main_category_name</span>
                         @if (main.medicineSubCategories != null && main.medicineSubCategories.Count > 0)
                         {
-                                    <ul class="medicine_sub_category" id="medicine_sub_category" style="display: none;">
+                            <ul class="medicine_sub_category" id="medicine_sub_category" style="display: none;">
                                 @foreach (var sub in main.medicineSubCategories)
                                 {
-                                                <li class="medicine_sub_category_li" id="medicine_sub_category_li">
-                                                    <a href="#" class="medicine_sub_category_li_a"><p>@sub.medicine_sub_category_name</p></a>
+                                    <li class="medicine_sub_category_li" id="medicine_sub_category_li">
+                                        <a href="/Ecom/Filter?Filter=@sub.medicine_sub_category_id" class="medicine_sub_category_li_a">
+                                            <p>@sub.medicine_sub_category_name</p>
+                                        </a>
+
                                         @if (sub.Medicine_Finel_Categories != null && sub.Medicine_Finel_Categories.Count > 0)
                                         {
-                                                            <ul class="medicine_finel_category" id="medicine_finel_category">
+                                            <ul class="medicine_finel_category" id="medicine_finel_category">
                                                 @foreach (var finel in sub.Medicine_Finel_Categories)
                                                 {
-                                                                        <li class="medicine_finel_category_li"><a href="#" class="medicine_finel_category_li_a"><p>@finel.medicine_finel_category_name</p></a></li>
+                                                    <li class="medicine_finel_category_li">
+                                                        <a href="/Ecom/Filter?Filter=@finel.medicine_finel_category_id" class="medicine_finel_category_li_a">
+                                                            <p>@finel.medicine_finel_category_name</p>
+                                                        </a>
+                                                    </li>
                                                 }
-                                                            </ul>
+                                            </ul>
                                         }
-                                                </li>
+                                    </li>
+
                                 }
-                                    </ul>
+                            </ul>
                         }
-                        </li>
+                    </li>
                 }
             </ul>
         </nav>
