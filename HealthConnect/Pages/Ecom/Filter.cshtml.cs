@@ -326,6 +326,50 @@ namespace HealthConnect.Pages.Ecom
         }
 
 
+        public async Task<IActionResult> OnPost()
+        {
+            if (!int.TryParse(Request.Form["user_id"], out int userId) || !int.TryParse(Request.Form["product_id"], out int productId))
+            {
+                TempData["ErrorMessage"] = "Invalid user or product.";
+                return RedirectToPage("/Ecom/Filter", new { Filter = Request.Query["Filter"] });
+
+            }
+
+            using (SqlConnection connection = new SqlConnection(_connectionString))
+            {
+                await connection.OpenAsync();
+
+                string checkCartQuery = "SELECT COUNT(*) FROM Cart WHERE user_id = @UserId AND product_id = @ProductId";
+                using (SqlCommand checkCartCommand = new SqlCommand(checkCartQuery, connection))
+                {
+                    checkCartCommand.Parameters.AddWithValue("@UserId", userId);
+                    checkCartCommand.Parameters.AddWithValue("@ProductId", productId);
+
+                    int count = (int)await checkCartCommand.ExecuteScalarAsync();
+
+                    if (count > 0)
+                    {
+                        TempData["ErrorMessage"] = "Item is already in your cart.";
+                        return RedirectToPage("/Ecom/Filter", new { Filter = Request.Query["Filter"] });
+
+                    }
+                }
+
+                string insertQuery = "INSERT INTO Cart (user_id, product_id, quantity) VALUES (@UserId, @ProductId, @quantity)";
+                using (SqlCommand insertCommand = new SqlCommand(insertQuery, connection))
+                {
+                    insertCommand.Parameters.AddWithValue("@UserId", userId);
+                    insertCommand.Parameters.AddWithValue("@ProductId", productId);
+                    insertCommand.Parameters.AddWithValue("@quantity", 1);
+
+                    await insertCommand.ExecuteNonQueryAsync();
+                    TempData["SuccessMessage"] = "Item added to cart successfully.";
+                }
+            }
+            return RedirectToPage("/Ecom/Filter", new { Filter = Request.Query["Filter"] });
+
+        }
+
 
 
     }
