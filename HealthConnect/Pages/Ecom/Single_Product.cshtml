@@ -26,6 +26,10 @@
 
                 <div class="main_image_div">
                     <img id="mainImage" src="/ProductImage/@(Model.Product.product_image.Split(',').First().Trim())" />
+                    @if (Model.Product.product_qantity == 0)
+                    {
+                        <p>Out of stock</p>
+                    }
                 </div>
             </div>
 
@@ -59,13 +63,11 @@
                                 {
                                     <del>&#8377;@Model.Product.product_price</del>
                                     <span class="dis_price">&#8377;@Model.Product.discounted_price</span>
-
                                 }
                                 else
                                 {
                                     <span class="org_price">&#8377;@Model.Product.product_price</span>
                                 }
-
                             </div>
                         </div>
 
@@ -76,7 +78,6 @@
                                 <textarea rows="3" id="address" style="display: none;" placeholder="Enter new address here..."></textarea>
                                 <input type="checkbox" name="change-address" id="change-address" /> Change Address
                             </div>
-
                         </div>
 
                         <div class="row">
@@ -98,14 +99,12 @@
                                     <input type="hidden" name="product_id" value="@Model.Product?.product_id" />
                                     <input type="hidden" name="quantity" id="cart_quantity" value="1" readonly />
 
-                                    <button type="submit" name="addCart" id="addCart">Add to cart</button>
+                                    <button type="submit" name="action" value="AddToCart" id="addCart">Add to cart</button>
                                 </form>
 
                                 <form method="post" id="Buy">
                                     <input type="hidden" name="name" value="@Model.UserId" />
                                     <input type="hidden" name="name" value="@Model.Product.product_id" />
-                                    <input type="hidden" name="quantity" id="buying_quantity" value="1" readonly />
-                                    <input type="hidden" name="address" id="hidden_address" value="@Model.House_number_and_Street_name @Model.City @Model.State @Model.Country - @Model.Pincode" />
 
 
                                     @if (Model.Product.product_discount != null && Model.Product.product_discount > 0)
@@ -117,7 +116,7 @@
                                         <input type="hidden" name="name" value="@Model.Product.product_price" />
                                     }
 
-                                    <button type="button" name="buy" id="Buy">Buy</button>
+                                    <button id="buyButton" class="buy" type="button" name="buy">Buy</button>
                                 </form>
                             </div>
 
@@ -194,6 +193,115 @@
 </div>
 
 
+<!-- Order Popup -->
+<div class="order_popup_container" id="orderPopup">
+    <div class="popup_content">
+        <i class="fa-solid fa-times" id="closePopup"></i>
+        <h2>Chack your details</h2>
+        <form method="post" id="Buy">
+            <div class="confiem_detail">
+                <div class="detail">
+                    <input type="hidden" name="user_id" value="@Model.UserId" readonly />
+                </div>
+                <div class="detail">
+                    <input type="hidden" name="product_id" value="@Model.Product.product_id" readonly />
+                </div> 
+                <div class="detail">
+                    <input type="hidden" name="seller_id" value="@Model.Product?.Seller.id" />
+                </div>
+                <div class="detail">
+                    <label>Quantity: </label>
+                    <input type="text" name="quantity" id="buying_quantity" value="1" readonly />
+                </div>
+                <div class="detail">
+                    <label>Address: </label>
+                    <input type="text" name="billing_address" id="hidden_address" value="@Model.House_number_and_Street_name @Model.City @Model.State @Model.Country - @Model.Pincode" readonly />
+                </div>
+                <div class="detail">
+                    <label>Total Price: </label>
+                    <input type="text" name="price" id="final-price-display" readonly />
+                </div>
+
+
+                <div class="detail">
+                    <label>Paymant methode: </label>
+                    <input type="text" name="paymant_methode" id="methode-display" readonly />
+                </div>
+
+                @if (Model.Product.product_discount != null && Model.Product.product_discount > 0)
+                {
+                    <span class="dis_price" style="display: none;" id="f-price">&#8377;@Model.Product.discounted_price</span>
+                }
+                else
+                {
+                    <span class="org_price" style="display: none;" id="f-price">&#8377;@Model.Product.product_price</span>
+                }
+
+            </div>
+
+            <h4>Choose your paymant methode</h4>
+            <div class="paymat_methode_options">
+                <img src="~/images/cash_paymant.png" id="Cash" data-methode="Cash" />
+                <img src="/images/upi_paymant.png" id="UPI" data-methode="UPI" />
+            </div>
+
+            <div class="upi_id" id="upi_id">
+                <input type="text" placeholder="Enter your upi id" />
+            </div>
+
+            <button id="buyButton" class="pay" type="submit" name="action" value="Pay" onclick="checkPaymentMethod()">Pay</button>
+        </form>
+
+    </div>
+</div>
+
+
+
+
+<script>
+       document.getElementById("UPI").addEventListener("click", function () {
+           var methode = document.getElementById("methode-display");
+        document.getElementById("upi_id").style.display = "block";
+        methode.value = this.getAttribute("data-methode");
+    });
+       document.getElementById("Cash").addEventListener("click", function () {
+           var methode = document.getElementById("methode-display");
+        document.getElementById("upi_id").style.display = "none";
+        methode.value = this.getAttribute("data-methode");
+    });
+
+</script>
+
+<script>
+    function updateFinalPrice() {
+        let quantity = parseInt(document.getElementById("quantity_select").value) || 1;
+        let priceText = document.getElementById("f-price").innerText.replace(/[^\d.]/g, '');
+        let price = parseFloat(priceText);
+
+        let finalPrice = quantity * price;
+        document.getElementById("final-price-display").value = `₹${finalPrice}`;
+    }
+
+    window.onload = updateFinalPrice;
+
+    document.getElementById("quantity_select").addEventListener("change", updateFinalPrice);
+</script>
+
+<script>
+        document.getElementById("buyButton").addEventListener("click", function () {
+        document.getElementById("orderPopup").style.display = "block";
+    });
+
+    document.getElementById("closePopup").addEventListener("click", function () {
+        document.getElementById("orderPopup").style.display = "none";
+    });
+
+    document.getElementById("confirmOrder").addEventListener("click", function () {
+        document.getElementById("Buy").submit();
+    });
+
+</script>
+
 <script>
     function changeMainImage(element) {
         document.getElementById("mainImage").src = element.src;
@@ -209,11 +317,11 @@
         if (this.checked) {
             addressText.style.display = "none";
             addressInput.style.display = "block";
-            hiddenAddress.value = ""; 
+            hiddenAddress.value = "";
         } else {
             addressText.style.display = "block";
             addressInput.style.display = "none";
-            hiddenAddress.value = addressText.innerText; 
+            hiddenAddress.value = addressText.innerText;
         }
     });
 
@@ -221,7 +329,6 @@
         document.getElementById("hidden_address").value = this.value;
     });
 </script>
-
 
 <script>
     document.getElementById("quantity_select").addEventListener("change", function () {

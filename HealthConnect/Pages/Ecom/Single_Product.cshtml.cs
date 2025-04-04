@@ -62,6 +62,11 @@ namespace HealthConnect.Pages.Ecom
 
         public int CartCount { get; set; }
 
+
+        [BindProperty]
+        public Order_Table Order { get; set; }
+
+
         public Single_ProductModel(ILogger<IndexModel> logger, IConfiguration configuration)
         {
             _logger = logger;
@@ -325,7 +330,31 @@ namespace HealthConnect.Pages.Ecom
             }
         }
 
-        public IActionResult OnPost()
+
+
+
+
+
+
+        public IActionResult OnPost(string action, int cart_id, int quantity)
+        {
+            string product_id = Request.Form["product_id"];
+            int? UserId = HttpContext.Session.GetInt32("Id");
+
+            if (action == "AddToCart")
+            {
+                return OnPostAddToCart();
+            }
+            else if (action == "Pay")
+            {
+                return OnPostBuy();
+            }
+
+            return Redirect($"/Ecom/Single_Product?product_id={product_id}");
+        }
+
+
+        public IActionResult OnPostAddToCart()
         {
             string product_id = Request.Form["product_id"];
             int? UserId = HttpContext.Session.GetInt32("Id");
@@ -407,7 +436,93 @@ namespace HealthConnect.Pages.Ecom
             return Redirect($"/Ecom/Single_Product?product_id={product_id}");
         }
 
+        public IActionResult OnPostBuy()
+        {
+            string product_id = Request.Form["product_id"];
+            string seller_id = Request.Form["seller_id"];
+            string quantityStr = Request.Form["quantity"];
+            string rawPrice = Request.Form["price"];
+            string cleanedPrice = System.Text.RegularExpressions.Regex.Replace(rawPrice, @"[^\d]", "");
+            int price = string.IsNullOrEmpty(cleanedPrice) ? 0 : Convert.ToInt32(cleanedPrice);
 
+            string billingAddress = Request.Form["billing_address"];
+            string paymentMethod = Request.Form["paymant_methode"];
+
+            int quantity = string.IsNullOrEmpty(quantityStr) ? 0 : Convert.ToInt32(quantityStr);
+            int? UserId = HttpContext.Session.GetInt32("Id");
+
+            if (UserId == null)
+            {
+                return Redirect("/User/Sign_in");
+            }
+
+            using (SqlConnection connection = new SqlConnection(_connectionString))
+            {
+                connection.Open();
+
+               
+                string productQuery = "SELECT product_qantity FROM Product_Table WHERE product_id = @product_id";
+                int availableQuantity = 0;
+
+                using (SqlCommand productCommand = new SqlCommand(productQuery, connection))
+                {
+                    productCommand.Parameters.AddWithValue("@product_id", product_id);
+                    object result = productCommand.ExecuteScalar();
+
+                    if (result != null)
+                    {
+                        availableQuantity = Convert.ToInt32(result);
+                    }
+                }
+
+                int totalCartQuantity = quantity;
+
+                if (quantity > availableQuantity)
+                {
+                    TempData["ErrorMessage"] = $"You can't add this product to cart. Available stock: {availableQuantity}.";
+                    return Redirect($"/Ecom/Single_Product?product_id={product_id}");
+                }
+
+
+                string order = "INSERT INTO Order_Table (user_id, product_id, seller_id, price, billing_address, quantity, paymant_methode, order_datetime, order_cancle) " +
+                               "VALUES (@user_id, @product_id, @seller_id, @price, @billing_address, @quantity, @paymant_methode, @order_datetime, @order_cancle)";
+
+                using (SqlCommand command = new SqlCommand(order, connection))
+                {
+                    command.Parameters.AddWithValue("@user_id", UserId.Value);
+                    command.Parameters.AddWithValue("@product_id", product_id);
+                    command.Parameters.AddWithValue("@seller_id", seller_id);
+                    command.Parameters.AddWithValue("@price", price);
+                    command.Parameters.AddWithValue("@billing_address", billingAddress);
+                    command.Parameters.AddWithValue("@quantity", quantity);
+                    command.Parameters.AddWithValue("@paymant_methode", paymentMethod);
+                    command.Parameters.AddWithValue("@order_datetime", DateTime.Now);
+                    command.Parameters.AddWithValue("@order_cancle", false);
+
+                    int orderConfirmed = command.ExecuteNonQuery();
+
+                    if (orderConfirmed > 0)
+                    {
+                        string reduceQuantity = "UPDATE Product_Table SET product_qantity = product_qantity - @quantity WHERE product_id = @product_id";
+
+                        using (SqlCommand reduceCommand = new SqlCommand(reduceQuantity, connection))
+                        {
+                            reduceCommand.Parameters.AddWithValue("@product_id", product_id);
+                            reduceCommand.Parameters.AddWithValue("@quantity", quantity);
+                            reduceCommand.ExecuteNonQuery();
+                        }
+
+                        TempData["SuccessMessage"] = "Order placed successfully!";
+                        return Redirect($"/Ecom/Single_Product?product_id={product_id}");
+                    }
+                    else
+                    {
+                        TempData["ErrorMessage"] = "Failed to place order. Please try again.";
+                        return Redirect($"/Ecom/Single_Product?product_id={product_id}");
+                    }
+                }
+            }
+        }
 
 
 
