@@ -3,9 +3,9 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.Data.SqlClient;
 
-namespace HealthConnect.Pages.User.Saler
+namespace HealthConnect.Pages.User.Saler.Order_Manage
 {
-    public class Saler_DashbordModel : PageModel
+    public class Order_detailModel : PageModel
     {
         private readonly ILogger<IndexModel> _logger;
         private readonly IConfiguration _configuration;
@@ -65,7 +65,7 @@ namespace HealthConnect.Pages.User.Saler
 
 
 
-        public Saler_DashbordModel(ILogger<IndexModel> logger, IConfiguration configuration)
+        public Order_detailModel(ILogger<IndexModel> logger, IConfiguration configuration)
         {
             _logger = logger;
             _configuration = configuration;
@@ -87,7 +87,17 @@ namespace HealthConnect.Pages.User.Saler
             if (UserId.HasValue)
             {
                 OnGetLoginUserDetail();
-                OnGetOrderList();
+
+                int? OrderId = null;
+                if (Request.Query.ContainsKey("order_id") && int.TryParse(Request.Query["order_id"], out int parsedOrderId))
+                {
+                    OrderId = parsedOrderId;
+                }
+
+                if (UserId.HasValue)
+                {
+                    OnGetOrderList(OrderId);
+                }
             }
 
         }
@@ -121,42 +131,38 @@ namespace HealthConnect.Pages.User.Saler
                 }
             }
         }
-        private void OnGetOrderList()
+        private void OnGetOrderList(int? order_id)
         {
             UserId = HttpContext.Session.GetInt32("Id");
             if (UserId == null) return;
 
             using (SqlConnection connection = new SqlConnection(_connectionString))
             {
-                string query = @"
-                SELECT TOP 5
-                    OT.order_id, OT.user_id, OT.product_id, OT.seller_id, OT.price, OT.billing_address, OT.quantity, OT.paymant_methode,
-                    OT.order_datetime, OT.order_cancle, OT.order_cancle_datetime, OT.order_status,
-                    Customer.id, Customer.first_name, Customer.last_name, Customer.profile_pic,
-                    PT.product_id, PT.product_name, PT.product_image, PT.product_price, 
-                    MFC.medicine_finel_category_id, MFC.medicine_finel_category_name,
-                    MSC.medicine_sub_category_id, MSC.medicine_sub_category_name, 
-                    MMC.medicine_main_category_id, MMC.medicine_main_category_name,
-                    PB.pharmaceutical_brands_id, PB.pharmaceutical_brands_name
-                FROM Order_Table OT
-                LEFT JOIN User_Table Customer ON OT.user_id = Customer.id
-                LEFT JOIN Product_Table PT ON OT.product_id = PT.product_id
-                LEFT JOIN Medicine_Finel_Category MFC ON PT.product_category_id = MFC.medicine_finel_category_id
-                LEFT JOIN Medicine_Sub_Category MSC ON PT.product_category_id = MSC.medicine_sub_category_id
-                LEFT JOIN Medicine_Main_Category MMC ON MSC.medicine_main_category_id = MMC.medicine_main_category_id
-                LEFT JOIN Pharmaceutical_Brands PB ON PT.brande_id = PB.pharmaceutical_brands_id
-                WHERE OT.seller_id = @UserId
-                ORDER BY OT.order_datetime DESC";
-
+                string query = @"SELECT OT.order_id, OT.user_id, OT.product_id, OT.seller_id, OT.price, OT.billing_address, OT.quantity, OT.paymant_methode,
+                  OT.order_datetime, OT.order_cancle, OT.order_cancle_datetime, OT.order_status,
+                  Customer.id, Customer.first_name, Customer.last_name, Customer.profile_pic,
+                  PT.product_id, PT.product_name, PT.product_image, PT.product_price, 
+                  MFC.medicine_finel_category_id, MFC.medicine_finel_category_name,
+                  MSC.medicine_sub_category_id, MSC.medicine_sub_category_name, 
+                  MMC.medicine_main_category_id, MMC.medicine_main_category_name,
+                  PB.pharmaceutical_brands_id, PB.pharmaceutical_brands_name
+              FROM Order_Table OT
+              LEFT JOIN User_Table Customer ON OT.user_id = Customer.id
+              LEFT JOIN Product_Table PT ON OT.product_id = PT.product_id
+              LEFT JOIN Medicine_Finel_Category MFC ON PT.product_category_id = MFC.medicine_finel_category_id
+              LEFT JOIN Medicine_Sub_Category MSC ON PT.product_category_id = MSC.medicine_sub_category_id
+              LEFT JOIN Medicine_Main_Category MMC ON MSC.medicine_main_category_id = MMC.medicine_main_category_id
+              LEFT JOIN Pharmaceutical_Brands PB ON PT.brande_id = PB.pharmaceutical_brands_id
+              WHERE OT.order_id = @order_id";
                 using (SqlCommand cmd = new SqlCommand(query, connection))
                 {
-                    cmd.Parameters.AddWithValue("@UserId", UserId);
+                    cmd.Parameters.AddWithValue("@order_id", order_id);
                     connection.Open();
                     using (SqlDataReader reader = cmd.ExecuteReader())
                     {
-                        while (reader.Read())
+                        if (reader.Read())
                         {
-                            Order_Table order = new Order_Table
+                            Order_Table = new Order_Table
                             {
                                 order_id = reader.GetInt32(0),
                                 user_id = reader.GetInt32(1),
@@ -205,7 +211,6 @@ namespace HealthConnect.Pages.User.Saler
                                     pharmaceutical_brands_name = reader.IsDBNull(27) ? null : reader.GetString(27)
                                 }
                             };
-                            Order_TableList.Add(order);
                         }
                     }
                 }
@@ -213,6 +218,27 @@ namespace HealthConnect.Pages.User.Saler
         }
 
 
+
+        public IActionResult OnPost()
+        {
+            using(SqlConnection connection = new SqlConnection(_connectionString))
+            {
+                string query = "UPDATE Order_Table SET order_status = @order_status WHERE order_id = @order_id";
+                using (SqlCommand cmd = new SqlCommand(query, connection))
+                {
+                    cmd.Parameters.AddWithValue("@order_id", Order_Table.order_id);
+                    cmd.Parameters.AddWithValue("@order_status", "Delivered");
+                    connection.Open();
+                    cmd.ExecuteNonQuery();
+                }
+            }
+
+            TempData["SuccessMessage"] = "Order status updated successfully.";
+            SuccessMessage = "Order status updated successfully.";
+
+            return Redirect($"/User/Saler/Order_Manage/Order_detail?order_id={Order_Table.order_id}");
+
+        }
 
     }
 }

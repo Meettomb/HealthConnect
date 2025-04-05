@@ -490,8 +490,8 @@ namespace HealthConnect.Pages.Ecom
 
                     string orderQuery = @"
                 INSERT INTO Order_Table 
-                (user_id, product_id, seller_id, price, billing_address, quantity, paymant_methode, order_datetime, order_cancle) 
-                VALUES (@user_id, @product_id, @seller_id, @price, @billing_address, @quantity, @paymant_methode, @order_datetime, @order_cancle)";
+                (user_id, product_id, seller_id, price, billing_address, quantity, paymant_methode, order_datetime, order_cancle, order_status) 
+                VALUES (@user_id, @product_id, @seller_id, @price, @billing_address, @quantity, @paymant_methode, @order_datetime, @order_cancle, @order_status)";
 
                     using (SqlCommand orderCommand = new SqlCommand(orderQuery, connection))
                     {
@@ -504,6 +504,7 @@ namespace HealthConnect.Pages.Ecom
                         orderCommand.Parameters.AddWithValue("@paymant_methode", paymentMethod);
                         orderCommand.Parameters.AddWithValue("@order_datetime", DateTime.Now);
                         orderCommand.Parameters.AddWithValue("@order_cancle", false);
+                        orderCommand.Parameters.AddWithValue("@order_status", "Pending");
 
                         orderCommand.ExecuteNonQuery();
                     }

@@ -3,9 +3,9 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.Data.SqlClient;
 
-namespace HealthConnect.Pages.User.Saler
+namespace HealthConnect.Pages.User.Saler.Order_Manage
 {
-    public class Saler_DashbordModel : PageModel
+    public class All_orderModel : PageModel
     {
         private readonly ILogger<IndexModel> _logger;
         private readonly IConfiguration _configuration;
@@ -65,7 +65,7 @@ namespace HealthConnect.Pages.User.Saler
 
 
 
-        public Saler_DashbordModel(ILogger<IndexModel> logger, IConfiguration configuration)
+        public All_orderModel(ILogger<IndexModel> logger, IConfiguration configuration)
         {
             _logger = logger;
             _configuration = configuration;
@@ -128,26 +128,23 @@ namespace HealthConnect.Pages.User.Saler
 
             using (SqlConnection connection = new SqlConnection(_connectionString))
             {
-                string query = @"
-                SELECT TOP 5
-                    OT.order_id, OT.user_id, OT.product_id, OT.seller_id, OT.price, OT.billing_address, OT.quantity, OT.paymant_methode,
-                    OT.order_datetime, OT.order_cancle, OT.order_cancle_datetime, OT.order_status,
-                    Customer.id, Customer.first_name, Customer.last_name, Customer.profile_pic,
-                    PT.product_id, PT.product_name, PT.product_image, PT.product_price, 
-                    MFC.medicine_finel_category_id, MFC.medicine_finel_category_name,
-                    MSC.medicine_sub_category_id, MSC.medicine_sub_category_name, 
-                    MMC.medicine_main_category_id, MMC.medicine_main_category_name,
-                    PB.pharmaceutical_brands_id, PB.pharmaceutical_brands_name
-                FROM Order_Table OT
-                LEFT JOIN User_Table Customer ON OT.user_id = Customer.id
-                LEFT JOIN Product_Table PT ON OT.product_id = PT.product_id
-                LEFT JOIN Medicine_Finel_Category MFC ON PT.product_category_id = MFC.medicine_finel_category_id
-                LEFT JOIN Medicine_Sub_Category MSC ON PT.product_category_id = MSC.medicine_sub_category_id
-                LEFT JOIN Medicine_Main_Category MMC ON MSC.medicine_main_category_id = MMC.medicine_main_category_id
-                LEFT JOIN Pharmaceutical_Brands PB ON PT.brande_id = PB.pharmaceutical_brands_id
-                WHERE OT.seller_id = @UserId
-                ORDER BY OT.order_datetime DESC";
-
+                string query = @"SELECT OT.order_id, OT.user_id, OT.product_id, OT.seller_id, OT.price, OT.billing_address, OT.quantity, OT.paymant_methode,
+                  OT.order_datetime, OT.order_cancle, OT.order_cancle_datetime, OT.order_status,
+                  Customer.id, Customer.first_name, Customer.last_name, Customer.profile_pic,
+                  PT.product_id, PT.product_name, PT.product_image, PT.product_price, 
+                  MFC.medicine_finel_category_id, MFC.medicine_finel_category_name,
+                  MSC.medicine_sub_category_id, MSC.medicine_sub_category_name, 
+                  MMC.medicine_main_category_id, MMC.medicine_main_category_name,
+                  PB.pharmaceutical_brands_id, PB.pharmaceutical_brands_name
+                  FROM Order_Table OT
+                  LEFT JOIN User_Table Customer ON OT.user_id = Customer.id
+                  LEFT JOIN Product_Table PT ON OT.product_id = PT.product_id
+                  LEFT JOIN Medicine_Finel_Category MFC ON PT.product_category_id = MFC.medicine_finel_category_id
+                  LEFT JOIN Medicine_Sub_Category MSC ON PT.product_category_id = MSC.medicine_sub_category_id
+                  LEFT JOIN Medicine_Main_Category MMC ON MSC.medicine_main_category_id = MMC.medicine_main_category_id
+                  LEFT JOIN Pharmaceutical_Brands PB ON PT.brande_id = PB.pharmaceutical_brands_id
+                    WHERE OT.seller_id = @UserId
+                    ORDER BY OT.order_datetime DESC";
                 using (SqlCommand cmd = new SqlCommand(query, connection))
                 {
                     cmd.Parameters.AddWithValue("@UserId", UserId);
@@ -211,8 +208,6 @@ namespace HealthConnect.Pages.User.Saler
                 }
             }
         }
-
-
 
     }
 }
