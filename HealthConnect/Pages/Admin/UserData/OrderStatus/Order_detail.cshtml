@@ -1,0 +1,75 @@
+﻿@page
+@model HealthConnect.Pages.Admin.UserData.OrderStatus.Order_detailModel
+@{
+    Layout = "_Admin_header";
+    ViewData["Title"] = "Orders Details";
+}
+
+
+
+<div class="row">
+    <div class="col-12">
+        <div class="card">
+            <div class="card-body">
+                <h4 class="card-title">Doctor Register inquiry</h4>
+                <p onclick="history.back()" class="text-primary" style="cursor: pointer;">Back to list</p>
+
+                <div class="row">
+                    <div class="col-md-12">
+                        <div class="table-responsive">
+                            <table class="table">
+
+                                <tbody>
+                                    <tr><th>Order Id</th><td>@Model.Order_Table.order_id</td></tr>
+                                    <tr><th>Amount </th><td>₹@Model.Order_Table.price</td></tr>
+                                    <tr><th>Quantity</th><td>@Model.Order_Table.quantity</td></tr>
+                                    <tr><th>Total Price</th><td>₹@(Model.Order_Table.price * Model.Order_Table.quantity)</td></tr>
+                                    <tr><th>Billing Address</th><td>@Model.Order_Table.billing_address</td></tr>
+                                    <tr><th>Payment Method</th><td>@Model.Order_Table.paymant_methode</td></tr>
+                                    <tr><th>Order Date Time</th><td>@Model.Order_Table.order_datetime</td></tr>
+                                    <tr><th>Order Status</th><td>@Model.Order_Table.order_status</td></tr>
+                                    <tr><th>Order Cancelled</th><td>@(Model.Order_Table.order_cancle ? "Yes" : "No")</td></tr>
+
+                                    @if (Model.Order_Table.order_cancle && Model.Order_Table.order_cancle_datetime != DateTime.MinValue)
+                                    {
+                                        <tr><th>Order Cancel DateTime</th><td>@Model.Order_Table.order_cancle_datetime</td></tr>
+                                    }
+
+                                    <tr><th>Customer Name</th><td>@Model.Order_Table.User.first_name @Model.Order_Table.User.last_name</td></tr>
+                                    <tr><th>Seller Name</th><td>@Model.Order_Table.Seller.first_name @Model.Order_Table.Seller.last_name</td></tr>
+                                    <tr><th>Product Name</th><td>@Model.Order_Table.Product.product_name</td></tr>
+                                    <tr>
+                                        <th>Product Image</th>
+                                        <td>
+                                            @if (!string.IsNullOrEmpty(Model.Order_Table.Product.product_image))
+                                            {
+                                                var images = Model.Order_Table.Product.product_image.Split(',');
+                                                foreach (var image in images)
+                                                {
+                                                    <img src="/ProductImage/@image.Trim()" width="100" style="margin-right: 5px;" />
+                                                }
+                                            }
+                                            else
+                                            {
+                                                <span>No image</span>
+                                            }
+                                        </td>
+                                    </tr>
+                                    <tr><th>Final Category Name</th><td>@Model.Order_Table.Product.FinelCategory.medicine_finel_category_name</td></tr>
+                                    <tr><th>Brand Name</th><td>@Model.Order_Table.Brand.pharmaceutical_brands_name</td></tr>
+                                </tbody>
+
+
+                            </table>
+                        </div>
+
+                    </div>
+
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+

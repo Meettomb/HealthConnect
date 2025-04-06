@@ -1,15 +1,14 @@
 using HealthConnect.Models;
 using HealthConnect.Services;
-using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.Data.SqlClient;
 using Microsoft.Extensions.Options;
-using System.Diagnostics.Metrics;
+using static HealthConnect.Pages.Admin.Admin_indexModel;
 
-namespace HealthConnect.Pages.Admin
+namespace HealthConnect.Pages.Admin.UserData.OrderStatus
 {
-    public class Admin_indexModel : PageModel
+    public class All_OrderModel : PageModel
     {
         private readonly IEmailService _emailService;
         private readonly EmailSettings _emailSettings;
@@ -68,7 +67,7 @@ namespace HealthConnect.Pages.Admin
         public Order_Table Order_Table { get; set; }
         public List<Order_Table> Order_TableList { get; set; } = new List<Order_Table>();
 
-        public Admin_indexModel(IEmailService emailService, IOptions<EmailSettings> emailSettings, IConfiguration configuration)
+        public All_OrderModel(IEmailService emailService, IOptions<EmailSettings> emailSettings, IConfiguration configuration)
         {
             _emailService = emailService;
             _emailSettings = emailSettings.Value;
@@ -117,7 +116,7 @@ namespace HealthConnect.Pages.Admin
             GetTopFiveUser();
             GetUserCountsByCountry();
             GetTopFiveDoctorReports();
-            OnGetTopFiveOrderList();
+            OnGetOrderList();
 
             return Page();
 
@@ -156,7 +155,6 @@ namespace HealthConnect.Pages.Admin
                 }
             }
         }
-
         public void GetUserCountsByCountry()
         {
             List<User_Table> userList = new List<User_Table>();
@@ -195,7 +193,6 @@ namespace HealthConnect.Pages.Admin
 
             UserTable = countryCounts;
         }
-
         public void GetTopFiveDoctorReports()
         {
             using (SqlConnection con = new SqlConnection(_connectionString))
@@ -242,8 +239,7 @@ namespace HealthConnect.Pages.Admin
                 }
             }
         }
-
-        private void OnGetTopFiveOrderList()
+        private void OnGetOrderList()
         {
             UserId = HttpContext.Session.GetInt32("Id");
             if (UserId == null) return;
@@ -251,7 +247,7 @@ namespace HealthConnect.Pages.Admin
             using (SqlConnection connection = new SqlConnection(_connectionString))
             {
                 string query = @"
-            SELECT TOP 5
+            SELECT 
                 OT.order_id, OT.user_id, OT.product_id, OT.seller_id, OT.price, OT.billing_address, OT.quantity, OT.paymant_methode,
                 OT.order_datetime, OT.order_cancle, OT.order_cancle_datetime, OT.order_status,
 
@@ -345,13 +341,6 @@ namespace HealthConnect.Pages.Admin
                 }
             }
         }
-
-        public class CountryCount
-        {
-            public string Country { get; set; }
-            public int Count { get; set; }
-        }
-
 
 
     }

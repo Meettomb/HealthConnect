@@ -1,15 +1,14 @@
 using HealthConnect.Models;
 using HealthConnect.Services;
-using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.Data.SqlClient;
 using Microsoft.Extensions.Options;
-using System.Diagnostics.Metrics;
+using static HealthConnect.Pages.Admin.Admin_indexModel;
 
-namespace HealthConnect.Pages.Admin
+namespace HealthConnect.Pages.Admin.UserData.OrderStatus
 {
-    public class Admin_indexModel : PageModel
+    public class Order_detailModel : PageModel
     {
         private readonly IEmailService _emailService;
         private readonly EmailSettings _emailSettings;
@@ -68,7 +67,7 @@ namespace HealthConnect.Pages.Admin
         public Order_Table Order_Table { get; set; }
         public List<Order_Table> Order_TableList { get; set; } = new List<Order_Table>();
 
-        public Admin_indexModel(IEmailService emailService, IOptions<EmailSettings> emailSettings, IConfiguration configuration)
+        public Order_detailModel(IEmailService emailService, IOptions<EmailSettings> emailSettings, IConfiguration configuration)
         {
             _emailService = emailService;
             _emailSettings = emailSettings.Value;
@@ -117,7 +116,18 @@ namespace HealthConnect.Pages.Admin
             GetTopFiveUser();
             GetUserCountsByCountry();
             GetTopFiveDoctorReports();
-            OnGetTopFiveOrderList();
+
+            int? OrderId = null;
+            if (Request.Query.ContainsKey("order_id") && int.TryParse(Request.Query["order_id"], out int parsedOrderId))
+            {
+                OrderId = parsedOrderId;
+            }
+
+            if (UserId.HasValue && OrderId.HasValue)
+            {
+                OnGetOrderDetailList(OrderId.Value);
+            }
+
 
             return Page();
 
@@ -156,14 +166,13 @@ namespace HealthConnect.Pages.Admin
                 }
             }
         }
-
         public void GetUserCountsByCountry()
         {
             List<User_Table> userList = new List<User_Table>();
 
             using (SqlConnection connection = new SqlConnection(_connectionString))
             {
-                string query = "SELECT * FROM User_Table ORDER BY country"; 
+                string query = "SELECT * FROM User_Table ORDER BY country";
 
                 using (SqlCommand command = new SqlCommand(query, connection))
                 {
@@ -174,7 +183,7 @@ namespace HealthConnect.Pages.Admin
                         {
                             User_Table user = new User_Table
                             {
-                                country = reader.GetString(7) 
+                                country = reader.GetString(7)
                             };
                             userList.Add(user);
                         }
@@ -185,7 +194,7 @@ namespace HealthConnect.Pages.Admin
             var countryCounts = userList
                 .GroupBy(u => u.country)
                 .Select(g => new CountryCount { Country = g.Key, Count = g.Count() })
-                .OrderBy(x => x.Country) 
+                .OrderBy(x => x.Country)
                 .ToList();
 
             foreach (var item in countryCounts)
@@ -195,7 +204,6 @@ namespace HealthConnect.Pages.Admin
 
             UserTable = countryCounts;
         }
-
         public void GetTopFiveDoctorReports()
         {
             using (SqlConnection con = new SqlConnection(_connectionString))
@@ -242,8 +250,7 @@ namespace HealthConnect.Pages.Admin
                 }
             }
         }
-
-        private void OnGetTopFiveOrderList()
+        private void OnGetOrderDetailList(int order_id)
         {
             UserId = HttpContext.Session.GetInt32("Id");
             if (UserId == null) return;
@@ -251,39 +258,41 @@ namespace HealthConnect.Pages.Admin
             using (SqlConnection connection = new SqlConnection(_connectionString))
             {
                 string query = @"
-            SELECT TOP 5
-                OT.order_id, OT.user_id, OT.product_id, OT.seller_id, OT.price, OT.billing_address, OT.quantity, OT.paymant_methode,
-                OT.order_datetime, OT.order_cancle, OT.order_cancle_datetime, OT.order_status,
+        SELECT 
+            OT.order_id, OT.user_id, OT.product_id, OT.seller_id, OT.price, OT.billing_address, OT.quantity, OT.paymant_methode,
+            OT.order_datetime, OT.order_cancle, OT.order_cancle_datetime, OT.order_status,
 
-                Customer.id, Customer.first_name, Customer.last_name, Customer.profile_pic,
-                Seller.id, Seller.first_name, Seller.last_name, Seller.profile_pic,
+            Customer.id, Customer.first_name, Customer.last_name, Customer.profile_pic,
+            Seller.id, Seller.first_name, Seller.last_name, Seller.profile_pic,
 
-                PT.product_id, PT.product_name, PT.product_image, PT.product_price,
+            PT.product_id, PT.product_name, PT.product_image, PT.product_price,
 
-                MFC.medicine_finel_category_id, MFC.medicine_finel_category_name,
-                MSC.medicine_sub_category_id, MSC.medicine_sub_category_name, 
-                MMC.medicine_main_category_id, MMC.medicine_main_category_name,
+            MFC.medicine_finel_category_id, MFC.medicine_finel_category_name,
+            MSC.medicine_sub_category_id, MSC.medicine_sub_category_name, 
+            MMC.medicine_main_category_id, MMC.medicine_main_category_name,
 
-                PB.pharmaceutical_brands_id, PB.pharmaceutical_brands_name
+            PB.pharmaceutical_brands_id, PB.pharmaceutical_brands_name
 
-            FROM Order_Table OT
-            LEFT JOIN User_Table Customer ON OT.user_id = Customer.id
-            LEFT JOIN User_Table Seller ON OT.seller_id = Seller.id
-            LEFT JOIN Product_Table PT ON OT.product_id = PT.product_id
-            LEFT JOIN Medicine_Finel_Category MFC ON PT.product_category_id = MFC.medicine_finel_category_id
-            LEFT JOIN Medicine_Sub_Category MSC ON PT.product_category_id = MSC.medicine_sub_category_id
-            LEFT JOIN Medicine_Main_Category MMC ON MSC.medicine_main_category_id = MMC.medicine_main_category_id
-            LEFT JOIN Pharmaceutical_Brands PB ON PT.brande_id = PB.pharmaceutical_brands_id
-            ORDER BY OT.order_datetime DESC";
+        FROM Order_Table OT
+        LEFT JOIN User_Table Customer ON OT.user_id = Customer.id
+        LEFT JOIN User_Table Seller ON OT.seller_id = Seller.id
+        LEFT JOIN Product_Table PT ON OT.product_id = PT.product_id
+        LEFT JOIN Medicine_Finel_Category MFC ON PT.product_category_id = MFC.medicine_finel_category_id
+        LEFT JOIN Medicine_Sub_Category MSC ON PT.product_category_id = MSC.medicine_sub_category_id
+        LEFT JOIN Medicine_Main_Category MMC ON MSC.medicine_main_category_id = MMC.medicine_main_category_id
+        LEFT JOIN Pharmaceutical_Brands PB ON PT.brande_id = PB.pharmaceutical_brands_id
+        WHERE OT.order_id = @OrderId
+        ORDER BY OT.order_datetime DESC";
 
                 using (SqlCommand cmd = new SqlCommand(query, connection))
                 {
+                    cmd.Parameters.AddWithValue("@OrderId", order_id);
                     connection.Open();
                     using (SqlDataReader reader = cmd.ExecuteReader())
                     {
-                        while (reader.Read())
+                        if (reader.Read())
                         {
-                            Order_Table order = new Order_Table
+                            Order_Table = new Order_Table
                             {
                                 order_id = reader.GetInt32(0),
                                 user_id = reader.GetInt32(1),
@@ -339,18 +348,12 @@ namespace HealthConnect.Pages.Admin
                                     pharmaceutical_brands_name = reader.IsDBNull(31) ? null : reader.GetString(31)
                                 }
                             };
-                            Order_TableList.Add(order);
                         }
                     }
                 }
             }
         }
 
-        public class CountryCount
-        {
-            public string Country { get; set; }
-            public int Count { get; set; }
-        }
 
 
 

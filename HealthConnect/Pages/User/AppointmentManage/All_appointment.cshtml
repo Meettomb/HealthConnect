@@ -58,6 +58,7 @@
                                 <div class="all_appointmant_side3">
                                     <p class="appointment_date"><b>Appointment Date:</b> <span>@data.appointment_date</span></p>
                                     <p class="appointment_time"><b>Appointment Time:</b> <span>@data.time_slot</span></p>
+                                    <p><a href="/User/Chat?id=@data.User.id">Start Chatting</a></p>
                                 </div>
 
                                 <div class="all_appointmant_side4">
@@ -87,7 +88,9 @@
                         <div class="all_side_container" id="YouAppointmant">
                             <div class="all_side">
                                 <div class="all_appointmant_side1">
-                                    <img src="/documant/@data.Doctor.profile_pic" alt="Dr. @data.Doctor.first_name @data.Doctor.last_name" />
+                                    <a href="/User/Doctor_Profile?doctor_id=@data.Doctor.id">
+                                        <img src="/documant/@data.Doctor.profile_pic" alt="Dr. @data.Doctor.first_name @data.Doctor.last_name" />
+                                    </a>
                                 </div>
                                 <div class="all_appointmant_side2">
                                     <h1>Dr. @data.Doctor.first_name @data.Doctor.last_name</h1>
@@ -111,6 +114,7 @@
                                 <div class="all_appointmant_side3">
                                     <p class="appointment_date"><b>Appointment Date:</b> <span>@data.appointment_date</span></p>
                                     <p class="appointment_time"><b>Appointment Time:</b> <span>@data.time_slot</span></p>
+                                    <p><a href="/User/Chat?id=@data.Doctor.id">Start Chatting</a></p>
                                 </div>
 
                                 <div class="all_appointmant_side4">
@@ -152,7 +156,9 @@
                     <div class="all_side_container">
                         <div class="all_side">
                             <div class="all_appointmant_side1">
-                                <img src="/documant/@data.Doctor.profile_pic" alt="Dr. @data.Doctor.first_name @data.Doctor.last_name" />
+                                <a href="/User/Doctor_Profile?doctor_id=@data.Doctor.id">
+                                    <img src="/documant/@data.Doctor.profile_pic" alt="Dr. @data.Doctor.first_name @data.Doctor.last_name" />
+                                </a>
                             </div>
                             <div class="all_appointmant_side2">
                                 <h1>Dr. @data.Doctor.first_name @data.Doctor.last_name</h1>
@@ -176,6 +182,7 @@
                             <div class="all_appointmant_side3">
                                 <p class="appointment_date"><b>Appointment Date:</b> <span>@data.appointment_date</span></p>
                                 <p class="appointment_time"><b>Appointment Time:</b> <span>@data.time_slot</span></p>
+                                <p><a href="/User/Chat?id=@data.Doctor.id">Start Chatting</a></p>
                             </div>
 
                             <div class="all_appointmant_side4">

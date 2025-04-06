@@ -1,0 +1,12 @@
+﻿@page
+@model HealthConnect.Pages.User.Order_historyModel
+@{
+
+    Layout = "_Pharmacy_header";
+    ViewData["Title"] = "All Orders";
+}
+
+@foreach (var order in Model.Order_TableList)
+{
+    <h2>@order.order_id</h2>
+}

@@ -195,7 +195,9 @@ namespace HealthConnect.Pages.User.AppointmentManage
                 D.max_time_per_appointments AS doctor_max_time_per_appointments, 
                 D.break_between_two_appointments AS doctor_break_between_two_appointments,
                 D.email AS doctor_email, D.work_start_time AS doctor_work_start_time, 
-                D.work_end_time AS doctor_work_end_time, D.weekly_work_days AS doctor_weekly_work_days
+                D.work_end_time AS doctor_work_end_time, D.weekly_work_days AS doctor_weekly_work_days,
+D.id As doctor_id,
+U.id AS user_id
             FROM Appointments A
             INNER JOIN User_Table U ON A.user_id = U.id
             INNER JOIN User_Table D ON A.doctor_id = D.id
@@ -259,6 +261,8 @@ namespace HealthConnect.Pages.User.AppointmentManage
                             appointment.Doctor.work_end_time = reader.IsDBNull(36) ? "" : reader.GetString(36);
                             appointment.Doctor.weekly_work_days = reader.IsDBNull(37) || string.IsNullOrEmpty(reader.GetString(37)) ? new List<string>() : reader.GetString(37).Split(',').ToList();
 
+                            appointment.Doctor.id = reader.GetInt32(38);
+                            appointment.User.id = reader.GetInt32(39);
 
 
 
