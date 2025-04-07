@@ -1,7 +1,10 @@
 using HealthConnect.Models;
+using HealthConnect.Services;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.Data.SqlClient;
+using Microsoft.Extensions.Options;
 
 namespace HealthConnect.Pages.User
 {
@@ -10,6 +13,8 @@ namespace HealthConnect.Pages.User
         private readonly ILogger<IndexModel> _logger;
         private readonly IConfiguration _configuration;
         private readonly string _connectionString;
+        private readonly IEmailService _emailService;
+        private readonly EmailSettings _emailSettings;
 
 
         public int? UserId { get; set; }
@@ -17,6 +22,7 @@ namespace HealthConnect.Pages.User
         public string LastName { get; set; }
         public string ProfilePic { get; set; }
         public string Role { get; set; }
+        public string House_number_and_Street_name { get; set; }
         public string Country { get; set; }
         public string State { get; set; }
         public string City { get; set; }
@@ -64,11 +70,12 @@ namespace HealthConnect.Pages.User
         public List<Order_Table> Order_TableList { get; set; } = new List<Order_Table>();
         public int CartCount { get; set; }
 
-        public Order_historyModel(ILogger<IndexModel> logger, IConfiguration configuration)
+        public Order_historyModel(IEmailService emailService, IOptions<EmailSettings> emailSettings, ILogger<IndexModel> logger, IConfiguration configuration)
         {
             _logger = logger;
             _configuration = configuration;
-            _connectionString = configuration.GetConnectionString("HealthConnect");
+            _connectionString = configuration.GetConnectionString("HealthConnect"); _emailService = emailService;
+            _emailSettings = emailSettings.Value;
         }
         public IActionResult OnGet()
         {
@@ -80,7 +87,7 @@ namespace HealthConnect.Pages.User
 
                 OnGetLoginUserDetail();
                 OnCartGet(UserId.Value);
-                OnGetOrderList();
+                OnGetOrderList(UserId.Value);
             }
 
             OnGetPharmacyCategory();
@@ -123,6 +130,7 @@ namespace HealthConnect.Pages.User
                                 LastName = reader["last_name"].ToString();
                                 ProfilePic = reader["profile_pic"].ToString();
                                 Role = reader["role"].ToString();
+                                House_number_and_Street_name = reader["House_number_and_Street_name"].ToString();
                                 Country = reader["country"].ToString();
                                 State = reader["state"].ToString();
                                 City = reader["city"].ToString();
@@ -228,7 +236,7 @@ namespace HealthConnect.Pages.User
                 }
             }
         }
-        private void OnGetOrderList()
+        private void OnGetOrderList(int? user_id)
         {
             UserId = HttpContext.Session.GetInt32("Id");
             if (UserId == null) return;
@@ -317,6 +325,214 @@ namespace HealthConnect.Pages.User
         }
 
 
+
+        public async Task<IActionResult> OnPostAsync(string action)
+        {
+            string roleInSession = HttpContext.Session.GetString("UserRole");
+            UserId = HttpContext.Session.GetInt32("Id");
+
+            if (UserId.HasValue)
+            {
+                OnGetLoginUserDetail();
+                OnCartGet(UserId.Value);
+                OnGetOrderList(UserId.Value);
+            }
+
+            if (action == "OrderCancle")
+            {
+                return await OnPostCancleOrderAsync();
+            }
+            else if (action == "ReOrder")
+            {
+                OnPostReOrder();
+            }
+
+            OnGetPharmacyCategory();
+            return RedirectToPage("/User/Order_history");
+        }
+
+
+        public async Task<IActionResult> OnPostCancleOrderAsync()
+        {
+            string orderId = Request.Form["order_id"];
+            string userId = Request.Form["user_id"];
+
+            if (string.IsNullOrEmpty(orderId) || string.IsNullOrEmpty(userId))
+            {
+                ErrorMessage = "Invalid order details.";
+                return Page();
+            }
+
+            string? sellerEmail = null;
+            string? productName = null;
+            string? userFullName = null;
+            DateTime cancelTime = DateTime.Now;
+
+            using (SqlConnection connection = new SqlConnection(_connectionString))
+            {
+                await connection.OpenAsync();
+
+                string updateQuery = @"
+            UPDATE Order_Table 
+            SET order_cancle = 1, 
+                order_status = @OrderStatus, 
+                order_cancle_datetime = @CancelDateTime 
+            WHERE order_id = @OrderId AND user_id = @UserId";
+
+                using (SqlCommand updateCommand = new SqlCommand(updateQuery, connection))
+                {
+                    updateCommand.Parameters.AddWithValue("@OrderId", orderId);
+                    updateCommand.Parameters.AddWithValue("@UserId", userId);
+                    updateCommand.Parameters.AddWithValue("@OrderStatus", "Cancel");
+                    updateCommand.Parameters.AddWithValue("@CancelDateTime", cancelTime);
+                    await updateCommand.ExecuteNonQueryAsync();
+                }
+
+                string fetchQuery = @"
+    SELECT 
+        o.order_id, 
+        p.product_name, 
+        CONCAT(u.first_name, ' ', u.last_name) AS fullname, 
+        s.email AS seller_email
+    FROM Order_Table o
+    JOIN User_Table u ON o.user_id = u.id
+    JOIN User_Table s ON o.seller_id = s.id
+    JOIN Product_Table p ON o.product_id = p.product_id
+    WHERE o.order_id = @OrderId AND o.user_id = @UserId";
+
+                using (SqlCommand fetchCommand = new SqlCommand(fetchQuery, connection))
+                {
+                    fetchCommand.Parameters.AddWithValue("@OrderId", orderId);
+                    fetchCommand.Parameters.AddWithValue("@UserId", userId);
+
+                    using (SqlDataReader reader = await fetchCommand.ExecuteReaderAsync())
+                    {
+                        if (await reader.ReadAsync())
+                        {
+                            productName = reader["product_name"]?.ToString();
+                            sellerEmail = reader["seller_email"]?.ToString();
+                            userFullName = reader["fullname"]?.ToString();
+                        }
+                    }
+                }
+
+            }
+
+            if (!string.IsNullOrEmpty(sellerEmail))
+            {
+                string subject = $"Order #{orderId} Cancelled";
+                string message = $@"
+                    Hello Seller,
+
+                    This is to inform you that an order has been cancelled:
+
+                    Order ID     : {orderId}
+                    Product      : {productName}
+                    Customer     : {userFullName}
+                    Cancelled At : {cancelTime:f}
+
+                    Please update your records accordingly.
+
+                    Thanks,
+                    HealthConnect Team";
+
+                await _emailService.SendEmailAsync(sellerEmail, subject, message);
+            }
+
+            TempData["SuccessMessage"] = "Order cancelled successfully.";
+            return RedirectToPage("/User/Order_history");
+        }
+
+
+
+        private IActionResult OnPostReOrder()
+        {
+            string product_id = Request.Form["product_id"];
+            string seller_id = Request.Form["seller_id"];
+            string quantityStr = Request.Form["quantity"];
+            string rawPrice = Request.Form["price"];
+            string cleanedPrice = System.Text.RegularExpressions.Regex.Replace(rawPrice, @"[^\d]", "");
+            int price = string.IsNullOrEmpty(cleanedPrice) ? 0 : Convert.ToInt32(cleanedPrice);
+
+            string billingAddress = Request.Form["billing_address"];
+            string paymentMethod = Request.Form["paymant_methode"];
+
+            int quantity = string.IsNullOrEmpty(quantityStr) ? 0 : Convert.ToInt32(quantityStr);
+            int? UserId = HttpContext.Session.GetInt32("Id");
+
+            if (UserId == null)
+            {
+                return RedirectToPage("/User/Sign_in");
+            }
+
+            using (SqlConnection connection = new SqlConnection(_connectionString))
+            {
+                connection.Open();
+
+
+                string productQuery = "SELECT product_qantity FROM Product_Table WHERE product_id = @product_id";
+                int availableQuantity = 0;
+
+                using (SqlCommand productCommand = new SqlCommand(productQuery, connection))
+                {
+                    productCommand.Parameters.AddWithValue("@product_id", product_id);
+                    object result = productCommand.ExecuteScalar();
+
+                    if (result != null)
+                    {
+                        availableQuantity = Convert.ToInt32(result);
+                    }
+                }
+
+                int totalCartQuantity = quantity;
+
+                if (quantity > availableQuantity)
+                {
+                    TempData["ErrorMessage"] = $"You can't buy this product. Available stock: {availableQuantity}.";
+                    return RedirectToPage("/User/Order_history");
+                }
+
+
+                string order = "INSERT INTO Order_Table (user_id, product_id, seller_id, price, billing_address, quantity, paymant_methode, order_datetime, order_cancle, order_status) " +
+                               "VALUES (@user_id, @product_id, @seller_id, @price, @billing_address, @quantity, @paymant_methode, @order_datetime, @order_cancle, @order_status)";
+
+                using (SqlCommand command = new SqlCommand(order, connection))
+                {
+                    command.Parameters.AddWithValue("@user_id", UserId.Value);
+                    command.Parameters.AddWithValue("@product_id", product_id);
+                    command.Parameters.AddWithValue("@seller_id", seller_id);
+                    command.Parameters.AddWithValue("@price", price);
+                    command.Parameters.AddWithValue("@billing_address", billingAddress);
+                    command.Parameters.AddWithValue("@quantity", quantity);
+                    command.Parameters.AddWithValue("@paymant_methode", paymentMethod);
+                    command.Parameters.AddWithValue("@order_datetime", DateTime.Now);
+                    command.Parameters.AddWithValue("@order_cancle", false);
+                    command.Parameters.AddWithValue("@order_status", "Pending");
+
+                    int orderConfirmed = command.ExecuteNonQuery();
+
+                    if (orderConfirmed > 0)
+                    {
+                        string reduceQuantity = "UPDATE Product_Table SET product_qantity = product_qantity - @quantity WHERE product_id = @product_id";
+
+                        using (SqlCommand reduceCommand = new SqlCommand(reduceQuantity, connection))
+                        {
+                            reduceCommand.Parameters.AddWithValue("@product_id", product_id);
+                            reduceCommand.Parameters.AddWithValue("@quantity", quantity);
+                            reduceCommand.ExecuteNonQuery();
+                        }
+
+                        TempData["SuccessMessage"] = "Order placed successfully!";
+                        return RedirectToPage("/User/Order_history");
+                    }
+                    else
+                    {
+                        TempData["ErrorMessage"] = "Failed to place order. Please try again.";
+                        return RedirectToPage("/User/Order_history");
+                    }
+                }
+            }
+        }
 
 
 
