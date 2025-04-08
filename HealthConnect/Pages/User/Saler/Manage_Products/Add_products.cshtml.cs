@@ -239,6 +239,12 @@ namespace HealthConnect.Pages.User.Saler.Manage_Products
                 return Page();
             }
 
+            if (uploadedFiles.Count > 3)
+            {
+                ErrorMessage = "You can upload a maximum of 3 product images.";
+                return Page();
+            }
+
             string uploadFolder = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot", "ProductImage");
             if (!Directory.Exists(uploadFolder))
             {
@@ -249,28 +255,31 @@ namespace HealthConnect.Pages.User.Saler.Manage_Products
 
             foreach (var file in uploadedFiles)
             {
-                string filePath = Path.Combine(uploadFolder, file.FileName);
+                string originalFileName = Path.GetFileNameWithoutExtension(file.FileName).Replace(",", "");
+                string extension = Path.GetExtension(file.FileName);
+                string cleanedFileName = originalFileName + extension;
+
+                string filePath = Path.Combine(uploadFolder, cleanedFileName);
                 using (var stream = new FileStream(filePath, FileMode.Create))
                 {
                     await file.CopyToAsync(stream);
                 }
-                productImages.Add(file.FileName);
+
+                productImages.Add(cleanedFileName);
             }
-
-
 
             using (SqlConnection con = new SqlConnection(_connectionString))
             {
                 string query = @"INSERT INTO Product_Table 
-                    (saler_id, brande_id, product_name, product_description, product_price, 
-                    product_discount, product_exp_date, product_qantity, 
-                    product_category_id, product_image, product_add_date, product_features, 
-                    product_benefits, product_how_to_use, discounted_price) 
-                    VALUES 
-                    (@saler_id, @brande_id, @product_name, @product_description, @product_price, 
-                    @product_discount, @product_exp_date, @product_qantity, 
-                    @product_category_id, @product_image, @product_add_date, @product_features, 
-                    @product_benefits, @product_how_to_use, @discounted_price)";
+            (saler_id, brande_id, product_name, product_description, product_price, 
+            product_discount, product_exp_date, product_qantity, 
+            product_category_id, product_image, product_add_date, product_features, 
+            product_benefits, product_how_to_use, discounted_price) 
+            VALUES 
+            (@saler_id, @brande_id, @product_name, @product_description, @product_price, 
+            @product_discount, @product_exp_date, @product_qantity, 
+            @product_category_id, @product_image, @product_add_date, @product_features, 
+            @product_benefits, @product_how_to_use, @discounted_price)";
 
                 using (SqlCommand cmd = new SqlCommand(query, con))
                 {
@@ -312,6 +321,7 @@ namespace HealthConnect.Pages.User.Saler.Manage_Products
                     }
                 }
             }
+
             return RedirectToPage("/User/Saler/Manage_Products/Add_products");
         }
 

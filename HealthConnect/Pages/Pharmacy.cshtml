@@ -5,12 +5,38 @@
     ViewData["Title"] = "Pharmacy";
 }
 
+
+<div class="pharmacy_index_container">
+
+    <section class="pharmacy_index_container_section_2">
+        <h2>Shop By Brands</h2>
+        <p class="slide_left mdi mdi-chevron-left" id="slide_left"></p>
+        <p class="slide_right mdi mdi-chevron-right" id="slide_right"></p>
+
+        <div class="slider_container">
+
+            @foreach (var Brand in Model.PharmaceuticalBrandsList)
+            {
+                <div class="product_section">
+                    <a href="/Ecom/Filter?FilterB=@Brand.pharmaceutical_brands_id">
+                        <img src="/PharmaceuticalBrandsImage/@Brand.pharmaceutical_brands_image" alt="medicine1" />
+                    </a>
+                </div>
+            }
+
+
+        </div>
+    </section>
+
+</div>
+
+
 <div class="pharmacy_index_container">
 
     <section class="pharmacy_index_container_section_1">
         <h2>Minimum 50% discount</h2>
-        <p class="slide_left mdi mdi-chevron-left" id="slide_left"></p>
-        <p class="slide_right mdi mdi-chevron-right" id="slide_right"></p>
+        <p class="slide_left mdi mdi-chevron-left" id="slide_left2"></p>
+        <p class="slide_right mdi mdi-chevron-right" id="slide_right2"></p>
 
         <div class="slider_container">
 
@@ -58,28 +84,43 @@
 
 <script>
     document.addEventListener("DOMContentLoaded", function () {
-        const container = document.querySelector(".slider_container");
-        const leftButton = document.getElementById("slide_left");
-        const rightButton = document.getElementById("slide_right");
+        const sliders = document.querySelectorAll(".slider_container");
 
-        if (!container || !leftButton || !rightButton) return;
+        const configs = [
+            {
+                container: sliders[0],
+                leftButton: document.getElementById("slide_left"),
+                rightButton: document.getElementById("slide_right"),
+            },
+            {
+                container: sliders[1],
+                leftButton: document.getElementById("slide_left2"),
+                rightButton: document.getElementById("slide_right2"),
+            }
+        ];
 
-        function toggleButtons() {
-            leftButton.style.display = container.scrollLeft > 0 ? "block" : "none";
-            rightButton.style.display = container.scrollWidth > container.clientWidth + container.scrollLeft ? "block" : "none";
-        }
+        configs.forEach(({ container, leftButton, rightButton }) => {
+            if (!container || !leftButton || !rightButton) return;
 
-        rightButton.addEventListener("click", function () {
-            container.scrollBy({ left: 250, behavior: "smooth" });
+            function toggleButtons() {
+                leftButton.style.display = container.scrollLeft > 0 ? "block" : "none";
+                rightButton.style.display = container.scrollWidth > container.clientWidth + container.scrollLeft ? "block" : "none";
+            }
+
+            rightButton.addEventListener("click", function () {
+                container.scrollBy({ left: 250, behavior: "smooth" });
+            });
+
+            leftButton.addEventListener("click", function () {
+                container.scrollBy({ left: -250, behavior: "smooth" });
+            });
+
+            container.addEventListener("scroll", toggleButtons);
+            window.addEventListener("resize", toggleButtons);
+
+            // Initial toggle
+            toggleButtons();
         });
-
-        leftButton.addEventListener("click", function () {
-            container.scrollBy({ left: -250, behavior: "smooth" });
-        });
-
-        container.addEventListener("scroll", toggleButtons);
-        window.addEventListener("resize", toggleButtons);
-        toggleButtons();
     });
 </script>
 

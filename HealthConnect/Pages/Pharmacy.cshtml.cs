@@ -64,6 +64,11 @@ namespace HealthConnect.Pages
         [BindProperty]
         public Cart Cart { get; set; }
 
+
+        [BindProperty]
+        public Pharmaceutical_Brands Pharmaceutical_Brands { get; set; }
+        public List<Pharmaceutical_Brands> PharmaceuticalBrandsList { get; set; } = new List<Pharmaceutical_Brands>();
+
         public int CartCount { get; set; }
 
         public PharmacyModel(ILogger<IndexModel> logger, IConfiguration configuration)
@@ -86,7 +91,8 @@ namespace HealthConnect.Pages
            
             OnGetPharmacyFiftyPercentDiscountedProducts();
             OnGetPharmacyCategory();
-            OnGetPharmacyAllProducts();
+            OnGetPharmacyAllProducts(); 
+            OnGetBrandeData();
             return Page();
         }
 
@@ -236,20 +242,22 @@ namespace HealthConnect.Pages
             using (SqlConnection connection = new SqlConnection(_connectionString))
             {
                 string query = @"SELECT PT.product_id, PT.saler_id, PT.brande_id, PT.product_image, PT.product_name,
-                        PT.product_category_id, PT.product_price, PT.product_discount, PT.discounted_price, PT.product_qantity, 
-                        PT.product_description, PT.product_features, PT.product_benefits, PT.product_how_to_use,
-                        PT.product_exp_date, PT.product_add_date, PB.pharmaceutical_brands_id, PB.pharmaceutical_brands_name,
-                        UT.id, UT.first_name, UT.last_name, UT.profile_pic, UT.shop_name, UT.shop_address,
-                        MFC.medicine_finel_category_id, MFC.medicine_finel_category_name,
-                        MSC.medicine_sub_category_id, MSC.medicine_sub_category_name, 
-                        MMC.medicine_main_category_id, MMC.medicine_main_category_name
-                        FROM Product_Table PT
-                        LEFT JOIN Pharmaceutical_Brands PB ON PT.brande_id = PB.pharmaceutical_brands_id
-                        LEFT JOIN User_Table UT ON PT.saler_id = UT.id
-                        Left JOIN Medicine_Finel_Category MFC ON PT.product_category_id = MFC.medicine_finel_category_id
-                        LEFT JOIN Medicine_Sub_Category MSC ON MFC.medicine_sub_category_id = MSC.medicine_sub_category_id
-                        LEFT JOIN Medicine_Main_Category MMC ON MSC.medicine_main_category_id = MMC.medicine_main_category_id
-                        WHERE PT.product_discount >= 50";
+        PT.product_category_id, PT.product_price, PT.product_discount, PT.discounted_price, PT.product_qantity, 
+        PT.product_description, PT.product_features, PT.product_benefits, PT.product_how_to_use,
+        PT.product_exp_date, PT.product_add_date, PB.pharmaceutical_brands_id, PB.pharmaceutical_brands_name,
+        UT.id, UT.first_name, UT.last_name, UT.profile_pic, UT.shop_name, UT.shop_address,
+        MFC.medicine_finel_category_id, MFC.medicine_finel_category_name,
+        MSC.medicine_sub_category_id, MSC.medicine_sub_category_name, 
+        MMC.medicine_main_category_id, MMC.medicine_main_category_name
+        FROM Product_Table PT
+        LEFT JOIN Pharmaceutical_Brands PB ON PT.brande_id = PB.pharmaceutical_brands_id
+        LEFT JOIN User_Table UT ON PT.saler_id = UT.id
+        LEFT JOIN Medicine_Finel_Category MFC ON PT.product_category_id = MFC.medicine_finel_category_id
+        LEFT JOIN Medicine_Sub_Category MSC ON MFC.medicine_sub_category_id = MSC.medicine_sub_category_id
+        LEFT JOIN Medicine_Main_Category MMC ON MSC.medicine_main_category_id = MMC.medicine_main_category_id
+        WHERE PT.product_discount >= 50
+        ORDER BY PT.product_discount DESC";
+
                 using (SqlCommand command = new SqlCommand(query, connection))
                 {
                     connection.Open();
@@ -317,25 +325,26 @@ namespace HealthConnect.Pages
             }
 
         }
-
         private void OnGetPharmacyAllProducts()
         {
             using (SqlConnection connection = new SqlConnection(_connectionString))
             {
                 string query = @"SELECT PT.product_id, PT.saler_id, PT.brande_id, PT.product_image, PT.product_name,
-                        PT.product_category_id, PT.product_price, PT.product_discount, PT.discounted_price, PT.product_qantity, 
-                        PT.product_description, PT.product_features, PT.product_benefits, PT.product_how_to_use,
-                        PT.product_exp_date, PT.product_add_date, PB.pharmaceutical_brands_id, PB.pharmaceutical_brands_name,
-                        UT.id, UT.first_name, UT.last_name, UT.profile_pic, UT.shop_name, UT.shop_address,
-                        MFC.medicine_finel_category_id, MFC.medicine_finel_category_name,
-                        MSC.medicine_sub_category_id, MSC.medicine_sub_category_name, 
-                        MMC.medicine_main_category_id, MMC.medicine_main_category_name
-                        FROM Product_Table PT
-                        LEFT JOIN Pharmaceutical_Brands PB ON PT.brande_id = PB.pharmaceutical_brands_id
-                        LEFT JOIN User_Table UT ON PT.saler_id = UT.id
-                        Left JOIN Medicine_Finel_Category MFC ON PT.product_category_id = MFC.medicine_finel_category_id
-                        LEFT JOIN Medicine_Sub_Category MSC ON MFC.medicine_sub_category_id = MSC.medicine_sub_category_id
-                        LEFT JOIN Medicine_Main_Category MMC ON MSC.medicine_main_category_id = MMC.medicine_main_category_id";
+        PT.product_category_id, PT.product_price, PT.product_discount, PT.discounted_price, PT.product_qantity, 
+        PT.product_description, PT.product_features, PT.product_benefits, PT.product_how_to_use,
+        PT.product_exp_date, PT.product_add_date, PB.pharmaceutical_brands_id, PB.pharmaceutical_brands_name,
+        UT.id, UT.first_name, UT.last_name, UT.profile_pic, UT.shop_name, UT.shop_address,
+        MFC.medicine_finel_category_id, MFC.medicine_finel_category_name,
+        MSC.medicine_sub_category_id, MSC.medicine_sub_category_name, 
+        MMC.medicine_main_category_id, MMC.medicine_main_category_name
+        FROM Product_Table PT
+        LEFT JOIN Pharmaceutical_Brands PB ON PT.brande_id = PB.pharmaceutical_brands_id
+        LEFT JOIN User_Table UT ON PT.saler_id = UT.id
+        LEFT JOIN Medicine_Finel_Category MFC ON PT.product_category_id = MFC.medicine_finel_category_id
+        LEFT JOIN Medicine_Sub_Category MSC ON MFC.medicine_sub_category_id = MSC.medicine_sub_category_id
+        LEFT JOIN Medicine_Main_Category MMC ON MSC.medicine_main_category_id = MMC.medicine_main_category_id
+        ORDER BY NEWID()";
+
                 using (SqlCommand command = new SqlCommand(query, connection))
                 {
                     connection.Open();
@@ -402,7 +411,30 @@ namespace HealthConnect.Pages
                 }
             }
         }
-
+        private void OnGetBrandeData()
+        {
+            using (SqlConnection connection = new SqlConnection(_connectionString))
+            {
+                string query = "SELECT * FROM Pharmaceutical_Brands";
+                using (SqlCommand command = new SqlCommand(query, connection))
+                {
+                    connection.Open();
+                    using (SqlDataReader reader = command.ExecuteReader())
+                    {
+                        while (reader.Read())
+                        {
+                            Pharmaceutical_Brands = new Pharmaceutical_Brands
+                            {
+                                pharmaceutical_brands_id = reader.GetInt32(0),
+                                pharmaceutical_brands_image = reader.GetString(1),
+                                pharmaceutical_brands_name = reader.GetString(2)
+                            };
+                            PharmaceuticalBrandsList.Add(Pharmaceutical_Brands);
+                        }
+                    }
+                }
+            }
+        }
 
         public async Task<IActionResult> OnPost()
         {

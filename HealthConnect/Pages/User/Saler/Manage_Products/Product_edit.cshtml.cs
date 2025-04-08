@@ -357,9 +357,10 @@ namespace HealthConnect.Pages.User.Saler.Manage_Products
                         Directory.CreateDirectory(uploadsFolder);
                     }
 
-                    foreach (var productImage in productImages)
+                    for (int i = 0; i < Math.Min(productImages.Count, 3); i++)
                     {
-                        string fileName = productImage.FileName;
+                        var productImage = productImages[i];
+                        string fileName = productImage.FileName.Replace(",", ""); // Remove commas
                         string filePath = Path.Combine(uploadsFolder, fileName);
 
                         using (var fileStream = new FileStream(filePath, FileMode.Create))
@@ -370,30 +371,28 @@ namespace HealthConnect.Pages.User.Saler.Manage_Products
                         imageFileNames.Add(fileName);
                     }
 
-                    // Save only new images, discard old ones
-                    newImages = string.Join(",", imageFileNames);
+                    newImages = string.Join(",", imageFileNames); // Join with commas
                 }
                 else
                 {
-                    // Keep old images if no new images are uploaded
                     newImages = oldImages;
                 }
 
                 string query = @"UPDATE Product_Table SET 
-                brande_id = @brande_id, 
-                product_image = @product_image, 
-                product_name = @product_name, 
-                product_category_id = @product_category_id, 
-                product_price = @product_price, 
-                product_discount = @product_discount, 
-                product_qantity = @product_qantity, 
-                product_description = @product_description, 
-                product_features = @product_features, 
-                product_benefits = @product_benefits, 
-                product_how_to_use = @product_how_to_use, 
-                product_exp_date = @product_exp_date,
-                discounted_price = @discounted_price
-                WHERE product_id = @product_id";
+        brande_id = @brande_id, 
+        product_image = @product_image, 
+        product_name = @product_name, 
+        product_category_id = @product_category_id, 
+        product_price = @product_price, 
+        product_discount = @product_discount, 
+        product_qantity = @product_qantity, 
+        product_description = @product_description, 
+        product_features = @product_features, 
+        product_benefits = @product_benefits, 
+        product_how_to_use = @product_how_to_use, 
+        product_exp_date = @product_exp_date,
+        discounted_price = @discounted_price
+        WHERE product_id = @product_id";
 
                 using (SqlCommand command = new SqlCommand(query, connection))
                 {
