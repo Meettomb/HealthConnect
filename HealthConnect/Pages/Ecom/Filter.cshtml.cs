@@ -78,13 +78,13 @@ namespace HealthConnect.Pages.Ecom
         {
             string roleInSession = HttpContext.Session.GetString("UserRole");
             UserId = HttpContext.Session.GetInt32("Id");
-            if (UserId == null)
+
+            if (UserId.HasValue)
             {
-                return RedirectToPage("/User/Sign_in");
+                OnCartGet(UserId.Value);
             }
             OnGetLoginUserDetail();
             OnGetPharmacyCategory();
-            OnCartGet(UserId.Value);
             OnGetPharmacyAllProducts();
 
 

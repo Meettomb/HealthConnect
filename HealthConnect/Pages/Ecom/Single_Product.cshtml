@@ -258,6 +258,208 @@
 
 
 
+<div class="pharmacy_index_container">
+
+    <section class="pharmacy_index_container_section_1">
+        <h2>Recommended Products</h2>
+        <p class="slide_left mdi mdi-chevron-left" id="slide_left1"></p>
+        <p class="slide_right mdi mdi-chevron-right" id="slide_right1"></p>
+
+        <div class="slider_container">
+
+            @foreach (var recommendedproducts in Model.RecommendedProducts)
+            {
+                <div class="product_section">
+                    <a href="/Ecom/Single_Product?product_id=@recommendedproducts.product_id">
+
+                        <img src="/ProductImage/@recommendedproducts.product_image.Split(',')[0]" alt="medicine1" />
+
+                        <div class="priceing_div">
+                            <p class="product_name">@recommendedproducts.product_name</p>
+                            @if (recommendedproducts.product_discount != null && recommendedproducts.product_discount > 0)
+                            {
+                                <p class="price">
+                                    <del>&#8377;@recommendedproducts.product_price</del>
+                                    <span> &#8377;@recommendedproducts.discounted_price </span>
+                                </p>
+                            }
+                            else
+                            {
+                                <p class="price">
+                                    <span> &#8377;@recommendedproducts.product_price</span>
+                                </p>
+                            }
+
+                        </div>
+                    </a>
+
+                    <form id="cartForm" method="post">
+                        <input type="hidden" name="user_id" id="user_id" value="@Model.UserId" />
+                        <input type="hidden" name="product_id" id="product_id" value="@recommendedproducts.product_id" />
+                        <input type="hidden" name="quantity" id="cart_quantity" value="1" readonly />
+                        <button type="submit" name="action" value="AddToCart" id="addToCart">Add</button>
+                    </form>
+                </div>
+            }
+
+
+        </div>
+    </section>
+
+</div>
+
+@if (Model.UserId != null)
+{
+    <div class="pharmacy_index_container">
+
+        <section class="pharmacy_index_container_section_1">
+            <h2>Hot Seller In Your City</h2>
+            <p class="slide_left mdi mdi-chevron-left" id="slide_left2"></p>
+            <p class="slide_right mdi mdi-chevron-right" id="slide_right2"></p>
+
+            <div class="slider_container">
+
+                @foreach (var cityhotseller in Model.CityHotSeller)
+                {
+                    <div class="product_section">
+                        <a href="/Ecom/Single_Product?product_id=@cityhotseller.product_id">
+
+                            <img src="/ProductImage/@cityhotseller.product_image.Split(',')[0]" alt="medicine1" />
+
+                            <div class="priceing_div">
+                                <p class="product_name">@cityhotseller.product_name</p>
+                                @if (cityhotseller.product_discount != null && cityhotseller.product_discount > 0)
+                                {
+                                    <p class="price">
+                                        <del>&#8377;@cityhotseller.product_price</del>
+                                        <span> &#8377;@cityhotseller.discounted_price </span>
+                                    </p>
+                                }
+                                else
+                                {
+                                    <p class="price">
+                                        <span> &#8377;@cityhotseller.product_price</span>
+                                    </p>
+                                }
+
+                            </div>
+                        </a>
+
+                        <form id="cartForm" method="post">
+                            <input type="hidden" name="user_id" id="user_id" value="@Model.UserId" />
+                            <input type="hidden" name="product_id" id="product_id" value="@cityhotseller.product_id" />
+                            <input type="hidden" name="quantity" id="cart_quantity" value="1" readonly />
+                            <button type="submit" name="action" value="AddToCart" id="addToCart">Add</button>
+                        </form>
+                    </div>
+                }
+
+
+            </div>
+        </section>
+
+    </div>
+}
+
+else
+{
+    <div class="pharmacy_index_container">
+
+        <section class="pharmacy_index_container_section_1">
+            <h2>Hot Seller</h2>
+            <p class="slide_left mdi mdi-chevron-left" id="slide_left2"></p>
+            <p class="slide_right mdi mdi-chevron-right" id="slide_right2"></p>
+
+            <div class="slider_container">
+
+                @foreach (var hotseller in Model.HotSeller)
+                {
+                    <div class="product_section">
+                        <a href="/Ecom/Single_Product?product_id=@hotseller.product_id">
+
+                            <img src="/ProductImage/@hotseller.product_image.Split(',')[0]" alt="medicine1" />
+
+                            <div class="priceing_div">
+                                <p class="product_name">@hotseller.product_name</p>
+                                @if (hotseller.product_discount != null && hotseller.product_discount > 0)
+                                {
+                                    <p class="price">
+                                        <del>&#8377;@hotseller.product_price</del>
+                                        <span> &#8377;@hotseller.discounted_price </span>
+                                    </p>
+                                }
+                                else
+                                {
+                                    <p class="price">
+                                        <span> &#8377;@hotseller.product_price</span>
+                                    </p>
+                                }
+
+                            </div>
+                        </a>
+
+                        <form id="cartForm" method="post">
+                            <input type="hidden" name="user_id" id="user_id" value="@Model.UserId" />
+                            <input type="hidden" name="product_id" id="product_id" value="@hotseller.product_id" /> 
+                            <input type="hidden" name="quantity" id="cart_quantity" value="1" readonly />
+                            <button type="submit" name="action" value="AddToCart" id="addToCart">Add</button>
+                        </form>
+                    </div>
+                }
+
+
+            </div>
+        </section>
+
+    </div>
+}
+
+
+
+
+
+
+<script>
+    document.addEventListener("DOMContentLoaded", function () {
+        const sliders = document.querySelectorAll(".slider_container");
+
+        const configs = [
+            {
+                container: sliders[0],
+                leftButton: document.getElementById("slide_left1"),
+                rightButton: document.getElementById("slide_right1"),
+            },
+            {
+                container: sliders[1],
+                leftButton: document.getElementById("slide_left2"),
+                rightButton: document.getElementById("slide_right2"),
+            }
+        ];
+
+        configs.forEach(({ container, leftButton, rightButton }) => {
+            if (!container || !leftButton || !rightButton) return;
+
+            function toggleButtons() {
+                leftButton.style.display = container.scrollLeft > 0 ? "block" : "none";
+                rightButton.style.display = container.scrollWidth > container.clientWidth + container.scrollLeft ? "block" : "none";
+            }
+
+            rightButton.addEventListener("click", function () {
+                container.scrollBy({ left: 250, behavior: "smooth" });
+            });
+
+            leftButton.addEventListener("click", function () {
+                container.scrollBy({ left: -250, behavior: "smooth" });
+            });
+
+            container.addEventListener("scroll", toggleButtons);
+            window.addEventListener("resize", toggleButtons);
+
+            toggleButtons();
+        });
+    });
+</script>
+
 <script>
        document.getElementById("UPI").addEventListener("click", function () {
            var methode = document.getElementById("methode-display");

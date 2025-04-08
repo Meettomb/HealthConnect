@@ -20,7 +20,7 @@
                             @{
                                 var firstImage = !string.IsNullOrEmpty(Filter.product_image)
                                 ? Filter.product_image.Split(',')[0]
-                                : "default.png"; // fallback image
+                                : "default.png";
                             }
                             <img src="/ProductImage/@firstImage" alt="medicine1" />
 
