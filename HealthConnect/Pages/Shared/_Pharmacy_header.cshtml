@@ -72,7 +72,7 @@
 
             <div class="header_search_section">
                 <i class="mdi mdi-magnify"></i>
-                <input type="search" name="myInput" placeholder="Search Medicines" />
+                <input type="search" name="myInput" class="myInput" placeholder="Search Medicines" autocomplete="off" />
             </div>
 
             <div class="pharmacy_header_right_side">
@@ -197,7 +197,7 @@
 
         <div class="extar_search_area">
             <i class="mdi mdi-magnify"></i>
-            <input type="search" name="myInput" placeholder="Search Medicines" />
+            <input type="search" name="myInput" class="myInput" placeholder="Search Medicines" autocomplete="off" />
         </div>
 
         <div class="cart_icon">
@@ -239,14 +239,6 @@
                 </div>
             </section>
 
-            <section class="footer_section">
-                <h1>Product Category</h1>
-                <div class="footer_section_links">
-                    <a href="">View all Category</a>
-                    <a href="">View all Brands</a>
-                    <a href=""></a>
-                </div>
-            </section>
 
             <section class="footer_section">
                 <div class="footer_logo">
@@ -265,9 +257,107 @@
 
 
 
-    <script src="/js/Script.js"></script>
+    <!-- PopUp -->
+    <div id="myPopup" class="popup_outer_container">
+        <p id="closePopup">&times;</p>
+        <h1>Search your product hear</h1>
+        <div class="popup_container">
+            <section>
+                <div class="popup_serch_bar">
+                    <input type="text" name="name" id="myInput" placeholder="Search your product hear" autocomplete="off"/>
+                </div>
 
+                <div class="prduct_container">
+
+                    @foreach (var allproductList in Model.AllProductList)
+                    {
+                        <div class="product_section data">
+                            <a href="/Ecom/Single_Product?product_id=@allproductList.product_id">
+
+                                <img src="/ProductImage/@allproductList.product_image.Split(',')[0]" alt="medicine1" />
+
+                                <div class="priceing_div">
+                                    <p class="product_name">@allproductList.product_name</p>
+                                    @if (allproductList.product_discount != null && allproductList.product_discount > 0)
+                                    {
+                                        <p class="price">
+                                            <del>&#8377;@allproductList.product_price</del>
+                                            <span> &#8377;@allproductList.discounted_price </span>
+                                        </p>
+                                    }
+                                    else
+                                    {
+                                        <p class="price">
+                                            <span> &#8377;@allproductList.product_price</span>
+                                        </p>
+                                    }
+
+                                </div>
+                            </a>
+                        </div>
+                    }
+                </div>
+            </section>
+        </div>
+    </div>
+
+
+
+
+
+    <script src="/js/Script.js"></script>
+    <script src="/js/jQuery.js"></script>
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script>
+        const inputs = document.querySelectorAll(".myInput");
+        const popup = document.getElementById("myPopup");
+        const closeBtn = document.getElementById("closePopup");
+
+        inputs.forEach(input => {
+            input.addEventListener("click", function () {
+                popup.style.display = "block";
+                document.documentElement.style.overflow = "hidden";
+                document.body.style.overflow = "hidden";             
+            });
+        });
+
+        closeBtn.addEventListener("click", function () {
+            popup.style.display = "none";
+            document.documentElement.style.overflow = "auto";
+            document.body.style.overflow = "auto";
+        });
+    </script>
+
+    <script>
+        $(document).ready(function () {
+            $("#myInput").on("keyup", function () {
+                var value = $(this).val().toLowerCase();
+                $(".data").filter(function () {
+                    $(this).toggle($(this).text().toLowerCase().indexOf(value) > -1);
+                });
+            });
+        });
+
+         document.getElementById('myInput').addEventListener('keydown', function(event) {
+          if (event.key === 'Enter') {
+            event.preventDefault();
+          }
+        });
+    </script>
+
+
+    <!--
+        <script>
+             const inputs = document.querySelectorAll(".myInput");
+
+             inputs.forEach(input => {
+                 input.addEventListener("click", function () {
+                     window.location.href = "/Ecom/Search_Product";
+                 });
+             });
+         </script>
+     -->
+
 
     <script>
         $(document).ready(function() {
@@ -282,8 +372,6 @@
             });
         });
     </script>
-
-
 
     <script>
         document.addEventListener("DOMContentLoaded", function () {

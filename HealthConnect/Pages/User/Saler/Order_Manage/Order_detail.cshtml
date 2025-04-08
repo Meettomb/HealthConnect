@@ -13,28 +13,35 @@
         <h3 class="mb-4">Order Detail</h3>
 
         <div class="d-flex gap-2">
-            @if (Model.Order_Table.order_status == "Pending")
+            @if (Model.Order_Table != null &&
+            (Model.Order_Table.order_status == "Pending" || Model.Order_Table.order_status == "Shipped"))
             {
                 <form method="post" class="d-flex gap-1">
                     <input type="hidden" name="order_id" value="@Model.Order_Table.order_id" />
                     <select name="order_status" class="form-control">
-                        <option value="@Model.Order_Table.order_status">@Model.Order_Table.order_status</option>
+                        <option disabled selected>@Model.Order_Table.order_status</option>
+                        @if (Model.Order_Table.order_status == "Pending")
+                        {
+                            <option value="Shipped">Shipped</option>
+                        }
                         <option value="Delivered">Delivered</option>
+                        <option value="Cancel">Cancel</option>
                     </select>
                     <button type="submit" name="submit" class="btn btn-success">Update</button>
                 </form>
             }
-            else if (Model.Order_Table != null && Model.Order_Table.order_status == "Delivered")
+
+            else if (Model.Order_Table?.order_status == "Delivered")
             {
                 <h4 class="text-success">Delivered</h4>
             }
-            else if (Model.Order_Table != null && Model.Order_Table.order_status == "Cancel")
+            else if (Model.Order_Table?.order_status == "Cancel")
             {
                 <h4 class="text-danger">Cancel</h4>
             }
 
             <a href="javascript:void(0);" onclick="history.back()" class="btn btn-secondary">Back to List</a>
-           
+
         </div>
         <div class="table-responsive">
             <table class="table">
@@ -97,7 +104,7 @@
                         <th>Product Quantity</th>
                         <td>@Model.Order_Table.quantity</td>
                     </tr>
-                    
+
                     <tr>
                         <th>Paymant methode</th>
                         <td>@Model.Order_Table.paymant_methode</td>

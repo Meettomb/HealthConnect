@@ -227,7 +227,7 @@ namespace HealthConnect.Pages.User.Saler.Order_Manage
                 using (SqlCommand cmd = new SqlCommand(query, connection))
                 {
                     cmd.Parameters.AddWithValue("@order_id", Order_Table.order_id);
-                    cmd.Parameters.AddWithValue("@order_status", "Delivered");
+                    cmd.Parameters.AddWithValue("@order_status", Order_Table.order_status);
                     connection.Open();
                     cmd.ExecuteNonQuery();
                 }
