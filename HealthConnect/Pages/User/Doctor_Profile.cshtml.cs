@@ -66,6 +66,13 @@ namespace HealthConnect.Pages.User
 
         public List<Doctor_Feedback> Doctor_Report = new List<Doctor_Feedback>();
 
+        [BindProperty]
+        public Star_Rating starRating { get; set; } = new Star_Rating();
+
+        public List<Star_Rating> Star_RatingList = new List<Star_Rating>();
+        public double AverageRating { get; set; }
+
+
 
         public IActionResult OnGet()
         {
@@ -138,9 +145,12 @@ namespace HealthConnect.Pages.User
 
             if (doctorId.HasValue)
             {
-                GetDoctorsList(doctorId.Value);
+                GetDoctorsList(doctorId.Value);       
+                OnGetStarRating(doctorId.Value);
+                OnGetGlobalStarRating(doctorId.Value); 
+                
             }
-                GetDoctorFeedback();
+            GetDoctorFeedback();
 
             return Page();
         }
@@ -173,7 +183,6 @@ namespace HealthConnect.Pages.User
                 }
             }
         }
-       
         private void GetDoctorsList(int doctor_id)
         {
             using (SqlConnection connection = new SqlConnection(_connectionString))
@@ -273,8 +282,6 @@ namespace HealthConnect.Pages.User
                 }
             }
         }
-
-
         private void GetDoctorFeedback()
         {
             int? doctorId = null;
@@ -335,6 +342,51 @@ namespace HealthConnect.Pages.User
                 }
             }
         }
+        public int? ExistingRating { get; set; }
+
+        public void OnGetStarRating(int doctor_id)
+        {
+            UserId = HttpContext.Session.GetInt32("Id");
+
+            if (!UserId.HasValue) return;
+
+            using (SqlConnection connection = new SqlConnection(_connectionString))
+            {
+                connection.Open();
+                string query = "SELECT rating FROM Star_Rating WHERE user_id = @UserId AND doctor_id = @DoctorId";
+                using (SqlCommand cmd = new SqlCommand(query, connection))
+                {
+                    cmd.Parameters.AddWithValue("@UserId", UserId.Value);
+                    cmd.Parameters.AddWithValue("@DoctorId", doctor_id);
+
+                    object result = cmd.ExecuteScalar();
+                    if (result != null && int.TryParse(result.ToString(), out int rating))
+                    {
+                        ExistingRating = rating;
+                    }
+                }
+            }
+        }
+
+
+        public void OnGetGlobalStarRating(int doctor_id)
+        {
+            using (SqlConnection connection = new SqlConnection(_connectionString))
+            {
+                connection.Open();
+                string query = "SELECT AVG(CAST(rating AS FLOAT)) FROM Star_Rating WHERE doctor_id = @DoctorId";
+                using (SqlCommand cmd = new SqlCommand(query, connection))
+                {
+                    cmd.Parameters.AddWithValue("@DoctorId", doctor_id);
+
+                    object result = cmd.ExecuteScalar();
+                    if (result != DBNull.Value && result != null)
+                    {
+                        AverageRating = Math.Round(Convert.ToDouble(result), 1);
+                    }
+                }
+            }
+        }
 
 
 
@@ -350,6 +402,10 @@ namespace HealthConnect.Pages.User
             else if (action == "report")
             {
                 return await OnPostGiveReport();
+            }
+            else if (action == "Rating")
+            {
+                return OnPostGiveStarRating();
             }
             return Page();
         }
@@ -495,6 +551,34 @@ namespace HealthConnect.Pages.User
 
         }
 
+        public IActionResult OnPostGiveStarRating()
+        {
+            string userId = Request.Form["user_id"];
+            string doctorId = Request.Form["doctor_id"];
+            string rating = Request.Form["rating"];
+
+            if (string.IsNullOrEmpty(userId))
+            {
+                TempData["ErrorMessage"] = "You must be signed in to rate a doctor.";
+                return Redirect("/User/Sign_in");
+            }
+
+            using (SqlConnection conn = new SqlConnection(_connectionString))
+            {
+                conn.Open();
+                string query = "INSERT INTO Star_Rating (user_id, doctor_id, rating) VALUES (@UserId, @DoctorId, @Rating)";
+                using (SqlCommand cmd = new SqlCommand(query, conn))
+                {
+                    cmd.Parameters.AddWithValue("@UserId", userId);
+                    cmd.Parameters.AddWithValue("@DoctorId", doctorId);
+                    cmd.Parameters.AddWithValue("@Rating", rating);
+                    cmd.ExecuteNonQuery();
+                }
+            }
+
+            TempData["SuccessMessage"] = "Rating submitted successfully!";
+            return Redirect($"/User/Doctor_Profile?doctor_id={doctorId}");
+        }
 
 
     }

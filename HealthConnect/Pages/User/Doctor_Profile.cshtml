@@ -28,8 +28,9 @@
                     <div class="section_1_right">
                         <div class="total_rating_review">
                             <p>
-                                <i class="mdi mdi-star"></i> <span>5 Star</span>
+                                <i class="mdi mdi-star"></i> <span>@Model.AverageRating Star</span>
                             </p>
+
                             <p>
                                 <i class="mdi mdi-message-text"></i> <span>20 Feedback</span>
                             </p>
@@ -45,6 +46,31 @@
                         </div>
                         <p class="give_feedback">Give feedback</p>
                         <p class="give_report">Give report</p>
+
+
+
+                        <form method="post">
+                            <input type="hidden" name="user_id" value="@Model.UserId" />
+                            <input type="hidden" name="doctor_id" value="@data.id" />
+                            <input type="hidden" id="ratingInput" name="rating" />
+
+                            <div class="star-rating @(Model.ExistingRating.HasValue ? "readonly" : "")">
+                                @for (int i = 1; i <= 5; i++)
+                                {
+                                    var isFilled = Model.ExistingRating.HasValue && i <= Model.ExistingRating.Value;
+                                    <span class="star @(isFilled ? "filled" : "")" data-value="@i">&#9733;</span>
+                                }
+                            </div>
+
+                            @if (!Model.ExistingRating.HasValue)
+                            {
+                                <button type="submit" name="action" class="submitrating" value="Rating">Submit Rating</button>
+                            }
+
+                        </form>
+
+                      
+
                     </div>
 
                     <div class="section_2_right">
@@ -214,7 +240,37 @@
             </div>
         </section>
 
-   
+
+
+
+
+
+
+
+
+
+
+
+        <script>
+            document.addEventListener("DOMContentLoaded", function () {
+                const stars = document.querySelectorAll(".star-rating:not(.readonly) .star");
+                const ratingInput = document.getElementById("ratingInput");
+
+                stars.forEach(star => {
+                    star.addEventListener("click", function () {
+                        const rating = this.getAttribute("data-value");
+                        ratingInput.value = rating;
+
+                        // Highlight selected stars
+                        stars.forEach(s => {
+                            s.classList.toggle("filled", s.getAttribute("data-value") <= rating);
+                        });
+                    });
+                });
+            });
+        </script>
+
+
 
         <script>
             function validateFeedback() {
