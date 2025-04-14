@@ -1,4 +1,4 @@
-﻿using HealthConnect.Models;
+using HealthConnect.Models;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.Data.SqlClient;
@@ -6,7 +6,7 @@ using static HealthConnect.Pages.IndexModel;
 
 namespace HealthConnect.Pages
 {
-    public class PrivacyModel : PageModel
+    public class Return_And_RefundModel : PageModel
     {
         private readonly ILogger<IndexModel> _logger;
         private readonly IConfiguration _configuration;
@@ -47,7 +47,7 @@ namespace HealthConnect.Pages
         public int TotalSpecialitiesCount { get; set; }
         public int TotalUsersCount { get; set; }
         public int TotalDoctorsCount { get; set; }
-        public PrivacyModel(ILogger<IndexModel> logger, IConfiguration configuration)
+        public Return_And_RefundModel(ILogger<IndexModel> logger, IConfiguration configuration)
         {
             _logger = logger;
             _configuration = configuration;
@@ -202,5 +202,4 @@ namespace HealthConnect.Pages
         }
 
     }
-
 }

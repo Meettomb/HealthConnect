@@ -106,7 +106,7 @@ namespace HealthConnect.Pages.OTPVerify
             {
                 SuccessMessage = "Email verify Completed";
 
-                return RedirectToPage("/User/Pharmacist_sign_up");
+                return RedirectToPage("/User/Doctor_sign_up");
             }
 
             else

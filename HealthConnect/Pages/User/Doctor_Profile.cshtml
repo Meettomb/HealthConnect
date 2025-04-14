@@ -32,7 +32,7 @@
                             </p>
 
                             <p>
-                                <i class="mdi mdi-message-text"></i> <span>20 Feedback</span>
+                                <i class="mdi mdi-message-text"></i> <span>@Model.TotalFeedbackCount Feedback</span>
                             </p>
                         </div>
                     </div>
@@ -44,30 +44,39 @@
                         <div class="licence_photo">
                             <img src="/documant/@data.doctore_medical_license_photo" alt="Licence photo" />
                         </div>
-                        <p class="give_feedback">Give feedback</p>
-                        <p class="give_report">Give report</p>
+
+                        @if(Model.UserId == data.id)
+                        {
+                            <p>You are viewing your own profile.</p>
+                        }
+                        else{
+                            <p class="give_feedback">Give feedback</p>
+                            <p class="give_report">Give report</p>
 
 
 
-                        <form method="post">
-                            <input type="hidden" name="user_id" value="@Model.UserId" />
-                            <input type="hidden" name="doctor_id" value="@data.id" />
-                            <input type="hidden" id="ratingInput" name="rating" />
+                            <form method="post">
+                                <input type="hidden" name="user_id" value="@Model.UserId" />
+                                <input type="hidden" name="doctor_id" value="@data.id" />
+                                <input type="hidden" id="ratingInput" name="rating" />
 
-                            <div class="star-rating @(Model.ExistingRating.HasValue ? "readonly" : "")">
-                                @for (int i = 1; i <= 5; i++)
+                                <div class="star-rating @(Model.ExistingRating.HasValue ? "readonly" : "")">
+                                    @for (int i = 1; i <= 5; i++)
+                                    {
+                                        var isFilled = Model.ExistingRating.HasValue && i <= Model.ExistingRating.Value;
+                                        <span class="star @(isFilled ? "filled" : "")" data-value="@i">&#9733;</span>
+                                    }
+                                </div>
+
+                                @if (!Model.ExistingRating.HasValue)
                                 {
-                                    var isFilled = Model.ExistingRating.HasValue && i <= Model.ExistingRating.Value;
-                                    <span class="star @(isFilled ? "filled" : "")" data-value="@i">&#9733;</span>
+                                    <button type="submit" name="action" class="submitrating" value="Rating">Submit Rating</button>
                                 }
-                            </div>
 
-                            @if (!Model.ExistingRating.HasValue)
-                            {
-                                <button type="submit" name="action" class="submitrating" value="Rating">Submit Rating</button>
-                            }
+                            </form>
+                        }
 
-                        </form>
+                     
 
                       
 
@@ -142,6 +151,11 @@
                             <tr>
                                 <th>Working dayes</th>
                                 <td>@string.Join(", ", data.weekly_work_days)</td>
+                            </tr>
+                            
+                            <tr>
+                                <th>Working time</th>
+                                <td>@data.work_start_time - @data.work_end_time</td>
                             </tr>
 
                         </table>

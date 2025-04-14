@@ -44,6 +44,10 @@ namespace HealthConnect.Pages.User
         public string CurrencyCode { get; set; }
         public string ErrorMessage { get; set; }
         public string SuccessMessage { get; set; }
+        public double AverageRating { get; set; }
+        public int? ExistingRating { get; set; }
+        public int TotalFeedbackCount { get; set; }
+
 
 
         [BindProperty]
@@ -56,6 +60,7 @@ namespace HealthConnect.Pages.User
 
         public List<Doctor_Specialitis> doctorSpecialitiesList = new List<Doctor_Specialitis>();
 
+        public List<Doctor_Feedback> Doctor_Feedbacks = new List<Doctor_Feedback>();
 
         [BindProperty] public Appointments Appointments { get; set; }
 
@@ -141,7 +146,8 @@ namespace HealthConnect.Pages.User
                 }
             }
 
-            GetDoctorsList("Doctor");
+            GetDoctorsList("Doctor"); 
+           
 
             return Page();
         }
@@ -151,38 +157,36 @@ namespace HealthConnect.Pages.User
             using (SqlConnection connection = new SqlConnection(_connectionString))
             {
                 string query = @"
-    SELECT u.id, u.first_name, u.last_name, u.email, u.mobil_no, 
-        u.dob, u.House_number_and_Street_name, u.country, u.city, 
-        u.state, u.pincode, u.gender, u.role, u.password, 
-        u.profile_pic, u.doctore_medical_license_photo, u.medical_registration_no, 
-        u.state_medical_council, u.year_of_registration, u.doctore_experience, 
-        u.hospital_or_clinic, u.doctor_qualifications, 
-        t.type_of_doctor AS doctor_type, -- Fetching doctor type name
-        u.languages_spoken, u.clinic_or_hospital_address, u.on_site_consultation_fee, 
-        u.doctor_profile_complete, u.account_create_date, u.block, u.isactive, 
-        u.mobail_verifie, u.auth_token, u.medicine_type, 
-        u.currency_code, u.video_call_consultation_fee, 
-        STRING_AGG(ds.doctor_specialitis, ', ') AS doctor_specialitis_list, 
-        u.work_start_time, u.work_end_time, u.weekly_work_days, 
-        u.max_time_per_appointments, u.break_between_two_appointments
-    FROM User_Table u
-    LEFT JOIN Types_of_Doctor t ON u.doctor_type = t.doctor_type_id -- Joining with Types_of_Doctor table
-    LEFT JOIN Doctor_Specialitis ds 
-        ON ds.doctor_specialitis_id IN (SELECT value FROM STRING_SPLIT(u.doctor_specialitis, ','))
-    WHERE u.role = @Role AND u.doctor_profile_complete = 1 AND u.isactive = 1
-    GROUP BY u.id, u.first_name, u.last_name, u.email, u.mobil_no, 
-        u.dob, u.House_number_and_Street_name, u.country, u.city, 
-        u.state, u.pincode, u.gender, u.role, u.password, 
-        u.profile_pic, u.doctore_medical_license_photo, u.medical_registration_no, 
-        u.state_medical_council, u.year_of_registration, u.doctore_experience, 
-        u.hospital_or_clinic, u.doctor_qualifications, t.type_of_doctor, 
-        u.languages_spoken, u.clinic_or_hospital_address, u.on_site_consultation_fee, 
-        u.doctor_profile_complete, u.account_create_date, u.block, u.isactive, 
-        u.mobail_verifie, u.auth_token, u.medicine_type, 
-        u.currency_code, u.video_call_consultation_fee, u.work_start_time, u.work_end_time, u.weekly_work_days, 
-        u.max_time_per_appointments, u.break_between_two_appointments";
-
-
+SELECT u.id, u.first_name, u.last_name, u.email, u.mobil_no, 
+    u.dob, u.House_number_and_Street_name, u.country, u.city, 
+    u.state, u.pincode, u.gender, u.role, u.password, 
+    u.profile_pic, u.doctore_medical_license_photo, u.medical_registration_no, 
+    u.state_medical_council, u.year_of_registration, u.doctore_experience, 
+    u.hospital_or_clinic, u.doctor_qualifications, 
+    t.type_of_doctor AS doctor_type, 
+    u.languages_spoken, u.clinic_or_hospital_address, u.on_site_consultation_fee, 
+    u.doctor_profile_complete, u.account_create_date, u.block, u.isactive, 
+    u.mobail_verifie, u.auth_token, u.medicine_type, 
+    u.currency_code, u.video_call_consultation_fee, 
+    STRING_AGG(ds.doctor_specialitis, ', ') AS doctor_specialitis_list, 
+    u.work_start_time, u.work_end_time, u.weekly_work_days, 
+    u.max_time_per_appointments, u.break_between_two_appointments
+FROM User_Table u
+LEFT JOIN Types_of_Doctor t ON u.doctor_type = t.doctor_type_id 
+LEFT JOIN Doctor_Specialitis ds 
+    ON ds.doctor_specialitis_id IN (SELECT value FROM STRING_SPLIT(u.doctor_specialitis, ','))
+WHERE u.role = @Role AND u.doctor_profile_complete = 1 AND u.isactive = 1
+GROUP BY u.id, u.first_name, u.last_name, u.email, u.mobil_no, 
+    u.dob, u.House_number_and_Street_name, u.country, u.city, 
+    u.state, u.pincode, u.gender, u.role, u.password, 
+    u.profile_pic, u.doctore_medical_license_photo, u.medical_registration_no, 
+    u.state_medical_council, u.year_of_registration, u.doctore_experience, 
+    u.hospital_or_clinic, u.doctor_qualifications, t.type_of_doctor, 
+    u.languages_spoken, u.clinic_or_hospital_address, u.on_site_consultation_fee, 
+    u.doctor_profile_complete, u.account_create_date, u.block, u.isactive, 
+    u.mobail_verifie, u.auth_token, u.medicine_type, 
+    u.currency_code, u.video_call_consultation_fee, u.work_start_time, u.work_end_time, u.weekly_work_days, 
+    u.max_time_per_appointments, u.break_between_two_appointments";
 
                 using (SqlCommand cmd = new SqlCommand(query, connection))
                 {
@@ -222,7 +226,6 @@ namespace HealthConnect.Pages.User
                                 hospital_or_clinic = reader.IsDBNull(20) ? null : reader.GetString(20),
                                 doctor_qualifications = reader.IsDBNull(21) ? null : reader.GetString(21),
                                 doctor_type = reader.IsDBNull(22) ? null : reader.GetString(22),
-                                //doctor_type = reader.IsDBNull(22) ? null : reader.IsDBNull(22) ? 22 : int.Parse(reader.GetString(22)),
                                 languages_spoken = reader.IsDBNull(23) ? null : reader.GetString(23),
                                 clinic_or_hospital_address = reader.IsDBNull(24) ? null : reader.GetString(24),
                                 on_site_consultation_fee = reader.IsDBNull(25) ? null : reader.GetString(25),
@@ -241,15 +244,40 @@ namespace HealthConnect.Pages.User
                                 weekly_work_days = reader.IsDBNull(38) ? new List<string>() : reader.GetString(38).Split(',').ToList(),
                                 max_time_per_appointments = reader.IsDBNull(39) ? null : reader.GetString(39),
                                 break_between_two_appointments = reader.IsDBNull(40) ? null : reader.GetString(40)
-
                             };
+
+                            using (SqlConnection feedbackConnection = new SqlConnection(_connectionString))
+                            {
+                                feedbackConnection.Open();
+
+                                string feedbackQuery = "SELECT COUNT(*) FROM Doctor_Feedback WHERE doctor_id = @DoctorId";
+                                using (SqlCommand feedbackCmd = new SqlCommand(feedbackQuery, feedbackConnection))
+                                {
+                                    feedbackCmd.Parameters.AddWithValue("@DoctorId", userData.id);
+
+                                    object feedbackResult = feedbackCmd.ExecuteScalar();
+                                    userData.TotalFeedbackCount = (feedbackResult != DBNull.Value) ? Convert.ToInt32(feedbackResult) : 0;
+                                }
+
+                                string ratingQuery = "SELECT AVG(CAST(rating AS FLOAT)) FROM Star_Rating WHERE doctor_id = @DoctorId";
+                                using (SqlCommand ratingCmd = new SqlCommand(ratingQuery, feedbackConnection))
+                                {
+                                    ratingCmd.Parameters.AddWithValue("@DoctorId", userData.id);
+
+                                    object ratingResult = ratingCmd.ExecuteScalar();
+                                    if (ratingResult != DBNull.Value && ratingResult != null)
+                                    {
+                                        userData.AverageRating = Math.Round(Convert.ToDouble(ratingResult), 1);
+                                    }
+                                }
+                            }
+
                             User_list.Add(userData);
                         }
                     }
                 }
             }
         }
-
 
 
 
@@ -295,8 +323,8 @@ namespace HealthConnect.Pages.User
                     }
                 }
                 string insertQuery = @"
-            INSERT INTO Appointments (user_id, doctor_id, appointment_type, time_slot, appointment_date, appointment_approve, book_date_time, booking_user_role, problem) 
-            VALUES (@UserId, @DoctorId, @AppointmentType, @TimeSlot, @AppointmentDate, @AppointmentApprove, @book_date_time, @booking_user_role, @problem)";
+            INSERT INTO Appointments (user_id, doctor_id, appointment_type, time_slot, appointment_date, appointment_approve, book_date_time, booking_user_role, problem, appointment_cancel) 
+            VALUES (@UserId, @DoctorId, @AppointmentType, @TimeSlot, @AppointmentDate, @AppointmentApprove, @book_date_time, @booking_user_role, @problem, @appointment_cancel)";
 
                 using (SqlCommand command = new SqlCommand(insertQuery, connection))
                 {
@@ -305,10 +333,11 @@ namespace HealthConnect.Pages.User
                     command.Parameters.AddWithValue("@AppointmentType", Appointments.appointment_type);
                     command.Parameters.AddWithValue("@TimeSlot", Appointments.time_slot);
                     command.Parameters.AddWithValue("@AppointmentDate", Appointments.appointment_date);
-                    command.Parameters.AddWithValue("@AppointmentApprove", true);
+                    command.Parameters.AddWithValue("@AppointmentApprove", false);
                     command.Parameters.AddWithValue("@book_date_time", DateTime.Now);
                     command.Parameters.AddWithValue("@booking_user_role", Appointments.booking_user_role);
                     command.Parameters.AddWithValue("@problem", string.IsNullOrEmpty(Appointments.problem) ? (object)DBNull.Value : Appointments.problem);
+                    command.Parameters.AddWithValue("@appointment_cancel", false);
 
 
                     rowEffect = await command.ExecuteNonQueryAsync();
@@ -351,7 +380,8 @@ namespace HealthConnect.Pages.User
             if (!string.IsNullOrEmpty(userEmail))
             {
                 string subject = "Appointment Confirmation";
-                string body = $"Dear User, your appointment is confirmed for {Appointments.appointment_date} at {Appointments.time_slot}.";
+                string body = $"Dear User,\n\nYou have applied for an appointment on {Appointments.appointment_date:yyyy-MM-dd} at {Appointments.time_slot}.\n\nWe will notify you once it is confirmed.\n\nThank you.";
+
                 await _emailService.SendEmailAsync(userEmail, subject, body);
                 Console.WriteLine("User email sent.");
             }

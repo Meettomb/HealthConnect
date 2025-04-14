@@ -467,7 +467,11 @@ namespace HealthConnect.Pages.Ecom
                     TempData["SuccessMessage"] = "Item added to cart successfully.";
                 }
             }
-            return RedirectToPage("/Ecom/Filter", new { Filter = Request.Query["Filter"] });
+            return RedirectToPage("/Ecom/Filter", new
+            {
+                Filter = Request.Query["Filter"],
+                FilterB = Request.Query["FilterB"]
+            });
 
         }
 

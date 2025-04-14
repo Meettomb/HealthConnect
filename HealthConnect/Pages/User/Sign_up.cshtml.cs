@@ -150,7 +150,6 @@ namespace HealthConnect.Pages.User
                 }
             }
 
-            // Set session values for user data
             HttpContext.Session.SetString("FirstName", user.first_name);
             HttpContext.Session.SetString("LastName", user.last_name);
             HttpContext.Session.SetString("Email", user.email);

@@ -71,7 +71,8 @@ namespace HealthConnect.Pages.User
 
         public List<Star_Rating> Star_RatingList = new List<Star_Rating>();
         public double AverageRating { get; set; }
-
+        public int? ExistingRating { get; set; }
+        public int TotalFeedbackCount { get; set; }
 
 
         public IActionResult OnGet()
@@ -150,6 +151,7 @@ namespace HealthConnect.Pages.User
                 OnGetGlobalStarRating(doctorId.Value); 
                 
             }
+            OnGetCountFeedbacks();
             GetDoctorFeedback();
 
             return Page();
@@ -342,7 +344,7 @@ namespace HealthConnect.Pages.User
                 }
             }
         }
-        public int? ExistingRating { get; set; }
+       
 
         public void OnGetStarRating(int doctor_id)
         {
@@ -367,8 +369,6 @@ namespace HealthConnect.Pages.User
                 }
             }
         }
-
-
         public void OnGetGlobalStarRating(int doctor_id)
         {
             using (SqlConnection connection = new SqlConnection(_connectionString))
@@ -387,7 +387,36 @@ namespace HealthConnect.Pages.User
                 }
             }
         }
+        private void OnGetCountFeedbacks()
+        {
+            int? doctorId = null;
 
+            if (Request.Query.ContainsKey("doctor_id"))
+            {
+                doctorId = int.TryParse(Request.Query["doctor_id"], out int id) ? id : (int?)null;
+            }
+
+            if (!doctorId.HasValue)
+            {
+                Doctor_Feedbacks = new List<Doctor_Feedback>();
+                return;
+            }
+
+            using (SqlConnection connection = new SqlConnection(_connectionString))
+            {
+                connection.Open();
+
+                string query = "SELECT COUNT(*) FROM Doctor_Feedback WHERE doctor_id = @doctor_id"; 
+
+                using (SqlCommand cmd = new SqlCommand(query, connection))
+                {
+                    cmd.Parameters.AddWithValue("@doctor_id", doctorId);  
+
+                    object result = cmd.ExecuteScalar();
+                    TotalFeedbackCount = (result != DBNull.Value) ? Convert.ToInt32(result) : 0;
+                }
+            }
+        }
 
 
 

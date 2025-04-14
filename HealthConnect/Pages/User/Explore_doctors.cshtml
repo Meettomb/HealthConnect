@@ -135,8 +135,8 @@
                         </div>
 
                         <div class="all_doctor_single_right_right">
-                            <p><i class="fa-solid fa-star"></i> 5 Star</p>
-                            <p><i class="fa-solid fa-comments"></i> 20 Review</p>
+                            <p><i class="fa-solid fa-star"></i> @data.AverageRating Star</p>
+                            <p><i class="fa-solid fa-comments"></i> @data.TotalFeedbackCount Review</p>
 
                             @if (data.hospital_or_clinic == "Clinic")
                             {
@@ -380,9 +380,15 @@
 
 
 <script>
-    document.addEventListener("DOMContentLoaded", function () {
-        var today = new Date().toISOString().split("T")[0];
-        document.getElementById("datePicker").setAttribute("min", today);
+       document.addEventListener("DOMContentLoaded", function () {
+        var today = new Date();
+        var todayISO = today.toISOString().split("T")[0];
+        var twoMonthsLater = new Date(today);
+        twoMonthsLater.setMonth(today.getMonth() + 2);
+        var maxDateISO = twoMonthsLater.toISOString().split("T")[0];
+
+        document.getElementById("datePicker").setAttribute("min", todayISO);
+        document.getElementById("datePicker").setAttribute("max", maxDateISO);
     });
 
     $(document).ready(function () {
@@ -398,8 +404,6 @@
             var MaxTime = $(this).attr("data-max-time");
             var BrackTime = $(this).attr("data-breck-time");
             var availableDaysString = $(this).attr("data-weekly-work-days");
-
-
 
             if (!WorkStart || !WorkEnd) {
                 alert("Invalid work start or end time.");
@@ -421,8 +425,6 @@
         function generateTimeSlots(startTime, endTime) {
             let max_time_per_appointments = parseInt(document.getElementById("max_time").value);
             let break_between_two_appointments = parseInt(document.getElementById("brack_time").value);
-
-
 
             if (isNaN(max_time_per_appointments) || isNaN(break_between_two_appointments)) {
                 console.error("Invalid values for max appointment time or break time.");
@@ -459,7 +461,6 @@
                 var selectedDate = new Date(this.value);
                 var selectedDayName = selectedDate.toLocaleDateString("en-US", { weekday: "long" });
 
-
                 if (!availableDays.includes(selectedDayName)) {
                     this.value = "";
                     $("#dateError").show();
@@ -468,9 +469,8 @@
                 }
             });
         }
-
-
     });
+
 </script>
 
 
