@@ -181,7 +181,7 @@ namespace HealthConnect.Pages.User.AppointmentManage
                 string query = @"
                 SELECT 
                 A.appointment_id, A.user_id, A.doctor_id, A.appointment_type, 
-                A.time_slot, A.appointment_date, A.appointment_approve, A.book_date_time, A.booking_user_role, A.problem,
+                A.time_slot, A.appointment_date, A.appointment_approve, A.book_date_time, A.booking_user_role, A.problem, A.appointment_cancel,
                 U.first_name AS user_first_name, U.last_name AS user_last_name, U.profile_pic AS user_profile_pic, U.House_number_and_Street_name AS House_number_and_Street_name,
                 U.country AS country, U.state AS state, U.city AS city, 
                 D.first_name AS doctor_first_name, D.last_name AS doctor_last_name, D.profile_pic AS doctor_profile_pic,
@@ -222,54 +222,50 @@ U.id AS user_id
                                 appointment_date = reader.GetString(5),
                                 appointment_approve = reader.GetBoolean(6),
                                 book_date_time = reader.GetDateTime(7),
-
-
                                 booking_user_role = reader.GetString(8),
-
                                 problem = reader.IsDBNull(9) ? null : reader.GetString(9),
+                                appointment_cancel = reader.GetBoolean(10),
                                 User = new User_Table(),
                                 Doctor = new User_Table()
                             };
 
-                            appointment.User.first_name = reader.IsDBNull(10) ? "" : reader.GetString(10);
-                            appointment.User.last_name = reader.IsDBNull(11) ? "" : reader.GetString(11);
-                            appointment.User.profile_pic = reader.IsDBNull(12) ? "" : reader.GetString(12);
-                            appointment.User.House_number_and_Street_name = reader.IsDBNull(13) ? "" : reader.GetString(13);
-                            appointment.User.country = reader.IsDBNull(14) ? "" : reader.GetString(14);
-                            appointment.User.state = reader.IsDBNull(15) ? "" : reader.GetString(15);
-                            appointment.User.city = reader.IsDBNull(16) ? "" : reader.GetString(16);
+                            appointment.User.first_name = reader.IsDBNull(11) ? "" : reader.GetString(11);
+                            appointment.User.last_name = reader.IsDBNull(12) ? "" : reader.GetString(12);
+                            appointment.User.profile_pic = reader.IsDBNull(13) ? "" : reader.GetString(13);
+                            appointment.User.House_number_and_Street_name = reader.IsDBNull(14) ? "" : reader.GetString(14);
+                            appointment.User.country = reader.IsDBNull(15) ? "" : reader.GetString(15);
+                            appointment.User.state = reader.IsDBNull(16) ? "" : reader.GetString(16);
+                            appointment.User.city = reader.IsDBNull(17) ? "" : reader.GetString(17);
 
-                            appointment.Doctor.first_name = reader.IsDBNull(17) ? "" : reader.GetString(17);
-                            appointment.Doctor.last_name = reader.IsDBNull(18) ? "" : reader.GetString(18);
-                            appointment.Doctor.profile_pic = reader.IsDBNull(19) ? "" : reader.GetString(19);
-                            appointment.Doctor.country = reader.IsDBNull(20) ? "" : reader.GetString(20);
-                            appointment.Doctor.state = reader.IsDBNull(21) ? "" : reader.GetString(21);
-                            appointment.Doctor.city = reader.IsDBNull(22) ? "" : reader.GetString(22);
-                            appointment.Doctor.year_of_registration = reader.IsDBNull(23) ? "" : reader.GetString(23);
-                            appointment.Doctor.doctore_experience = reader.IsDBNull(24) ? "" : reader.GetString(24);
-                            appointment.Doctor.hospital_or_clinic = reader.IsDBNull(25) ? "" : reader.GetString(25);
-                            appointment.Doctor.clinic_or_hospital_address = reader.IsDBNull(26) ? "" : reader.GetString(26);
-                            appointment.Doctor.on_site_consultation_fee = reader.IsDBNull(27) ? "" : reader.GetString(27);
-                            appointment.Doctor.video_call_consultation_fee = reader.IsDBNull(28) ? "" : reader.GetString(28);
-                            appointment.Doctor.doctor_specialitis = reader.IsDBNull(29) ? "" : reader.GetString(29);
-                            appointment.Doctor.languages_spoken = reader.IsDBNull(30) ? "" : reader.GetString(30);
-                            appointment.Doctor.currency_code = reader.IsDBNull(31) ? "" : reader.GetString(31);
-                            appointment.Doctor.max_time_per_appointments = reader.IsDBNull(32) ? "" : reader.GetString(32);
-                            appointment.Doctor.break_between_two_appointments = reader.IsDBNull(33) ? "" : reader.GetString(33);
-                            appointment.Doctor.email = reader.IsDBNull(34) ? "" : reader.GetString(34);
-                            appointment.Doctor.work_start_time = reader.IsDBNull(35) ? "" : reader.GetString(35);
-                            appointment.Doctor.work_end_time = reader.IsDBNull(36) ? "" : reader.GetString(36);
-                            appointment.Doctor.weekly_work_days = reader.IsDBNull(37) || string.IsNullOrEmpty(reader.GetString(37)) ? new List<string>() : reader.GetString(37).Split(',').ToList();
+                            appointment.Doctor.first_name = reader.IsDBNull(18) ? "" : reader.GetString(18);
+                            appointment.Doctor.last_name = reader.IsDBNull(19) ? "" : reader.GetString(19);
+                            appointment.Doctor.profile_pic = reader.IsDBNull(20) ? "" : reader.GetString(20);
+                            appointment.Doctor.country = reader.IsDBNull(21) ? "" : reader.GetString(21);
+                            appointment.Doctor.state = reader.IsDBNull(22) ? "" : reader.GetString(22);
+                            appointment.Doctor.city = reader.IsDBNull(23) ? "" : reader.GetString(23);
+                            appointment.Doctor.year_of_registration = reader.IsDBNull(24) ? "" : reader.GetString(24);
+                            appointment.Doctor.doctore_experience = reader.IsDBNull(25) ? "" : reader.GetString(25);
+                            appointment.Doctor.hospital_or_clinic = reader.IsDBNull(26) ? "" : reader.GetString(26);
+                            appointment.Doctor.clinic_or_hospital_address = reader.IsDBNull(27) ? "" : reader.GetString(27);
+                            appointment.Doctor.on_site_consultation_fee = reader.IsDBNull(28) ? "" : reader.GetString(28);
+                            appointment.Doctor.video_call_consultation_fee = reader.IsDBNull(29) ? "" : reader.GetString(29);
+                            appointment.Doctor.doctor_specialitis = reader.IsDBNull(30) ? "" : reader.GetString(30);
+                            appointment.Doctor.languages_spoken = reader.IsDBNull(31) ? "" : reader.GetString(31);
+                            appointment.Doctor.currency_code = reader.IsDBNull(32) ? "" : reader.GetString(32);
+                            appointment.Doctor.max_time_per_appointments = reader.IsDBNull(33) ? "" : reader.GetString(33);
+                            appointment.Doctor.break_between_two_appointments = reader.IsDBNull(34) ? "" : reader.GetString(34);
+                            appointment.Doctor.email = reader.IsDBNull(35) ? "" : reader.GetString(35);
+                            appointment.Doctor.work_start_time = reader.IsDBNull(36) ? "" : reader.GetString(36);
+                            appointment.Doctor.work_end_time = reader.IsDBNull(37) ? "" : reader.GetString(37);
+                            appointment.Doctor.weekly_work_days = reader.IsDBNull(38) || string.IsNullOrEmpty(reader.GetString(38)) ? new List<string>() : reader.GetString(38).Split(',').ToList();
 
-                            appointment.Doctor.id = reader.GetInt32(38);
-                            appointment.User.id = reader.GetInt32(39);
-
-
-
+                            appointment.Doctor.id = reader.GetInt32(39);
+                            appointment.User.id = reader.GetInt32(40);
 
                             AppointmentsList.Add(appointment);
                             BookingUserRole = appointment.booking_user_role;
                         }
+
                     }
                 }
             }

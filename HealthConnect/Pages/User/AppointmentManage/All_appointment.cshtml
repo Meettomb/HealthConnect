@@ -73,39 +73,53 @@
                                             @if (data.appointment_approve == false)
                                             {
 
-
-                                                <form method="post">
-                                                    <input type="hidden" name="appointment_id" value="@data.appointment_id" />
-                                                    <button class="approve_appointmant" name="action" value="approve"><i class="fa-solid fa-square-check"></i> Approve</button>
-                                                </form>
+                                                @if (data.appointment_cancel == false)
+                                                {
+                                                    <p><i class="fa-regular fa-hourglass-half"></i> Panding</p>
+                                                    <form method="post">
+                                                        <input type="hidden" name="appointment_id" value="@data.appointment_id" />
+                                                        <button class="approve_appointmant" name="action" value="approve"><i class="fa-solid fa-square-check"></i> Approve</button>
+                                                    </form>
+                                                }
+                                                else
+                                                {
+                                                    <span>Appointment canceled</span>
+                                                }
                                             }
                                             else
                                             {
-                                                <p data-appointmant-id="@data.appointment_id"
-                                                   data-work-start="@data.Doctor.work_start_time"
-                                                   data-work-end="@data.Doctor.work_end_time"
-                                                   data-weekly-work-days="@string.Join(", ", data.Doctor.weekly_work_days)"
-                                                   data-email="@data.Doctor.email"
-                                                   data-notice="You have to Pay fee direct Doctor on Video call"
-                                                   data-max-time="@data.Doctor.max_time_per_appointments"
-                                                   data-breck-time="@data.Doctor.break_between_two_appointments"
-                                                   class="reschedule_appointmant"
-                                                   id="reschedule_appointmant">
-                                                    <a href="#"><i class="fa-solid fa-clock"></i> Reschedule </a>
-                                                </p>
+                                                @if (data.appointment_cancel == false)
+                                                {
+                                                    <p data-appointmant-id="@data.appointment_id"
+                                                       data-work-start="@data.Doctor.work_start_time"
+                                                       data-work-end="@data.Doctor.work_end_time"
+                                                       data-weekly-work-days="@string.Join(", ", data.Doctor.weekly_work_days)"
+                                                       data-email="@data.Doctor.email"
+                                                       data-notice="You have to Pay fee direct Doctor on Video call"
+                                                       data-max-time="@data.Doctor.max_time_per_appointments"
+                                                       data-breck-time="@data.Doctor.break_between_two_appointments"
+                                                       class="reschedule_appointmant"
+                                                       id="reschedule_appointmant">
+                                                        <a href="#"><i class="fa-solid fa-clock"></i> Reschedule </a>
+                                                    </p>
 
-                                                <p data-appointmant-id="@data.appointment_id"
-                                                   data-work-start="@data.Doctor.work_start_time"
-                                                   data-work-end="@data.Doctor.work_end_time"
-                                                   data-weekly-work-days="@string.Join(", ", data.Doctor.weekly_work_days)"
-                                                   data-email="@data.Doctor.email"
-                                                   data-consultancy="On site"
-                                                   data-notice="You have to Pay fee direct Doctor on his site"
-                                                   data-max-time="@data.Doctor.max_time_per_appointments"
-                                                   data-breck-time="@data.Doctor.break_between_two_appointments"
-                                                   class="cancle_Appointment">
-                                                    <a href="#"><i class="fa-solid fa-calendar-xmark"></i> Cancel </a>
-                                                </p>
+                                                    <p data-appointmant-id="@data.appointment_id"
+                                                       data-work-start="@data.Doctor.work_start_time"
+                                                       data-work-end="@data.Doctor.work_end_time"
+                                                       data-weekly-work-days="@string.Join(", ", data.Doctor.weekly_work_days)"
+                                                       data-email="@data.Doctor.email"
+                                                       data-consultancy="On site"
+                                                       data-notice="You have to Pay fee direct Doctor on his site"
+                                                       data-max-time="@data.Doctor.max_time_per_appointments"
+                                                       data-breck-time="@data.Doctor.break_between_two_appointments"
+                                                       class="cancle_Appointment">
+                                                        <a href="#"><i class="fa-solid fa-calendar-xmark"></i> Cancel </a>
+                                                    </p>
+                                                }
+                                                else
+                                                {
+                                                    <span>Appointment canceled</span>
+                                                }
                                             }
 
                                         }
@@ -158,23 +172,31 @@
                                         }
                                         else
                                         {
-
-                                            @if (data.appointment_approve == false)
+                                            @if (data.appointment_cancel == false)
                                             {
+                                                @if (data.appointment_approve == false)
+                                                {
+                                                    <p><i class="fa-regular fa-hourglass-half"></i> Panding</p>
+                                                    <p data-appointmant-id="@data.appointment_id" data-work-start="@data.Doctor.work_start_time" data-work-end="@data.Doctor.work_end_time"
+                                                       data-weekly-work-days="@string.Join(", ", @data.Doctor.weekly_work_days)" data-email="@data.Doctor.email"
+                                                       data-notice="You have to Pay fee direct Doctor on Video call"
+                                                       data-max-time="@data.Doctor.max_time_per_appointments" data-breck-time="@data.Doctor.break_between_two_appointments" class="reschedule_appointmant" id="reschedule_appointmant">
+                                                        <a href="#"><i class="fa-solid fa-clock"></i> Reschedule </a>
+                                                    </p>
+                                                }
+
                                                 <p data-appointmant-id="@data.appointment_id" data-work-start="@data.Doctor.work_start_time" data-work-end="@data.Doctor.work_end_time"
-                                                   data-weekly-work-days="@string.Join(", ", @data.Doctor.weekly_work_days)" data-email="@data.Doctor.email"
-                                                   data-notice="You have to Pay fee direct Doctor on Video call"
-                                                   data-max-time="@data.Doctor.max_time_per_appointments" data-breck-time="@data.Doctor.break_between_two_appointments" class="reschedule_appointmant" id="reschedule_appointmant">
-                                                    <a href="#"><i class="fa-solid fa-clock"></i> Reschedule </a>
+                                                   data-weekly-work-days="@string.Join(", ", @data.Doctor.weekly_work_days)" data-email="@data.Doctor.email" data-consultancy="On site"
+                                                   data-notice="You have to Pay fee direct Doctor on his site"
+                                                   data-max-time="@data.Doctor.max_time_per_appointments" data-breck-time="@data.Doctor.break_between_two_appointments" class="cancle_Appointment">
+                                                    <a href="#"><i class="fa-solid fa-calendar-xmark"></i> Cancle </a>
                                                 </p>
                                             }
+                                            else
+                                            {
 
-                                            <p data-appointmant-id="@data.appointment_id" data-work-start="@data.Doctor.work_start_time" data-work-end="@data.Doctor.work_end_time"
-                                               data-weekly-work-days="@string.Join(", ", @data.Doctor.weekly_work_days)" data-email="@data.Doctor.email" data-consultancy="On site"
-                                               data-notice="You have to Pay fee direct Doctor on his site"
-                                               data-max-time="@data.Doctor.max_time_per_appointments" data-breck-time="@data.Doctor.break_between_two_appointments" class="cancle_Appointment">
-                                                <a href="#"><i class="fa-solid fa-calendar-xmark"></i> Cancle </a>
-                                            </p>
+                                                <span>Appointment canceled</span>
+                                            }
                                         }
                                     </div>
                                 </div>
@@ -235,22 +257,31 @@
                                     }
                                     else
                                     {
-                                        @if (data.appointment_approve == false)
+                                        @if (data.appointment_cancel == false)
                                         {
+                                            @if (data.appointment_approve == false)
+                                            {
+                                                <p><i class="fa-regular fa-hourglass-half"></i> Panding</p>
+                                                <p data-appointmant-id="@data.appointment_id" data-work-start="@data.Doctor.work_start_time" data-work-end="@data.Doctor.work_end_time"
+                                                   data-weekly-work-days="@string.Join(", ", @data.Doctor.weekly_work_days)" data-email="@data.Doctor.email"
+                                                   data-notice="You have to Pay fee direct Doctor on Video call"
+                                                   data-max-time="@data.Doctor.max_time_per_appointments" data-breck-time="@data.Doctor.break_between_two_appointments" class="reschedule_appointmant" id="reschedule_appointmant">
+                                                    <a href="#"><i class="fa-solid fa-clock"></i> Reschedule </a>
+                                                </p>
+                                            }
+
                                             <p data-appointmant-id="@data.appointment_id" data-work-start="@data.Doctor.work_start_time" data-work-end="@data.Doctor.work_end_time"
-                                               data-weekly-work-days="@string.Join(", ", @data.Doctor.weekly_work_days)" data-email="@data.Doctor.email"
-                                               data-notice="You have to Pay fee direct Doctor on Video call"
-                                               data-max-time="@data.Doctor.max_time_per_appointments" data-breck-time="@data.Doctor.break_between_two_appointments" class="reschedule_appointmant" id="reschedule_appointmant">
-                                                <a href="#"><i class="fa-solid fa-clock"></i> Reschedule </a>
+                                               data-weekly-work-days="@string.Join(", ", @data.Doctor.weekly_work_days)" data-email="@data.Doctor.email" data-consultancy="On site"
+                                               data-notice="You have to Pay fee direct Doctor on his site"
+                                               data-max-time="@data.Doctor.max_time_per_appointments" data-breck-time="@data.Doctor.break_between_two_appointments" class="cancle_Appointment">
+                                                <a href="#"><i class="fa-solid fa-calendar-xmark"></i> Cancel</a>
                                             </p>
                                         }
+                                        else
+                                        {
 
-                                        <p data-appointmant-id="@data.appointment_id" data-work-start="@data.Doctor.work_start_time" data-work-end="@data.Doctor.work_end_time"
-                                           data-weekly-work-days="@string.Join(", ", @data.Doctor.weekly_work_days)" data-email="@data.Doctor.email" data-consultancy="On site"
-                                           data-notice="You have to Pay fee direct Doctor on his site"
-                                           data-max-time="@data.Doctor.max_time_per_appointments" data-breck-time="@data.Doctor.break_between_two_appointments" class="cancle_Appointment">
-                                            <a href="#"><i class="fa-solid fa-calendar-xmark"></i> Cancel</a>
-                                        </p>
+                                            <span>Appointment canceled</span>
+                                        }
                                     }
                                 </div>
                             </div>

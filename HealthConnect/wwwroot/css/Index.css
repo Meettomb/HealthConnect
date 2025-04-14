@@ -3047,6 +3047,7 @@ header img {
             display: flex;
             flex-direction: column;
             margin-left: 10%;
+            color: var(--contrast-color);
         }
 
             .all_appointmant_section_container .all_side .all_appointmant_side4 span {
