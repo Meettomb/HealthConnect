@@ -37,6 +37,7 @@
 
     <link rel="stylesheet" href="/assets/vendors/mdi/css/materialdesignicons.min.css">
 
+
 </head>
 <body>
 
@@ -61,12 +62,6 @@
     }
 
 
-    <div class="loder" id="loder">
-        <img src="/Loder.gif" alt="Alternate Text" />
-    </div>
-
-
-
     <header id="header">
         <nav>
 
@@ -77,40 +72,9 @@
                 <p><a href="/">Home</a></p>
 
                 <p><a href="/User/Explore_doctors">Explore doctors</a></p>
+                <p><a href="/Pharmacy">Shopping</a></p>
+                <p><a href="/Blogs">Blogs</a></p>
 
-                <div class="Type_drop_down">
-                    <p>Search by types <i class="fa-solid fa-angle-down toggle-icon1"></i></p>
-                    <div class="Search_by_Type">
-                        <ul>
-                            @foreach (var item in Model.Types_of_doctor)
-                            {
-                                <a href="/User/Explore_doctors?Type=@item.type_of_doctor">
-                                <li>@item.type_of_doctor</li>
-                                </a>
-                            }
-
-                        </ul>
-
-                    </div>
-                </div>
-
-                <div class="Speciality_drop_down">
-                    <p>Search by Speciality <i class="fa-solid fa-angle-down toggle-icon1"></i></p>
-                    <div class="Search_by_Speciality">
-                        <ul>
-                            @foreach (var item in Model.doctorSpecialitiesList)
-                            {
-                                <a href="/User/Explore_doctors?Speciality=@item.doctor_specialitis">
-                                <li>@item.doctor_specialitis</li>
-                                </a>
-                            }
-
-                        </ul>
-
-                    </div>
-                </div>
-                <p><a href="/Blogs">Blog</a></p>
-                <p> <a href="/Pharmacy">Shop</a></p>
 
                 <div class="login_and_profile">
 
@@ -180,44 +144,9 @@
                 <div class="hamburger_container_link" id="hamburger_container_link">
                     <ul>
                         <li><a href="/">Home</a></li>
-                        <li><a href="/User/Explore_doctors">Explor doctors</a></li>
-
-                        <li class="S_by_T">Search by Types of doctor <i class="fa-solid fa-angle-down toggle-icon1"></i></li>
-                    </ul>
-
-                    <div class="hamburgar_Search_by_Type" style="display: none;">
-                        <ul>
-                            @foreach (var item in Model.Types_of_doctor)
-                            {
-                                <a href="/User/Explore_doctors?Type=@item.type_of_doctor">
-                                <li>@item.type_of_doctor</li>
-                                </a>
-                            }
-
-                        </ul>
-                    </div>
-
-                    <ul>
-
-                        <li class="S_by_S">Search by Speciality <i class="fa-solid fa-angle-down toggle-icon1"></i></li>
-
-                    </ul>
-
-                    <div class="hamburgar_Search_by_Speciality" style="display: none;">
-                        <ul>
-                            @foreach (var item in Model.doctorSpecialitiesList)
-                            {
-                                <a href="/User/Explore_doctors?Speciality=@item.doctor_specialitis">
-                                <li>@item.doctor_specialitis</li>
-                                </a>
-                            }
-
-                        </ul>
-                    </div>
-                    <ul>
-
-                        <li><a href="/Blogs">Blog</a></li>
-                        <li><a href="/Pharmacy">Shop</a></li>
+                        <li><a href="/User/Explore_doctors">Explore doctors</a></li>
+                        <li><a href="/Pharmacy">Shopping</a></li>
+                        <li><a href="/Blogs">Blogs</a></li>
                     </ul>
                 </div>
 
@@ -282,9 +211,12 @@
     </header>
 
 
+
     <div>
         @RenderBody()
     </div>
+
+
 
     <footer class="footer">
         <div class="footer_container">
@@ -308,7 +240,7 @@
                     <a href="/Pharmacy">Online pharmacy</a>
                     <a href="">Health checkup</a>
                     <a href="">Health insurance</a>
-                    <a href="/Blogs">Health blog</a>
+                    <a href="">Health blog</a>
                 </div>
             </section>
 
@@ -487,6 +419,9 @@
             hideMessageAfterDelay("tempErrorMessage");
         });
     </script>
+
+
+
 
 </body>
 </html>
