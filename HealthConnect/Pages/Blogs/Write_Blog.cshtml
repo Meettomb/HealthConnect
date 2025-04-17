@@ -1,0 +1,148 @@
+﻿@page
+@model HealthConnect.Pages.Blogs.Write_BlogModel
+@{
+    Layout = "_BlogHeader";
+    ViewData["Title"] = "Write New Blog";
+}
+
+<div class="write_blog_heading">
+    <h1>Write a new Blog</h1>
+</div>
+
+
+<div class="blog_nav">
+    <nav>
+        <button onclick="formatText('bold')"><i class="fa-solid fa-b"></i></button>
+        <button onclick="formatText('underline')"><i class="fa-solid fa-underline"></i></button>
+        <button onclick="formatText('italic')"><i class="fa-solid fa-italic"></i></button>
+
+        <select onchange="changeFontSize(this.value)">
+            <option value="">Font Size</option>
+            <option value="8px">8px</option>
+            <option value="10px">10px</option>
+            <option value="12px">12px</option>
+            <option value="14px">14px</option>
+            <option value="16px">16px</option>
+            <option value="18px">18px</option>
+            <option value="24px">24px</option>
+            <option value="32px">32px</option>
+            <option value="40px">40px</option>
+        </select>
+
+    </nav>
+</div>
+
+<div class="write_blog_container">
+    <div class="write_blog_form">
+
+        <form method="post" enctype="multipart/form-data">
+            <input type="hidden" name="user_id" value="@Model.UserId" required />
+            <div class="content_div">
+                <label for="blogTitle">Blog Title:</label>
+                <input type="text" id="blogTitle" name="blog_title" required autocomplete="off"/>
+            </div>
+            <div class="content_div">
+                <label for="blogImage">Upload Image:</label>
+                <input type="file" id="blogImage" name="blog_image" accept="image/*" required />
+                <div class="priew_blog_image"></div>
+            </div>
+
+            <div class="content_div2">
+                <div class="detail_div">
+                    <label for="blogContent">Blog Content:</label>
+                    <div id="TotalWords">Total Characters: 0</div>
+
+                    <div id="blogContent" contenteditable="true" required class="blog-editor"></div>
+
+                    <input type="hidden" name="blog_content" id="hiddenContent" />
+
+                </div>
+            </div>
+
+            <button type="submit" name="action" value="Publish">Publish</button>
+        </form>
+    </div>
+</div>
+
+
+<script>
+    function updateWordCount() {
+        const html = document.getElementById("blogContent").innerHTML;
+        const tempDiv = document.createElement("div");
+        tempDiv.innerHTML = html;
+        const plainText = tempDiv.textContent || tempDiv.innerText || "";
+        const totalChars = plainText.length;
+
+        document.getElementById("TotalWords").innerText = `Total Characters: ${totalChars}`;
+    }
+
+    document.addEventListener("DOMContentLoaded", function () {
+        const editor = document.getElementById("blogContent");
+        const hiddenInput = document.getElementById("hiddenContent");
+
+        editor.addEventListener("input", () => {
+            hiddenInput.value = editor.innerHTML;
+            updateWordCount();
+        });
+
+        editor.addEventListener("blur", () => {
+            hiddenInput.value = editor.innerHTML;
+            updateWordCount();
+        });
+    });
+
+    function formatText(command) {
+        document.execCommand(command, false, null);
+        updateHiddenContent();
+    }
+
+    function changeFontSize(sizeValue) {
+        const blogContent = document.getElementById("blogContent");
+
+        if (["1", "2", "3", "4", "5", "6", "7"].includes(sizeValue)) {
+            document.execCommand("fontSize", false, sizeValue);
+        } else {
+            const sel = window.getSelection();
+            if (!sel.rangeCount) return;
+
+            const range = sel.getRangeAt(0);
+            const span = document.createElement("span");
+            span.style.fontSize = sizeValue;
+            span.textContent = range.toString();
+
+            range.deleteContents();
+            range.insertNode(span);
+        }
+
+        updateHiddenContent();
+    }
+
+    function updateHiddenContent() {
+        const html = document.getElementById("blogContent").innerHTML;
+        document.getElementById("hiddenContent").value = html;
+        document.getElementById("blogContent").focus();
+        updateWordCount();
+    }
+
+
+
+
+
+        document.getElementById("blogImage").addEventListener("change", function(event) {
+        const file = event.target.files[0];
+        const previewDiv = document.querySelector(".priew_blog_image");
+
+        if (file && file.type.startsWith("image/")) {
+            const reader = new FileReader();
+            reader.onload = function(e) {
+                previewDiv.innerHTML = `<img src="${e.target.result}" style="max-width: 100%; max-height: 300px; border: 1px solid #ccc; padding: 5px; border-radius: 8px;" />`;
+            };
+            reader.readAsDataURL(file);
+        } else {
+            previewDiv.innerHTML = "Please select a valid image file.";
+        }
+    });
+</script>
+
+
+
