@@ -37,9 +37,9 @@
                                     <td>
                                         <div class="d-flex align-items-center" style="max-width: 200px; overflow: hidden;">
                                             <img src="/ProductImage/@toporder.Product.product_image?.Split(',')[0]"
-                                                 alt="@toporder.Product.product_name"
-                                                 class="img-thumbnail"
-                                                 style="width: 40px; height: 40px; object-fit: cover;" />
+                                            alt="@toporder.Product.product_name"
+                                            class="img-thumbnail"
+                                            style="width: 40px; height: 40px; object-fit: cover;" />
                                             <span class="pl-2 text-truncate" style="white-space: nowrap;">@toporder.Product.product_name</span>
                                         </div>
                                     </td>
@@ -161,25 +161,25 @@
             <div class="card-body">
                 <div class="d-flex justify-content-between flex-row">
                     <h4 class="card-title">Feedback</h4>
-                    <p class="text-muted mb-1 small">View all</p>
+                    <p class="text-muted mb-1 small"><a href="">View all</a></p>
                 </div>
                 <div class="preview-list">
 
-                    <div class="preview-item border-bottom">
-                        <div class="preview-thumbnail">
-                            <img src="/assets/images/faces/face6.jpg" alt="image" class="rounded-circle" />
-                        </div>
-                        <div class="preview-item-content d-flex flex-grow">
-                            <div class="flex-grow">
-                                <div class="d-flex d-md-block d-xl-flex justify-content-between">
-                                    <h6 class="preview-subject">Leonard</h6>
-                                    <p class="text-muted text-small">5 minutes ago</p>
+                    @foreach (var feedback in Model.FeedbackList)
+                    {
+                        <div class="preview-item border-bottom">
+                           
+                            <div class="preview-item-content d-flex flex-grow">
+                                <div class="flex-grow">
+                                    <div class="d-flex d-md-block d-xl-flex justify-content-between">
+                                        <h6 class="preview-subject">@feedback.name</h6>
+                                        <p class="text-muted text-small">@feedback.date</p>
+                                    </div>
+                                    <p class="text-muted">@feedback.message</p>
                                 </div>
-                                <p class="text-muted">Well, it seems to be working now.</p>
                             </div>
                         </div>
-                    </div>
-
+                    }
                 </div>
             </div>
         </div>

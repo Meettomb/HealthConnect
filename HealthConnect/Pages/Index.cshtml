@@ -121,6 +121,39 @@
             </div>
         </section>
 
+
+        <section class="index_section_last" id="ContactUs">
+            <div class="feedback_container">
+                <h1>Feedback</h1>
+                <form method="post">
+                    <div class="detail_div">
+                        <div class="feedback_filde">
+                            <label for="name">Name</label>
+                            <input type="text" name="name" id="name" value="@Model.FirstName @Model.LastName" />
+                            <p class="feedbackerror"></p>
+                        </div>
+                        <div class="feedback_filde">
+                            <label for="email">Email</label>
+                            <input type="email" name="email" id="email" value="@Model.Email" />
+                            <p class="feedbackerror"></p>
+                        </div>
+                    </div>
+
+                    <div class="feedback_filde">
+                        <label for="message">Message</label>
+                        <textarea name="message" id="message" placeholder="Feedback Message"></textarea>
+                        <p class="feedbackerror"></p>
+                    </div>
+
+                    <div>
+                        <button type="submit" name="action" value="SubmitFeedback" class="feedback_button">Submit</button>
+                    </div>
+                </form>
+
+            </div>
+        </section>
+
+
         @if (Model.Role == "Doctor" && Model.DoctorProfileComplete == false)
         {
             <div class="finel_step_for_doctor_registration" id="popup">
@@ -202,7 +235,7 @@
                         </div>
 
                         <div class="submit_button">
-                            <button type="submit">Submit</button>
+                            <button type="submit" name="action" value="DoctorSubmit">Submit</button>
                         </div>
                     </form>
                 </div>
@@ -232,6 +265,51 @@
     {
         <div class="error_message">@TempData["ErrorMessage"]</div>
     }
+
+    <script>
+    document.querySelector("form").addEventListener("submit", function (e) {
+        let isValid = true;
+
+        // Clear previous error messages
+        document.querySelectorAll(".feedbackerror").forEach(el => el.textContent = "");
+
+        const nameInput = document.getElementById("name");
+        const emailInput = document.getElementById("email");
+        const messageInput = document.getElementById("message");
+
+        // Validate Name
+        if (nameInput.value.trim() === "") {
+            nameInput.nextElementSibling.textContent = "Name is required.";
+            isValid = false;
+        } else if (nameInput.value.length > 20) {
+            nameInput.nextElementSibling.textContent = "Name must be 20 characters or fewer.";
+            isValid = false;
+        }
+
+        // Validate Email
+        if (emailInput.value.trim() === "") {
+            emailInput.nextElementSibling.textContent = "Email is required.";
+            isValid = false;
+        } else if (emailInput.value.length > 50) {
+            emailInput.nextElementSibling.textContent = "Email must be 50 characters or fewer.";
+            isValid = false;
+        } 
+
+        // Validate Message
+        if (messageInput.value.trim() === "") {
+            messageInput.nextElementSibling.textContent = "Message is required.";
+            isValid = false;
+        } else if (messageInput.value.length > 300) {
+            messageInput.nextElementSibling.textContent = "Message must be 300 characters or fewer.";
+            isValid = false;
+        }
+
+        if (!isValid) {
+            e.preventDefault(); // Stop form submission if validation fails
+        }
+    });
+</script>
+
 
 
 </body>

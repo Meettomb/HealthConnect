@@ -1,9 +1,11 @@
 using HealthConnect.Models;
+using HealthConnect.Services;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.Data.SqlClient;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
+using Microsoft.Extensions.Options;
 using System.Data;
 using static HealthConnect.Pages.Admin.Admin_indexModel;
 
@@ -14,11 +16,14 @@ namespace HealthConnect.Pages
         private readonly ILogger<IndexModel> _logger;
         private readonly IConfiguration _configuration;
         private readonly string _connectionString;
+        private readonly IEmailService _emailService;
+        private readonly EmailSettings _emailSettings;
 
 
         public int? UserId { get; set; }
         public string FirstName { get; set; }
         public string LastName { get; set; }
+        public string Email { get; set; }
         public string ProfilePic { get; set; }
         public string Role { get; set; }
         public string Country { get; set; }
@@ -47,11 +52,16 @@ namespace HealthConnect.Pages
 
         public List<Doctor_Specialitis> doctorSpecialitiesList = new List<Doctor_Specialitis>();
 
+
+        [BindProperty]public Feedback Feedback { get; set; } = new Feedback();
+
         public int TotalSpecialitiesCount { get; set; }
         public int TotalUsersCount { get; set; }
         public int TotalDoctorsCount { get; set; }
-        public IndexModel(ILogger<IndexModel> logger, IConfiguration configuration)
+        public IndexModel(IEmailService emailService, IOptions<EmailSettings> emailSettings, ILogger<IndexModel> logger, IConfiguration configuration)
         {
+            _emailService = emailService;
+            _emailSettings = emailSettings.Value;
             _logger = logger;
             _configuration = configuration;
             _connectionString = configuration.GetConnectionString("HealthConnect");
@@ -124,6 +134,7 @@ namespace HealthConnect.Pages
                             {
                                 FirstName = reader["first_name"].ToString();
                                 LastName = reader["last_name"].ToString();
+                                Email = reader["email"].ToString();
                                 ProfilePic = reader["profile_pic"].ToString();
                                 Role = reader["role"].ToString();
                                 Country = reader["country"].ToString();
@@ -236,26 +247,36 @@ namespace HealthConnect.Pages
         }
 
 
-        public IActionResult OnPost()
+        public async Task<IActionResult> OnPost()
         {
             int? UserId = HttpContext.Session.GetInt32("Id");
 
-            if (!UserId.HasValue)
+            
+            var action = Request.Form["action"];
+            if(action == "SubmitFeedback")
             {
-                ErrorMessage = "User session expired. Please log in again.";
-                return Page();
+                await OnPostFeedbackAsync();
             }
-
-            var selectedDays = Request.Form["weekly_work_days"].ToList();
-
-            if (selectedDays.Count == 0)
+            else if (action == "DoctorSubmit")
             {
-                ErrorMessage = "Please select days which you would like to work.";
-                return Page();
-            }
+                if (!UserId.HasValue)
+                {
+                    ErrorMessage = "User session expired. Please log in again.";
+                    return Page();
+                }
 
-            User.weekly_work_days = selectedDays;
-            OnPostAddDoctorworkingInfo(UserId.Value);
+                var selectedDays = Request.Form["weekly_work_days"].ToList();
+
+                if (selectedDays.Count == 0)
+                {
+                    ErrorMessage = "Please select days which you would like to work.";
+                    return Page();
+                }
+
+                User.weekly_work_days = selectedDays;
+                OnPostAddDoctorworkingInfo(UserId.Value);
+
+            }
 
             return RedirectToPage();
         }
@@ -309,17 +330,48 @@ namespace HealthConnect.Pages
                     int rowsAffected = command.ExecuteNonQuery();
                     if (rowsAffected > 0)
                     {
-                        SuccessMessage = "Doctor working information updated successfully.";
+                        TempData["SuccessMessage"] = "Doctor working information updated successfully.";
                     }
                     else
                     {
-                        ErrorMessage = "Failed to update doctor working information.";
+                        TempData["ErrorMessage"] = "Failed to update doctor working information.";
                     }
                 }
             }
         }
 
+        public async Task OnPostFeedbackAsync()
+        {
+            string userEmail = Request.Form["email"];
+            string userName = Request.Form["name"];
+            using (SqlConnection connection = new SqlConnection(_connectionString))
+            {
+                connection.Open();
+                string query = "INSERT INTO Feedback (name, email, message, date) VALUES (@name, @email, @message, @date)";
+                using (SqlCommand command = new SqlCommand(query, connection))
+                {
+                    command.Parameters.AddWithValue("@name", Feedback.name);
+                    command.Parameters.AddWithValue("@email", Feedback.email);
+                    command.Parameters.AddWithValue("@message", Feedback.message);
+                    command.Parameters.AddWithValue("@date", DateTime.Now);
+                    var result = await command.ExecuteNonQueryAsync();
+                    if (result > 0)
+                    {
+                        string subject = "Feedback Saved";
+                        string body = $"Dear User, {userName}\n\nYour feedback has been saved.";
 
+
+                        await _emailService.SendEmailAsync(userEmail, subject, body);
+                        TempData["SuccessMessage"] = "Feedback submitted successfully.";
+                    }
+                    else
+                    {
+                        TempData["ErrorMessage"] = "Failed to submit feedback.";
+                    }
+
+                }
+            }
+        }
 
     }
 

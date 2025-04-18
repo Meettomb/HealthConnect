@@ -701,6 +701,94 @@ header img {
             cursor: pointer;
             font-weight: 600;
         }
+
+
+.index_section_last {
+    width: 100%;
+    display: flex;
+    justify-content: center;
+}
+
+    .index_section_last .feedback_container {
+        width: 90%;
+        margin: 30px 0;
+    }
+
+        .index_section_last .feedback_container h1 {
+            text-align: center;
+            font-size: 30px;
+            font-family: var(--heading-font);
+            font-weight: 600;
+            color: var(--heading-color);
+        }
+
+        .index_section_last .feedback_container form {
+            width: 100%;
+        }
+            .index_section_last .feedback_container form .feedbackerror {
+                color: red;
+            }
+                .index_section_last .feedback_container form label {
+                color: var(--accent-color);
+                font-family: var(--heading-font);
+            }
+            .index_section_last .feedback_container form input {
+                padding: 10px;
+                margin: 10px 0;
+                font-family: var(--default-font);
+                color: var(--default-color);
+            }
+            .index_section_last .feedback_container form textarea {
+                padding: 10px;
+                height: 200px;
+                font-size: 16px;
+                margin-top: 10px;
+                font-family: var(--default-font);
+                color: var(--default-color);
+            }
+            .index_section_last .feedback_container form button {
+                background-color: var(--accent-color);
+                border-radius: 20px;
+                color: var(--contrast-color);
+                font-family: var(--default-font);
+                padding: 10px 50px;
+                cursor: pointer;
+                border: none;
+                font-weight: 600;
+                font-size: 16px;
+                margin-top: 15px;
+            }
+                .index_section_last .feedback_container form button:hover {
+                    background-color: var(--button-hover-bg-color);
+                }
+
+            .index_section_last .feedback_container form .detail_div {
+                width: 100%;
+                display: flex;
+                justify-content: space-between;
+                margin: 15px 0;
+            }
+
+                .index_section_last .feedback_container form .detail_div .feedback_filde {
+                    width: 45%;
+                }
+
+            .index_section_last .feedback_container form .feedback_filde {
+                width: 100%;
+                display: flex;
+                flex-direction: column;
+            }
+
+@media (max-width: 1000px) {
+    .index_section_last .feedback_container form .detail_div {
+        flex-direction: column;
+        row-gap: 10px;
+    }
+
+        .index_section_last .feedback_container form .detail_div .feedback_filde {
+            width: 100%;
+        }
+}
 /*--------------------------------------------------------------------------------------------------------------*/
 /*--------------------------------------------------------------------------------------------------------------*/
 /*--------------------------------------------------------------------------------------------------------------*/
@@ -932,11 +1020,12 @@ header img {
                     display: flex;
                     flex-direction: column;
                 }
-                .regi_body .regi_form_container form .user_filsd_wrep .user_input_box .error{
-                    width: 100%;
-                    color: red;
-                }
-                  
+
+                    .regi_body .regi_form_container form .user_filsd_wrep .user_input_box .error {
+                        width: 100%;
+                        color: red;
+                    }
+
 
                 .regi_body .regi_form_container form .user_filsd_wrep label {
                     width: 100%;
@@ -945,7 +1034,7 @@ header img {
                     font-size: 16.5px;
                 }
 
-               
+
 
                 .regi_body .regi_form_container form .user_filsd_wrep .user_input_box select {
                     width: 97%;
@@ -7656,3 +7745,20 @@ header img {
     border-radius: 5px;
     background-color: white;
 }
+
+
+.network {
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    padding: 10px;
+}
+    .network #network-status {
+        color: red;
+        position: fixed;
+        top: 5%;
+        padding-inline: 10px;
+        color: red;
+        background-color: #f8d7da;
+        font-family: var(--default-font);
+    }

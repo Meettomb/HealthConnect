@@ -67,6 +67,7 @@ namespace HealthConnect.Pages.Admin
         [BindProperty]
         public Order_Table Order_Table { get; set; }
         public List<Order_Table> Order_TableList { get; set; } = new List<Order_Table>();
+        public List<Feedback> FeedbackList { get; set; } = new List<Feedback>();
 
         public Admin_indexModel(IEmailService emailService, IOptions<EmailSettings> emailSettings, IConfiguration configuration)
         {
@@ -118,6 +119,7 @@ namespace HealthConnect.Pages.Admin
             GetUserCountsByCountry();
             GetTopFiveDoctorReports();
             OnGetTopFiveOrderList();
+            OnGetFiveUserFeedback();
 
             return Page();
 
@@ -242,7 +244,6 @@ namespace HealthConnect.Pages.Admin
                 }
             }
         }
-
         private void OnGetTopFiveOrderList()
         {
             UserId = HttpContext.Session.GetInt32("Id");
@@ -345,6 +346,34 @@ namespace HealthConnect.Pages.Admin
                 }
             }
         }
+
+        private void OnGetFiveUserFeedback()
+        {
+            using (SqlConnection connection = new SqlConnection(_connectionString))
+            {
+                string query = "SELECT TOP 5 * FROM Feedback ORDER BY date DESC";
+                using (SqlCommand command = new SqlCommand(query, connection))
+                {
+                    connection.Open();
+                    using (SqlDataReader reader = command.ExecuteReader()) {
+                        while (reader.Read()) {
+                            Feedback feedback = new Feedback
+                            {
+                                feedback_id = reader.GetInt32(0),
+                                name = reader.GetString(1),
+                                email = reader.GetString(2),
+                                message = reader.GetString(3),
+                                date = DateOnly.FromDateTime(reader.GetDateTime(4)),
+                            };
+
+                            FeedbackList.Add(feedback);
+                        }
+                    }
+                }
+                
+            }
+        }
+
 
         public class CountryCount
         {
