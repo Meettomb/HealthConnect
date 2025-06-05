@@ -44,63 +44,31 @@
 
         </section>
 
-        <h1 class="latest_blog_text">Latest Blogs</h1>
+        <h1 class="latest_blog_text">All Blogs</h1>
         <section class="blog_index_section3">
-            <div class="blog_outer_section">
+            @foreach (var blog in Model.blogList)
+            {
+                <div class="blog_outer_section">
 
-                <div class="blog_image">
-                    <img src="/ProductImage/Apollo Pharmacy Vitamin C Effervescent 20 Tablets_1.png" alt="" loading="lazy" />
+                    <div class="blog_image">
+                        <img src="/BlogImage/@blog.blog_image" alt="@blog.blog_title" loading="lazy" />
+                    </div>
+
+                    <div class="date_time_div">
+                        <p>Date: <span>@blog.blog_date</span></p>
+                        <p>Publisher name: <span>@blog.Writer.first_name @blog.Writer.last_name</span></p>
+                    </div>
+
+                    <div class="blog_detail">
+                        <h2>@blog.blog_title</h2>
+                        <p>@Html.Raw(@blog.blog_content)</p>
+                        <a href="/single_blog">Read more...</a>
+                    </div>
                 </div>
 
-                <div class="date_time_div">
-                    <p>Date: <span>12-05-2025</span></p>
-                    <p>Publisher name: <span>Anand Yadav</span></p>
-                </div>
-
-                <div class="blog_detail">
-                    <h2>Title</h2>
-                    <p>With it installed in the code editor you are using, you can type “lorem” and then tab and it will expand into a paragraph of Lorem Ipsum placeholder text</p>
-                    <a href="/single_blog">Read more...</a>
-                </div>
-            </div>
-
-            <div class="blog_outer_section">
-
-                <div class="blog_image">
-                    <img src="/ProductImage/Apollo Pharmacy Vitamin C Effervescent 20 Tablets_1.png" alt="" />
-                </div>
-
-                <div class="date_time_div">
-                    <p>Date <span>12-05-2025</span></p>
-                    <p>Publisher name <span>Anand Yadav</span></p>
-                </div>
-
-                <div class="blog_detail">
-                    <h2>Title</h2>
-                    <p>With it installed in the code editor you are using, you can type “lorem” and then tab and it will expand into a paragraph of Lorem Ipsum placeholder text</p>
-                    <a href="/single_blog">Read more...</a>
-                </div>
-
-            </div>
-
-            <div class="blog_outer_section">
-
-                <div class="blog_image">
-                    <img src="/ProductImage/Apollo Pharmacy Vitamin C Effervescent 20 Tablets_1.png" alt="" />
-                </div>
-
-                <div class="date_time_div">
-                    <p>Date <span>12-05-2025</span></p>
-                    <p>Publisher name <span>Anand Yadav</span></p>
-                </div>
-
-                <div class="blog_detail">
-                    <h2>Title</h2>
-                    <p>With it installed in the code editor you are using, you can type “lorem” and then tab and it will expand into a paragraph of Lorem Ipsum placeholder text</p>
-                    <a href="/single_blog">Read more...</a>
-                </div>
-
-            </div>
+            }
+           
+          
 
         </section>
 

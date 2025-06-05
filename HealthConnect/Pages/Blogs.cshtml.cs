@@ -42,6 +42,8 @@ namespace HealthConnect.Pages
         public Doctor_Specialitis SpecialitisOfDoctor { get; set; } = new Doctor_Specialitis();
 
         public List<Doctor_Specialitis> doctorSpecialitiesList = new List<Doctor_Specialitis>();
+        public List<Blog_Table> blogList { get; set; } = new List<Blog_Table>();
+
 
         public int TotalSpecialitiesCount { get; set; }
         public int TotalUsersCount { get; set; }
@@ -55,6 +57,8 @@ namespace HealthConnect.Pages
 
         public IActionResult OnGet()
         {
+
+            OnGetBlog();
             string roleInSession = HttpContext.Session.GetString("UserRole");
           
 
@@ -198,6 +202,45 @@ namespace HealthConnect.Pages
                 }
             }
 
+
+            return Page();
+        }
+
+
+        public IActionResult OnGetBlog()
+        {
+            using (SqlConnection connection = new SqlConnection(_connectionString))
+            {
+                string query = @"SELECT b.blog_id, b.user_id, b.blog_image, b.blog_title, b.blog_content, b.blog_date,
+                           u.first_name, u.last_name
+                    FROM Blog_Table b
+                    JOIN User_Table u ON b.user_id = u.id
+                    ORDER BY b.blog_date DESC";
+                using (SqlCommand cmd = new SqlCommand(query, connection)) {
+                    connection.Open();
+                    using (SqlDataReader reader = cmd.ExecuteReader())
+                    {
+                        while (reader.Read())
+                        {
+                            Blog_Table blog = new Blog_Table
+                            {
+                                blog_id = reader.GetInt32(0),
+                                user_id = reader.GetInt32(1),
+                                blog_image = reader.GetString(2),
+                                blog_title = reader.GetString(3),
+                                blog_content = reader.GetString(4),
+                                blog_date = DateOnly.FromDateTime(reader.GetDateTime(5)),
+                                Writer = new User_Table
+                                {
+                                    first_name = reader.GetString(6),
+                                    last_name = reader.GetString(7),
+                                }
+                            };
+                            blogList.Add(blog);
+                        }
+                    }
+                }
+            }
             return Page();
         }
 

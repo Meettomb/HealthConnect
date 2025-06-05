@@ -10,5 +10,8 @@ namespace HealthConnect.Models
         public string blog_title { get; set; }
         public string blog_content { get; set; }
         public DateOnly blog_date { get; set; }
+
+
+        public User_Table Writer { get; set; }
     }
 }
