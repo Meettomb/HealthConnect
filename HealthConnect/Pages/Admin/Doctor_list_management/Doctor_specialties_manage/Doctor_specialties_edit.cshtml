@@ -1,0 +1,52 @@
+﻿@page
+@model HealthConnect.Pages.Admin.Doctor_list_management.Doctor_specialties_editModel
+@{
+    Layout = "_Admin_header";
+    ViewData["Title"] = "Edit Doctor Specialties";
+}
+
+<div class="col-md-6 grid-margin stretch-card">
+    <div class="card">
+        <div class="card-body">
+            <h4 class="card-title">Add doctor specialitis of doctor</h4>
+            <form method="post" asp-page-handler="EditSpecialitis">
+                <input type="hidden" name="doctor_specialitis_id" value="@Model.SpecialitisOfDoctor.doctor_specialitis_id" />
+                <div class="col-md-12">
+                    <div class="form-group row">
+                        <div class="col-sm-12">
+
+                            <div class="form-group">
+                                <select class="form-control" name="doctor_type_id">
+                                    <option selected disabled>Select Doctor Type</option>
+                                    @foreach (var item in Model.Types_of_doctor)
+                                    {
+                                        if (item.doctor_type_id == Model.SpecialitisOfDoctor.doctor_type_id)
+                                        {
+                                            <option value="@item.doctor_type_id" selected="selected">@item.type_of_doctor</option>
+                                        }
+                                        else
+                                        {
+                                            <option value="@item.doctor_type_id">@item.type_of_doctor</option>
+                                        }
+                                    }
+                                </select>
+
+
+                            </div>
+                            <div class="form-group">
+                                <label for="doctor_specialitis">Specialitis of doctor</label>
+                                <input type="text" class="form-control" name="doctor_specialitis" id="doctor_specialitis" value="@Model.SpecialitisOfDoctor.doctor_specialitis" placeholder="Specialitis of doctor">
+                            </div>
+
+                        </div>
+                    </div>
+                    <button type="submit" class="btn btn-primary mr-2">Submit</button>
+                    <button type="button" class="btn btn-dark" onclick="history.back()">Cancel</button>
+                </div>
+            </form>
+
+        </div>
+    </div>
+</div>
+
+

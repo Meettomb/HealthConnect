@@ -1,0 +1,217 @@
+﻿<!DOCTYPE html>
+
+<html>
+<head>
+    <meta name="viewport" content="width=device-width" />
+    <title>@ViewBag.Title - Health Connect</title>
+
+    <link href="/images/HealthConnectTabLogo.png" rel="icon" />
+    <link href="/css/Index.css" rel="stylesheet" />
+
+    <!--ICON-->
+    <link href="/Icon/fontawesome-free-6.7.2-web/css/fontawesome.css" rel="stylesheet" />
+    <link href="/Icon/fontawesome-free-6.7.2-web/css/brands.css" rel="stylesheet" />
+    <link href="/Icon/fontawesome-free-6.7.2-web/css/solid.css" rel="stylesheet" />
+    <link href="/Icon/fontawesome-free-6.7.2-web/css/sharp-thin.css" rel="stylesheet" />
+    <link href="/Icon/fontawesome-free-6.7.2-web/css/duotone-thin.css" rel="stylesheet" />
+    <link href="/Icon/fontawesome-free-6.7.2-web/css/sharp-duotone-thin.css" rel="stylesheet" />
+
+    <link rel="stylesheet" href="/assets/vendors/mdi/css/materialdesignicons.min.css">
+
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="/js/jQuery.js"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@100..900&family=Sofia+Sans+Condensed:ital,wght@0,1..1000;1,1..1000&display=swap" rel="stylesheet">
+
+</head>
+<body>
+
+    <div class="loder" id="loder">
+        <img src="/Loder.gif" alt="Alternate Text" />
+    </div>
+
+    <div class="overview_header_contant" id="header">
+        <header class="overview_header">
+            <div class="overview_back_button">
+                <img src="/images/HealthConnectLogo.png" onclick="redirectToHomepage()" />
+            </div>
+
+            <div class="overview_profile_icon">
+
+                <div class="login_and_profile">
+
+                    @if (Model.UserId == null)
+                    {
+                        <a class="header_login_button" href="/User/Sign_in">Login</a>
+                    }
+                    else
+                    {
+                        <div class="header_user_icon_drop_down">
+                            @if (!string.IsNullOrEmpty(Model.ProfilePic))
+                            {
+                                <div class="header_user_image">
+                                    <img src="/documant/@Model.ProfilePic" />
+                                </div>
+                            }
+                            else
+                            {
+                                <div class="header_user_icon">
+                                    @Model.FirstName[0].ToString().ToUpper()
+                                </div>
+
+                            }
+                            <div class="header_user_services">
+                                <section>
+                                    <a href="/Account/Overview">
+                                        <i class="fa-solid fa-user"></i> Account
+                                    </a>
+
+                                    <a href="/Chatting/Chatting_page">
+                                        <i class="fa-solid fa-message"></i> Message
+                                    </a>
+
+                                    <a href="/User/AppointmentManage/All_appointment">
+                                        <i class="fa-solid fa-calendar-day"></i> Appointment
+                                    </a>
+
+                                    @if (Model.Role == "Pharmacist")
+                                    {
+                                        <a href="/User/Saler/Saler_Dashbord">
+                                            <i class="fa-solid fa-chart-line"></i> Your Dashbord
+                                        </a>
+                                    }
+
+                                    @if (Model.Role == "Admin")
+                                    {
+                                        <a href="/Admin/Admin_index">
+                                            <i class="fa-solid fa-user-tie"></i> Admin side
+                                        </a>
+                                    }
+                                    <a href="/User/Logout">
+                                        <i class="fa-solid fa-right-from-bracket"></i> Logout
+                                    </a>
+                                </section>
+                            </div>
+                        </div>
+                    }
+
+                </div>
+            </div>
+        </header>
+    </div>
+
+    <div class="overview_container">
+        <div class="overview_all_contant">
+            <div class="overview_content">
+                <nav class="overview_nav">
+                    <h4 onclick="redirectToHomepage()"><i class="fa-solid fa-arrow-left"></i> Back to Health Connect</h4>
+                    <ul>
+                        <li id="overview"><i class="fa-solid fa-warehouse"></i> Overview </li>
+
+                        <li id="paymant"><i class="fa-solid fa-wallet"></i> Paymant </li>
+
+                        <li id="security"><i class="fa-solid fa-shield-halved"></i> Security </li>
+
+                        <li id="chat-setting"><i class="fa-solid fa-message"></i> Chat Setting </li>
+
+                    </ul>
+                </nav>
+
+                <div class="overview_content_container">
+                    @RenderBody()
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+    <script src="/js/Script.js"></script>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+
+    <script>
+        document.addEventListener("DOMContentLoaded", function () {
+            function hideMessageAfterDelay(elementId) {
+                let element = document.getElementById(elementId);
+                if (element && element.innerText.trim() !== "") {
+                    element.style.display = "block";
+                    setTimeout(() => {
+                        element.style.display = "none";
+                    }, 5000);
+                }
+            }
+
+            hideMessageAfterDelay("errorMessage");
+            hideMessageAfterDelay("successMessage");
+            hideMessageAfterDelay("tempSuccessMessage");
+            hideMessageAfterDelay("tempErrorMessage");
+        });
+    </script>
+
+    <script>
+        $(".header_user_icon").on("click", function () {
+            $(".header_user_services").slideToggle();
+
+            $(".Search_by_Speciality, .Search_by_Type, .Search_by_city").slideUp();
+        });
+        $(".header_user_image").on("click", function () {
+            $(".header_user_services").slideToggle();
+
+            $(".Search_by_Speciality, .Search_by_Type, .Search_by_city").slideUp();
+        });
+    </script>
+
+    <script>
+
+        document.getElementById("overview").addEventListener("click", function () {
+            let allLinks = document.querySelectorAll(".all_quick_links > *");
+
+            allLinks.forEach(link => {
+                link.style.display = "block";
+            });
+
+        });
+        document.getElementById("paymant").addEventListener("click", function () {
+            let allLinks = document.querySelectorAll(".all_quick_links > *");
+            let paymentLink = document.querySelector(".all_quick_links .paymant_quick_link");
+
+            allLinks.forEach(link => {
+                link.style.display = "none";
+            });
+
+            if (paymentLink) {
+                paymentLink.style.display = "block";
+            }
+        });
+        document.getElementById("security").addEventListener("click", function () {
+            let allLinks = document.querySelectorAll(".all_quick_links > *")
+            let securityLink = document.querySelector(".all_quick_links .secuirty_quick_link");
+
+            allLinks.forEach(link => {
+                link.style.display = "none";
+            });
+
+            if (securityLink) {
+                securityLink.style.display = "block";
+            }
+
+        });
+        document.getElementById("chat-setting").addEventListener("click", function () {
+            let allLinks = document.querySelectorAll(".all_quick_links > *");
+            let chatLink = document.querySelector(".all_quick_links .chat_quick_link");
+
+            allLinks.forEach(Link => {
+                Link.style.display = "none";
+            });
+
+            if (chatLink) {
+                chatLink.style.display = "block";
+            }
+
+        });
+
+
+    </script>
+
+</body>
+</html>

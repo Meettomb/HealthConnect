@@ -1,0 +1,129 @@
+﻿@page
+@model HealthConnect.Pages.User.Sign_inModel
+@{
+    Layout = "";
+    ViewData["Title"] = "Login";
+}
+
+<!DOCTYPE html>
+
+<html>
+<head>
+    <meta name="viewport" content="width=device-width" />
+    <title>@ViewBag.Title</title>
+    <link rel="stylesheet" href="/css/Index.css">
+
+    <link href="/images/HealthConnectTabLogo.png" rel="icon" />
+
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css">
+
+</head>
+<body class="login_body">
+
+    @if (!string.IsNullOrEmpty(Model.ErrorMessage))
+    {
+        <div class="error_message" id="errorMessage">@Model.ErrorMessage</div>
+    }
+
+    @if (!string.IsNullOrEmpty(Model.SuccessMessage))
+    {
+        <p class="success_message" id="successMessage">@Model.SuccessMessage</p>
+    }
+
+    @if (TempData["SuccessMessage"] != null)
+    {
+        <div class="success_message" id="tempSuccessMessage">@TempData["SuccessMessage"]</div>
+    }
+
+    @if (TempData["ErrorMessage"] != null)
+    {
+        <div class="error_message" id="tempErrorMessage">@TempData["ErrorMessage"]</div>
+    }
+
+
+    <div class="back_button" onclick="history.back()"><i class="fa-solid fa-arrow-left"></i></div>
+    <div class="loging_container">
+        <div class="form_container">
+            <form method="post">
+                <div class="from_heading">
+                    <h1>Sign in</h1>
+                </div>
+                <div class="user_input_box" style="margin:20px 0;">
+                    <input type="email" id="email" name="email" placeholder="Enter your Email">
+                    <label for="email">Email</label>
+                    <i class="fa-solid fa-at"></i>
+                </div>
+
+                <div class="user_input_box" style="margin:20px 0;">
+                    <input type="password" id="password" class="password-input" name="password" placeholder="Enter your Password">
+                    <label for="password">Password</label>
+                    <i class="fa-regular fa-eye"></i>
+                </div>
+
+
+                <div class="login_button">
+                    <button type="submit">Sign in</button>
+                </div>
+
+                <a href="/User/Forgot_password/Enter_Email">Forgot password?</a>
+                <a href="/User/Sign_up">Don't have an account? Sign up</a>
+
+            </form>
+
+
+        </div>
+    </div>
+
+    <script src="/js/Script.js"></script>
+
+
+    <script>
+        const inputBoxes = document.querySelectorAll('.user_input_box');
+
+        inputBoxes.forEach(box => {
+            const input = box.querySelector('input');
+            const label = box.querySelector('label');
+
+            // Apply floating label if input already has text
+            if (input.value.length > 0) {
+                label.classList.add('float-label');
+            }
+
+            // Add input event listener to toggle label position
+            input.addEventListener('input', () => {
+                if (input.value.length > 0) {
+                    label.classList.add('float-label');
+                } else {
+                    label.classList.remove('float-label');
+                }
+            });
+        });
+
+
+    </script>
+
+    
+    <script>
+        document.addEventListener("DOMContentLoaded", function () {
+            function hideMessageAfterDelay(elementId) {
+                let element = document.getElementById(elementId);
+                if (element && element.innerText.trim() !== "") {
+                    element.style.display = "block";
+                    setTimeout(() => {
+                        element.style.display = "none";
+                    }, 5000);
+                }
+                else{
+                    element.style.display = "none";
+                }
+            }
+
+            hideMessageAfterDelay("errorMessage");
+            hideMessageAfterDelay("successMessage");
+            hideMessageAfterDelay("tempSuccessMessage");
+            hideMessageAfterDelay("tempErrorMessage");
+        });
+    </script>
+
+</body>
+</html>

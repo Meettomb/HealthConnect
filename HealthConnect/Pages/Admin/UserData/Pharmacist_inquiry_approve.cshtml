@@ -1,0 +1,145 @@
+﻿@page
+@model HealthConnect.Pages.Admin.UserData.Pharmacist_inquiry_approveModel
+@{
+    Layout = "_Admin_header";
+    ViewData["Title"] = "Pharmacist Inquiry Approve";
+}
+
+
+<head>
+    <style>
+        .form_button {
+            display: flex;
+            position: sticky;
+            column-gap: 30px;
+            margin: 15px 0;
+        }
+
+            .form_button button {
+                text-align: center;
+                padding: 10px 10px;
+                border-radius: 5px;
+                border: none;
+                color: white;
+                cursor: pointer;
+            }
+
+                .form_button button i {
+                    width: 100%;
+                    text-align: center;
+                }
+    </style>
+</head>
+
+<div class="row">
+    <div class="col-12">
+        <div class="card">
+            <div class="card-body">
+                <h4 class="card-title">Doctor Register inquiry</h4>
+                <p onclick="history.back()" class="text-primary" style="cursor: pointer;">Back to list</p>
+                <div class="form_button">
+                    <form method="post" asp-page-handler="Approve">
+                        <input type="hidden" name="pharmacist_Approvel_id" value="@Model.pharmacist_Approvel.pharmacist_approvel_id" />
+                        <button class="btn btn-success"><i class="fa-solid fa-check"></i></button>
+                    </form>
+
+                    <form method="post" asp-page-handler="Reject">
+                        <input type="hidden" name="pharmacist_Approvel_id" value="@Model.pharmacist_Approvel.pharmacist_approvel_id" />
+                        <button class="btn btn-danger"><i class="fa-solid fa-xmark"></i></button>
+                    </form>
+                </div>
+                <div class="row">
+                    <div class="col-md-12">
+                        <div class="table-responsive">
+                            <table class="table">
+
+                                <tbody>
+                                    <tr>
+                                        <th>Request ID</th>
+                                        <td>@Model.pharmacist_Approvel.pharmacist_approvel_id</td>
+                                    </tr>
+                                    <tr>
+                                        <th>First Name</th>
+                                        <td>@Model.pharmacist_Approvel.first_name</td>
+                                    </tr>
+                                    <tr>
+                                        <th>Last Name</th>
+                                        <td>@Model.pharmacist_Approvel.last_name</td>
+                                    </tr>
+                                    <tr>
+                                        <th>Email</th>
+                                        <td>@Model.pharmacist_Approvel.email</td>
+                                    </tr>
+                                    <tr>
+                                        <th>Mobile No</th>
+                                        <td>@Model.pharmacist_Approvel.mobil_no</td>
+                                    </tr>
+                                    <tr>
+                                        <th>Date of Birth</th>
+                                        <td>@Model.pharmacist_Approvel.dob</td>
+                                    </tr>
+                                    <tr>
+                                        <th>Address</th>
+                                        <td>@Model.pharmacist_Approvel.House_number_and_Street_name</td>
+                                    </tr>
+                                    <tr>
+                                        <th>Country</th>
+                                        <td>@Model.pharmacist_Approvel.country</td>
+                                    </tr>
+                                    <tr>
+                                        <th>City</th>
+                                        <td>@Model.pharmacist_Approvel.city</td>
+                                    </tr>
+                                    <tr>
+                                        <th>State</th>
+                                        <td>@Model.pharmacist_Approvel.state</td>
+                                    </tr>
+                                    <tr>
+                                        <th>Pincode</th>
+                                        <td>@Model.pharmacist_Approvel.pincode</td>
+                                    </tr>
+                                    <tr>
+                                        <th>Gender</th>
+                                        <td>@Model.pharmacist_Approvel.gender</td>
+                                    </tr>
+                                    <tr>
+                                        <th>Role</th>
+                                        <td>@Model.pharmacist_Approvel.role</td>
+                                    </tr>
+                                    <tr>
+                                        <th>Role</th>
+                                        <td><img src="/documant/@Model.pharmacist_Approvel.shop_licence" alt="" /></td>
+                                    </tr>
+                                    <tr>
+                                        <th>Role</th>
+                                        <td>@Model.pharmacist_Approvel.shop_name</td>
+                                    </tr>
+                                     <tr>
+                                        <th>Role</th>
+                                        <td>@Model.pharmacist_Approvel.shop_address</td>
+                                    </tr>
+                                    <tr>
+                                        <th>Account Approved</th>
+                                        <td>@(Model.pharmacist_Approvel.account_approve.HasValue ? Model.pharmacist_Approvel.account_approve.Value ? "Yes" : "No" : "Pending")</td>
+                                    </tr>
+                                    <tr>
+                                        <th>Account Creation Date</th>
+                                        <td>@Model.pharmacist_Approvel.account_create_date.ToString("dd/MM/yyyy")</td>
+                                    </tr>
+                                    <tr>
+                                        <th>Active Status</th>
+                                        <td>@(Model.pharmacist_Approvel.isactive ? "Active" : "Inactive")</td>
+                                    </tr>
+
+                                </tbody>
+
+                            </table>
+                        </div>
+
+                    </div>
+
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

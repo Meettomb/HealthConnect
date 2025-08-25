@@ -1,0 +1,27 @@
+﻿
+@import url('https://fonts.googleapis.com/css2?family=Outfit:wght@100..900&family=Sofia+Sans+Condensed:ital,wght@0,1..1000;1,1..1000&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Gabarito:wght@400..900&family=Outfit:wght@100..900&family=Sofia+Sans+Condensed:ital,wght@0,1..1000;1,1..1000&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Gabarito:wght@400..900&family=Outfit:wght@100..900&family=Roboto:ital,wght@0,100..900;1,100..900&family=Sofia+Sans+Condensed:ital,wght@0,1..1000;1,1..1000&display=swap');
+
+:root {
+    --body-bg-color: #ffffff;
+    --header-bg-color: #ffffff;
+    --header-text-hover-color: #1977cc;
+    --button-bg-color: #1977cc;
+    --button-font-color: white;
+    --main-font-color: #333333;
+    --heading-color: #2c4964;
+    --header-text-color: #2c4964;
+    --footer-bg-color: #f1f7fc;
+    --button-hover-bg-color: #53a8f5;
+    --default-color: #444444;
+    --heading-color: #2c4964;
+    --accent-color: #1977cc;
+    --surface-color: #ffffff;
+    --contrast-color: #ffffff;
+    --default-font: "Roboto", serif;
+    --heading-font: "Gabarito", serif;
+    --nav-font: "Gabarito", serif;
+    --dark-emerald-color: #12403e;
+    --border-color: #f1f1f1;
+}

@@ -1,0 +1,197 @@
+﻿@page
+@model HealthConnect.Pages.Admin.UserData.Register_inquiry_approveModel
+@{
+    Layout = "~/Pages/Shared/_Admin_header.cshtml";
+    ViewData["Title"] = "Doctor Register inquiry approve page";
+}
+<head>
+    <style>
+        .form_button {
+            display: flex;
+            position: sticky;
+            column-gap: 30px;
+            margin: 15px 0;
+        }
+
+            .form_button button {
+                text-align: center;
+                padding: 10px 10px; 
+                border-radius: 5px;
+                border: none;
+                color: white;
+                cursor: pointer;
+            }
+
+            .form_button button i{
+                width: 100%;
+                    text-align: center;
+            }
+    </style>
+</head>
+
+<div class="row">
+    <div class="col-12">
+        <div class="card">
+            <div class="card-body">
+                <h4 class="card-title">Doctor Register inquiry</h4>
+                <p onclick="history.back()" class="text-primary" style="cursor: pointer;">Back to list</p>
+                <div class="form_button">
+                    <form method="post" asp-page-handler="Approve">
+                        <input type="hidden" name="doctor_approvel_id" value="@Model.Doctor_approvel.doctor_approvel_id" />
+                        <button class="btn btn-success"><i class="fa-solid fa-check"></i></button>
+                    </form>
+
+                    <form method="post" asp-page-handler="Reject">
+                        <input type="hidden" name="doctor_approvel_id" value="@Model.Doctor_approvel.doctor_approvel_id" />
+                        <button class="btn btn-danger"><i class="fa-solid fa-xmark"></i></button>
+                    </form>
+                </div>
+                <div class="row">
+                    <div class="col-md-12">
+                        <div class="table-responsive">
+                            <table class="table">
+
+                                <tbody>
+                                    <tr>
+                                        <th>Request ID</th>
+                                        <td>@Model.Doctor_approvel.doctor_approvel_id</td>
+                                    </tr>
+                                    <tr>
+                                        <th>First Name</th>
+                                        <td>@Model.Doctor_approvel.first_name</td>
+                                    </tr>
+                                    <tr>
+                                        <th>Last Name</th>
+                                        <td>@Model.Doctor_approvel.last_name</td>
+                                    </tr>
+                                    <tr>
+                                        <th>Email</th>
+                                        <td>@Model.Doctor_approvel.email</td>
+                                    </tr>
+                                    <tr>
+                                        <th>Mobile No</th>
+                                        <td>@Model.Doctor_approvel.mobil_no</td>
+                                    </tr>
+                                    <tr>
+                                        <th>Date of Birth</th>
+                                        <td>@Model.Doctor_approvel.dob</td>
+                                    </tr>
+                                    <tr>
+                                        <th>Address</th>
+                                        <td>@Model.Doctor_approvel.House_number_and_Street_name</td>
+                                    </tr>
+                                    <tr>
+                                        <th>Country</th>
+                                        <td>@Model.Doctor_approvel.country</td>
+                                    </tr>
+                                    <tr>
+                                        <th>City</th>
+                                        <td>@Model.Doctor_approvel.city</td>
+                                    </tr>
+                                    <tr>
+                                        <th>State</th>
+                                        <td>@Model.Doctor_approvel.state</td>
+                                    </tr>
+                                    <tr>
+                                        <th>Pincode</th>
+                                        <td>@Model.Doctor_approvel.pincode</td>
+                                    </tr>
+                                    <tr>
+                                        <th>Gender</th>
+                                        <td>@Model.Doctor_approvel.gender</td>
+                                    </tr>
+                                    <tr>
+                                        <th>Role</th>
+                                        <td>@Model.Doctor_approvel.role</td>
+                                    </tr>
+                                    <tr>
+                                        <th>Password</th>
+                                        <td>@Model.Doctor_approvel.password</td>
+                                    </tr>
+                                    <tr>
+                                        <th>Profile Picture</th>
+                                        <td><img src="/documant/@Model.Doctor_approvel.profile_pic" alt="Profile Picture" width="100"></td>
+                                    </tr>
+                                    <tr>
+                                        <th>Medical License Photo</th>
+                                        <td><img src="/documant/@Model.Doctor_approvel.doctore_medical_license_photo" alt="License Photo" width="100"></td>
+                                    </tr>
+                                    <tr>
+                                        <th>Medical Registration No</th>
+                                        <td>@Model.Doctor_approvel.medical_registration_no</td>
+                                    </tr>
+                                    <tr>
+                                        <th>State Medical Council</th>
+                                        <td>@Model.Doctor_approvel.state_medical_council</td>
+                                    </tr>
+                                    <tr>
+                                        <th>Year of Registration</th>
+                                        <td>@Model.Doctor_approvel.year_of_registration</td>
+                                    </tr>
+                                    <tr>
+                                        <th>Experience</th>
+                                        <td>@Model.Doctor_approvel.doctore_experience</td>
+                                    </tr>
+                                    <tr>
+                                        <th>Medicine type</th>
+                                        <td>@Model.Doctor_approvel.medicine_type</td>
+                                    </tr>
+                                    <tr>
+                                        <th>Hospital/Clinic</th>
+                                        <td>@Model.Doctor_approvel.hospital_or_clinic</td>
+                                    </tr>
+                                    <tr>
+                                        <th>Qualifications</th>
+                                        <td>@Model.Doctor_approvel.doctor_qualifications</td>
+                                    </tr>
+                                    <tr>
+                                        <th>Doctor Type</th>
+                                        <td>@Model.Doctor_approvel.doctor_type </td>
+                                    </tr>
+
+                                    <tr>
+                                        <th>Doctor Specialitis</th>
+                                        <td>@Model.Doctor_approvel.doctor_specialitis</td>
+                                    </tr>
+
+                                    <tr>
+                                        <th>Languages Spoken</th>
+                                        <td>@Model.Doctor_approvel.languages_spoken</td>
+                                    </tr>
+                                    <tr>
+                                        <th>Clinic/Hospital Address</th>
+                                        <td>@Model.Doctor_approvel.clinic_or_hospital_address</td>
+                                    </tr>
+                                    <tr>
+                                        <th>On Clinic Consultation Fee</th>
+                                        <td>@Model.Doctor_approvel.on_site_consultation_fee</td>
+                                    </tr>
+                                    <tr>
+                                        <th>Video Call Consultation Fee</th>
+                                        <td>@Model.Doctor_approvel.video_call_consultation_fee</td>
+                                    </tr>
+                                    <tr>
+                                        <th>Account Approved</th>
+                                        <td>@(Model.Doctor_approvel.account_approve.HasValue ? Model.Doctor_approvel.account_approve.Value ? "Yes" : "No" : "Pending")</td>
+                                    </tr>
+                                    <tr>
+                                        <th>Account Creation Date</th>
+                                        <td>@Model.Doctor_approvel.account_create_date.ToString("dd/MM/yyyy")</td>
+                                    </tr>
+                                    <tr>
+                                        <th>Active Status</th>
+                                        <td>@(Model.Doctor_approvel.isactive ? "Active" : "Inactive")</td>
+                                    </tr>
+
+                                </tbody>
+
+                            </table>
+                        </div>
+
+                    </div>
+
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

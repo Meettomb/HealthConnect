@@ -1,0 +1,79 @@
+﻿@page
+@model HealthConnect.Pages.User.Saler.Manage_Products.View_productsModel
+@{
+    Layout = "_Saler_dashbord";
+    ViewData["Title"] = "View Products";
+}
+
+<div class="col-12">
+    <div class="bg-light rounded h-100 p-4">
+        <h6 class="mb-4">Product List</h6>
+        <div class="table-responsive">
+            <table class="table">
+                <thead>
+                    <tr>
+                        <th scope="col">#</th>
+                        <th scope="col">Product name</th>
+                        <th scope="col">Price</th>
+                        <th scope="col">Quantity</th>
+                        <th scope="col">Expire date</th>
+                        <th scope="col">Product add date</th>
+                        <th scope="col">Action</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var product in Model.Product_TableList)
+                    {
+                        <tr>
+                            <th scope="row">@product.product_id</th>
+                            <td>@product.product_name</td>
+                            <td>@product.product_price</td>
+                            <td>@product.product_qantity</td>
+                            <td>@product.product_exp_date</td>
+                            <td>@product.product_add_date</td>
+                            <td><a href="/User/Saler/Manage_Products/Product_details?product_id=@product.product_id">Detail</a></td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+
+
+
+
+<!--
+@foreach (var product in Model.Product_TableList)
+{
+        <div class="product-container">
+            <h3>@product.product_name</h3>
+            <p><strong>Product ID:</strong> @product.product_id</p>
+            <p><strong>Price:</strong> @product.product_price</p>
+            <p><strong>Discount:</strong> @(product.product_discount.HasValue ? product.product_discount.Value + "%" : "N/A")</p>
+            <p><strong>Quantity:</strong> @product.product_qantity</p>
+            <p><strong>Description:</strong> @product.product_description</p>
+            <p><strong>Features:</strong> @(string.IsNullOrEmpty(product.product_features) ? "N/A" : product.product_features)</p>
+            <p><strong>Benefits:</strong> @product.product_benefits</p>
+            <p><strong>How to Use:</strong> @product.product_how_to_use</p>
+            <p><strong>Expiration Date:</strong> @product.product_exp_date</p>
+            <p><strong>Added Date:</strong> @product.product_add_date</p>
+
+            <h4>Brand Details</h4>
+            <p><strong>Brand Name:</strong> @product.Brand.pharmaceutical_brands_name</p>
+
+            <h4>Seller Details</h4>
+            <p><strong>Seller Name:</strong> @product.Seller.first_name @product.Seller.last_name</p>
+            <p><strong>Shop Name:</strong> @(string.IsNullOrEmpty(product.Seller.shop_name) ? "N/A" : product.Seller.shop_name)</p>
+            <p><strong>Shop Address:</strong> @(string.IsNullOrEmpty(product.Seller.shop_address) ? "N/A" : product.Seller.shop_address)</p>
+
+        @if (!string.IsNullOrEmpty(product.Seller.profile_pic))
+        {
+                    <p><strong>Profile Picture:</strong></p>
+                    <img src="@product.Seller.profile_pic" alt="Profile Picture" width="100" />
+        }
+
+            <hr />
+        </div>
+}
+-->

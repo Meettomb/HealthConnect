@@ -1,0 +1,128 @@
+﻿@page
+@model HealthConnect.Pages.User.Saler.Manage_Products.Product_detailsModel
+@{
+    Layout = "_Saler_dashbord";
+    ViewData["Title"] = "Product Details";
+}
+
+
+<div class="col-12">
+    <div class="bg-light rounded h-100 p-4">
+        <h3 class="mb-4">Product Detail</h3>
+
+        <div class="d-flex gap-2">
+            <form method="post">
+                <input type="hidden" name="product_id" value="@Model.Product.product_id" />
+                <button type="submit" name="submit" class="btn btn-danger">Delete</button>
+            </form> 
+            <a href="/User/Saler/Manage_Products/Product_edit?product_id=@Model.Product.product_id" class="btn btn-success">Edit product details</a>
+            <a href="javascript:void(0);" onclick="history.back()" class="btn btn-secondary">Back to List</a>
+
+        </div>
+        <div class="table-responsive">
+            <table class="table">
+                <thead>
+                    <tr>
+                        <th>Field</th>
+                        <th>Value</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <th>Product ID</th>
+                        <td>@Model.Product.product_id</td>
+                    </tr>
+                    <tr>
+                        <th>Seller Name</th>
+                        <td>@Model.Product.Seller.first_name @Model.Product.Seller.last_name</td>
+                    </tr>
+                    <tr>
+                        <th>Brand Name</th>
+                        <td>@Model.Product.Brand.pharmaceutical_brands_name</td>
+                    </tr>
+
+                    <tr>
+                        <th>Product Image</th>
+                        <td>
+                            @if (!string.IsNullOrEmpty(Model.Product.product_image))
+                            {
+                                var images = Model.Product.product_image.Split(',');
+                                foreach (var image in images)
+                                {
+                                    <img src="/ProductImage/@image.Trim()" alt="Product Image" width="100" style="margin-right: 5px;" />
+                                }
+                            }
+                        </td>
+                    </tr>
+                    <tr>
+                        <th>Product Name</th>
+                        <td>@Model.Product.product_name</td>
+                    </tr>
+                    <tr>
+                        <th>Category</th>
+                        <td>@Model.Product.FinelCategory.Medicine_Main_Category.medicine_main_category_name</td>
+                    </tr>
+                    <tr>
+                        <th></th>
+                        <td>@Model.Product.FinelCategory.Medicine_Sub_Category.medicine_sub_category_name</td>
+                    </tr>
+                    <tr>
+                        <th></th>
+                        <td>@Model.Product.FinelCategory.medicine_finel_category_name</td>
+                    </tr>
+                    <tr>
+                        <th>Product Price</th>
+                        <td>@Model.Product.product_price</td>
+                    </tr>
+                    <tr>
+                        <th>Product Discount</th>
+                        <td>@(Model.Product.product_discount ?? 0)%</td>
+                    </tr>  
+                    <tr>
+                        <th>Discount Price</th>
+                        <td>@Model.Product.discounted_price</td>
+                    </tr>
+                    <tr>
+                        <th>Product Quantity</th>
+                        <td>@Model.Product.product_qantity</td>
+                    </tr>
+                    <tr>
+                        <th>Product Description</th>
+                        <td>@Model.Product.product_description</td>
+                    </tr>
+                    <tr>
+                        <th>Product Features</th>
+                        <td>@(Model.Product.product_features ?? "N/A")</td>
+                    </tr>
+                    <tr>
+                        <th>Product Benefits</th>
+                        <td>@Model.Product.product_benefits</td>
+                    </tr>
+                    <tr>
+                        <th>How to Use</th>
+                        <td>@Model.Product.product_how_to_use</td>
+                    </tr>
+                    <tr>
+                        <th>Expiry Date</th>
+                        <td>@Model.Product.product_exp_date</td>
+                    </tr>
+                    <tr>
+                        <th>Product Added Date</th>
+                        <td>@Model.Product.product_add_date</td>
+                    </tr>
+
+                   
+                    <tr>
+                        <th>Shop Name</th>
+                        <td>@(Model.Product.Seller.shop_name ?? "N/A")</td>
+                    </tr>
+                    <tr>
+                        <th>Shop Address</th>
+                        <td>@(Model.Product.Seller.shop_address ?? "N/A")</td>
+                    </tr>
+                </tbody>
+            </table>
+           
+        </div>
+    </div>
+</div>

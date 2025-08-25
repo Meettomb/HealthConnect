@@ -1,0 +1,85 @@
+﻿@page
+@model HealthConnect.Pages.Admin.DoctorReportsManage.Report_detailModel
+@{
+    Layout = "_Admin_header";
+    ViewData["Title"] = "Reports Detail";
+}
+
+<div class="row">
+    <div class="col-12">
+        <div class="card">
+            <div class="card-body">
+                <h4 class="card-title">Doctor Register inquiry</h4>
+                <p onclick="history.back()" class="text-primary" style="cursor: pointer;">Back to list</p>
+
+                <div class="row">
+                    <div class="col-md-12">
+                        <div class="table-responsive">
+                            <table class="table">
+
+                                <tbody>
+                                    @if (Model.Doctor_Report != null)
+                                    {
+                                        <tr>
+                                            <th>User Name</th>
+                                            <td>
+                                                @if (string.IsNullOrEmpty(Model.Doctor_Report.UserList.profile_pic))
+                                                {
+                                                    <span class="name_first_latter">
+                                                        @Model.Doctor_Report.UserList.first_name[0].ToString().ToUpper()
+                                                    </span>
+
+                                                }
+                                                else
+                                                {
+                                                    <img src="/documant/@Model.Doctor_Report.UserList.profile_pic" alt="image" />
+                                                }
+                                                 @Model.Doctor_Report.UserList?.first_name @Model.Doctor_Report.UserList?.last_name
+                                            </td>
+                                        </tr>
+
+                                        <tr>
+                                            <th>Doctor Name</th>
+                                            <td>
+
+                                                @if (string.IsNullOrEmpty(Model.Doctor_Report.DoctorList.profile_pic))
+                                                {
+                                                    <span class="name_first_latter">
+                                                        @Model.Doctor_Report.DoctorList.first_name[0].ToString().ToUpper()
+                                                    </span>
+                                                }
+                                                else
+                                                {
+                                                    <img src="/documant/@Model.Doctor_Report.DoctorList.profile_pic" alt="image" />
+
+                                                }
+
+                                                 @Model.Doctor_Report.DoctorList?.first_name @Model.Doctor_Report.DoctorList?.last_name
+                                            </td>
+                                        </tr>
+
+                                        <tr>
+                                            <th>Report Message</th>
+                                            <td>@Model.Doctor_Report.report_message</td>
+                                        </tr>
+                                    }
+                                    else
+                                    {
+                                        <tr>
+                                            <td colspan="2">No report found.</td>
+                                        </tr>
+                                    }
+                                </tbody>
+
+
+                            </table>
+                        </div>
+
+                    </div>
+
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+

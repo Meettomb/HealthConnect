@@ -1,0 +1,272 @@
+﻿@page
+@model HealthConnect.Pages.User.Order_historyModel
+@{
+
+    Layout = "_Pharmacy_header";
+    ViewData["Title"] = "Your Orders";
+}
+
+<div class="order_history_container">
+    <main class="order_main_tag">
+        <h1>Order history</h1>
+        @foreach (var order in Model.Order_TableList)
+        {
+            <section>
+                <div class="left_side">
+                    <div class="image_div">
+                        <a href="/Ecom/Single_Product?product_id=@order.product_id">
+                            <img src="/ProductImage/@order.Product.product_image.Split(",")[0]" alt="@order.Product.product_name" />
+                        </a>
+                    </div>
+                    <div class="product_info">
+                        <h2><a href="/Ecom/Single_Product?product_id=@order.product_id">@order.Product.product_name</a></h2>
+                        <p class="quentity">Quantity: <span>@order.quantity</span></p>
+                        <p class="address">Address: <span>@order.billing_address</span></p>
+                        <p class="price">Total Ammount: <span>@order.price</span></p>
+                    </div>
+                </div>
+
+                <div class="right_side">
+                    <div class="order_status">
+                        <p>
+                            Order Status
+                            @if (order.order_status == "Pending")
+                            {
+                                <span style="color: #757575;">@order.order_status</span>
+                            }
+                            else if (order.order_status == "Cancel")
+                            {
+                                <span style="color: #dc3545;">@order.order_status</span>
+                            }
+                            else if (order.order_status == "Delivered")
+                            {
+                                <span style="color: #198754;">@order.order_status</span>
+                            }
+                            else if (order.order_status == "Shipped")
+                            {
+                                <span style="color: #ffc107 ;">@order.order_status</span>
+
+                            }
+                        </p>
+                    </div>
+                    <div class="order_date">
+                        <p>
+                            Order Date
+                            <span class="date">@order.order_datetime</span>
+                        </p>
+                    </div>
+                    <div class="order_id">
+                        <p>
+                            Order ID
+                            <span class="id">@order.order_id</span>
+                        </p>
+                    </div>
+                </div>
+            </section>
+
+            <div class="below_detail">
+
+                @if (order.order_status == "Pending")
+                {
+                    <form method="post">
+                        <input type="hidden" name="order_id" value="@order.order_id" />
+                        <input type="hidden" name="user_id" value="@Model.UserId" />
+                        <button type="submit" name="action" value="OrderCancle">Order Cancle</button>
+                    </form>
+                }
+                else if (order.order_status == "Shipped")
+                {
+                    <form method="post">
+                        <input type="hidden" name="order_id" value="@order.order_id" />
+                        <input type="hidden" name="user_id" value="@Model.UserId" />
+                        <button type="submit" name="action" value="OrderCancle">Order Cancle</button>
+                    </form>
+                }
+
+                <form>
+                    <button class="buyButton"
+                            type="button"
+                            data-product-id="@order.product_id"
+                            data-seller-id="@order.seller_id"
+                            data-quantity="@order.quantity"
+                            data-price="@((order.Product.product_discount != null && order.Product.product_discount > 0) ? order.Product.discounted_price : order.Product.product_price)">
+                        Re Order
+                    </button>
+
+
+                </form>
+
+                <form>
+                    <button>Downlode invoce</button>
+                </form>
+
+            </div>
+
+
+
+
+            <div class="order_popup_container" id="orderPopup">
+                <div class="popup_content">
+                    <i class="fa-solid fa-times" id="closePopup"></i>
+                    <h2>Chack your details</h2>
+
+                    <form method="post" id="Buy">
+                        <div class="confiem_detail">
+
+
+                            <div class="detail">
+                                <input type="hidden" name="user_id" value="@Model.UserId" readonly />
+                            </div>
+                            <div class="detail">
+                                <input type="hidden" name="product_id" value="" readonly />
+                            </div>
+                            <div class="detail">
+                                <input type="hidden" name="seller_id" value="" readonly />
+                            </div>
+
+
+                            <div class="detail">
+                                <label>Quantity: (You can Change)</label>
+                                <input type="number" name="quantity" id="buying_quantity" value="" min="1" max="6" />
+                            </div>
+
+                            <div class="detail">
+                                <label>Address: (You can Change)</label>
+                                <input type="text" name="billing_address" id="hidden_address" value="@Model.House_number_and_Street_name @Model.City @Model.State @Model.Country - @Model.Pincode" />
+                            </div>
+                            <div class="detail">
+                                <label>Total Price: </label>
+                                <input type="text" name="price" id="final-price-display" readonly />
+                            </div>
+
+
+                            <div class="detail">
+                                <label>Paymant methode: </label>
+                                <input type="text" name="paymant_methode" id="methode-display" readonly />
+                            </div>
+
+                            @if (order.Product.product_discount != null && order.Product.product_discount > 0)
+                            {
+                                <span class="dis_price" style="display: none;" id="f-price">&#8377;@order.Product.discounted_price</span>
+                            }
+                            else
+                            {
+                                <span class="org_price" style="display: none;" id="f-price">&#8377;@order.Product.product_price</span>
+                            }
+
+                        </div>
+
+                        <h4>Choose your paymant methode</h4>
+                        <div class="paymat_methode_options">
+                            <img src="~/images/cash_paymant.png" id="Cash" data-methode="Cash" />
+                            <img src="/images/upi_paymant.png" id="UPI" data-methode="UPI" />
+                        </div>
+
+                        <div class="upi_id" id="upi_id">
+                            <input type="text" placeholder="Enter your upi id" />
+                        </div>
+
+                        <button id="buyButton" class="pay" type="submit" name="action" value="ReOrder" onclick="checkPaymentMethod()">Pay</button>
+                    </form>
+
+                </div>
+            </div>
+
+
+
+
+
+        }
+    </main>
+</div>
+<script>
+    document.addEventListener("DOMContentLoaded", function () {
+        const reorderButtons = document.querySelectorAll(".buyButton");
+
+        reorderButtons.forEach(button => {
+            button.addEventListener("click", function () {
+                const productId = this.dataset.productId;
+                const sellerId = this.dataset.sellerId;
+                const quantity = this.dataset.quantity;
+                const price = this.dataset.price;
+
+                const packagingFee = 10;
+                const platformFee = 5;
+                const deliveryCharge = 20;
+
+                document.querySelector("input[name='product_id']").value = productId;
+                document.querySelector("input[name='seller_id']").value = sellerId;
+                document.querySelector("input[name='quantity']").value = quantity;
+
+                document.getElementById("orderPopup").style.display = "block";
+
+                const quantityInput = document.getElementById("buying_quantity");
+                const finalPriceDisplay = document.getElementById("final-price-display");
+
+                function calculateTotalPrice() {
+                    const q = parseInt(quantityInput.value) || 0;
+                    const p = parseFloat(price) || 0;
+                    const productTotal = q * p;
+                    const grandTotal = productTotal + packagingFee + platformFee + deliveryCharge;
+
+                    finalPriceDisplay.value = grandTotal.toFixed(2);
+                }
+
+                calculateTotalPrice();
+                quantityInput.addEventListener("input", calculateTotalPrice);
+            });
+        });
+
+        document.querySelectorAll(".paymat_methode_options img").forEach(img => {
+            img.addEventListener("click", function () {
+                document.getElementById("methode-display").value = this.dataset.methode;
+            });
+        });
+    });
+
+    function checkPaymentMethod() {
+        const method = document.getElementById("methode-display").value;
+        if (!method) {
+            alert("Please select a payment method.");
+            event.preventDefault();
+        }
+    }
+</script>
+
+
+
+
+
+
+<script>
+       document.getElementById("UPI").addEventListener("click", function () {
+           var methode = document.getElementById("methode-display");
+        document.getElementById("upi_id").style.display = "block";
+        methode.value = this.getAttribute("data-methode");
+    });
+       document.getElementById("Cash").addEventListener("click", function () {
+           var methode = document.getElementById("methode-display");
+        document.getElementById("upi_id").style.display = "none";
+        methode.value = this.getAttribute("data-methode");
+    });
+
+</script>
+
+<script>
+    document.addEventListener("DOMContentLoaded", function () {
+        const buyButtons = document.querySelectorAll(".buyButton");
+        buyButtons.forEach(button => {
+            button.addEventListener("click", function () {
+                document.getElementById("orderPopup").style.display = "block";
+            });
+        });
+
+        document.getElementById("closePopup").addEventListener("click", function () {
+            document.getElementById("orderPopup").style.display = "none";
+        });
+
+        document.getElementById("confirmOrder").addEventListener("click", function () {
+            document.getElementById("Buy").submit();
+        });
+    });
+</script>

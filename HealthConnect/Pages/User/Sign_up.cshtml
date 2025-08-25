@@ -1,0 +1,467 @@
+﻿@page
+@model HealthConnect.Pages.User.Sign_upModel
+@{
+    Layout = null;
+    ViewData["Title"] = "Sign up";
+}
+
+<!DOCTYPE html>
+
+<html>
+<head>
+    <meta name="viewport" content="width=device-width" />
+    <title>@ViewBag.Title</title>
+    <link rel="stylesheet" href="/css/Index.css">
+    <link href="/images/HealthConnectTabLogo.png" rel="icon" />
+
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css">
+
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+
+</head>
+<body class="regi_body">
+
+    <div class="back_button" onclick="history.back()"><i class="fa-solid fa-arrow-left"></i></div>
+
+    <div class="regi_form_container">
+        <form method="post" novalidate>
+            <div class="from_heading">
+                <h1>Register</h1>
+            </div>
+
+            <div class="user_filsd_wrep">
+                <div class="user_input_box">
+                    <label>First Name</label>
+                    <input type="text" name="first_name" placeholder="First Name" required>
+                    <p class="error"></p>
+                </div>
+
+                <div class="user_input_box">
+                    <label>Last Name</label>
+                    <input type="text" name="last_name" placeholder="Last Name" required>
+                    <p class="error"></p>
+                </div>
+            </div>
+
+            <div class="user_filsd_wrep">
+                <div class="user_input_box">
+                    <label>Email</label>
+                    <input type="email" name="email" placeholder="Email" required>
+                    <p class="error"></p>
+                </div>
+
+                <div class="user_input_box">
+                    <label>Mobil Number</label>
+                    <input type="text" name="mobil_no" maxlength="10" placeholder="Mobil Number" required>
+                    <p class="error"></p>
+                </div>
+            </div>
+
+            <div class="user_filsd_wrep">
+                <div class="user_input_box">
+                    <label>Date of Birth</label>
+                    <input type="date" name="dob" placeholder="Date of Birth" required>
+                    <p class="error"></p>
+                </div>
+                <div class="user_input_box">
+                    <label>House number & Street name</label>
+                    <input type="text" name="House_number_and_Street_name" placeholder="Address" required>
+                    <p class="error"></p>
+                </div>
+
+            </div>
+
+            <div class="user_filsd_wrep">
+                <div class="user_input_box">
+                    <label>Select your country</label>
+                    <select id="country-select" style="background-color: transparent;" name="country" required>
+                        <option disabled>-- Select your Country --</option>
+                    </select>
+                    <p class="error"></p>
+                </div>
+
+
+
+                <div class="user_input_box">
+                    <label>Select your state</label>
+                    <select id="state-select" style="background-color: transparent;" name="state" required>
+                        <option disabled>-- Select your State --</option>
+                    </select>
+                    <p class="error"></p>
+                </div>
+            </div>
+
+            <input type="hidden" id="currency-code" name="currency_code" placeholder="Currency code" />
+
+            <div class="user_filsd_wrep">
+                <div class="user_input_box">
+                    <label>Select your city</label>
+                    <select id="city-select" style="background-color: transparent;" name="city" required>
+                        <option disabled>-- Select your City --</option>
+                    </select>
+                    <p class="error"></p>
+                </div>
+
+                <div class="user_input_box">
+                    <label>Enter your pincode</label>
+                    <input type="text" name="pincode" maxlength="12" min="4" placeholder="Pincode" required>
+                    <p class="error"></p>
+                </div>
+            </div>
+
+
+
+
+            <div class="user_filsd_wrep">
+                <div class="user_input_box">
+                    <label>Select your Gender</label>
+                    <select style="background-color: transparent;" name="gender" required>
+                        <option disabled value="">-- Select your Gender --</option>
+                        <option value="Male">Male</option>
+                        <option value="Female">Female</option>
+                    </select>
+                    <p class="error"></p>
+                </div>
+
+
+                <div class="user_input_box">
+                    <label>Select your role</label>
+                    <select style="background-color: transparent;" name="role" required>
+                        <option disabled value="">-- Select your Role --</option>
+                        <option value="User">User</option>
+                        <option value="Doctor">Doctor</option>
+                        <option value="Pharmacist">Pharmacist</option>
+                    </select>
+                    <p class="error"></p>
+                </div>
+            </div>
+
+
+            <div class="user_filsd_wrep">
+                <div class="user_input_box">
+                    <label>Password</label>
+                    <input type="password" class="password-input" name="password" placeholder="Password" required>
+                    <i class="fa-regular fa-eye"></i>
+                    <p class="error"></p>
+                </div>
+
+                <div class="user_input_box">
+                    <label>Confirm Password</label>
+                    <input type="password" class="password-input" name="confirm_password" placeholder="Confirm Password" required>
+                    <i class="fa-regular fa-eye"></i>
+                    <p class="error"></p>
+                </div>
+            </div>
+
+
+            <div class="login_button">
+                <button type="submit" name="submit">Sign in</button>
+            </div>
+            <a href="/User/Sign_in">All ready have an account? Sign in</a>
+        </form>
+
+    </div>
+    @if (!string.IsNullOrEmpty(Model.ErrorMessage))
+    {
+        <p class="error_message">@Model.ErrorMessage</p>
+    }
+
+
+
+
+
+
+    
+
+
+    <script>
+
+
+            const countryToCurrency = {
+            "AF": "AFN", "AL": "ALL", "DZ": "DZD", "AS": "USD", "AD": "EUR", "AO": "AOA",
+            "AG": "XCD", "AR": "ARS", "AM": "AMD", "AU": "AUD", "AT": "EUR", "AZ": "AZN",
+            "BS": "BSD", "BH": "BHD", "BD": "BDT", "BB": "BBD", "BY": "BYN", "BE": "EUR",
+            "BZ": "BZD", "BJ": "XOF", "BT": "BTN", "BO": "BOB", "BA": "BAM", "BW": "BWP",
+            "BR": "BRL", "BN": "BND", "BG": "BGN", "BF": "XOF", "BI": "BIF", "KH": "KHR",
+            "CM": "XAF", "CA": "CAD", "CV": "CVE", "CF": "XAF", "TD": "XAF", "CL": "CLP",
+            "CN": "CNY", "CO": "COP", "KM": "KMF", "CD": "CDF", "CG": "XAF", "CR": "CRC",
+            "HR": "HRK", "CU": "CUP", "CY": "EUR", "CZ": "CZK", "DK": "DKK", "DJ": "DJF",
+            "DM": "XCD", "DO": "DOP", "EC": "USD", "EG": "EGP", "SV": "USD", "GQ": "XAF",
+            "ER": "ERN", "EE": "EUR", "SZ": "SZL", "ET": "ETB", "FJ": "FJD", "FI": "EUR",
+            "FR": "EUR", "GA": "XAF", "GM": "GMD", "GE": "GEL", "DE": "EUR", "GH": "GHS",
+            "GR": "EUR", "GD": "XCD", "GU": "USD", "GT": "GTQ", "GN": "GNF", "GW": "XOF",
+            "GY": "GYD", "HT": "HTG", "HN": "HNL", "HU": "HUF", "IS": "ISK", "IN": "INR",
+            "ID": "IDR", "IR": "IRR", "IQ": "IQD", "IE": "EUR", "IL": "ILS", "IT": "EUR",
+            "JM": "JMD", "JP": "JPY", "JO": "JOD", "KZ": "KZT", "KE": "KES", "KI": "AUD",
+            "KP": "KPW", "KR": "KRW", "KW": "KWD", "KG": "KGS", "LA": "LAK", "LV": "EUR",
+            "LB": "LBP", "LS": "LSL", "LR": "LRD", "LY": "LYD", "LI": "CHF", "LT": "EUR",
+            "LU": "EUR", "MG": "MGA", "MW": "MWK", "MY": "MYR", "MV": "MVR", "ML": "XOF",
+            "MT": "EUR", "MH": "USD", "MR": "MRU", "MU": "MUR", "MX": "MXN", "FM": "USD",
+            "MD": "MDL", "MC": "EUR", "MN": "MNT", "ME": "EUR", "MA": "MAD", "MZ": "MZN",
+            "MM": "MMK", "NA": "NAD", "NR": "AUD", "NP": "NPR", "NL": "EUR", "NZ": "NZD",
+            "NI": "NIO", "NE": "XOF", "NG": "NGN", "NO": "NOK", "OM": "OMR", "PK": "PKR",
+            "PW": "USD", "PA": "PAB", "PG": "PGK", "PY": "PYG", "PE": "PEN", "PH": "PHP",
+            "PL": "PLN", "PT": "EUR", "QA": "QAR", "RO": "RON", "RU": "RUB", "RW": "RWF",
+            "WS": "WST", "SM": "EUR", "ST": "STN", "SA": "SAR", "SN": "XOF", "RS": "RSD",
+            "SC": "SCR", "SL": "SLL", "SG": "SGD", "SK": "EUR", "SI": "EUR", "SB": "SBD",
+            "SO": "SOS", "ZA": "ZAR", "ES": "EUR", "LK": "LKR", "SD": "SDG", "SR": "SRD",
+            "SE": "SEK", "CH": "CHF", "SY": "SYP", "TW": "TWD", "TJ": "TJS", "TZ": "TZS",
+            "TH": "THB", "TL": "USD", "TG": "XOF", "TO": "TOP", "TT": "TTD", "TN": "TND",
+            "TR": "TRY", "TM": "TMT", "UG": "UGX", "UA": "UAH", "AE": "AED", "GB": "GBP",
+            "US": "USD", "UY": "UYU", "UZ": "UZS", "VU": "VUV", "VA": "EUR", "VE": "VES",
+            "VN": "VND", "YE": "YER", "ZM": "ZMW", "ZW": "ZWL"
+        };
+
+
+            const countrySelect = document.getElementById('country-select');
+        const currencyCodeInput = document.getElementById('currency-code');
+
+            const stateSelect = document.getElementById('state-select');
+            const citySelect = document.getElementById('city-select');
+
+               const countrySettings = {
+            async: true,
+            crossDomain: true,
+            url: 'https://country-state-city-search-rest-api.p.rapidapi.com/allcountries',
+            method: 'GET',
+            headers: {
+                'x-rapidapi-key': '3f03d9797emsh73ca4574bd5e4d8p18d1c3jsn45f14e7f6f51',
+                'x-rapidapi-host': 'country-state-city-search-rest-api.p.rapidapi.com'
+            }
+        };
+
+        $.ajax(countrySettings).done(function (response) {
+            if (Array.isArray(response)) {
+                response.forEach(country => {
+                    const option = document.createElement('option');
+                    option.value = country.isoCode;
+                    option.textContent = country.name;
+                    countrySelect.appendChild(option);
+                });
+            } else {
+                console.error('API response is not an array:', response);
+            }
+        });
+
+        // Event listener for country select change
+        countrySelect.addEventListener('change', function () {
+            const selectedCountryCode = countrySelect.value;
+            const currencyCode = countryToCurrency[selectedCountryCode];
+            currencyCodeInput.value = currencyCode || ''; // Update the currency input field
+        });
+
+            // Fetch states based on selected country code
+            countrySelect.addEventListener('change', function () {
+                const selectedCountryCode = countrySelect.value;
+                const selectedCountryName = countrySelect.options[countrySelect.selectedIndex].text;
+
+                console.log('Selected Country Code:', selectedCountryCode);
+                console.log('Selected Country Name:', selectedCountryName);
+
+                if (selectedCountryCode) {
+                    stateSelect.innerHTML = '<option disabled selected>Select your State</option>';
+
+                    const stateSettings = {
+                        async: true,
+                        crossDomain: true,
+                        url: `https://country-state-city-search-rest-api.p.rapidapi.com/states-by-countrycode?countrycode=${selectedCountryCode}`,
+                        method: 'GET',
+                        headers: {
+                            'x-rapidapi-key': '3f03d9797emsh73ca4574bd5e4d8p18d1c3jsn45f14e7f6f51',
+                            'x-rapidapi-host': 'country-state-city-search-rest-api.p.rapidapi.com'
+                        }
+                    };
+
+                    $.ajax(stateSettings).done(function (stateResponse) {
+                        if (Array.isArray(stateResponse)) {
+                            stateResponse.forEach(state => {
+                                const option = document.createElement('option');
+                                option.value = state.isoCode;
+                                option.textContent = state.name;
+                                stateSelect.appendChild(option);
+                            });
+                        } else {
+                            console.error('API response for states is not an array:', stateResponse);
+                        }
+                    });
+                }
+            });
+
+            // Fetch cities based on selected country and state code
+                   stateSelect.addEventListener('change', function () {
+                const selectedCountryCode = countrySelect.value;
+                const selectedStateCode = stateSelect.value;
+
+                const selectedStateName = stateSelect.options[stateSelect.selectedIndex].text;
+
+                console.log('Selected State Code:', selectedStateCode);
+                console.log('Selected State Name:', selectedStateName);
+
+                if (selectedCountryCode && selectedStateCode) {
+                    citySelect.innerHTML = '<option disabled selected>Select your City</option>';
+
+                    const citySettings = {
+                        async: true,
+                        crossDomain: true,
+                        url: `https://country-state-city-search-rest-api.p.rapidapi.com/cities-by-countrycode-and-statecode?countrycode=${selectedCountryCode}&statecode=${selectedStateCode}`,
+                        method: 'GET',
+                        headers: {
+                            'x-rapidapi-key': '3f03d9797emsh73ca4574bd5e4d8p18d1c3jsn45f14e7f6f51',
+                            'x-rapidapi-host': 'country-state-city-search-rest-api.p.rapidapi.com'
+                        }
+                    };
+
+                    $.ajax(citySettings).done(function (cityResponse) {
+                        if (Array.isArray(cityResponse)) {
+                            cityResponse.forEach(city => {
+                                const option = document.createElement('option');
+                                option.value = city.name; // Correctly using the city name as the value
+                                option.textContent = city.name; // Correctly using the city name as text content
+                                citySelect.appendChild(option);
+                            });
+                        } else {
+                            console.error('API response for cities is not an array:', cityResponse);
+                        }
+                    });
+                }
+            });
+
+            // Display selected city name and its ISO code after selecting a city
+            citySelect.addEventListener('change', function () {
+                const selectedCityName = citySelect.options[citySelect.selectedIndex].text;
+                const selectedCityCode = citySelect.value; // City name is used as the value
+
+                console.log('Selected City Name:', selectedCityName);
+                console.log('Selected City Code:', selectedCityCode);
+            });
+
+    </script>
+   
+
+    <script>
+                document.addEventListener('DOMContentLoaded', () => {
+            const passwordInputs = document.querySelectorAll('.password-input');
+            const toggleIcons = document.querySelectorAll('.fa-eye');
+
+            toggleIcons.forEach((icon, index) => {
+                icon.addEventListener('click', () => {
+                    const input = passwordInputs[index];
+                    const isPasswordVisible = input.type === 'text';
+                    input.type = isPasswordVisible ? 'password' : 'text';
+                    icon.classList.toggle('fa-eye-slash', !isPasswordVisible);
+                    icon.classList.toggle('fa-eye', isPasswordVisible);
+                });
+            });
+        });
+
+    </script>
+
+    <script>
+        document.querySelectorAll('input').forEach(function(input) {
+            input.addEventListener('input', function() {
+                const errorElement = input.parentElement.querySelector('.error');
+                if (input.value.trim() !== '') {
+
+                    if (errorElement) {
+                        errorElement.textContent = '';
+                    }
+                }
+            });
+        });
+
+        document.querySelector('form').addEventListener('submit', function(event) {
+            let isValid = true;
+
+            document.querySelectorAll('.error').forEach(function(errorElement) {
+                errorElement.textContent = '';
+            });
+
+
+            const firstName = document.querySelector('[name="first_name"]').value.trim();
+            if (firstName === '') {
+                document.querySelector('[name="first_name"]').parentElement.querySelector('.error').textContent = 'First name is required.';
+                isValid = false;
+            }
+
+            const lastName = document.querySelector('[name="last_name"]').value.trim();
+            if (lastName === '') {
+                document.querySelector('[name="last_name"]').parentElement.querySelector('.error').textContent = 'Last name is required.';
+                isValid = false;
+            }
+
+            const mobileNumber = document.querySelector('[name="mobil_no"]').value.trim();
+            if (mobileNumber === '' || isNaN(mobileNumber) || mobileNumber.length !== 10) {
+                document.querySelector('[name="mobil_no"]').parentElement.querySelector('.error').textContent = 'Please enter a valid 10-digit mobile number.';
+                isValid = false;
+            }
+
+            const dob = document.querySelector('[name="dob"]').value.trim();
+            if (dob === '') {
+                document.querySelector('[name="dob"]').parentElement.querySelector('.error').textContent = 'Date of birth is required.';
+                isValid = false;
+            }
+
+            const address = document.querySelector('[name="House_number_and_Street_name"]').value.trim();
+            if (address === '') {
+                document.querySelector('[name="House_number_and_Street_name"]').parentElement.querySelector('.error').textContent = 'Address is required.';
+                isValid = false;
+            }
+
+            const country = document.querySelector('[name="country"]').value.trim();
+            if (country === '') {
+                document.querySelector('[name="country"]').parentElement.querySelector('.error').textContent = 'Country is required.';
+                isValid = false;
+            }
+
+            const city = document.querySelector('[name="city"]').value.trim();
+            if (city === '') {
+                document.querySelector('[name="city"]').parentElement.querySelector('.error').textContent = 'City is required.';
+                isValid = false;
+            }
+
+            const state = document.querySelector('[name="state"]').value.trim();
+            if (state === '') {
+                document.querySelector('[name="state"]').parentElement.querySelector('.error').textContent = 'State is required.';
+                isValid = false;
+            }
+
+            const gender = document.querySelector('[name="gender"]').value.trim();
+            if (!gender) {
+                document.querySelector('[name="gender"]').closest('.user_filsd_wrep').querySelector('.error').textContent = 'Please select a gender.';
+                isValid = false;
+            }
+
+            const role = document.querySelector('[name="role"]').value.trim();
+            if (!role) {
+                document.querySelector('[name="role"]').closest('.user_filsd_wrep').querySelector('.error').textContent = 'Please select a role.';
+                isValid = false;
+            }
+
+            const password = document.querySelector('[name="password"]').value;
+            const confirmPassword = document.querySelector('[name="confirm_password"]').value;
+            if (password.length < 6) {
+                document.querySelector('[name="password"]').parentElement.querySelector('.error').textContent = 'Password must be at least 6 characters long.';
+                isValid = false;
+            }
+            if (password !== confirmPassword) {
+                document.querySelector('[name="confirm_password"]').parentElement.querySelector('.error').textContent = 'Passwords do not match.';
+                isValid = false;
+            }
+        const pincode = document.querySelector('[name="pincode"]').value.trim();
+        if (pincode === '' || pincode.length < 4 || pincode.length > 12) {
+            document.querySelector('[name="pincode"]').parentElement.querySelector('.error').textContent =
+                'Pincode must be between 4 and 12 characters long.';
+            isValid = false;
+        }
+
+
+            if (!isValid) {
+                event.preventDefault();
+            }
+        });
+    </script>
+
+
+</body>
+
+</html>

@@ -1,0 +1,82 @@
+﻿@page
+@model HealthConnect.Pages.OTPVerify.Change_email_otp_verifyModel
+@{
+    Layout = "_OtpVerify";
+    ViewData["Title"] = "Verify you OTP";
+}
+
+
+<style>
+    #timer {
+        float: right;
+        margin: 10px 0;
+    }
+</style>
+
+<div class="opt_verify_container">
+    <h1>Verify you OTP</h1>
+    <p>Enter the OTP sent to your email</p>
+    <form method="post">
+        <div class="user_opt_section">
+            <input type="text" id="OptInput" maxlength="6" oninput="handleInput(event)" asp-for="EnteredOTP" autocomplete="off" required>
+            <span asp-validation-for="EnteredOTP" class="text-danger"></span>
+        </div>
+
+        <button type="submit" name="submit">Verify</button>
+
+        <div id="timer"></div>
+    </form>
+</div>
+@if (!string.IsNullOrEmpty(Model.ErrorMessage))
+{
+    <p class="error_message">@Model.ErrorMessage</p>
+}
+
+@if (!string.IsNullOrEmpty(Model.SuccessMessage))
+{
+    <p class="success_message">@Model.SuccessMessage</p>
+}
+
+<script>
+    function resendOTP() {
+        fetch('@Url.Page("/OTPVerify/Sign_up_otp_verify", new { handler = "ResendOTP" })', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+        })
+        .then(response => {
+            if (response.ok) {
+                alert('OTP has been resent.');
+            } else {
+                alert('Failed to resend OTP.');
+            }
+        })
+        .catch(error => {
+            alert('An error occurred: ' + error);
+        });
+    }
+</script>
+
+
+
+<script>
+    window.onload = function() {
+        let timeLeft = 120;
+        const timerDisplay = document.getElementById('timer');
+
+        const timerInterval = setInterval(function() {
+            const minutes = Math.floor(timeLeft / 60);
+            const seconds = timeLeft % 60;
+
+            timerDisplay.textContent = `Time Left: ${minutes}:${seconds < 10 ? '0' : ''}${seconds}`;
+
+            if (timeLeft <= 0) {
+                clearInterval(timerInterval);
+                timerDisplay.textContent = 'Time Expired';
+            }
+
+            timeLeft--;
+        }, 1000);
+    };
+</script>

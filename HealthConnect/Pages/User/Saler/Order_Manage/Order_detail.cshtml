@@ -1,0 +1,140 @@
+﻿@page
+@model HealthConnect.Pages.User.Saler.Order_Manage.Order_detailModel
+@{
+    Layout = "_Saler_dashbord";
+    ViewData["Title"] = "Saler Dashbord";
+}
+
+
+
+
+<div class="col-12">
+    <div class="bg-light rounded h-100 p-4">
+        <h3 class="mb-4">Order Detail</h3>
+
+        <div class="d-flex gap-2">
+            @if (Model.Order_Table != null &&
+            (Model.Order_Table.order_status == "Pending" || Model.Order_Table.order_status == "Shipped"))
+            {
+                <form method="post" class="d-flex gap-1">
+                    <input type="hidden" name="order_id" value="@Model.Order_Table.order_id" />
+                    <select name="order_status" class="form-control">
+                        <option disabled selected>@Model.Order_Table.order_status</option>
+                        @if (Model.Order_Table.order_status == "Pending")
+                        {
+                            <option value="Shipped">Shipped</option>
+                        }
+                        <option value="Delivered">Delivered</option>
+                    </select>
+                    <button type="submit" name="submit" class="btn btn-success">Update</button>
+                </form>
+            }
+
+            else if (Model.Order_Table?.order_status == "Delivered")
+            {
+                <h4 class="text-success">Delivered</h4>
+            }
+            else if (Model.Order_Table?.order_status == "Cancel")
+            {
+                <h4 class="text-danger">Cancel</h4>
+            }
+
+            <a href="javascript:void(0);" onclick="history.back()" class="btn btn-secondary">Back to List</a>
+
+        </div>
+        <div class="table-responsive">
+            <table class="table">
+                <thead>
+                    <tr>
+                        <th>Field</th>
+                        <th>Value</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <th>Order ID</th>
+                        <td>@Model.Order_Table.order_id</td>
+                    </tr>
+
+                    <tr>
+                        <th>Order Date Time</th>
+                        <td>@Model.Order_Table.order_datetime</td>
+                    </tr>
+
+                    <tr>
+                        <th>Customer Name</th>
+                        <td>@Model.Order_Table.User.first_name @Model.Order_Table.User.last_name</td>
+                    </tr>
+                    <tr>
+                        <th>Billing Address</th>
+                        <td>@Model.Order_Table.billing_address</td>
+                    </tr>
+
+                    <tr>
+                        <th>Product Image</th>
+                        <td>
+                            @if (Model.Order_Table != null && Model.Order_Table.Product != null && !string.IsNullOrEmpty(Model.Order_Table.Product.product_image))
+                            {
+                                var images = Model.Order_Table.Product.product_image.Split(',');
+                                foreach (var image in images)
+                                {
+                                    <img src="/ProductImage/@image.Trim()" alt="Product Image" width="100" style="margin-right: 5px;" />
+                                }
+                            }
+                            else
+                            {
+                                <span>No product image available.</span>
+                            }
+                        </td>
+                    </tr>
+
+
+                    <tr>
+                        <th>Product Name</th>
+                        <td>@Model.Order_Table.Product.product_name</td>
+                    </tr>
+
+                    <tr>
+                        <th>Product Price</th>
+                        <td>@Model.Order_Table.price</td>
+                    </tr>
+
+                    <tr>
+                        <th>Product Quantity</th>
+                        <td>@Model.Order_Table.quantity</td>
+                    </tr>
+
+                    <tr>
+                        <th>Paymant methode</th>
+                        <td>@Model.Order_Table.paymant_methode</td>
+                    </tr>
+
+                    <tr>
+                        <th>Brand Name</th>
+                        <td>@Model.Order_Table.Brand.pharmaceutical_brands_name</td>
+                    </tr>
+
+                    <tr>
+                        <th>Category</th>
+                        <td>@Model.Order_Table.Product.FinelCategory.Medicine_Main_Category.medicine_main_category_name</td>
+                    </tr>
+
+                    <tr>
+                        <th></th>
+                        <td>@Model.Order_Table.Product.FinelCategory.Medicine_Sub_Category.medicine_sub_category_name</td>
+                    </tr>
+
+                    <tr>
+                        <th></th>
+                        <td>@Model.Order_Table.Product.FinelCategory.medicine_finel_category_name</td>
+                    </tr>
+
+
+                </tbody>
+            </table>
+
+        </div>
+    </div>
+</div>
+
+

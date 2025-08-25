@@ -1,0 +1,327 @@
+﻿@page
+@model HealthConnect.Pages.User.Docter_ProfileModel
+@{
+    Layout = "_Header";
+    ViewData["Title"] = "Doctor Profile";
+}
+
+@if (Model.User_list != null && Model.User_list.Any())
+{
+    @foreach (var data in Model.User_list)
+    {
+
+        <div class="doctor_profile_container">
+            <main>
+
+                <section class="section_1">
+
+                    <div class="section_1_left">
+                        <div class="Doctor_pic">
+                            <img src="/documant/@data.profile_pic" alt="@data.first_name @data.last_name" loading="lazy" />
+                        </div>
+
+                        <div class="doctor_name">
+                            <p>Dr. @data.first_name @data.last_name</p>
+                        </div>
+                    </div>
+
+                    <div class="section_1_right">
+                        <div class="total_rating_review">
+                            <p>
+                                <i class="mdi mdi-star"></i> <span>@Model.AverageRating Star</span>
+                            </p>
+
+                            <p>
+                                <i class="mdi mdi-message-text"></i> <span>@Model.TotalFeedbackCount Feedback</span>
+                            </p>
+                        </div>
+                    </div>
+
+                </section>
+
+                <section class="section_2">
+                    <div class="section_2_left">
+                        <div class="licence_photo">
+                            <img src="/documant/@data.doctore_medical_license_photo" alt="Licence photo" />
+                        </div>
+
+                        @if(Model.UserId == data.id)
+                        {
+                            <p>You are viewing your own profile.</p>
+                        }
+                        else{
+                            <p class="give_feedback">Give feedback</p>
+                            <p class="give_report">Give report</p>
+
+
+
+                            <form method="post">
+                                <input type="hidden" name="user_id" value="@Model.UserId" />
+                                <input type="hidden" name="doctor_id" value="@data.id" />
+                                <input type="hidden" id="ratingInput" name="rating" />
+
+                                <div class="star-rating @(Model.ExistingRating.HasValue ? "readonly" : "")">
+                                    @for (int i = 1; i <= 5; i++)
+                                    {
+                                        var isFilled = Model.ExistingRating.HasValue && i <= Model.ExistingRating.Value;
+                                        <span class="star @(isFilled ? "filled" : "")" data-value="@i">&#9733;</span>
+                                    }
+                                </div>
+
+                                @if (!Model.ExistingRating.HasValue)
+                                {
+                                    <button type="submit" name="action" class="submitrating" value="Rating">Submit Rating</button>
+                                }
+
+                            </form>
+                        }
+
+                     
+
+                      
+
+                    </div>
+
+                    <div class="section_2_right">
+
+                        <table>
+
+                            <tr>
+                                <th>Medical Registration Numbar</th>
+                                <td>@data.medical_registration_no</td>
+                            </tr>
+
+                            <tr>
+                                <th>State medical council</th>
+                                <td>@data.state_medical_council</td>
+                            </tr>
+
+                            <tr>
+                                <th>Regitration year</th>
+                                <td>@data.year_of_registration</td>
+                            </tr>
+
+                            <tr>
+                                <th>Hospital or Clinic</th>
+                                @if (data.hospital_or_clinic == "Hospital")
+                                {
+                                    <td><i class="mdi mdi-hospital-building"></i> @data.hospital_or_clinic</td>
+                                }
+                                else
+                                {
+                                    <td><i class="fa-solid fa-house-chimney-medical"></i> @data.hospital_or_clinic</td>
+                                }
+                            </tr>
+
+                            <tr>
+                                <th>Hospital or Clinic address</th>
+                                <td>@data.clinic_or_hospital_address</td>
+                            </tr>
+
+                            <tr>
+                                <th>Qualification</th>
+                                <td>@data.doctor_qualifications</td>
+                            </tr>
+
+                            <tr>
+                                <th>Doctor type</th>
+                                <td>@data.doctor_type</td>
+                            </tr>
+
+                            <tr>
+                                <th>Doctor specialty</th>
+                                <td>@data.doctor_specialitis</td>
+                            </tr>
+
+                            <tr>
+                                <th>Language spoken</th>
+                                <td>@data.languages_spoken</td>
+                            </tr>
+
+                            <tr>
+                                <th>Video calling fee</th>
+                                <td><i class="mdi mdi-video"></i> @data.video_call_consultation_fee</td>
+                            </tr>
+
+                            <tr>
+                                <th>On site fee</th>
+                                <td><i class="mdi mdi-map-marker"></i> @data.on_site_consultation_fee</td>
+                            </tr>
+
+                            <tr>
+                                <th>Working dayes</th>
+                                <td>@string.Join(", ", data.weekly_work_days)</td>
+                            </tr>
+                            
+                            <tr>
+                                <th>Working time</th>
+                                <td>@data.work_start_time - @data.work_end_time</td>
+                            </tr>
+
+                        </table>
+                    </div>
+                </section>
+
+
+                <section class="section_3">
+                    <input type="hidden" name="doctor_id" value="@data.id" />
+                    <div class="feedbacks_container">
+
+                        <h1>Feedback's</h1>
+
+                        @if (Model.Doctor_Feedbacks != null && Model.Doctor_Feedbacks.Any())
+                        {
+                            @foreach (var feedback in Model.Doctor_Feedbacks)
+                            {
+                                var user = feedback.User ?? new Models.User_Table();
+                                <div class="single_feedback">
+                                    <div class="user_image">
+                                        @if (!string.IsNullOrEmpty(user.profile_pic))
+                                        {
+                                            <img src="/documant/@user.profile_pic" alt="@user.first_name" />
+                                        }
+                                        else
+                                        {
+                                            <p>@user.first_name[0].ToString().ToUpper()</p>
+                                        }
+                                    </div>
+
+                                    <div class="feedback_message">
+                                        <p><strong>@user.first_name @user.last_name</strong></p>
+                                        <p>@feedback.feedback_message</p>
+                                    </div>
+                                </div>
+                            }
+
+                        }
+                        else
+                        {
+                            <p>No feedback available.</p>
+                        }
+
+
+
+                    </div>
+                </section>
+
+            </main>
+        </div>
+
+        <section class="explorer_doctor_section3" id="popup">
+            <div class="videocall_consultation_container">
+                <div class="videocall_consultation">
+                    <i class="fa-solid fa-times" id="closePopup"></i>
+                    <h1>Feedback</h1>
+                    <form method="post" id="GiveFeedback" onsubmit="return validateFeedback()">
+                        <input type="hidden" name="user_id" value="@Model.UserId" readonly />
+                        <input type="hidden" name="doctor_id" value="@data.id" readonly>
+
+                        <div class="sloat_time_and_date">
+                            <label>Feedback message</label>
+                            <textarea name="feedback_message" id="feedback_message" rows="5" placeholder="Feedback message"></textarea>
+                            <p id="error" class="error" style="color: red; display: none;"></p>
+                        </div>
+
+                        <button type="submit" name="action" value="feedback">Submit</button>
+                    </form>
+
+
+
+                </div>
+            </div>
+        </section>
+
+        <section class="explorer_doctor_section3" id="popup2">
+            <div class="videocall_consultation_container">
+                <div class="videocall_consultation">
+                    <i class="fa-solid fa-times" id="closePopup2"></i>
+                    <h1>Report</h1>
+                    <form method="post" id="GiveReport" onsubmit="return validateReport()">
+                        <input type="hidden" name="user_id" value="@Model.UserId" readonly />
+                        <input type="hidden" name="doctor_id" value="@data.id" readonly>
+
+                        <div class="sloat_time_and_date">
+                            <label for="report_message">Report message</label>
+                            <textarea name="report_message" id="report_message" rows="5" placeholder="Report message"></textarea>
+
+                            <p id="error2" class="error2" style="color: red; display: none;"></p>
+                        </div>
+
+                        <button type="submit" name="action" value="report">Submit</button>
+                    </form>
+
+                </div>
+            </div>
+        </section>
+
+
+
+
+
+
+
+
+
+
+
+
+        <script>
+            document.addEventListener("DOMContentLoaded", function () {
+                const stars = document.querySelectorAll(".star-rating:not(.readonly) .star");
+                const ratingInput = document.getElementById("ratingInput");
+
+                stars.forEach(star => {
+                    star.addEventListener("click", function () {
+                        const rating = this.getAttribute("data-value");
+                        ratingInput.value = rating;
+
+                        // Highlight selected stars
+                        stars.forEach(s => {
+                            s.classList.toggle("filled", s.getAttribute("data-value") <= rating);
+                        });
+                    });
+                });
+            });
+        </script>
+
+
+
+        <script>
+            function validateFeedback() {
+            let feedbackMessage = document.getElementById("feedback_message").value.trim();
+            let errorMessage = document.getElementById("error");
+
+            if (feedbackMessage === "") {
+            errorMessage.textContent = "Feedback message is required.";
+            errorMessage.style.display = "block";
+            return false;
+            } else {
+            errorMessage.style.display = "none";
+            return true;
+            }
+            }
+        </script>
+        <script>
+            function validateReport() {
+            let reportMessage = document.getElementById("report_message").value.trim();
+            let errorMessage = document.getElementById("error2");
+
+            if (reportMessage  === "") {
+            errorMessage.textContent = "Report message is required.";
+            errorMessage.style.display = "block";
+            return false;
+            } else {
+            errorMessage.style.display = "none";
+            return true;
+            }
+            }
+        </script>
+
+    }
+
+}
+else
+{
+
+}
+

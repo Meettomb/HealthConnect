@@ -1,0 +1,832 @@
+[
+  {
+    "country": "IN",
+    "currency": "INR",
+    "symbol": "₹"
+  },
+  {
+    "country": "AF",
+    "currency": "AFN",
+    "symbol": "؋"
+  },
+  {
+    "country": "AL",
+    "currency": "ALL",
+    "symbol": "L"
+  },
+  {
+    "country": "DZ",
+    "currency": "DZD",
+    "symbol": "د.ج"
+  },
+  {
+    "country": "AS",
+    "currency": "USD",
+    "symbol": "$"
+  },
+  {
+    "country": "AD",
+    "currency": "EUR",
+    "symbol": "€"
+  },
+  {
+    "country": "AO",
+    "currency": "AOA",
+    "symbol": "Kz"
+  },
+  {
+    "country": "AI",
+    "currency": "XCD",
+    "symbol": "$"
+  },
+  {
+    "country": "AG",
+    "currency": "XCD",
+    "symbol": "$"
+  },
+  {
+    "country": "AR",
+    "currency": "ARS",
+    "symbol": "$"
+  },
+  {
+    "country": "AM",
+    "currency": "AMD",
+    "symbol": "֏"
+  },
+  {
+    "country": "AW",
+    "currency": "AWG",
+    "symbol": "ƒ"
+  },
+  {
+    "country": "AU",
+    "currency": "AUD",
+    "symbol": "$"
+  },
+  {
+    "country": "AT",
+    "currency": "EUR",
+    "symbol": "€"
+  },
+  {
+    "country": "AZ",
+    "currency": "AZN",
+    "symbol": "₼"
+  },
+  {
+    "country": "BS",
+    "currency": "BSD",
+    "symbol": "$"
+  },
+  {
+    "country": "BH",
+    "currency": "BHD",
+    "symbol": ".د.ب"
+  },
+  {
+    "country": "BD",
+    "currency": "BDT",
+    "symbol": "৳"
+  },
+  {
+    "country": "BB",
+    "currency": "BBD",
+    "symbol": "$"
+  },
+  {
+    "country": "BY",
+    "currency": "BYN",
+    "symbol": "Br"
+  },
+  {
+    "country": "BE",
+    "currency": "EUR",
+    "symbol": "€"
+  },
+  {
+    "country": "BZ",
+    "currency": "BZD",
+    "symbol": "$"
+  },
+  {
+    "country": "BJ",
+    "currency": "XOF",
+    "symbol": "Fr"
+  },
+  {
+    "country": "BM",
+    "currency": "BMD",
+    "symbol": "$"
+  },
+  {
+    "country": "BT",
+    "currency": "BTN",
+    "symbol": "Nu."
+  },
+  {
+    "country": "BO",
+    "currency": "BOB",
+    "symbol": "Bs."
+  },
+  {
+    "country": "BA",
+    "currency": "BAM",
+    "symbol": "KM"
+  },
+  {
+    "country": "BW",
+    "currency": "BWP",
+    "symbol": "P"
+  },
+  {
+    "country": "BR",
+    "currency": "BRL",
+    "symbol": "R$"
+  },
+  {
+    "country": "BN",
+    "currency": "BND",
+    "symbol": "$"
+  },
+  {
+    "country": "BG",
+    "currency": "BGN",
+    "symbol": "лв"
+  },
+  {
+    "country": "BF",
+    "currency": "XOF",
+    "symbol": "Fr"
+  },
+  {
+    "country": "BI",
+    "currency": "BIF",
+    "symbol": "Fr"
+  },
+  {
+    "country": "KH",
+    "currency": "KHR",
+    "symbol": "៛"
+  },
+  {
+    "country": "CM",
+    "currency": "XAF",
+    "symbol": "Fr"
+  },
+  {
+    "country": "CA",
+    "currency": "CAD",
+    "symbol": "$"
+  },
+  {
+    "country": "CF",
+    "currency": "XAF",
+    "symbol": "Fr"
+  },
+  {
+    "country": "TD",
+    "currency": "XAF",
+    "symbol": "Fr"
+  },
+  {
+    "country": "CL",
+    "currency": "CLP",
+    "symbol": "$"
+  },
+  {
+    "country": "CN",
+    "currency": "CNY",
+    "symbol": "¥"
+  },
+  {
+    "country": "CO",
+    "currency": "COP",
+    "symbol": "$"
+  },
+  {
+    "country": "KM",
+    "currency": "KMF",
+    "symbol": "Fr"
+  },
+  {
+    "country": "CD",
+    "currency": "CDF",
+    "symbol": "Fr"
+  },
+  {
+    "country": "CR",
+    "currency": "CRC",
+    "symbol": "₡"
+  },
+  {
+    "country": "HR",
+    "currency": "HRK",
+    "symbol": "kn"
+  },
+  {
+    "country": "CU",
+    "currency": "CUP",
+    "symbol": "$"
+  },
+  {
+    "country": "CY",
+    "currency": "EUR",
+    "symbol": "€"
+  },
+  {
+    "country": "CZ",
+    "currency": "CZK",
+    "symbol": "Kč"
+  },
+  {
+    "country": "DK",
+    "currency": "DKK",
+    "symbol": "kr"
+  },
+  {
+    "country": "DO",
+    "currency": "DOP",
+    "symbol": "$"
+  },
+  {
+    "country": "EG",
+    "currency": "EGP",
+    "symbol": "£"
+  },
+  {
+    "country": "SV",
+    "currency": "USD",
+    "symbol": "$"
+  },
+  {
+    "country": "GQ",
+    "currency": "XAF",
+    "symbol": "Fr"
+  },
+  {
+    "country": "EE",
+    "currency": "EUR",
+    "symbol": "€"
+  },
+  {
+    "country": "ET",
+    "currency": "ETB",
+    "symbol": "Br"
+  },
+  {
+    "country": "FJ",
+    "currency": "FJD",
+    "symbol": "$"
+  },
+  {
+    "country": "FI",
+    "currency": "EUR",
+    "symbol": "€"
+  },
+  {
+    "country": "FR",
+    "currency": "EUR",
+    "symbol": "€"
+  },
+  {
+    "country": "GA",
+    "currency": "XAF",
+    "symbol": "Fr"
+  },
+  {
+    "country": "GM",
+    "currency": "GMD",
+    "symbol": "D"
+  },
+  {
+    "country": "GE",
+    "currency": "GEL",
+    "symbol": "₾"
+  },
+  {
+    "country": "DE",
+    "currency": "EUR",
+    "symbol": "€"
+  },
+  {
+    "country": "GH",
+    "currency": "GHS",
+    "symbol": "₵"
+  },
+  {
+    "country": "GR",
+    "currency": "EUR",
+    "symbol": "€"
+  },
+  {
+    "country": "GT",
+    "currency": "GTQ",
+    "symbol": "Q"
+  },
+  {
+    "country": "GN",
+    "currency": "GNF",
+    "symbol": "Fr"
+  },
+  {
+    "country": "GW",
+    "currency": "XOF",
+    "symbol": "Fr"
+  },
+  {
+    "country": "GY",
+    "currency": "GYD",
+    "symbol": "$"
+  },
+  {
+    "country": "HK",
+    "currency": "HKD",
+    "symbol": "$"
+  },
+  {
+    "country": "HU",
+    "currency": "HUF",
+    "symbol": "Ft"
+  },
+  {
+    "country": "IS",
+    "currency": "ISK",
+    "symbol": "kr"
+  },
+  {
+    "country": "ID",
+    "currency": "IDR",
+    "symbol": "Rp"
+  },
+  {
+    "country": "IE",
+    "currency": "EUR",
+    "symbol": "€"
+  },
+  {
+    "country": "IL",
+    "currency": "ILS",
+    "symbol": "₪"
+  },
+  {
+    "country": "IT",
+    "currency": "EUR",
+    "symbol": "€"
+  },
+  {
+    "country": "JP",
+    "currency": "JPY",
+    "symbol": "¥"
+  },
+  {
+    "country": "JO",
+    "currency": "JOD",
+    "symbol": "د.ا"
+  },
+  {
+    "country": "KE",
+    "currency": "KES",
+    "symbol": "KSh"
+  },
+  {
+    "country": "KR",
+    "currency": "KRW",
+    "symbol": "₩"
+  },
+  {
+    "country": "KW",
+    "currency": "KWD",
+    "symbol": "د.ك"
+  },
+  {
+    "country": "MY",
+    "currency": "MYR",
+    "symbol": "RM"
+  },
+  {
+    "country": "MX",
+    "currency": "MXN",
+    "symbol": "$"
+  },
+  {
+    "country": "NL",
+    "currency": "EUR",
+    "symbol": "€"
+  },
+  {
+    "country": "NZ",
+    "currency": "NZD",
+    "symbol": "$"
+  },
+  {
+    "country": "NG",
+    "currency": "NGN",
+    "symbol": "₦"
+  },
+  {
+    "country": "PK",
+    "currency": "PKR",
+    "symbol": "₨"
+  },
+  {
+    "country": "PH",
+    "currency": "PHP",
+    "symbol": "₱"
+  },
+  {
+    "country": "RU",
+    "currency": "RUB",
+    "symbol": "₽"
+  },
+  {
+    "country": "SA",
+    "currency": "SAR",
+    "symbol": "﷼"
+  },
+  {
+    "country": "ZA",
+    "currency": "ZAR",
+    "symbol": "R"
+  },
+  {
+    "country": "GB",
+    "currency": "GBP",
+    "symbol": "£"
+  },
+  {
+    "country": "US",
+    "currency": "USD",
+    "symbol": "$"
+  },
+  {
+    "country": "ES",
+    "currency": "EUR",
+    "symbol": "€"
+  },
+  {
+    "country": "CV",
+    "currency": "CVE",
+    "symbol": "$"
+  },
+  {
+    "country": "KM",
+    "currency": "KMF",
+    "symbol": "CF"
+  },
+  {
+    "country": "CD",
+    "currency": "CDF",
+    "symbol": "FC"
+  },
+  {
+    "country": "DJ",
+    "currency": "DJF",
+    "symbol": "Fdj"
+  },
+  {
+    "country": "DM",
+    "currency": "XCD",
+    "symbol": "$"
+  },
+  {
+    "country": "TL",
+    "currency": "USD",
+    "symbol": "$"
+  },
+  {
+    "country": "EC",
+    "currency": "USD",
+    "symbol": "$"
+  },
+  {
+    "country": "GQ",
+    "currency": "XAF",
+    "symbol": "CFA"
+  },
+  {
+    "country": "ER",
+    "currency": "ERN",
+    "symbol": "Nfk"
+  },
+  {
+    "country": "SZ",
+    "currency": "SZL",
+    "symbol": "E"
+  },
+  {
+    "country": "FJ",
+    "currency": "FJD",
+    "symbol": "$"
+  },
+  {
+    "country": "GA",
+    "currency": "XAF",
+    "symbol": "CFA"
+  },
+  {
+    "country": "GM",
+    "currency": "GMD",
+    "symbol": "D"
+  },
+  {
+    "country": "GD",
+    "currency": "XCD",
+    "symbol": "$"
+  },
+  {
+    "country": "GN",
+    "currency": "GNF",
+    "symbol": "FG"
+  },
+  {
+    "country": "GW",
+    "currency": "XOF",
+    "symbol": "CFA"
+  },
+  {
+    "country": "GY",
+    "currency": "GYD",
+    "symbol": "$"
+  },
+  {
+    "country": "HT",
+    "currency": "HTG",
+    "symbol": "G"
+  },
+  {
+    "country": "HN",
+    "currency": "HNL",
+    "symbol": "L"
+  },
+  {
+    "country": "IS",
+    "currency": "ISK",
+    "symbol": "kr"
+  },
+  {
+    "country": "IR",
+    "currency": "IRR",
+    "symbol": "﷼"
+  },
+  {
+    "country": "IQ",
+    "currency": "IQD",
+    "symbol": "ع.د"
+  },
+  {
+    "country": "JM",
+    "currency": "JMD",
+    "symbol": "$"
+  },
+  {
+    "country": "KZ",
+    "currency": "KZT",
+    "symbol": "₸"
+  },
+  {
+    "country": "KI",
+    "currency": "AUD",
+    "symbol": "$"
+  },
+  {
+    "country": "XK",
+    "currency": "EUR",
+    "symbol": "€"
+  },
+  {
+    "country": "KG",
+    "currency": "KGS",
+    "symbol": "лв"
+  },
+  {
+    "country": "LA",
+    "currency": "LAK",
+    "symbol": "₭"
+  },
+  {
+    "country": "LB",
+    "currency": "LBP",
+    "symbol": "ل.ل"
+  },
+  {
+    "country": "LS",
+    "currency": "LSL",
+    "symbol": "L"
+  },
+  {
+    "country": "LR",
+    "currency": "LRD",
+    "symbol": "$"
+  },
+  {
+    "country": "LY",
+    "currency": "LYD",
+    "symbol": "ل.د"
+  },
+  {
+    "country": "LI",
+    "currency": "CHF",
+    "symbol": "CHF"
+  },
+  {
+    "country": "LU",
+    "currency": "EUR",
+    "symbol": "€"
+  },
+  {
+    "country": "MG",
+    "currency": "MGA",
+    "symbol": "Ar"
+  },
+  {
+    "country": "MW",
+    "currency": "MWK",
+    "symbol": "MK"
+  },
+  {
+    "country": "MV",
+    "currency": "MVR",
+    "symbol": "Rf"
+  },
+  {
+    "country": "ML",
+    "currency": "XOF",
+    "symbol": "CFA"
+  },
+  {
+    "country": "MT",
+    "currency": "EUR",
+    "symbol": "€"
+  },
+  {
+    "country": "MH",
+    "currency": "USD",
+    "symbol": "$"
+  },
+  {
+    "country": "MR",
+    "currency": "MRU",
+    "symbol": "UM"
+  },
+  {
+    "country": "FM",
+    "currency": "USD",
+    "symbol": "$"
+  },
+  {
+    "country": "MD",
+    "currency": "MDL",
+    "symbol": "L"
+  },
+  {
+    "country": "MC",
+    "currency": "EUR",
+    "symbol": "€"
+  },
+  {
+    "country": "MN",
+    "currency": "MNT",
+    "symbol": "₮"
+  },
+  {
+    "country": "ME",
+    "currency": "EUR",
+    "symbol": "€"
+  },
+  {
+    "country": "MA",
+    "currency": "MAD",
+    "symbol": "د.م."
+  },
+  {
+    "country": "MZ",
+    "currency": "MZN",
+    "symbol": "MT"
+  },
+  {
+    "country": "NA",
+    "currency": "NAD",
+    "symbol": "$"
+  },
+  {
+    "country": "NR",
+    "currency": "AUD",
+    "symbol": "$"
+  },
+  {
+    "country": "NP",
+    "currency": "NPR",
+    "symbol": "रू"
+  },
+  {
+    "country": "NI",
+    "currency": "NIO",
+    "symbol": "C$"
+  },
+  {
+    "country": "NE",
+    "currency": "XOF",
+    "symbol": "CFA"
+  },
+  {
+    "country": "KP",
+    "currency": "KPW",
+    "symbol": "₩"
+  },
+  {
+    "country": "MK",
+    "currency": "MKD",
+    "symbol": "ден"
+  },
+  {
+    "country": "PW",
+    "currency": "USD",
+    "symbol": "$"
+  },
+  {
+    "country": "PS",
+    "currency": "ILS",
+    "symbol": "₪"
+  },
+  {
+    "country": "PA",
+    "currency": "PAB",
+    "symbol": "B/."
+  },
+  {
+    "country": "PG",
+    "currency": "PGK",
+    "symbol": "K"
+  },
+  {
+    "country": "PY",
+    "currency": "PYG",
+    "symbol": "₲"
+  },
+  {
+    "country": "PE",
+    "currency": "PEN",
+    "symbol": "S/."
+  },
+  {
+    "country": "QA",
+    "currency": "QAR",
+    "symbol": "﷼"
+  },
+  {
+    "country": "RW",
+    "currency": "RWF",
+    "symbol": "FRw"
+  },
+  {
+    "country": "KN",
+    "currency": "XCD",
+    "symbol": "$"
+  },
+  {
+    "country": "LC",
+    "currency": "XCD",
+    "symbol": "$"
+  },
+  {
+    "country": "VC",
+    "currency": "XCD",
+    "symbol": "$"
+  },
+  {
+    "country": "WS",
+    "currency": "WST",
+    "symbol": "T"
+  },
+  {
+    "country": "SM",
+    "currency": "EUR",
+    "symbol": "€"
+  },
+  {
+    "country": "ST",
+    "currency": "STN",
+    "symbol": "Db"
+  },
+  {
+    "country": "SN",
+    "currency": "XOF",
+    "symbol": "CFA"
+  },
+  {
+    "country": "SC",
+    "currency": "SCR",
+    "symbol": "₨"
+  },
+  {
+    "country": "SL",
+    "currency": "SLL",
+    "symbol": "Le"
+  },
+  {
+    "country": "SB",
+    "currency": "SBD",
+    "symbol": "$"
+  }
+]

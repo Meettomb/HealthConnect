@@ -1,0 +1,455 @@
+﻿<!DOCTYPE html>
+
+<html>
+<head>
+    <meta name="viewport" content="width=device-width" />
+
+    <title>@ViewBag.Title</title>
+
+    <link rel="stylesheet" href="/css/Index.css" asp-append-version="true">
+    <link href="/images/HealthConnectTabLogo.png" rel="icon" />
+    <!--ICON-->
+    <link href="/Icon/fontawesome-free-6.7.2-web/css/fontawesome.css" rel="stylesheet" />
+    <link href="/Icon/fontawesome-free-6.7.2-web/css/brands.css" rel="stylesheet" />
+    <link href="/Icon/fontawesome-free-6.7.2-web/css/solid.css" rel="stylesheet" />
+    <link href="/Icon/fontawesome-free-6.7.2-web/css/sharp-thin.css" rel="stylesheet" />
+    <link href="/Icon/fontawesome-free-6.7.2-web/css/duotone-thin.css" rel="stylesheet" />
+    <link href="/Icon/fontawesome-free-6.7.2-web/css/sharp-duotone-thin.css" rel="stylesheet" />
+
+    <link rel="stylesheet" href="/assets/vendors/mdi/css/materialdesignicons.min.css">
+
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="/js/jQuery.js"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@100..900&family=Sofia+Sans+Condensed:ital,wght@0,1..1000;1,1..1000&display=swap" rel="stylesheet">
+
+</head>
+<body>
+
+
+    @if (!string.IsNullOrEmpty(Model.ErrorMessage))
+    {
+        <div class="error_message" id="errorMessage">@Model.ErrorMessage</div>
+    }
+
+    @if (!string.IsNullOrEmpty(Model.SuccessMessage))
+    {
+        <p class="success_message" id="successMessage">@Model.SuccessMessage</p>
+    }
+
+    @if (TempData["SuccessMessage"] != null)
+    {
+        <div class="success_message" id="tempSuccessMessage">@TempData["SuccessMessage"]</div>
+    }
+
+    @if (TempData["ErrorMessage"] != null)
+    {
+        <div class="error_message" id="tempErrorMessage">@TempData["ErrorMessage"]</div>
+    }
+
+
+    <div class="loder" id="loder">
+        <img src="/Loder.gif" alt="Alternate Text" />
+    </div>
+
+    <div class="pharmacy_header_container">
+        <header>
+            <div class="pharmacy_header_left_side">
+                <div class="pharmacy_logo">
+                    <img src="/images/HealthConnectLogo.png" onclick="redirectToPharmacyPage()" alt="Health Connect" />
+                </div>
+
+                <div class="header_deliver_location">
+                    <i class="mdi mdi-map-marker-radius"></i>
+                    <div>
+                        <p>Deliver Address</p>
+                        <b>@Model.City @Model.Pincode</b>
+                    </div>
+                    <i class="mdi mdi-chevron-down"></i>
+                </div>
+            </div>
+
+            <div class="header_search_section">
+                <i class="mdi mdi-magnify"></i>
+                <input type="search" name="myInput" class="myInput" placeholder="Search Medicines" autocomplete="off" />
+            </div>
+
+            <div class="pharmacy_header_right_side">
+                <div class="cart_icon">
+                    <a href="/Ecom/Cart">
+                        <i class="mdi mdi-cart-outline"><span class="cart-count">@Model.CartCount</span></i>
+                    </a>
+                </div>
+                @if (Model.UserId == null)
+                {
+                    <a class="header_login_button" href="/User/Sign_in">Login</a>
+                }
+                else
+                {
+                    <div class="pharmacy_header_user_icon">
+
+                        <div class="user_profile_icon">
+                            @if (!string.IsNullOrEmpty(Model.ProfilePic))
+                            {
+                                <img src="/documant/@Model.ProfilePic" />
+                            }
+                            else
+                            {
+
+                                <p>@Model.FirstName[0].ToString().ToUpper()</p>
+                            }
+                        </div>
+
+                        <div class="pharmacy_header_user_services">
+                            <section>
+                                <a href="/Account/Overview">
+                                    <i class="fa-solid fa-user"></i> Account
+                                </a>
+                                <a href="/Chatting/Chatting_page">
+                                    <i class="fa-solid fa-message"></i> Message
+                                </a>
+
+                                <a href="/User/Order_history">
+                                    <i class="fa-solid fa-clock-rotate-left"></i> Order history
+                                </a>
+
+                                @if (Model.Role == "Admin")
+                                {
+                                    <a href="/Admin/Admin_index">
+                                        <i class="fa-solid fa-user-tie"></i> Admin side
+                                    </a>
+                                }
+
+                                @if (Model.Role == "Pharmacist")
+                                {
+                                    <a href="/User/Saler/Saler_Dashbord">
+                                        <i class="fa-solid fa-chart-line"></i> Your Dashbord
+                                    </a>
+                                }
+
+                                <a href="/User/Logout">
+                                    <i class="fa-solid fa-right-from-bracket"></i> Logout
+                                </a>
+                            </section>
+                        </div>
+
+                    </div>
+
+
+                }
+            </div>
+
+        </header>
+
+
+    </div>
+
+
+    <div class="Pharmacy_nav_container">
+
+        <nav class="pharmacy_nav">
+            <ul class="medicine_main_category">
+                @foreach (var main in Model.Medicine_Main_CategoryList)
+                {
+                    <li class="medicine_main_category_li">
+                        <span>@main.medicine_main_category_name</span>
+                        @if (main.medicineSubCategories != null && main.medicineSubCategories.Count > 0)
+                        {
+                            <ul class="medicine_sub_category" id="medicine_sub_category" style="display: none;">
+                                @foreach (var sub in main.medicineSubCategories)
+                                {
+                                    <li class="medicine_sub_category_li" id="medicine_sub_category_li">
+                                        <a href="/Ecom/Filter?Filter=@sub.medicine_sub_category_id" class="medicine_sub_category_li_a">
+                                            <p>@sub.medicine_sub_category_name</p>
+                                        </a>
+
+                                        @if (sub.Medicine_Finel_Categories != null && sub.Medicine_Finel_Categories.Count > 0)
+                                        {
+                                            <ul class="medicine_finel_category" id="medicine_finel_category">
+                                                @foreach (var finel in sub.Medicine_Finel_Categories)
+                                                {
+                                                    <li class="medicine_finel_category_li">
+                                                        <a href="/Ecom/Filter?Filter=@finel.medicine_finel_category_id" class="medicine_finel_category_li_a">
+                                                            <p>@finel.medicine_finel_category_name</p>
+                                                        </a>
+                                                    </li>
+                                                }
+                                            </ul>
+                                        }
+                                    </li>
+
+                                }
+                            </ul>
+                        }
+                    </li>
+                }
+            </ul>
+        </nav>
+
+    </div>
+
+
+
+
+    <div class="extar_search_area_container">
+        <p>Buy Medicines and Essentials</p>
+
+        <div class="extar_search_area">
+            <i class="mdi mdi-magnify"></i>
+            <input type="search" name="myInput" class="myInput" placeholder="Search Medicines" autocomplete="off" />
+        </div>
+
+        <div class="cart_icon">
+            <a href="/Ecom/Cart">
+                <i class="mdi mdi-cart-outline"><span>@Model.CartCount</span></i>
+            </a>
+        </div>
+
+    </div>
+
+    <div>
+        @RenderBody()
+    </div>
+
+
+    <footer class="footer">
+        <div class="footer_container">
+            <section class="footer_section">
+                <h1>About Health Connect</h1>
+                <div class="footer_section_links">
+                    <a href="/About">About Us</a>
+                    <a href="">FAQs</a>
+                    <a href="/#ContactUs">Contact US</a>
+                    <a href="/Blogs">Blogs</a>
+                    <a href="/Terms">Terms & Condition</a>
+                    <a href="/Return_And_Refund">Return & Refund</a>
+                    <a href="/Privacy">Privacy & policy</a>
+                </div>
+            </section>
+
+            <section class="footer_section">
+                <h1>Services</h1>
+                <div class="footer_section_links">
+                    <a href="/User/Explore_doctors">Find a doctor</a>
+                    <a href="/Pharmacy">Online pharmacy</a>
+                    <a href="">Health checkup</a>
+                    <a href="">Health insurance</a>
+                    <a href="/Blogs">Health blog</a>
+                </div>
+            </section>
+
+
+            <section class="footer_section">
+                <div class="footer_logo">
+                    <img src="/images/HealthConnectLogo.png" onclick="redirectToPharmacyPage()" />
+                </div>
+                <div class="footer_social_links">
+                    <a href=""><i class="fab fa-facebook"></i></a>
+                    <a href=""><i class="fab fa-instagram"></i></a>
+                    <a href=""><i class="fa-brands fa-x-twitter"></i></a>
+                    <a href=""><i class="fa-brands fa-youtube"></i></a>
+                </div>
+            </section>
+
+        </div>
+    </footer>
+
+
+
+    <!-- PopUp -->
+    <div id="myPopup" class="popup_outer_container">
+        <p id="closePopup">&times;</p>
+        <h1>Search your product hear</h1>
+        <div class="popup_container">
+            <section>
+                <div class="popup_serch_bar">
+                    <input type="text" name="name" id="myInput" placeholder="Search your product hear" autocomplete="off" />
+                </div>
+
+                <div class="prduct_container">
+
+                    @foreach (var allproductList in Model.AllProductList)
+                    {
+                        <div id="noResults" style="display:none;margin-top: 10px; color:red;">No results found</div>
+                        <div class="product_section data">
+                            <a href="/Ecom/Single_Product?product_id=@allproductList.product_id">
+
+                                <img src="/ProductImage/@allproductList.product_image.Split(',')[0]" alt="medicine1" loading="lazy"/>
+
+                                <div class="priceing_div">
+                                    <p class="product_name">@allproductList.product_name</p>
+                                    @if (allproductList.product_discount != null && allproductList.product_discount > 0)
+                                    {
+                                        <p class="price">
+                                            <del>&#8377;@allproductList.product_price</del>
+                                            <span> &#8377;@allproductList.discounted_price </span>
+                                        </p>
+                                    }
+                                    else
+                                    {
+                                        <p class="price">
+                                            <span> &#8377;@allproductList.product_price</span>
+                                        </p>
+                                    }
+
+                                </div>
+                            </a>
+                        </div>
+                    }
+                </div>
+            </section>
+        </div>
+    </div>
+
+
+
+
+
+    <script src="/js/Script.js"></script>
+    <script src="/js/jQuery.js"></script>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script>
+        const inputs = document.querySelectorAll(".myInput");
+        const popup = document.getElementById("myPopup");
+        const closeBtn = document.getElementById("closePopup");
+
+        inputs.forEach(input => {
+            input.addEventListener("click", function () {
+                popup.style.display = "block";
+                document.documentElement.style.overflow = "hidden";
+                document.body.style.overflow = "hidden";
+            });
+        });
+
+        closeBtn.addEventListener("click", function () {
+            popup.style.display = "none";
+            document.documentElement.style.overflow = "auto";
+            document.body.style.overflow = "auto";
+        });
+    </script>
+
+    <script>
+        $(document).ready(function () {
+            $("#myInput").on("keyup", function () {
+                var value = $(this).val().toLowerCase();
+                var hasVisible = false;
+
+                $(".data").each(function () {
+                    var match = $(this).text().toLowerCase().indexOf(value) > -1;
+                    $(this).toggle(match);
+                    if (match) {
+                        hasVisible = true;
+                    }
+                });
+
+                // Show/hide "No results found"
+                if (hasVisible) {
+                    $("#noResults").hide();
+                } else {
+                    $("#noResults").show();
+                }
+            });
+
+            document.getElementById('myInput').addEventListener('keydown', function (event) {
+                if (event.key === 'Enter') {
+                    event.preventDefault();
+                }
+            });
+        });
+    </script>
+
+
+
+    <!--
+        <script>
+             const inputs = document.querySelectorAll(".myInput");
+
+             inputs.forEach(input => {
+                 input.addEventListener("click", function () {
+                     window.location.href = "/Ecom/Search_Product";
+                 });
+             });
+         </script>
+     -->
+
+
+    <script>
+        $(document).ready(function() {
+            $('.medicine_main_category_li').click(function(event) {
+                event.stopPropagation();
+                $('.medicine_sub_category').not($(this).find('.medicine_sub_category')).slideUp(300);
+                $(this).find('.medicine_sub_category').stop(true, true).slideToggle(300);
+            });
+
+            $(document).click(function() {
+                $('.medicine_sub_category').slideUp(300);
+            });
+        });
+    </script>
+
+    <script>
+        document.addEventListener("DOMContentLoaded", function () {
+            function hideMessageAfterDelay(elementId) {
+                let element = document.getElementById(elementId);
+                if (element && element.innerText.trim() !== "") {
+                    element.style.display = "block";
+                    setTimeout(() => {
+                        element.style.display = "none";
+                    }, 5000);
+                }
+            }
+
+            hideMessageAfterDelay("errorMessage");
+            hideMessageAfterDelay("successMessage");
+            hideMessageAfterDelay("tempSuccessMessage");
+            hideMessageAfterDelay("tempErrorMessage");
+        });
+    </script>
+
+    <script>
+
+        $(document).ready(function () {
+            $('.pharmacy_header_user_icon').click(function (event) {
+                event.stopPropagation();
+                $('.pharmacy_header_user_services').slideToggle(300);
+            });
+
+            // Close menu when clicking outside
+            $(document).click(function (event) {
+                if (!$(event.target).closest('.pharmacy_header_user_services').length) {
+                    $('.pharmacy_header_user_services').slideUp(300);
+                }
+            });
+
+            // Stops the document click from closing the menu
+            $('.pharmacy_header_user_services').click(function (event) {
+                event.stopPropagation();
+            });
+        });
+
+    </script>
+
+    <script>
+
+        document.addEventListener("DOMContentLoaded", function () {
+            const header = document.querySelector('.pharmacy_header_container');
+
+            if (header) {
+                window.addEventListener('scroll', () => {
+                    const scrollPosition = window.pageYOffset || document.documentElement.scrollTop;
+
+                    if (scrollPosition > 70) {
+                        header.classList.add('pharmacy_header_scrolled');
+                    } else {
+                        header.classList.remove('pharmacy_header_scrolled');
+                    }
+                });
+            }
+        });
+
+
+    </script>
+
+</body>
+</html>

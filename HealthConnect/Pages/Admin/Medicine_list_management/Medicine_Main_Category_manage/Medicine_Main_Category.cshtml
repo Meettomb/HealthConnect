@@ -1,0 +1,73 @@
+﻿@page
+@model HealthConnect.Pages.Admin.Medicine_list_management.Medicine_Main_CategoryModel
+@{
+    Layout = "_Admin_header";
+    ViewData["Title"] = "Medicine Main Category";
+}
+
+
+<div class="col-md-6 grid-margin stretch-card">
+    <div class="card">
+        <div class="card-body">
+            <h4 class="card-title">Add medicine main category</h4>
+            <form method="post">
+                <div class="col-md-12">
+                    <div class="form-group row">
+                        <div class="col-sm-12">
+
+                            <div class="form-group">
+                                <label for="exampleInputUsername1">Medicine main category name</label>
+                                <input type="text" class="form-control" name="medicine_main_category_name" placeholder="Medicine main category name">
+                            </div>
+
+                        </div>
+                    </div>
+                    <button type="submit" class="btn btn-primary mr-2">Submit</button>
+                </div>
+            </form>
+
+        </div>
+    </div>
+</div>
+
+
+
+
+<div class="col-md-8 grid-margin stretch-card">
+    <div class="card">
+        <div class="card-body">
+            <h4 class="card-title">Medicine main category list</h4>
+            <div class="table-responsive">
+                <table class="table">
+                    <thead>
+                        <tr>
+                            <th> id </th>
+                            <th> Medicine main category name </th>
+
+                        </tr>
+                    </thead>
+                    <tbody>
+
+                        @foreach (var item in Model.Medicine_Main_Category)
+                        {
+                            <tr class="data">
+                                <td> @item.medicine_main_category_id </td>
+                                <td> @item.medicine_main_category_name </td>
+                                <td>
+                                    <a class="edit_icon" href="/Admin/Medicine_list_management/Medicine_Main_Category_manage/Medicine_Main_Category_Edit?medicine_main_category_id=@item.medicine_main_category_id"><i class="fa-regular fa-pen-to-square"></i></a>
+
+                                </td>
+                                <td>
+                                    <form method="post" asp-page-handler="Delete">
+                                        <input type="hidden" name="id" value="@item.medicine_main_category_id" />
+                                        <button class="btn btn-danger"><i class="fa-solid fa-trash-can"></i></button>
+                                    </form>
+                                </td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>

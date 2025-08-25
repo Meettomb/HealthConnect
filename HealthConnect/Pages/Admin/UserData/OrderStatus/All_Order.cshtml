@@ -1,0 +1,82 @@
+﻿@page
+@model HealthConnect.Pages.Admin.UserData.OrderStatus.All_OrderModel
+@{
+    Layout = "_Admin_header";
+    ViewData["Title"] = "All Orders";
+}
+
+
+
+<div class="row">
+    <div class="col-12 grid-margin">
+        <div class="card">
+            <div class="card-body">
+                <h4 class="card-title">Order Status</h4>
+                <div class="table-responsive">
+                    <table class="table">
+                        <thead>
+                            <tr>
+                                <th>Order No</th>
+                                <th style="width: 200px;">Product</th>
+                                <th>Client Name</th>
+                                <th>Seller Name</th>
+                                <th>Product Cost</th>
+                                <th>Payment Mode</th>
+                                <th>Order Date</th>
+                                <th>Order Status</th>
+                                <th>Action</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach (var toporder in Model.Order_TableList)
+                            {
+                                <tr>
+                                    <td>@toporder.order_id</td>
+                                    <td>
+                                        <div class="d-flex align-items-center" style="max-width: 200px; overflow: hidden;">
+                                            <img src="/ProductImage/@toporder.Product.product_image?.Split(',')[0]"
+                                                 alt="@toporder.Product.product_name"
+                                                 class="img-thumbnail"
+                                                 style="width: 40px; height: 40px; object-fit: cover;" />
+                                            <span class="pl-2 text-truncate" style="white-space: nowrap;">@toporder.Product.product_name</span>
+                                        </div>
+                                    </td>
+                                    <td>@toporder.User?.first_name</td>
+                                    <td>@toporder.Seller?.first_name</td>
+                                    <td>₹@toporder.price</td>
+                                    <td>@toporder.paymant_methode</td>
+                                    <td>@toporder.order_datetime</td>
+                                    <td>
+                                        @if (toporder.order_status == "Pending")
+                                        {
+                                            <div class="badge badge-outline-secondary">Pending</div>
+                                        }
+                                        else if (toporder.order_status == "Shipped")
+                                        {
+                                            <div class="badge badge-outline-warning">Shipped</div>
+                                        }
+                                        else if (toporder.order_status == "Cancel")
+                                        {
+                                            <div class="badge badge-outline-danger">Cancel</div>
+                                        }
+                                        else if (toporder.order_status == "Delivered")
+                                        {
+                                            <div class="badge badge-outline-success">Delivered</div>
+                                        }
+                                        else
+                                        {
+                                            <div class="badge badge-outline-info">Unknown</div>
+                                        }
+
+                                    </td>
+                                    <td><a href="/Admin/UserData/OrderStatus/Order_detail?order_id=@toporder.order_id">Detail</a></td>
+                                </tr>
+                            }
+                        </tbody>
+                    </table>
+
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

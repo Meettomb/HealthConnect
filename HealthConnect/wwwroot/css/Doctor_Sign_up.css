@@ -1,0 +1,600 @@
+﻿
+@import 'Variable.css';
+
+* {
+    margin: 0;
+    padding: 0;
+}
+
+
+
+
+.error_message {
+    color: red;
+    font-size: 14px;
+    font-weight: 700;
+    margin: 10px 0px;
+    text-align: center;
+    position: absolute;
+    top: 15px;
+    right: 15px;
+    background-color: #f8d7da;
+    padding: 10px 20px;
+    border-radius: 5px;
+    animation: shake 3s;
+    opacity: 0;
+}
+
+@keyframes shake {
+    0% {
+        transform: translateX(0);
+        opacity: 0.2;
+        display: block;
+    }
+
+    10% {
+        transform: translateX(-10px);
+        opacity: 0.5;
+    }
+
+    20% {
+        transform: translateX(10px);
+        opacity: 1;
+    }
+
+    30% {
+        transform: translateX(-10px);
+        opacity: 1;
+    }
+
+    40% {
+        transform: translateX(10px);
+        opacity: 1;
+    }
+
+    50% {
+        transform: translateX(-10px);
+        opacity: 1;
+    }
+
+    60% {
+        transform: translateX(10px);
+        opacity: 1;
+    }
+
+    70% {
+        transform: translateX(-10px);
+        opacity: 1;
+    }
+
+    80% {
+        transform: translateX(10px);
+        opacity: 0.5;
+    }
+
+    90% {
+        transform: translateX(-10px);
+        opacity: 0.2;
+    }
+
+    100% {
+        transform: translateX(0);
+        opacity: 0;
+    }
+}
+
+.success_message {
+    color: green;
+    font-size: 14px;
+    font-weight: 700;
+    margin: 10px 0px;
+    text-align: center;
+    position: absolute;
+    top: 15px;
+    right: 15px;
+    background-color: #d4edda;
+    padding: 10px 20px;
+    border-radius: 5px;
+    animation: shake 3s;
+    opacity: 0;
+}
+
+body {
+    width: 100%;
+    font-family: 'Roboto', sans-serif;
+    background-color: var(--body-bg-color);
+}
+
+
+
+.back_button i {
+    background-color: var(--accent-color);
+    color: var(--contrast-color);
+    padding: 10px 12px;
+    border-radius: 5px;
+    cursor: pointer;
+    -webkit-text-decoration: inherit;
+    text-decoration: inherit;
+    margin: 30px 0px 0px 50px;
+    z-index: 1000;
+    position: absolute;
+    top: 0;
+}
+
+.loging_container {
+    width: 100%;
+    height: auto;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-top: 8%;
+}
+
+    .loging_container .form_container {
+        width: 95%;
+        display: flex;
+        -webkit-justify-content: center;
+        justify-content: center;
+    }
+
+    .loging_container form {
+        border: 1px solid black;
+        max-width: 90%;
+        min-width: 30%;
+        border-radius: 10px;
+        padding: 20px;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        backdrop-filter: blur(1px);
+    }
+
+        .loging_container form .from_heading {
+            font-size: 30px;
+            font-weight: 600;
+            color: var(--heading-color);
+            font-family: var(--heading-font);
+            text-align: center;
+            margin: 30px 0 70px 0;
+        }
+
+        .loging_container form .user_input_box {
+            width: 100%;
+            padding: 10px 20px;
+            position: relative;
+            display: flex;
+            justify-content: center;
+        }
+
+            .loging_container form .user_input_box input {
+                width: 90%;
+                padding: 10px 15px;
+                border: none;
+                border: 2px solid #ccc;
+                background-color: #F5F5F5;
+                font-size: 16px;
+            }
+
+            .loging_container form .user_input_box label {
+                position: absolute;
+                top: 35%;
+                left: 9%;
+                transition: all 0.3s ease;
+            }
+
+            .loging_container form .user_input_box input:focus {
+                outline: none;
+                border-bottom: 2px solid #048077;
+            }
+
+        .loging_container form p {
+            color: red;
+            margin: 10px 0 10px 10px;
+            font-size: 14px;
+            font-weight: 500;
+            align-self: flex-start;
+            display: block;
+        }
+
+        .loging_container form .user_input_box i {
+            position: absolute;
+            top: 35%;
+            right: 10%;
+            font-size: 20px;
+            color: var(--accent-color);
+        }
+
+        .loging_container form .user_input_box input:focus + label,
+        .loging_container form .user_input_box input + label {
+            top: -10px;
+            font-size: 14px;
+            color: #048077;
+            font-weight: 600;
+        }
+
+
+
+/*--------------------------------------------------------------------------------------------------------------*/
+/*--------------------------------------------------------------------------------------------------------------*/
+/*--------------------------------------------------------------------------------------------------------------*/
+/*--------------------------------------------------------------------------------------------------------------*/
+/*--------------------------------------------------------------------------------------------------------------*/
+/*                                                 Register                                                     */
+/*--------------------------------------------------------------------------------------------------------------*/
+/*--------------------------------------------------------------------------------------------------------------*/
+/*--------------------------------------------------------------------------------------------------------------*/
+/*--------------------------------------------------------------------------------------------------------------*/
+/*--------------------------------------------------------------------------------------------------------------*/
+.regi_form_container {
+    width: 100%;
+    height: 90vh;
+    display: flex;
+    justify-content: center;
+    margin-top: 3%;
+}
+
+.user_filsd_wrep {
+    display: flex;
+    margin: 30px 0;
+    position: relative;
+}
+
+    .user_filsd_wrep .user_input_box input {
+        padding: 10px 1px;
+        border: 2px solid var(--accent-color);
+    }
+
+        .user_filsd_wrep .user_input_box input[type=date] {
+            padding: 10px 50px;
+        }
+
+
+@media (max-width: 683px) {
+    .user_filsd_wrep .user_input_box input[type=date] {
+        padding: 10px 40px;
+    }
+
+    .user_filsd_wrep {
+        flex-wrap: wrap;
+        margin: 10px 0;
+    }
+
+    .back_button i {
+        margin: 5px;
+    }
+}
+
+.regi_form_container .form_container {
+    width: 95%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.regi_form_container form {
+    max-width: 80%;
+    min-width: 30%;
+    border-radius: 10px;
+    padding: 20px;
+    display: flex;
+    flex-direction: column;
+    align-items: inherit;
+}
+
+    .regi_form_container form .from_heading {
+        font-size: 30px;
+        font-weight: 600;
+        color: var(--heading-color);
+        font-family: var(--heading-font);
+        text-align: center;
+        margin: 30px 0 70px 0;
+    }
+
+    .regi_form_container form .user_input_box {
+        width: 100%;
+        padding: 10px 20px;
+        position: relative;
+        display: flex;
+        justify-content: center;
+    }
+
+        .regi_form_container form .user_input_box input {
+            width: 90%;
+            padding: 10px 15px;
+            border: none;
+            border: 1px solid var(--accent-color);
+            -moz-border-radius: 5px;
+            -webkit-border-radius: 5px;
+            border-radius: 5px;
+            background-color: #F5F5F5;
+            font-size: 16px;
+            color: var(--accent-color);
+        }
+
+        .regi_form_container form .user_input_box select {
+            width: 100%;
+            padding: 10px 0px 10px 10px;
+            border: none;
+            border-bottom: 2px solid var(--accent-color);
+            background-color: #F5F5F5;
+            font-size: 16px;
+        }
+
+            .regi_form_container form .user_input_box select::-webkit-scrollbar {
+                display: none;
+            }
+
+
+        .regi_form_container form .user_input_box label {
+            position: absolute;
+            top: 35%;
+            left: 9%;
+            transition: all 0.3s ease;
+        }
+
+        .regi_form_container form .user_input_box input:focus {
+            outline: none;
+            border-bottom: 2px solid #048077;
+        }
+
+    .regi_form_container form p {
+        color: red;
+        margin: 10px 0 10px 10px;
+        font-size: 14px;
+        font-weight: 500;
+        align-self: flex-start;
+    }
+
+    .regi_form_container form .user_input_box i {
+        position: absolute;
+        top: 35%;
+        right: 10%;
+        font-size: 20px;
+        color: var(--accent-color);
+    }
+
+    .regi_form_container form .user_input_box input:focus + label,
+    .regi_form_container form .user_input_box input + label {
+        top: -10px;
+        font-size: 14px;
+        color: var(--accent-color);
+        font-weight: 600;
+    }
+
+.regi_form_container button {
+    background-color: var(--accent-color);
+    color: var(--contrast-color);
+    padding: 10px 100px;
+    border-radius: 5px;
+    cursor: pointer;
+    -webkit-text-decoration: inherit;
+    text-decoration: inherit;
+    margin: 15px 0px 20px 0px;
+    border: none;
+    font-size: 16px;
+    &:hover
+
+{
+    background-color: var(--button-hover-bg-color);
+}
+
+}
+
+.regi_form_container form a {
+    color: var(--accent-color);
+    text-decoration: none;
+    font-weight: 600;
+    font-size: 14px;
+    margin: 5px 0px 20px 0px;
+    &:hover
+
+{
+    color: var(--button-hover-bg-color);
+    text-decoration: underline;
+}
+
+}
+
+.user_filsd_wrep .user_input_box select {
+    max-width: 100%;
+    min-width: 100%;
+    outline: 1px solid var(--header-text-hover-color);
+    background-color: red;
+    border-radius: 5px;
+    border-bottom: none;
+}
+
+    .user_filsd_wrep .user_input_box select option {
+        background-color: #F5F5F5;
+        color: black;
+        font-weight: 500;
+        font-size: 15px;
+    }
+
+.regi_form_container form .login_button {
+    width: 100%;
+    display: flex;
+    -webkit-justify-content: center;
+    justify-content: center;
+    -webkit-align-items: center;
+    align-items: center;
+}
+
+.regi_form_container form a {
+    margin-left: -30px;
+}
+
+#profilePicInput {
+    width: 0%;
+    border: none;
+    &:before
+
+{
+    content: 'Upload Profile Picture';
+    position: absolute;
+    top: 0;
+    left: 5%;
+    width: 75%;
+    padding: 19px 20px;
+    background-color: var(--accent-color);
+    background-image: url('../user-regular.svg');
+    background-repeat: no-repeat;
+    border-radius: 5px;
+    color: var(--contrast-color);
+    cursor: pointer;
+    font-size: 10px;
+    background-size: 20px;
+    background-position: 90% 50%;
+
+}
+
+&:hover {
+    &:before
+
+{
+    background-color: var(--button-hover-bg-color);
+}
+
+}
+}
+
+
+
+#licensePhotoInput {
+    width: 0%;
+    border: none;
+    &:before
+
+{
+    content: ' Upload Medical License Photo';
+    position: absolute;
+    top: 0;
+    left: 5%;
+    width: 75%;
+    padding: 19px 20px;
+    background-color: var(--accent-color);
+    background-image: url('../id-card-regular.svg');
+    background-size: 20px;
+    background-position: 90% 50%;
+    background-repeat: no-repeat;
+    border-radius: 5px;
+    color: var(--contrast-color);
+    cursor: pointer;
+    font-size: 10px;
+}
+
+Upload Medical License Photo
+&:hover {
+    &:before
+
+{
+    background-color: var(--button-hover-bg-color);
+}
+
+}
+}
+
+
+
+.file-preview img {
+    max-width: 150px;
+    max-height: 150px;
+    margin-top: 10px;
+    border: 1px solid #ddd;
+    padding: 5px;
+    border-radius: 5px;
+}
+
+
+.tags-container {
+    display: flex;
+    flex-wrap: wrap;
+    column-gap: 10px;
+    width: 100%;
+    height: auto;
+    margin: 15px;
+}
+
+.tag {
+    background-color: var(--accent-color);
+    color: var(--contrast-color);
+    padding: 5px 10px;
+    border-radius: 15px;
+    display: flex;
+    align-items: center;
+    font-size: 10px;
+}
+
+    .tag span {
+        margin-left: 10px;
+        cursor: pointer;
+        font-weight: bold;
+    }
+
+.pic_view {
+    display: flex;
+    justify-content: center;
+    gap: 50px;
+    -ms-flex-wrap: wrap;
+    -webkit-flex-wrap: wrap;
+    flex-wrap: wrap;
+}
+
+.user_multiple_filsd_wrep {
+    width: 100%;
+}
+
+    .user_multiple_filsd_wrep label {
+        margin-left: 15px;
+        color: var(--accent-color);
+        font-weight: 600;
+        font-size: 14px;
+    }
+
+    .user_multiple_filsd_wrep .user_select_box {
+        display: flex;
+        justify-content: center;
+        width: 100%;
+    }
+
+        .user_multiple_filsd_wrep .user_select_box select {
+            width: 95%;
+            margin: 20px 0 0 0;
+            border: 1px solid var(--accent-color);
+            padding-left: 10px;
+        }
+
+            .user_multiple_filsd_wrep .user_select_box select::-webkit-scrollbar {
+                display: none;
+            }
+
+#DoctorSpecialitisTypeSelect option {
+    margin: 5px 0;
+    font-size: 16px;
+}
+
+#languagesSpokenSelect {
+    height: 150px;
+    overflow: scroll;
+    font-size: 16px;
+}
+
+    #languagesSpokenSelect option {
+        margin: 5px 0;
+    }
+
+
+#MedicineTypeSelect option {
+    margin: 5px 0;
+    font-size: 16px;
+}
+
+#DoctorQualificationsSelect {
+    /*    height: 250px;*/
+    overflow: scroll;
+    font-size: 16px;
+}
+
+    #DoctorQualificationsSelect option {
+        margin: 5px 0;
+    }

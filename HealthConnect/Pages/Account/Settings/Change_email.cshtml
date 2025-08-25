@@ -1,0 +1,24 @@
+﻿@page
+@model HealthConnect.Pages.Account.Settings.Change_emailModel
+@{
+    Layout = "_Settings";
+    ViewBag.Title = "Change email";
+}
+
+
+<div class="change_email_container">
+    <div class="change_email">
+        <h1>Change your email</h1>
+        <form method="post">
+            <div class="user_input">
+                <label for="email">Enter new email</label>
+                <input type="hidden" name="id" value="@Model.UserId" />
+                <input type="email" name="email" id="email" autocomplete="off" placeholder="Enter new email" />
+            </div>
+
+            <div class="form_button">
+                <button type="submit">Verify</button>
+            </div>
+        </form>
+    </div>
+</div>

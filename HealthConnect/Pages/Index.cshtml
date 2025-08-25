@@ -1,0 +1,316 @@
+﻿@page
+@model IndexModel
+@{
+    Layout = "_Header";
+    ViewData["Title"] = "Home page";
+}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Open Front Camera</title>
+    <link rel="stylesheet" href="/css/Index.css">
+
+
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css">
+</head>
+<body>
+    <main>
+
+        <section class="index_section_1">
+            <div class="slider">
+                <p class="welcome_text1" id="welcome_text1">Welcome to HealthConnect</p>
+                <p class="welcome_text2" id="welcome_text2">Your health is our priority</p>
+
+
+                <div class="whay_us_conteainer">
+                    <div class="why_us">
+                        <div class="why_choose_us_left">
+                            <h2>Why Choose HealthConnect?</h2>
+                            <p>
+                                HealthConnect offers trusted, secure, and convenient healthcare services.
+                                Enjoy easy appointment booking, digital prescriptions, and personalized care to meet your needs.
+                                From general consultations to specialist support, we keep you connected to quality healthcare.
+                            </p>
+
+                            <a href="#About">Learn More <i class="fa-solid fa-chevron-right"></i></a>
+                        </div>
+
+                        <div class="why_choose_us_right">
+                            <div class="why_choose_us_detail">
+                                <p><i class="fa-solid fa-stethoscope"></i></p>
+                                <h3>Verified Doctors</h3>
+                                <p>All doctors associated with HealthConnect are highly qualified, certified, and verified to ensure you receive trusted medical advice.</p>
+                            </div>
+
+                            <div class="why_choose_us_detail">
+                                <p><i class="fa-solid fa-shield-halved"></i></p>
+                                <h3>Complete Security</h3>
+                                <p>Your data is protected with industry-leading security. We prioritize 100% privacy of your health records and offer secure payment processing.</p>
+                            </div>
+
+                            <div class="why_choose_us_detail">
+                                <p><i class="fa-solid fa-square-phone"></i></p>
+                                <h3>24/7 Support</h3>
+                                <p>Our dedicated support team is available round the clock to assist you with any queries, ensuring a smooth and stress-free experience.</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section class="index_section_2" id="About">
+            <div class="index_about_container">
+                <div class="index_about_left DownUpAnimation">
+                    <img src="/images/about.jpg" />
+                </div>
+                <div class="index_about_right DownUpAnimation">
+                    <h1>About Us</h1>
+                    <article>
+                        Our website provides a comprehensive healthcare solution, connecting patients with trusted doctors for real-time consultations via chat and video calls.
+                        Receive personalized prescriptions and order medications seamlessly, ensuring convenient, secure, and confidential healthcare services from home.
+                    </article>
+
+                    <div class="about_detail">
+                        <h2>Connecting Patients and Doctors Seamlessly</h2>
+                        <p>Our platform enables users to connect with verified doctors instantly through secure chat and video calling for personalized consultations.</p>
+                    </div>
+
+                    <div class="about_detail">
+                        <h2>Expert Medical Consultations</h2>
+                        <p>Experienced doctors provide accurate diagnoses and medical prescriptions tailored to each patient’s needs.</p>
+                    </div>
+
+                    <div class="about_detail_read_more">
+                        <a href="/About">Read more <i class="fa-solid fa-chevron-right"></i></a>
+                    </div>
+
+                </div>
+            </div>
+        </section>
+
+        <section class="index_section_3">
+            <div class="count_container DownUpAnimation">
+                <div class="detail">
+                    <i class="fa-solid fa-user-doctor"></i>
+                    <div class="count">
+                        <h2 id="totalDoctorsCount" data-count="@Model.TotalDoctorsCount">0</h2>
+                        <h2>Doctor</h2>
+                    </div>
+
+                </div>
+                <div class="detail">
+                    <i class="fa-solid fa-hand-holding-heart"></i>
+                    <div class="count">
+                        <h2 id="TotalSpecialitiesCount" data-count="@Model.TotalSpecialitiesCount">0</h2>
+
+                        <h2>Specialities</h2>
+
+                    </div>
+                </div>
+                <div class="detail">
+                    <i class="fa-solid fa-users"></i>
+                    <div class="count">
+                        <h2 id="TotalUsersCount" data-count="@Model.TotalUsersCount">0</h2>
+                        <h2>Users</h2>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+
+        <section class="index_section_last" id="ContactUs">
+            <div class="feedback_container">
+                <h1>Feedback</h1>
+                <form method="post">
+                    <div class="detail_div">
+                        <div class="feedback_filde">
+                            <label for="name">Name</label>
+                            <input type="text" name="name" id="name" value="@Model.FirstName @Model.LastName" />
+                            <p class="feedbackerror"></p>
+                        </div>
+                        <div class="feedback_filde">
+                            <label for="email">Email</label>
+                            <input type="email" name="email" id="email" value="@Model.Email" />
+                            <p class="feedbackerror"></p>
+                        </div>
+                    </div>
+
+                    <div class="feedback_filde">
+                        <label for="message">Message</label>
+                        <textarea name="message" id="message" placeholder="Feedback Message"></textarea>
+                        <p class="feedbackerror"></p>
+                    </div>
+
+                    <div>
+                        <button type="submit" name="action" value="SubmitFeedback" class="feedback_button">Submit</button>
+                    </div>
+                </form>
+
+            </div>
+        </section>
+
+
+        @if (Model.Role == "Doctor" && Model.DoctorProfileComplete == false)
+        {
+            <div class="finel_step_for_doctor_registration" id="popup">
+                <div class="form_section">
+                    <h1>First complite your profile</h1>
+                    <form method="post">
+                        <div class="filde_container">
+                            <p>Choose your daily Woking hours</p>
+
+                            <div class="time_filde">
+
+                                <div class="fildes">
+                                    <label>Starting hours</label>
+                                    <input type="time" name="work_start_time" value="" />
+                                </div>
+
+                                <div class="fildes">
+                                    <label>Ending hours</label>
+                                    <input type="time" name="work_end_time" value="" />
+                                </div>
+
+                            </div>
+                        </div>
+
+                        <div class="filde_container">
+                            <P>Choose your working days</P>
+                            <div class="fildes">
+
+                                <div class="chackbox_fild">
+                                    <input type="checkbox" name="weekly_work_days" value="Monday" />
+                                    <label>Monday</label>
+                                </div>
+
+                                <div class="chackbox_fild">
+                                    <input type="checkbox" name="weekly_work_days" value="Tuesday" />
+                                    <label>Tuesday</label>
+                                </div>
+
+                                <div class="chackbox_fild">
+                                    <input type="checkbox" name="weekly_work_days" value="Wednesday" />
+                                    <label>Wednesday</label>
+                                </div>
+
+                                <div class="chackbox_fild">
+                                    <input type="checkbox" name="weekly_work_days" value="Thursday" />
+                                    <label>Thursday</label>
+                                </div>
+
+                                <div class="chackbox_fild">
+                                    <input type="checkbox" name="weekly_work_days" value="Friday" />
+                                    <label>Friday</label>
+                                </div>
+
+                                <div class="chackbox_fild">
+                                    <input type="checkbox" name="weekly_work_days" value="Saturday" />
+                                    <label>Saturday</label>
+                                </div>
+
+                                <div class="chackbox_fild">
+                                    <input type="checkbox" name="weekly_work_days" value="Sunday" />
+                                    <label>Sunday</label>
+                                </div>
+
+                            </div>
+                        </div>
+
+                        <div class="filde_container">
+                            <p>Max time per Appointments</p>
+                            <div class="fildes">
+                                <input type="number" name="max_time_per_appointments" placeholder="20" />
+                            </div>
+                        </div>
+
+                        <div class="filde_container">
+                            <p>How much time you need between two Appointments</p>
+                            <div class="fildes">
+                                <input type="number" name="break_between_two_appointments" placeholder="5" />
+                            </div>
+                        </div>
+
+                        <div class="submit_button">
+                            <button type="submit" name="action" value="DoctorSubmit">Submit</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        }
+
+
+    </main>
+
+
+    @if (!string.IsNullOrEmpty(Model.ErrorMessage))
+    {
+        <div class="error_message">@Model.ErrorMessage</div>
+    }
+
+    @if (!string.IsNullOrEmpty(Model.SuccessMessage))
+    {
+        <p class="success_message">@Model.SuccessMessage</p>
+    }
+
+    @if (TempData["SuccessMessage"] != null)
+    {
+        <div class="success_message">@TempData["SuccessMessage"]</div>
+    }
+
+    @if (TempData["ErrorMessage"] != null)
+    {
+        <div class="error_message">@TempData["ErrorMessage"]</div>
+    }
+
+    <script>
+    document.querySelector("form").addEventListener("submit", function (e) {
+        let isValid = true;
+
+        // Clear previous error messages
+        document.querySelectorAll(".feedbackerror").forEach(el => el.textContent = "");
+
+        const nameInput = document.getElementById("name");
+        const emailInput = document.getElementById("email");
+        const messageInput = document.getElementById("message");
+
+        // Validate Name
+        if (nameInput.value.trim() === "") {
+            nameInput.nextElementSibling.textContent = "Name is required.";
+            isValid = false;
+        } else if (nameInput.value.length > 20) {
+            nameInput.nextElementSibling.textContent = "Name must be 20 characters or fewer.";
+            isValid = false;
+        }
+
+        // Validate Email
+        if (emailInput.value.trim() === "") {
+            emailInput.nextElementSibling.textContent = "Email is required.";
+            isValid = false;
+        } else if (emailInput.value.length > 50) {
+            emailInput.nextElementSibling.textContent = "Email must be 50 characters or fewer.";
+            isValid = false;
+        } 
+
+        // Validate Message
+        if (messageInput.value.trim() === "") {
+            messageInput.nextElementSibling.textContent = "Message is required.";
+            isValid = false;
+        } else if (messageInput.value.length > 300) {
+            messageInput.nextElementSibling.textContent = "Message must be 300 characters or fewer.";
+            isValid = false;
+        }
+
+        if (!isValid) {
+            e.preventDefault(); // Stop form submission if validation fails
+        }
+    });
+</script>
+
+
+
+</body>
+</html>

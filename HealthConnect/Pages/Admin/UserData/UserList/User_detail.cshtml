@@ -1,0 +1,273 @@
+﻿@page
+@model HealthConnect.Pages.Admin.UserData.UserList.User_detailModel
+@{
+    Layout = "~/Pages/Shared/_Admin_header.cshtml";
+    ViewData["Title"] = "User full details";
+}
+<head>
+    <style>
+        .form_button {
+            display: flex;
+            position: sticky;
+            column-gap: 30px;
+            margin: 15px 0;
+        }
+
+            .form_button button {
+                text-align: center;
+                padding: 10px 10px;
+                border-radius: 5px;
+                border: none;
+                color: white;
+                cursor: pointer;
+            }
+
+                .form_button button i {
+                    width: 100%;
+                    text-align: center;
+                }
+    </style>
+</head>
+
+<div class="row">
+    <div class="col-12">
+        <div class="card">
+            <div class="card-body">
+                <h4 class="card-title">Doctor Register inquiry</h4>
+                <p onclick="history.back()" class="text-primary" style="cursor: pointer;">Back to list</p>
+                <div class="form_button">
+
+                    @if (Model.User_Table.isactive == true)
+                    {
+                        <form method="post" asp-page-handler="Delete">
+                            <input type="hidden" name="id" value="@Model.User_Table.id" />
+                            <button class="btn btn-danger"><i class="fa-solid fa-trash-can"></i></button>
+                        </form>
+                    }
+                    else
+                    {
+                        <form method="post" asp-page-handler="Active">
+                            <input type="hidden" name="id" value="@Model.User_Table.id" />
+                            <button class="btn btn-success"><i class="fa-solid fa-trash-can-arrow-up"></i></button>
+                        </form>
+                    }
+
+                    @if (Model.User_Table.block == true)
+                    {
+
+                        <form method="post" asp-page-handler="Unblock">
+                            <input type="hidden" name="id" value="@Model.User_Table.id" />
+                            <button class="btn btn-success"><i class="fa-solid fa-unlock-keyhole"></i></button>
+                        </form>
+                    }
+                    else
+                    {
+                        <form method="post" asp-page-handler="Block">
+                            <input type="hidden" name="id" value="@Model.User_Table.id" />
+                            <button class="btn btn-danger"><i class="fa-solid fa-ban"></i></button>
+                        </form>
+
+                    }
+
+                </div>
+
+
+                <div class="row">
+                    <div class="col-md-12">
+                        <div class="table-responsive">
+                            <table class="table">
+
+                                <tbody>
+                                    <tr>
+                                        <th>Request ID</th>
+                                        <td>@Model.User_Table.id</td>
+                                    </tr>
+                                    <tr>
+                                        <th>First Name</th>
+                                        <td>@Model.User_Table.first_name</td>
+                                    </tr>
+                                    <tr>
+                                        <th>Last Name</th>
+                                        <td>@Model.User_Table.last_name</td>
+                                    </tr>
+                                    <tr>
+                                        <th>Email</th>
+                                        <td>@Model.User_Table.email</td>
+                                    </tr>
+                                    <tr>
+                                        <th>Mobile No</th>
+                                        <td>@Model.User_Table.mobil_no</td>
+                                    </tr>
+                                    <tr>
+                                        <th>Date of Birth</th>
+                                        <td>@Model.User_Table.dob</td>
+                                    </tr>
+                                    <tr>
+                                        <th>Address</th>
+                                        <td>@Model.User_Table.House_number_and_Street_name</td>
+                                    </tr>
+                                    <tr>
+                                        <th>Country</th>
+                                        <td>@Model.User_Table.country</td>
+                                    </tr>
+                                    <tr>
+                                        <th>City</th>
+                                        <td>@Model.User_Table.city</td>
+                                    </tr>
+                                    <tr>
+                                        <th>State</th>
+                                        <td>@Model.User_Table.state</td>
+                                    </tr>
+                                    <tr>
+                                        <th>Pincode</th>
+                                        <td>@Model.User_Table.pincode</td>
+                                    </tr>
+                                    <tr>
+                                        <th>Gender</th>
+                                        <td>@Model.User_Table.gender</td>
+                                    </tr>
+                                    <tr>
+                                        <th>Role</th>
+                                        <td>@Model.User_Table.role</td>
+                                    </tr>
+
+
+                                    @if (Model.User_Table.role == "Doctor")
+                                    {
+
+
+                                        <tr>
+                                            <th>Profile Picture</th>
+                                            <td>
+                                                <img src="/documant/@Model.User_Table.profile_pic" alt="image" />
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <th>Medical License Photo</th>
+                                            <td><img src="/documant/@Model.User_Table.doctore_medical_license_photo" alt="License Photo" width="100"></td>
+                                        </tr>
+                                        <tr>
+                                            <th>Medical Registration No</th>
+                                            <td>@Model.User_Table.medical_registration_no</td>
+                                        </tr>
+                                        <tr>
+                                            <th>State Medical Council</th>
+                                            <td>@Model.User_Table.state_medical_council</td>
+                                        </tr>
+                                        <tr>
+                                            <th>Year of Registration</th>
+                                            <td>@Model.User_Table.year_of_registration</td>
+                                        </tr>
+                                        <tr>
+                                            <th>Experience</th>
+                                            <td>@Model.User_Table.doctore_experience</td>
+                                        </tr>
+                                        <tr>
+                                            <th>Medicine type</th>
+                                            <td>@Model.User_Table.medicine_type</td>
+                                        </tr>
+                                        <tr>
+                                            <th>Hospital/Clinic</th>
+                                            <td>@Model.User_Table.hospital_or_clinic</td>
+                                        </tr>
+                                        <tr>
+                                            <th>Qualifications</th>
+                                            <td>@Model.User_Table.doctor_qualifications</td>
+                                        </tr>
+                                        <tr>
+                                            <th>Doctor Type</th>
+                                            <td>@Model.User_Table.doctor_type</td>
+                                        </tr>
+                                        <tr>
+                                            <th>Doctor Specialitis</th>
+                                            <td>@Model.User_Table.doctor_specialitis</td>
+                                        </tr>
+                                        <tr>
+                                            <th>Languages Spoken</th>
+                                            <td>@Model.User_Table.languages_spoken</td>
+                                        </tr>
+                                        <tr>
+                                            <th>Clinic/Hospital Address</th>
+                                            <td>@Model.User_Table.clinic_or_hospital_address</td>
+                                        </tr>
+                                        <tr>
+                                            <th>On site Consultation Fee</th>
+                                            <td>@Model.User_Table.on_site_consultation_fee</td>
+                                        </tr>
+                                        <tr>
+                                            <th>Video call Consultation Fee</th>
+                                            <td>@Model.User_Table.video_call_consultation_fee</td>
+                                        </tr>
+                                        
+                                        <tr>
+                                            <th>Work Start Time</th>
+                                            <td>@Model.User_Table.work_start_time</td>
+                                        </tr>
+                                         
+                                        <tr>
+                                            <th>Work End Time</th>
+                                            <td>@Model.User_Table.work_end_time</td>
+                                        </tr>
+                                        <tr>
+                                            <th>Weekly Work Days</th>
+                                            <td>@string.Join(", ", Model.User_Table.weekly_work_days)</td>
+                                        </tr>
+                                         
+                                        <tr>
+                                            <th>Max Time Per Appointments</th>
+                                            <td>@Model.User_Table.max_time_per_appointments Minutes</td>
+                                        </tr>
+                                           
+                                        <tr>
+                                            <th>Break Between Two Appointments</th>
+                                            <td>@Model.User_Table.break_between_two_appointments Minutes</td>
+                                        </tr>
+                                         
+
+                                    }
+
+
+
+                                    <tr>
+                                        <th>Account Approved</th>
+                                        <td>@(Model.User_Table.account_approve ? "Yes" : "No")</td>
+                                    </tr>
+                                    <tr>
+                                        <th>Account Creation Date</th>
+                                        <td>@Model.User_Table.account_create_date.ToString("dd/MM/yyyy")</td>
+                                    </tr>
+                                    <tr>
+                                        <th>Block or Not</th>
+                                        <td>@(Model.User_Table.block == true ? "Block" : "Not Block")</td>
+                                    </tr>
+                                    <tr>
+                                        <th>Active Status</th>
+                                        <td>@(Model.User_Table.isactive ? "Active" : "Inactive")</td>
+                                    </tr>
+                                    <tr>
+                                        <th>Mobail Number Verifie</th>
+                                        <td>
+                                            @if (Model.User_Table.mobail_verifie == true)
+                                            {
+                                                <text>Yes</text>
+                                            }
+                                            else
+                                            {
+                                                <text>No</text>
+                                            }
+                                        </td>
+
+                                    </tr>
+                                </tbody>
+
+
+                            </table>
+                        </div>
+
+                    </div>
+
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

@@ -1,0 +1,46 @@
+﻿@page
+@model HealthConnect.Pages.Admin.Feedbacks.All_FeedbackModel
+@{ 
+    Layout = "_Admin_header";
+    ViewData["Title"] = "Feedbacks";
+}
+
+
+
+<div class="row">
+    <div class="col-12 grid-margin">
+        <div class="card">
+            <div class="card-body">
+                <h4 class="card-title">Doctor Register inquiry</h4>
+                <div class="table-responsive">
+                    <table class="table">
+                        <thead>
+                            <tr>
+                                <th> User Name </th>
+                                <th> Email </th>
+                                <th> Message </th>
+                                <th> Date </th>
+                            </tr>
+                        </thead>
+                        <tbody>
+
+                            @foreach (var feedback in Model.FeedbackList)
+                            {
+                                <tr class="data">
+                                    <td class="if_account_block">
+                                        <span class="pl-2">@feedback.name</span>
+                                    </td>
+
+                                    <td> @feedback.email</td>
+                                    <td> @feedback.message</td>   
+                                    <td> @feedback.date</td>
+
+                                </tr>
+                            }
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

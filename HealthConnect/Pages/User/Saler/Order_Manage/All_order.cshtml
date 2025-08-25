@@ -1,0 +1,63 @@
+﻿@page
+@model HealthConnect.Pages.User.Saler.Order_Manage.All_orderModel
+@{
+    Layout = "_Saler_dashbord";
+    ViewData["Title"] = "All Orders";
+}
+
+
+
+<div class="container-fluid pt-4 px-4">
+    <div class="bg-light text-center rounded p-4">
+        <div class="d-flex align-items-center justify-content-between mb-4">
+            <h6 class="mb-0">All orders</h6>
+            <a href="/User/Saler/Order_Manage">Show All</a>
+        </div>
+        <div class="table-responsive">
+            <table class="table text-start align-middle table-bordered table-hover mb-0">
+                <thead>
+                    <tr class="text-dark">
+                        <th scope="col">Date</th>
+                        <th scope="col">Product Name</th>
+                        <th scope="col">Customer Name</th>
+                        <th scope="col">Amount</th>
+                        <th scope="col">Quantity</th>
+                        <th scope="col">Status</th>
+                        <th scope="col">Action</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var order in Model.Order_TableList)
+                    {
+                        <tr>
+                            <td>@order.order_datetime</td>
+                            <td>@order.Product.product_name</td>
+                            <td>@order.User.first_name @order.User.last_name</td>
+                            <td>@order.price</td>
+                            <td>@order.quantity</td>
+                            @if (order.order_status == "Pending")
+                            {
+                                <td>@order.order_status</td>
+                            }
+                            else if (order.order_status == "Cancel")
+                            {
+                                <td class="text-danger">@order.order_status</td>
+                            }
+                            else if (order.order_status == "Delivered")
+                            {
+                                <td class="text-success">@order.order_status</td>
+                            }
+                            else if (order.order_status == "Shipped")
+                            {
+                                <td class="text-warning">@order.order_status</td>
+
+                            }
+
+                            <td><a class="btn btn-sm btn-primary" href="/User/Saler/Order_Manage/Order_detail?order_id=@order.order_id">Detail</a></td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>

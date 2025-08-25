@@ -1,0 +1,49 @@
+﻿@page
+@model HealthConnect.Pages.Admin.UserData.Pharmacist_inquiryModel
+@{
+    Layout = "_Admin_header";
+    ViewData["Title"] = "Pharmacist Inquiry";
+}
+
+
+<div class="row">
+    <div class="col-12 grid-margin">
+        <div class="card">
+            <div class="card-body">
+                <h4 class="card-title">Pharmacist Register inquiry</h4>
+                <div class="table-responsive">
+                    <table class="table">
+                        <thead>
+                            <tr>
+                                <th> Request id </th>
+                                <th> Pharmacist Name </th>
+                                <th> Email </th>
+                                <th> Shop name </th>
+                                <th> Inquiry date </th>
+                                <th> Status </th>
+                            </tr>
+                        </thead>
+                        <tbody>
+
+                            @foreach (var item in Model.pharmacist_approvels)
+                            {
+                                <tr class="data">
+                                    <td> @item.pharmacist_approvel_id </td>
+                                    <td>
+                                        <span class="pl-2">@item.first_name @item.last_name</span>
+                                    </td>
+                                    <td> @item.email </td>
+                                    <td> @item.shop_name </td>
+                                    <td> @item.account_create_date </td>
+                                    <td>
+                                        <a class="badge badge-outline-warning" href="/Admin/UserData/Pharmacist_inquiry_approve?pharmacist_approvel_id=@item.pharmacist_approvel_id">Panding</a>
+                                    </td>
+                                </tr>
+                            }
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

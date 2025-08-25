@@ -1,0 +1,64 @@
+﻿@page
+@model HealthConnect.Pages.Ecom.FilterModel
+@{
+    Layout = "_Pharmacy_header";
+    ViewData["Title"] = "Filter";
+}
+
+@if (Model.FilterProduct != null && Model.FilterProduct.Any())
+{
+
+
+    <div class="filter_index_container">
+        <section class="filter_index_container_section_1">
+            <div class="slider_container">
+                @foreach (var Filter in Model.FilterProduct)
+                {
+                    <div class="product_section">
+                        <a href="/Ecom/Single_Product?product_id=@Filter.product_id">
+
+                            @{
+                                var firstImage = !string.IsNullOrEmpty(Filter.product_image)
+                                ? Filter.product_image.Split(',')[0]
+                                : "default.png";
+                            }
+                            <img src="/ProductImage/@firstImage" alt="medicine1" loading="lazy" />
+
+
+                            <div class="priceing_div">
+                                <p class="product_name">@Filter.product_name</p>
+                                @if (Filter.product_discount != null && Filter.product_discount > 0)
+                                {
+                                    <p class="price">
+                                        <del>&#8377;@Filter.product_price</del>
+                                        <span> &#8377;@Filter.discounted_price </span>
+                                    </p>
+                                }
+                                else
+                                {
+                                    <p class="price">
+                                        <span> &#8377;@Filter.product_price</span>
+                                    </p>
+                                }
+
+                            </div>
+                        </a>
+
+                        <form id="cartForm" method="post">
+                            <input type="hidden" name="user_id" id="user_id" value="@Model.UserId" />
+                            <input type="hidden" name="product_id" id="product_id" value="@Filter.product_id" />
+                            <button type="submit" name="addToCart" id="addToCart">Add</button>
+                        </form>
+                    </div>
+                }
+            </div>
+        </section>
+    </div>
+
+}
+else
+{
+    <p class="filter_no_founde">No products found.</p>
+}
+
+

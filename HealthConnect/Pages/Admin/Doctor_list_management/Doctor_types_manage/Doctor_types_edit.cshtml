@@ -1,0 +1,39 @@
+﻿@page
+@model HealthConnect.Pages.Admin.Doctor_list_management.Doctor_types_manage.Doctor_types_editModel
+@{
+    Layout = "_Admin_header";
+    ViewData["Title"] = "Edit Doctor types";
+}
+
+<div class="col-md-6 grid-margin stretch-card">
+    <div class="card">
+        <div class="card-body">
+            <h4 class="card-title">Edit Doctor Type</h4>
+            <form method="post">
+                <div class="col-md-12">
+                    <div class="form-group row">
+                        <div class="col-sm-12">
+                            <input type="hidden" name="doctor_type_id" value="@Model.TypesOfDoctor.doctor_type_id" />
+
+                            <div class="form-group">
+                                <label for="type_of_doctor">Type of Doctor</label>
+                                <input type="text" class="form-control" name="type_of_doctor" id="type_of_doctor" value="@Model.TypesOfDoctor.type_of_doctor" placeholder="Type of doctor">
+                            </div>
+                        </div>
+                    </div>
+
+                    <button type="submit" class="btn btn-primary mr-2">Submit</button>
+                    <button type="button" class="btn btn-dark" onclick="history.back()">Cancel</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+
+@if (TempData["ErrorMessage"] != null)
+{
+    <div class="success_message">
+        @TempData["ErrorMessage"]
+    </div>
+}

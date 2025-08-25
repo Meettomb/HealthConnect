@@ -1,0 +1,194 @@
+﻿<!DOCTYPE html>
+
+<html>
+<head>
+    <meta name="viewport" content="width=device-width" />
+    <title>@ViewBag.Title - Health Connect</title>
+
+    <link href="/images/HealthConnectTabLogo.png" rel="icon" />
+    <link href="/css/Index.css" rel="stylesheet" />
+
+    <!--ICON-->
+    <link href="/Icon/fontawesome-free-6.7.2-web/css/fontawesome.css" rel="stylesheet" />
+    <link href="/Icon/fontawesome-free-6.7.2-web/css/brands.css" rel="stylesheet" />
+    <link href="/Icon/fontawesome-free-6.7.2-web/css/solid.css" rel="stylesheet" />
+    <link href="/Icon/fontawesome-free-6.7.2-web/css/sharp-thin.css" rel="stylesheet" />
+    <link href="/Icon/fontawesome-free-6.7.2-web/css/duotone-thin.css" rel="stylesheet" />
+    <link href="/Icon/fontawesome-free-6.7.2-web/css/sharp-duotone-thin.css" rel="stylesheet" />
+
+    <link rel="stylesheet" href="/assets/vendors/mdi/css/materialdesignicons.min.css">
+
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="/js/jQuery.js"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@100..900&family=Sofia+Sans+Condensed:ital,wght@0,1..1000;1,1..1000&display=swap" rel="stylesheet">
+
+
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/cropperjs/1.5.13/cropper.min.css" rel="stylesheet">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/cropperjs/1.5.13/cropper.min.js"></script>
+
+
+</head>
+<body>
+
+    @if (!string.IsNullOrEmpty(Model.ErrorMessage))
+    {
+        <div class="error_message" id="errorMessage">@Model.ErrorMessage</div>
+    }
+
+    @if (!string.IsNullOrEmpty(Model.SuccessMessage))
+    {
+        <p class="success_message" id="successMessage">@Model.SuccessMessage</p>
+    }
+
+    @if (TempData["SuccessMessage"] != null)
+    {
+        <div class="success_message" id="tempSuccessMessage">@TempData["SuccessMessage"]</div>
+    }
+
+    @if (TempData["ErrorMessage"] != null)
+    {
+        <div class="error_message" id="tempErrorMessage">@TempData["ErrorMessage"]</div>
+    }
+
+
+    <div class="loder" id="loder">
+        <img src="/Loder.gif" alt="Alternate Text" />
+    </div>
+
+    <div class="overview_header_contant" id="header">
+        <header class="overview_header">
+            <div class="overview_back_button">
+                <img src="/images/HealthConnectLogo.png" onclick="redirectToHomepage()" />
+            </div>
+
+            <div class="overview_profile_icon">
+
+                <div class="login_and_profile">
+
+                    @if (Model.UserId == null)
+                    {
+                        <a class="header_login_button" href="/User/Sign_in">Login</a>
+                    }
+                    else
+                    {
+                        <div class="header_user_icon_drop_down">
+                            @if (!string.IsNullOrEmpty(Model.ProfilePic))
+                            {
+                                <div class="header_user_image">
+                                    <img src="/documant/@Model.ProfilePic" />
+                                </div>
+                            }
+                            else
+                            {
+                                <div class="header_user_icon">
+                                    @Model.FirstName[0].ToString().ToUpper()
+                                </div>
+
+                            }
+                            <div class="header_user_services">
+                                <section>
+                                    <a href="/Account/Overview">
+                                        <i class="fa-solid fa-user"></i> Account
+                                    </a>
+
+                                    <a href="/Chatting/Chatting_page">
+                                        <i class="fa-solid fa-message"></i> Message
+                                    </a>
+
+                                    <a href="/User/AppointmentManage/All_appointment">
+                                        <i class="fa-solid fa-calendar-day"></i> Appointment
+                                    </a>
+
+                                    @if (Model.Role == "Pharmacist")
+                                    {
+                                        <a href="/User/Saler/Saler_Dashbord">
+                                            <i class="fa-solid fa-chart-line"></i> Your Dashbord
+                                        </a>
+                                    }
+
+                                    @if (Model.Role == "Admin")
+                                    {
+                                        <a href="/Admin/Admin_index">
+                                            <i class="fa-solid fa-user-tie"></i> Admin side
+                                        </a>
+                                    }
+                                    <a href="/User/Logout">
+                                        <i class="fa-solid fa-right-from-bracket"></i> Logout
+                                    </a>
+                                </section>
+                            </div>
+                        </div>
+                    }
+
+                </div>
+            </div>
+        </header>
+    </div>
+
+    <div>
+        @RenderBody()
+    </div>
+
+    <script src="/js/Script.js"></script>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+
+    <script>
+        document.addEventListener("DOMContentLoaded", function () {
+            function hideMessageAfterDelay(elementId) {
+                let element = document.getElementById(elementId);
+                if (element && element.innerText.trim() !== "") {
+                    element.style.display = "block";
+                    setTimeout(() => {
+                        element.style.display = "none";
+                    }, 5000);
+                }
+            }
+
+            hideMessageAfterDelay("errorMessage");
+            hideMessageAfterDelay("successMessage");
+            hideMessageAfterDelay("tempSuccessMessage");
+            hideMessageAfterDelay("tempErrorMessage");
+        });
+    </script>
+
+    <script>
+        $(".header_user_icon").on("click", function () {
+            $(".header_user_services").slideToggle();
+
+            $(".Search_by_Speciality, .Search_by_Type, .Search_by_city").slideUp();
+        });
+        $(".header_user_image").on("click", function () {
+            $(".header_user_services").slideToggle();
+
+            $(".Search_by_Speciality, .Search_by_Type, .Search_by_city").slideUp();
+        });
+    </script>
+
+
+    <script>
+        document.getElementById("profile_pic").addEventListener("change", function (event) {
+            const file = event.target.files[0];
+            const preview = document.getElementById("previewImageTag"); // Fixed the ID
+
+            if (file) {
+                if (file.type.startsWith("image/")) {
+                    const reader = new FileReader();
+                    reader.onload = function (e) {
+                        preview.src = e.target.result;
+                        preview.style.display = "block"; // Make the image visible
+                    };
+                    reader.readAsDataURL(file);
+                } else {
+                    alert("Please select a valid image file.");
+                    event.target.value = ""; // Reset file input
+                    preview.style.display = "none"; // Hide preview if invalid file
+                }
+            }
+        });
+    </script>
+
+
+</body>
+</html>

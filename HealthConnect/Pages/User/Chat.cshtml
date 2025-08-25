@@ -1,0 +1,44 @@
+﻿@page
+@model HealthConnect.Pages.User.ChatModel
+@{
+    Layout = "_Chat";
+    ViewData["Title"] = "Chat";
+}
+
+
+<div class="chat_container">
+    <div class="all_chat">
+        <div class="left_message">
+            @if (!string.IsNullOrEmpty(Model.User.profile_pic))
+            {
+                <img src="/documant/@Model.User.profile_pic" />
+            }
+            else
+            {
+                <i class="fa-solid fa-user"></i>
+            }
+            <div class="left_message_text" id="left_message_text">
+                <p id="rceiver_message"></p>
+            </div>
+        </div>
+        <div class="right_message">
+
+            <div class="right_message_text" id="right_message_text">
+                <p id="send_messages"></p>
+            </div>
+
+            @if (!string.IsNullOrEmpty(Model.ProfilePic))
+            {
+                <img src="/documant/@Model.ProfilePic" />
+            }
+            else
+            {
+                <i class="fa-solid fa-user"></i>
+            }
+        </div>
+    </div>
+</div>
+
+
+
+

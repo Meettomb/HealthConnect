@@ -1,0 +1,475 @@
+﻿<!DOCTYPE html>
+
+<html>
+<head>
+    <meta name="viewport" content="width=device-width" />
+    <title>@ViewBag.Title - Health Connect</title>
+    <link href="/images/HealthConnectTabLogo.png" rel="icon" />
+
+    <link rel="stylesheet" href="/css/Index.css" asp-append-version="true">
+
+    <!--ICON-->
+    <link href="/Icon/fontawesome-free-6.7.2-web/css/fontawesome.css" rel="stylesheet" />
+    <link href="/Icon/fontawesome-free-6.7.2-web/css/brands.css" rel="stylesheet" />
+    <link href="/Icon/fontawesome-free-6.7.2-web/css/solid.css" rel="stylesheet" />
+    <link href="/Icon/fontawesome-free-6.7.2-web/css/sharp-thin.css" rel="stylesheet" />
+    <link href="/Icon/fontawesome-free-6.7.2-web/css/duotone-thin.css" rel="stylesheet" />
+    <link href="/Icon/fontawesome-free-6.7.2-web/css/sharp-duotone-thin.css" rel="stylesheet" />
+
+    <link rel="stylesheet" href="/assets/vendors/mdi/css/materialdesignicons.min.css">
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@100..900&family=Sofia+Sans+Condensed:ital,wght@0,1..1000;1,1..1000&display=swap" rel="stylesheet">
+
+</head>
+<body>
+
+    <div class="loder" id="loder">
+        <img src="/Loder.gif" alt="Alternate Text" />
+    </div>
+
+    <div class="chatting_header">
+        <div class="first_column">
+
+            <img class="logo" src="/images/HealthConnectTabLogo.png" alt="Health Connect" onclick="redirectToHomepage()" />
+
+            @if (string.IsNullOrEmpty(Model.ProfilePic))
+            {
+                <span class="chatting_name_first_latter">
+                    @Model.FirstName[0].ToString().ToUpper()
+                </span>
+
+            }
+            else
+            {
+                <img class="profile_pic" src="/documant/@Model.ProfilePic" alt="Profile Picture" />
+            }
+            <div class="chatting_message_icon" id="chatting_message_icon">
+                <i class="fa-solid fa-message"></i>
+            </div>
+            <div class="chatting_setting_icon" id="chatting_setting_icon">
+                <i class="fa-solid fa-gear"></i>
+            </div>
+        </div>
+
+        <div class="second_column" id="second_column">
+
+            <div class="chat_user_lists" id="chat_user_lists">
+                <h3>Chats</h3>
+
+                <div class="chatting_search">
+                    <input type="text" id="myInput" placeholder="Search" />
+                    <i class="fa-solid fa-search"></i>
+                </div>
+
+                <div class="chatting_list">
+                    <ul id="receiverList" class="data">
+                        <li id="receiverItem">
+                            <img id="RecerverImage" src="" alt="Alternate Text" />
+                            <span id="ReceiverFirstName"></span>
+                            <span id="ReceiverLastName"></span>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+
+            <div class="chatting_setting" id="chatting_setting">
+                <p>
+                    Setting
+                </p>
+            </div>
+
+        </div>
+
+
+        <div class="third_column" id="MainchatContainer">
+            @RenderBody()
+        </div>
+    </div>
+
+
+
+
+    <script src="/js/Script.js"></script>
+
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/microsoft-signalr/7.0.0/signalr.min.js"></script>
+
+    <script>
+        const connection = new signalR.HubConnectionBuilder()
+            .withUrl("/chatHub") // SignalR hub URL
+            .build();
+
+        let senderId = "@Model.UserId"; // Get sender ID from Razor
+        let currentReceiverId = null; // Track the selected receiver
+
+        // Start the SignalR connection
+        connection.start().then(() => {
+            // console.log("SignalR Connected");
+            fetchReceivers(); // Fetch the receivers after connection is established
+        }).catch(err => {
+            console.error("SignalR connection failed: ", err);
+        });
+
+        // Fetch the list of receivers
+        function fetchReceivers() {
+            fetch(`/api/chat/getReceivers?senderId=${senderId}`)
+                .then(response => response.json())
+                .then(receivers => {
+                    const receiverList = document.getElementById("receiverList");
+                    receiverList.innerHTML = ""; // Clear previous content
+
+                    if (!receivers || receivers.length === 0) {
+                        receiverList.innerHTML = "<p>No chats found.</p>";
+                        return;
+                    }
+
+                    receivers.forEach((receiver, index) => {
+                        const listItem = document.createElement("li");
+                        listItem.classList.add("data"); // Add class for styling
+
+                        // Store receiver details in data attributes
+                        listItem.dataset.id = receiver.id;
+                        listItem.dataset.firstName = receiver.firstName;
+                        listItem.dataset.lastName = receiver.lastName;
+                        listItem.dataset.profilePic = receiver.profilePic;
+
+                        let imgElement;
+                        if (receiver.profilePic) {
+                            imgElement = document.createElement("img");
+                            imgElement.src = `/documant/${receiver.profilePic}`;
+                            imgElement.alt = "Profile Picture";
+                        } else {
+                            const firstLetter = receiver.firstName.charAt(0).toUpperCase();
+                            imgElement = document.createElement("p");
+                            imgElement.textContent = firstLetter;
+                            imgElement.classList.add("initials-avatar");
+                        }
+                        listItem.appendChild(imgElement);
+
+                        const firstName = document.createElement("span");
+                        firstName.textContent = receiver.firstName;
+                        listItem.appendChild(firstName);
+
+                        const lastName = document.createElement("span");
+                        lastName.textContent = receiver.lastName;
+                        listItem.appendChild(lastName);
+
+                        receiverList.appendChild(listItem);
+
+                        // Handle click event
+                        listItem.style.cursor = "pointer";
+                        listItem.onclick = () => loadMessagesForReceiver(receiver);
+                    });
+                })
+                .catch(err => console.error("Error fetching receivers:", err));
+        }
+
+
+        // Load messages when clicking on a receiver
+                       function loadMessagesForReceiver(receiver) {
+            // console.log("Loading messages for receiver ID:", receiver.id);
+            currentReceiverId = receiver.id; // Ensure this updates correctly
+
+
+                const receiverImageContainer = document.getElementById("ReceiverImageContainer"); // Parent container
+        receiverImageContainer.innerHTML = ""; // Clear previous content
+
+        if (receiver.profilePic) {
+            // If profile picture exists, display the image
+            const imgElement = document.createElement("img");
+            imgElement.src = `/documant/${receiver.profilePic}`;
+            imgElement.alt = "Profile Picture";
+            imgElement.id = "ReceiverImage";
+            receiverImageContainer.appendChild(imgElement);
+        } else {
+            const firstLetter = receiver.firstName.charAt(0).toUpperCase();
+            const initialsElement = document.createElement("p");
+            initialsElement.textContent = firstLetter;
+            initialsElement.classList.add("initials-avatar"); // Add CSS class for styling
+            receiverImageContainer.appendChild(initialsElement);
+        }
+
+
+
+        // Update receiver's name in the chat UI
+        document.getElementById("ReceiverFirstName2").textContent = receiver.firstName;
+        document.getElementById("ReceiverLastName2").textContent = receiver.lastName;
+        document.getElementById("chatWith").textContent = `Chatting with ${receiver.firstName} ${receiver.lastName}`;
+        document.getElementById("chatContainer").style.display = "block";
+
+
+        // document.getElementById("SenderSide").innerHTML = "";
+        // document.getElementById("ReceiverSide").innerHTML = "";
+
+
+            document.getElementById("chatContainer").innerHTML = ""; // Clear previous messages
+
+            fetch(`/api/chat/load?senderId=${senderId}&receiverId=${currentReceiverId}`)
+                .then(response => response.json())
+                .then(messages => {
+                    // console.log("Messages loaded:", messages);
+                    if (!messages || messages.length === 0) {
+                        // console.log("No messages found for this receiver.");
+                        return;
+                    }
+                    messages.forEach(msg => {
+                        const isSender = msg.senderId == senderId;
+                        displayMessage(msg.message, isSender);
+                    });
+                })
+                .catch(err => console.error("Error loading messages:", err));
+        }
+
+
+
+              function displayMessage(message, senderId, receiverId) {
+            if (!currentReceiverId || senderId !== currentUserId && receiverId !== currentUserId) return; // Ensure correct chat
+
+            const chatContainer = document.getElementById("chatContainer");
+            if (!chatContainer) return; // Prevent errors if chat is not loaded
+
+            // Determine if the logged-in user is the sender
+            const isSender = senderId === currentUserId && receiverId === currentReceiverId;
+
+            // Escape HTML to prevent XSS attacks
+            let escapedMessage = message.replace(/</g, "&lt;").replace(/>/g, "&gt;");
+
+            // Convert links into clickable hyperlinks
+            let formattedMessage = escapedMessage.replace(
+                /(https?:\/\/[^\s]+)/g,
+                '<a href="$1" target="_blank" style="color: blue; text-decoration: underline;">$1</a>'
+            );
+
+            // Create a wrapper for the message
+            const messageWrapper = document.createElement("div");
+            messageWrapper.classList.add(isSender ? "Sender_Side" : "Receiver_Side");
+
+            // Create a paragraph element for the message text
+            const messageText = document.createElement("p");
+            messageText.classList.add(isSender ? "SenderSide" : "ReceiverSide");
+            messageText.innerHTML = formattedMessage;
+            messageText.style.margin = "10px 0";
+
+            // Append message text to the wrapper
+            messageWrapper.appendChild(messageText);
+
+            // Append the message wrapper to chatContainer
+            chatContainer.appendChild(messageWrapper);
+
+            // Scroll to the latest message
+            chatContainer.scrollTop = chatContainer.scrollHeight;
+        }
+
+
+
+
+
+        // Send message when clicking the button
+        function sendMessage() {
+            const messageInput = document.getElementById("messageInput");
+            let message = messageInput.value.trim();
+
+            if (!message) {
+                alert("Please enter a message");
+                return;
+            }
+
+            // Encode special characters to prevent XSS
+            message = message.replace(/</g, "&lt;").replace(/>/g, "&gt;");
+
+            if (!senderId || !currentReceiverId) {
+                console.error("Sender or Receiver ID is missing!");
+                return;
+            }
+
+            // Send message via SignalR
+            connection.invoke("SendMessage", senderId, currentReceiverId, message)
+                .catch(err => console.error("Error sending message: ", err));
+
+            // Save the message to the server
+            saveMessageToServer(senderId, currentReceiverId, message);
+
+            // Clear input field
+            messageInput.value = "";
+        }
+                document.getElementById("messageInput").addEventListener("keypress", function (event) {
+            if (event.key === "Enter") {
+                event.preventDefault(); // Prevent default new line behavior
+                sendMessage();
+            }
+        });
+
+
+
+                connection.on("ReceiveMessage", (sender, receiver, message) => {
+            if (sender === senderId) {
+                // Message sent by the current user
+                displayMessage(message, true);
+            } else {
+                // Message received from another user
+                displayMessage(message, false);
+            }
+        });
+
+
+
+        // Display messages (Only show the message, not IDs)
+               function displayMessage(message, isSender) {
+            if (!currentReceiverId) return; // Ensure a chat is open
+
+            const chatContainer = document.getElementById("chatContainer");
+            if (!chatContainer) return; // Avoid errors if chat is not loaded
+
+            // Escape HTML to prevent XSS attacks
+            let escapedMessage = message.replace(/</g, "&lt;").replace(/>/g, "&gt;");
+
+            // Detect links and convert them into clickable hyperlinks
+            let formattedMessage = escapedMessage.replace(
+                /(https?:\/\/[^\s]+)/g,
+                '<a href="$1" target="_blank" style="color: blue; text-decoration: underline;">$1</a>'
+            );
+
+            // Create a new wrapper for the message
+            const messageWrapper = document.createElement("div");
+            messageWrapper.classList.add(isSender ? "Sender_Side" : "Receiver_Side"); // Assign sender or receiver class
+
+            // Create a new paragraph element for the message text
+            const messageText = document.createElement("p");
+            messageText.classList.add(isSender ? "SenderSide" : "ReceiverSide");
+            messageText.innerHTML = formattedMessage;
+            messageText.style.margin = "10px 0";
+
+            // Append message text to the wrapper
+            messageWrapper.appendChild(messageText);
+
+            // Append the message wrapper to chatContainer (messages will be ordered correctly)
+            chatContainer.appendChild(messageWrapper);
+
+            // Scroll to the latest message
+            chatContainer.scrollTop = chatContainer.scrollHeight;
+        }
+
+
+
+
+
+
+        // Save messages to the server
+        function saveMessageToServer(senderId, receiverId, message) {
+            fetch("/api/chat/save", {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({ senderId, receiverId, message })
+            })
+            .then(response => response.json())
+            // .then(data => console.log("Message saved:", data))
+            .catch(err => console.error("Error saving message:", err));
+        }
+
+        // Load messages from server when chat is opened
+        function loadMessagesFromServer() {
+            fetch(`/api/chat/load?senderId=${senderId}&receiverId=${receiverId}`)
+                .then(response => response.json())
+                .then(messages => {
+                    messages.forEach(msg => displayMessage(msg.message)); // Only display the message text
+                })
+                .catch(err => console.error("Error loading messages:", err));
+        }
+
+
+
+                        function clearChatHistory() {
+            if (!currentReceiverId) {
+                console.error("Receiver ID is not set.");
+                return;
+            }
+
+            fetch("/api/chat/clear", {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({ senderId, receiverId: currentReceiverId }) // Use currentReceiverId
+            })
+            .then(response => response.json())
+            .then(data => {
+                // console.log(data.message);
+                document.getElementById("Sender_Side").innerHTML = ""; // Clear chat UI
+
+            })
+            .catch(err => console.error("Error clearing chat:", err));
+        }
+
+
+
+
+    </script>
+
+
+
+    <script>
+        $(document).ready(function () {
+            $("#myInput").on("keyup", function () {
+                var value = $(this).val().toLowerCase();
+
+                $("#receiverList li").filter(function () {
+                    $(this).toggle($(this).text().toLowerCase().indexOf(value) > -1);
+                });
+            });
+        });
+
+    </script>
+
+
+    <script>
+        document.addEventListener("DOMContentLoaded", function () {
+            let chatUserLists = document.getElementById("chat_user_lists");
+            let chattingSetting = document.getElementById("chatting_setting");
+            let messageIcon = document.getElementById("chatting_message_icon");
+            let settingIcon = document.getElementById("chatting_setting_icon");
+            let secondColumn = document.getElementById("second_column");
+
+            chatUserLists.style.display = "block";
+            chattingSetting.style.display = "none";
+
+
+            function checkScreenSize() {
+                return window.innerWidth <= 1000;
+            }
+
+            // Default state: Hide second column on small screens
+            if (checkScreenSize()) {
+                secondColumn.style.display = "none";
+            }
+
+            // Show second column when message or settings icon is clicked
+            messageIcon.addEventListener("click", function () {
+                secondColumn.style.display = "block";
+                chatUserLists.style.display = "block";
+                chattingSetting.style.display = "none";
+                secondColumn.style.zIndex = "10";  // Set z-index for the second column
+            });
+
+            settingIcon.addEventListener("click", function () {
+                secondColumn.style.display = "block";
+                chatUserLists.style.display = "none";
+                chattingSetting.style.display = "block";
+                secondColumn.style.zIndex = "10";  // Set z-index for the second column
+            });
+
+            // Close second column when clicking outside (except on chat_user_lists or chatting_setting)
+            document.addEventListener("click", function (e) {
+                if (checkScreenSize() && !secondColumn.contains(e.target) &&
+                    !messageIcon.contains(e.target) && !settingIcon.contains(e.target) &&
+                    !chatUserLists.contains(e.target) && !chattingSetting.contains(e.target)) {
+                    secondColumn.style.display = "none";  // Hide second column
+                }
+            });
+        });
+
+    </script>
+
+
+</body>
+</html>

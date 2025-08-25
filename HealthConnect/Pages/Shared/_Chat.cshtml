@@ -1,0 +1,175 @@
+﻿<!DOCTYPE html>
+
+<html>
+<head>
+    <meta name="viewport" content="width=device-width" />
+    <title>@ViewBag.Title - Health Connect</title>
+    <link href="/css/index.css" rel="stylesheet" asp-append-version="true" />
+    <link href="/images/HealthConnectTabLogo.png" rel="icon" />
+
+
+    <link rel="stylesheet" href="/assets/vendors/mdi/css/materialdesignicons.min.css">
+    @* <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css"> *@
+    <!--ICON-->
+    <link href="/Icon/fontawesome-free-6.7.2-web/css/fontawesome.css" rel="stylesheet" />
+    <link href="/Icon/fontawesome-free-6.7.2-web/css/brands.css" rel="stylesheet" />
+    <link href="/Icon/fontawesome-free-6.7.2-web/css/solid.css" rel="stylesheet" />
+    <link href="/Icon/fontawesome-free-6.7.2-web/css/sharp-thin.css" rel="stylesheet" />
+    <link href="/Icon/fontawesome-free-6.7.2-web/css/duotone-thin.css" rel="stylesheet" />
+    <link href="/Icon/fontawesome-free-6.7.2-web/css/sharp-duotone-thin.css" rel="stylesheet" />
+
+    <link rel="stylesheet" href="/assets/vendors/mdi/css/materialdesignicons.min.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@100..900&family=Sofia+Sans+Condensed:ital,wght@0,1..1000;1,1..1000&display=swap" rel="stylesheet">
+
+</head>
+<body>
+
+
+    <div class="loder" id="loder">
+        <img src="/Loder.gif" alt="Alternate Text" />
+    </div>
+
+
+    <section class="chat_section_1">
+        <div class="chat_section_container">
+            <div class="doctor_profile_section">
+                <i class="fa-solid fa-arrow-left" onclick="redirectToExplorepage()"></i>
+                <a href="" title="Doctor Profile">
+                    <img src="/documant/@Model.User.profile_pic" />
+                    <p>
+                        <span>Dr. </span>
+                        <span>@Model.User.first_name</span>
+                        <span>@Model.User.last_name</span>
+                    </p>
+                </a>
+                <div class="chat_clear">
+                    <i class="fa-solid fa-broom" id="clearChat" title="Clear chat history" onclick="clearChatHistory()"></i>
+                </div>
+
+            </div>
+        </div>
+    </section>
+
+    <div>
+        @RenderBody()
+    </div>
+
+    <p id="message"> </p>
+    <section class="chat_section_2">
+        <div class="chat_section2_container">
+            <div class="message">
+                <button type="button" class="emoji">
+                    <i class="fa-regular fa-face-smile"></i>
+                </button>
+                <input type="text" name="message" id="messageInput" autocomplete="off" placeholder="Type your message..." />
+
+                <button type="button" class="send" onclick="sendMessage()">
+                    <i class="fa-regular fa-paper-plane"></i>
+                </button>
+            </div>
+
+        </div>
+    </section>
+
+    <script src="/js/script.js"></script>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/microsoft-signalr/7.0.0/signalr.min.js"></script>
+
+    <script>
+                 const connection = new signalR.HubConnectionBuilder()
+            .withUrl("/chatHub")
+            .build();
+
+        let senderId = "@Model.UserId"; // Get sender ID from Razor
+        let receiverId = "@Model.User.id"; // Get receiver ID
+
+        connection.start().then(() => {
+            console.log("SignalR Connected");
+            loadMessagesFromServer(); // Load messages from server
+        });
+
+        // Send message when clicking the button
+        function sendMessage() {
+            const messageInput = document.getElementById("messageInput");
+            const message = messageInput.value.trim();
+
+            if (!message) {
+                alert("Please enter a message");
+                return;
+            }
+
+            connection.invoke("SendMessage", senderId, receiverId, message)
+                .then(() => saveMessageToServer(senderId, receiverId, message))
+                .catch(err => console.error(err.toString()));
+
+            messageInput.value = "";
+        }
+
+        // Receive messages from SignalR
+        connection.on("ReceiveMessage", (sender, receiver, message) => {
+            displayMessage(sender, receiver, message);
+        });
+
+        // Display messages (Sender messages in `right_message_text`, Receiver messages in `left_message_text`)
+        function displayMessage(sender, receiver, message) {
+            const messageContainer = sender === senderId ? document.getElementById("right_message_text") : document.getElementById("left_message_text");
+
+            const newMessage = document.createElement("p");
+            newMessage.textContent = message;
+            newMessage.style.margin = "5px 0";
+            newMessage.classList.add("chat-message");
+
+            messageContainer.appendChild(newMessage);
+        }
+
+        // Save messages to the server
+        function saveMessageToServer(senderId, receiverId, message) {
+            fetch("/api/chat/save", {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({ senderId, receiverId, message })
+            }).catch(err => console.error("Error saving message:", err));
+        }
+
+        // Load messages from server
+               function loadMessagesFromServer() {
+            fetch(`/api/chat/load?senderId=${senderId}&receiverId=${receiverId}`)
+                .then(response => response.json())
+                .then(messages => {
+                    if (messages.length > 0) {
+                        // Redirect if messages exist
+                        window.location.href = "/Chatting/Chatting_page";
+                    } else {
+                        console.log("No chat history found.");
+                    }
+                })
+                .catch(err => console.error("Error loading messages:", err));
+        }
+
+       
+
+                              function clearChatHistory() {
+            fetch("/api/chat/clear", {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({ senderId, receiverId }) // Send the current sender and receiver IDs
+            })
+            .then(response => response.json())
+            .then(data => {
+                console.log(data.message); // Log success message
+                document.getElementById("messages").innerHTML = ""; // Clear chat UI
+            })
+            .catch(err => console.error("Error clearing chat:", err));
+        }
+
+    </script>
+
+
+
+
+</body>
+</html>
+
+

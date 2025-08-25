@@ -1,0 +1,44 @@
+﻿@page
+@model HealthConnect.Pages.Admin.UserData.UserList.Edit_userModel
+@{
+    Layout = "~/Pages/Shared/_Admin_header.cshtml";
+    ViewData["Title"] = "Edit_user";
+}
+
+<div class="col-md-6 grid-margin stretch-card">
+    <div class="card">
+        <div class="card-body">
+            <h4 class="card-title">Edit user role</h4>
+            <form method="post" asp-page-handler="RoleUpdate">
+                <input type="hidden" name="id" value="@Model.User_Table.id" />
+                <div class="col-md-12">
+                    <div class="form-group row">
+                        <label class="col-sm-3 col-form-label">Role</label>
+                        <div class="col-sm-12">
+                            <select class="form-control" name="role">
+
+                                @if (Model.User_Table.role == "Admin")
+                                {
+                                    <option value="Admin">Admin</option>
+                                    <option value="User">User</option>
+
+                                }
+                                else
+                                {
+                                    <option value="User">User</option>
+                                    <option value="Admin">Admin</option>
+
+                                }
+
+                            </select>
+
+                        </div>
+                    </div>
+                    <button type="submit" class="btn btn-primary mr-2">Submit</button>
+                    <button type="button" class="btn btn-dark" onclick="history.back()">Cancel</button>
+                </div>
+            </form>
+
+        </div>
+    </div>
+</div>

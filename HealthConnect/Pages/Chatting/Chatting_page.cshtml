@@ -1,0 +1,76 @@
+﻿@page
+@model HealthConnect.Pages.Chatting.Chatting_pageModel
+@{
+    Layout = "_ChattingNav";
+    ViewData["Title"] = "Chatting";
+}
+
+<div>
+    <div class="chatting_message_header">
+        <div id="ReceiverImageContainer">
+            <img id="ReceiverImage" src="" alt="Profile pic" />
+        </div>
+        <div class="receiver_name">
+            <span id="ReceiverFirstName2"></span>
+            <span id="ReceiverLastName2"></span>
+        </div>
+    </div>
+
+    <h3 class="chatting_with"><span id="chatWith"></span>...</h3>
+
+    @* <div id="chatContainer" class="chatting_message_container"> *@
+
+    @*     <div class="Receiver_Side" id="Receiver_Side"> *@
+    @*         <p id="ReceiverSide" class="ReceiverSide"></p> *@
+    @*     </div> *@
+
+    @*     <div class="Sender_Side" id="Sender_Side"> *@
+    @*         <p id="SenderSide" class="SenderSide"></p> *@
+    @*     </div> *@
+
+    @* </div> *@
+
+    <div id="chatContainer" class="chatting_message_container">
+
+        <div class="Receiver_Side" id="Receiver_Side">
+            <!-- Received messages will be added here -->
+        </div>
+
+        <div class="Sender_Side" id="Sender_Side">
+            <!-- Sent messages will be added here -->
+        </div>
+
+    </div>
+
+
+    <div class="chatting_message_send">
+        <i class="fa-regular fa-face-smile"></i>
+        <div class="chatting_message_send_input">
+            <input type="text" id="messageInput" placeholder="Type a message...">
+            <i class="fa-regular fa-paper-plane" onclick="sendMessage()"></i>
+        </div>
+        <i class="fa-solid fa-broom" onclick="clearChatHistory()"></i>
+    </div>
+
+</div>
+
+
+<div class="network">
+    <p id="network-status"><span class="mdi mdi-wifi-off"></span> </p>
+</div>
+
+<script>
+    function updateNetworkStatus() {
+        const statusTag = document.getElementById("network-status");
+        if (!navigator.onLine) {
+            statusTag.textContent = "No internet connection. Please check your network.";
+        } else {
+            statusTag.textContent = ""; 
+        }
+    }
+
+    updateNetworkStatus();
+
+    window.addEventListener('online', updateNetworkStatus);
+    window.addEventListener('offline', updateNetworkStatus);
+</script>

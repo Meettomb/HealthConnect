@@ -1,0 +1,748 @@
+﻿@page
+@model HealthConnect.Pages.User.Explore_doctorsModel
+@{
+    Layout = "_Header";
+    ViewData["Title"] = "Explore Doctors";
+}
+
+
+
+<div class="filter_icon_container">
+    <div class="filter_class">
+        <div class="search_doctore">
+            <input type="text" name="name" id="myInput" value="" autocomplete="off" placeholder="Search doctor name" />
+        </div>
+
+        <div class="remove_filter_class">
+            <i class="fa-solid fa-filter-circle-xmark"></i>Remove all Filter
+        </div>
+        <div class="add_filter_class">
+            <i class="fa-solid fa-filter"></i> Filter
+        </div>
+
+    </div>
+
+</div>
+
+
+<section style="display: none;" class="explorer_doctor_section1">
+    <div class="filtre_doctor_div">
+        <div class="select_filter">
+            <p>Doctor type</p>
+            <select id="typeFilter">
+                <option selected value="all">All</option>
+                @foreach (var item in Model.Types_of_doctor)
+                {
+                    <option value="@item.type_of_doctor">@item.type_of_doctor</option>
+                }
+            </select>
+
+        </div>
+
+        <div class="select_filter">
+            <p>Doctor speciality</p>
+            <select id="specialityFilter">
+                <option selected value="all">All</option>
+                @foreach (var item in Model.doctorSpecialitiesList)
+                {
+                    <option value="@item.doctor_specialitis">@item.doctor_specialitis</option>
+                }
+            </select>
+
+        </div>
+
+        <div class="select_filter">
+            <p>Country</p>
+            <select id="country-select">
+                <option selected value="all">All</option>
+            </select>
+        </div>
+
+        <div class="select_filter">
+            <p>State</p>
+            <select id="state-select">
+                <option selected value="all">All</option>
+            </select>
+        </div>
+
+        <div class="select_filter">
+            <p>City</p>
+            <select id="city-select">
+                <option selected value="all">All</option>
+            </select>
+        </div>
+
+        <div class="select_filter">
+            <p>Gender</p>
+            <select id="gender">
+                <option selected value="All">All</option>
+                <option value="Male">Male</option>
+                <option value="Female">Female</option>
+            </select>
+        </div>
+
+        <div class="select_filter">
+            <p>Minimum experience</p>
+            <select id="experience">
+                <option selected>All</option>
+                @for (int i = 1; i <= 70; i++)
+                {
+
+                    <option value="@i">@i</option>
+                }
+            </select>
+        </div>
+
+        <div class="select_filter">
+            <p>Doctor Available Days</p>
+            <select id="weekly-work-days">
+                <option selected>All</option>
+                <option value="Monday">Monday</option>
+                <option value="Tuesday">Tuesday</option>
+                <option value="Wednesday">Wednesday</option>
+                <option value="Thursday">Thursday</option>
+                <option value="Friday">Friday</option>
+                <option value="Saturday">Saturday</option>
+                <option value="Sunday">Sunday</option>
+            </select>
+        </div>
+
+    </div>
+</section>
+
+<section class="explorer_doctor_section2">
+    <div class="all_doctor_div" id="doctorsList">
+        @if (Model.User_list != null && Model.User_list.Count > 0)
+        {
+            @foreach (var data in Model.User_list)
+            {
+                <div class="all_doctor_single_div" data-types="@data.doctor_type" data-weekly-work-days="@string.Join(", ", data.weekly_work_days)" data-city="@data.city" data-state="@data.state" data-country="@data.country" data-experience="@data.doctore_experience" data-name="@data.first_name @data.last_name" data-speciality="@data.doctor_specialitis" data-gender="@data.gender">
+                    <div class="all_doctor_single_div_sides">
+                        <div class="all_doctor_single_left" data-country="@data.country" data-currency="@data.currency_code">
+                            <img src="/documant/@data.profile_pic" alt="Dr. @data.first_name @data.last_name" />
+                            <p><i class="fa-solid fa-location-dot"></i> @data.country, @data.state, @data.city</p>
+                        </div>
+
+                        <div class="all_doctor_single_middle">
+                            <h1>@data.first_name @data.last_name </h1>
+                            <p>@data.doctor_specialitis </p>
+                            <input type="hidden" id="max_time_per_appointments" value="@data.max_time_per_appointments" />
+                            <input type="hidden" id="break_between_two_appointments" value="@data.break_between_two_appointments" />
+
+                            <p>@data.doctor_type </p>
+
+                            <p>Experience: @data.doctore_experience Years <span></span></p>
+                        </div>
+
+                        <div class="all_doctor_single_right_right">
+                            <p><i class="fa-solid fa-star"></i> @data.AverageRating Star</p>
+                            <p><i class="fa-solid fa-comments"></i> @data.TotalFeedbackCount Review</p>
+
+                            @if (data.hospital_or_clinic == "Clinic")
+                            {
+                                <p class="hospital_or_clinic"><i class="fa-solid fa-house-chimney-medical"></i> @data.hospital_or_clinic</p>
+                            }
+                            else
+                            {
+                                <p class="hospital_or_clinic"><i class="fa-solid fa-hospital"></i> @data.hospital_or_clinic</p>
+                            }
+                            <address>
+                                @data.clinic_or_hospital_address
+                            </address>
+
+                            @if (data.on_site_consultation_fee != null)
+                            {
+                                <p class="fee"><strong data-currency_code="@data.currency_code">@data.on_site_consultation_fee</strong> On site consultation</p>
+                            }
+
+                            @if (data.video_call_consultation_fee != null)
+                            {
+                                <p class="fee"><strong data-currency_code="@data.currency_code">@data.video_call_consultation_fee</strong> Video consultation</p>
+                            }
+                        </div>
+                    </div>
+
+                    <div class="all_doctor_single_div_comunication_option">
+
+                        @if (data.hospital_or_clinic == "Clinic")
+                        {
+                            <p><i class="fa-solid fa-house-chimney-medical"></i><span data-currency_code="@data.currency_code">@data.on_site_consultation_fee</span></p>
+                        }
+                        else
+                        {
+                            <p><i class="fa-solid fa-hospital"></i><span data-currency_code="@data.currency_code">@data.on_site_consultation_fee</span></p>
+                        }
+
+                        <p><a href="/User/Chat?id=@data.id"><i class="fa-brands fa-rocketchat"></i> Chat</a></p>
+
+                        @if (Model.UserId == null)
+                        {
+
+                            <p><a href="/User/Sign_in"><i class="fa-solid fa-video"></i> Video call</a></p>
+                            <p> <a href="/User/Sign_in"><i class="fa-regular fa-calendar-days"></i> Book Appointment</a></p>
+                        }
+                        else
+                        {
+
+
+
+                            @if (data.video_call_consultation_fee != null)
+                            {
+                                <p data-work-start="@data.work_start_time" data-work-end="@data.work_end_time" data-weekly-work-days="@string.Join(", ", @data.weekly_work_days)"
+                                   data-doctorId="@data.id" data-consultancy="Video Call" data-email="@data.email" data-fee="@data.video_call_consultation_fee"
+                                   data-notice="You have to Pay fee direct Doctor on Video call"
+                                   data-max-time="@data.max_time_per_appointments" data-breck-time="@data.break_between_two_appointments" class="video-call" id="video-call">
+                                    <a href="#"><i class="fa-solid fa-video"></i> Video call</a>
+                                </p>
+                            }
+                            else
+                            {
+                                <p><a href="#" class="disabled-link"><i class="fa-solid fa-video"></i> Video call</a></p>
+                            }
+
+                            <p data-work-start="@data.work_start_time" data-work-end="@data.work_end_time" data-fee="@data.on_site_consultation_fee"
+                               data-weekly-work-days="@string.Join(", ", @data.weekly_work_days)" data-doctorId="@data.id" data-email="@data.email" data-consultancy="On site"
+                               data-notice="You have to Pay fee direct Doctor on his site"
+                               data-max-time="@data.max_time_per_appointments" data-breck-time="@data.break_between_two_appointments" class="Book-Onsite-Appointment">
+                                <a href="#"><i class="fa-regular fa-calendar-days"></i> Book Appointment</a>
+                            </p>
+                        }
+                        <p><a href="/User/Doctor_Profile?doctor_id=@data.id"><i class="fa-solid fa-user-doctor"></i> View profile</a></p>
+                    </div>
+                </div>
+            }
+        }
+        else
+        {
+            <p>No doctors found.</p>
+        }
+    </div>
+</section>
+
+<section class="explorer_doctor_section3" id="popup">
+    <div class="videocall_consultation_container">
+        <div class="videocall_consultation">
+            <i class="fa-solid fa-times" id="closePopup"></i>
+            <h1>Book appointment</h1>
+            <form method="post" id="appointmentForm" onsubmit="return validateAppointment()">
+
+                <div class="login_user_booking">
+
+                    <input type="hidden" name="user_id" value="@Model.UserId" />
+                    <input type="hidden" name="doctor_id" id="doctorIdInput" readonly>
+                    <input type="hidden" name="appointment_type" id="consultancyType" readonly>
+                    <input type="hidden" name="email" id="doctorEmail" readonly>
+                    <input type="hidden" id="max_time" readonly>
+                    <input type="hidden" id="brack_time" readonly>
+                    <input type="hidden" name="booking_user_role" value="@Model.Role" id="brack_time" readonly>
+
+                    <div class="notice">
+                        <span class="fa-regular fa-flag"></span>
+                        <p id="notice"></p>
+                    </div>
+
+                </div>
+
+                <div class="sloat_time_and_date">
+
+                    <label>Time slot</label>
+                    <select id="timeSlotsDropdown" name="time_slot"></select>
+
+
+                    <div id="messageContainer"></div>
+
+                    <label>Date</label>
+                    <input type="date" name="appointment_date" id="datePicker" placeholder="Select date" />
+                    <span id="dateError" style="color: red; display: none;">Doctor wash not available. Please select another Date.</span>
+                    <p><span id="Error_appointment_date"></span></p>
+
+                </div>
+                <div class="sloat_time_and_date">
+                    <label>Your Problem (Optional)</label>
+                    <textarea name="problem" id="problem" rows="5" placeholder="Problem"></textarea>
+                </div>
+
+
+                <button type="submit" name="submit">Book now</button>
+
+
+            </form>
+
+        </div>
+    </div>
+</section>
+
+<section class="explorer_doctor_section4">
+    <div class="LoadMore">
+        <button>Load more...</button>
+    </div>
+</section>
+
+<h2 id="noResultsMessage" style="display: none; text-align: center; margin-top: 20px; color: red;">
+    No doctors found.
+</h2>
+
+
+
+
+<script>
+    function validateAppointment() {
+        let appointment_date = document.getElementById("datePicker");
+        let Error_appointment_date = document.getElementById("Error_appointment_date");
+
+        if (!appointment_date.value.trim()) {
+            Error_appointment_date.innerText = "Please select an appointment date.";
+            Error_appointment_date.style.color = "red";
+            return false;
+        } else {
+            Error_appointment_date.innerText = "";
+            return true;
+        }
+    }
+</script>
+
+
+<script>
+    fetch('/js/allcurrency.json')
+        .then(response => response.json())
+        .then(data => {
+            document.querySelectorAll("[data-currency_code]").forEach(element => {
+                const currencyCode = element.getAttribute("data-currency_code");
+
+                const currencyData = data.find(item => item.currency === currencyCode);
+
+                if (currencyData) {
+                    element.innerHTML = currencyData.symbol + element.innerHTML;
+                }
+            });
+        })
+        .catch(error => console.error('Error loading JSON:', error));
+
+</script>
+
+
+<script>
+    document.addEventListener("DOMContentLoaded", function () {
+        let doctors = document.querySelectorAll(".all_doctor_single_div");
+        let loadMoreButton = document.querySelector(".LoadMore button");
+        let itemsToShow = 10; // Show only 10 by default
+        let itemsIncrement = 10; // Number of items to load each time
+
+        // Create "Show Less" button
+        let showLessButton = document.createElement("button");
+        showLessButton.textContent = "Show Less";
+        showLessButton.style.display = "none"; // Initially hidden
+        document.querySelector(".LoadMore").appendChild(showLessButton);
+
+        // Hide all doctors except the first 'itemsToShow'
+        doctors.forEach((doctor, index) => {
+            if (index >= itemsToShow) {
+                doctor.style.display = "none";
+            }
+        });
+
+        // Show Load More button only if there are more than 10 doctors
+        if (doctors.length > itemsToShow) {
+            loadMoreButton.style.display = "block";
+        } else {
+            loadMoreButton.style.display = "none";
+        }
+
+        loadMoreButton.addEventListener("click", function () {
+            let hiddenDoctors = Array.from(doctors).filter(doctor => doctor.style.display === "none");
+
+            // Show the next batch of doctors
+            for (let i = 0; i < itemsIncrement && i < hiddenDoctors.length; i++) {
+                hiddenDoctors[i].style.display = "block";
+            }
+
+            // If all doctors are visible, hide Load More button and show Show Less button
+            if (document.querySelectorAll(".all_doctor_single_div[style='display: none;']").length === 0) {
+                loadMoreButton.style.display = "none";
+                showLessButton.style.display = "block";
+            }
+        });
+
+        showLessButton.addEventListener("click", function () {
+            // Collapse back to showing only the first 'itemsToShow' doctors
+            doctors.forEach((doctor, index) => {
+                if (index >= itemsToShow) {
+                    doctor.style.display = "none";
+                }
+            });
+
+            // Reset button visibility
+            showLessButton.style.display = "none";
+            loadMoreButton.style.display = "block";
+        });
+    });
+</script>
+
+
+<script>
+       document.addEventListener("DOMContentLoaded", function () {
+        var today = new Date();
+        var todayISO = today.toISOString().split("T")[0];
+        var twoMonthsLater = new Date(today);
+        twoMonthsLater.setMonth(today.getMonth() + 2);
+        var maxDateISO = twoMonthsLater.toISOString().split("T")[0];
+
+        document.getElementById("datePicker").setAttribute("min", todayISO);
+        document.getElementById("datePicker").setAttribute("max", maxDateISO);
+    });
+
+    $(document).ready(function () {
+        $(".video-call, .Book-Onsite-Appointment").click(function (event) {
+            event.preventDefault();
+
+            var doctorId = $(this).attr("data-doctorid");
+            var consultancy = $(this).attr("data-consultancy");
+            var email = $(this).attr("data-email");
+            var WorkStart = $(this).attr("data-work-start");
+            var WorkEnd = $(this).attr("data-work-end");
+            var Bookingnotice = $(this).attr("data-notice");
+            var MaxTime = $(this).attr("data-max-time");
+            var BrackTime = $(this).attr("data-breck-time");
+            var availableDaysString = $(this).attr("data-weekly-work-days");
+
+            if (!WorkStart || !WorkEnd) {
+                alert("Invalid work start or end time.");
+                return;
+            }
+
+            $("#doctorIdInput").val(doctorId);
+            $("#consultancyType").val(consultancy);
+            $("#doctorEmail").val(email);
+            $("#notice").text(Bookingnotice);
+            $("#max_time").val(MaxTime);
+            $("#brack_time").val(BrackTime);
+
+            generateTimeSlots(WorkStart, WorkEnd);
+
+            disableUnavailableDays(availableDaysString);
+        });
+
+        function generateTimeSlots(startTime, endTime) {
+            let max_time_per_appointments = parseInt(document.getElementById("max_time").value);
+            let break_between_two_appointments = parseInt(document.getElementById("brack_time").value);
+
+            if (isNaN(max_time_per_appointments) || isNaN(break_between_two_appointments)) {
+                console.error("Invalid values for max appointment time or break time.");
+                return;
+            }
+
+            var timeSlotsDropdown = $("#timeSlotsDropdown");
+            timeSlotsDropdown.empty();
+
+            var start = convertToMinutes(startTime);
+            var end = convertToMinutes(endTime);
+
+            for (var time = start; time < end; time += (max_time_per_appointments + break_between_two_appointments)) {
+                var slot = convertToTimeFormat(time) + " - " + convertToTimeFormat(time + max_time_per_appointments);
+                timeSlotsDropdown.append(`<option value="${slot}">${slot}</option>`);
+            }
+        }
+
+        function convertToMinutes(time) {
+            var parts = time.split(":");
+            return parseInt(parts[0]) * 60 + parseInt(parts[1]);
+        }
+
+        function convertToTimeFormat(minutes) {
+            var hours = Math.floor(minutes / 60);
+            var mins = minutes % 60;
+            return (hours < 10 ? "0" + hours : hours) + ":" + (mins < 10 ? "0" + mins : mins);
+        }
+
+        function disableUnavailableDays(availableDaysString) {
+            var availableDays = availableDaysString.split(",").map(day => day.trim());
+
+            $("#datePicker").off("change").on("change", function () {
+                var selectedDate = new Date(this.value);
+                var selectedDayName = selectedDate.toLocaleDateString("en-US", { weekday: "long" });
+
+                if (!availableDays.includes(selectedDayName)) {
+                    this.value = "";
+                    $("#dateError").show();
+                } else {
+                    $("#dateError").hide();
+                }
+            });
+        }
+    });
+
+</script>
+
+
+<script>
+        document.addEventListener("DOMContentLoaded", function () {
+        let paramsTypes = new URLSearchParams(window.location.search);
+        let Types = paramsTypes.get('Type');
+
+        let typeFilter = document.getElementById("typeFilter");
+        if (typeFilter && Types) {
+            typeFilter.value = Types;
+        }
+
+        let paramsSpeciality = new URLSearchParams(window.location.search);
+        let Speciality = paramsSpeciality.get('Speciality');
+
+        let specialityFilter = document.getElementById("specialityFilter");
+        if (specialityFilter && Speciality) {
+            specialityFilter.value = Speciality;
+        }
+
+        $(document).ready(function () {
+            $('.add_filter_class').click(function () {
+                $('.explorer_doctor_section1').slideToggle(300);
+            });
+
+            $('.remove_filter_class').click(function () {
+                resetFilters();
+            });
+        });
+
+           function filterDoctors() {
+        var selectedSpeciality = specialityFilter?.value.toLowerCase() || "all";
+        var selectedType = typeFilter?.value.toLowerCase() || "all";
+        var selectedGender = document.getElementById("gender")?.value.toLowerCase() || "all";
+        var searchQuery = document.getElementById("myInput")?.value.toLowerCase() || "";
+        var selectedMinExperience = document.getElementById("experience")?.value.toLowerCase() || "all";
+        var selectedCountry = document.getElementById("country-select")?.value.toUpperCase() || "ALL";
+        var selectedState = document.getElementById("state-select")?.value.toUpperCase() || "ALL";
+        var selectedCity = document.getElementById("city-select")?.value.toLowerCase() || "all";
+        var selectedWeeklyWorkDays = document.getElementById("weekly-work-days")?.value.toLowerCase() || "all";
+
+        var doctors = document.querySelectorAll(".all_doctor_single_div");
+        let anyDoctorFound = false;
+
+        doctors.forEach(function (doctor) {
+            var doctorSpecialities = doctor.getAttribute("data-speciality")?.toLowerCase().split(", ") || [];
+            var doctorGender = doctor.getAttribute("data-gender")?.toLowerCase() || "";
+            var doctorFullName = doctor.getAttribute("data-name")?.toLowerCase() || "";
+            var doctorExperience = doctor.getAttribute("data-experience")?.toLowerCase() || "0";
+            var country = doctor.getAttribute("data-country")?.toUpperCase() || "ALL";
+            var state = doctor.getAttribute("data-state")?.toUpperCase() || "ALL";
+            var city = doctor.getAttribute("data-city")?.toLowerCase() || "all";
+            var weeklyWorkDays = doctor.getAttribute("data-weekly-work-days")?.toLowerCase().split(", ") || [];
+            var doctorType = doctor.getAttribute("data-types")?.toLowerCase() || "all";
+
+            var matchesType = selectedType === "all" || doctorType === selectedType;
+            var matchesSpeciality = selectedSpeciality === "all" || doctorSpecialities.includes(selectedSpeciality);
+            var matchesGender = selectedGender === "all" || doctorGender === selectedGender;
+            var matchesName = searchQuery === "" || doctorFullName.includes(searchQuery);
+            var matchesExperience = selectedMinExperience === "all" || parseInt(doctorExperience) >= parseInt(selectedMinExperience);
+            var matchesCountry = selectedCountry === "ALL" || country === selectedCountry;
+            var matchesState = selectedState === "ALL" || state === selectedState;
+            var matchesCity = selectedCity === "all" || city === selectedCity;
+            var matchesWeeklyWorkDays = selectedWeeklyWorkDays === "all" || weeklyWorkDays.includes(selectedWeeklyWorkDays);
+
+            if (matchesType && matchesSpeciality && matchesGender && matchesName && matchesExperience && matchesCountry && matchesState && matchesCity && matchesWeeklyWorkDays) {
+                doctor.style.display = "block";
+                anyDoctorFound = true;
+            } else {
+                doctor.style.display = "none";
+            }
+        });
+
+        // Show or hide "No doctors found" message
+        let noResultsMessage = document.getElementById("noResultsMessage");
+        if (!anyDoctorFound) {
+            noResultsMessage.style.display = "block";
+        } else {
+            noResultsMessage.style.display = "none";
+        }
+
+        // Show or hide the remove filter button
+        let removeFilterButton = document.querySelector(".remove_filter_class");
+        if (removeFilterButton) {
+            let allFiltersAreDefault = (
+                selectedSpeciality === "all" &&
+                selectedType === "all" &&
+                selectedGender === "all" &&
+                searchQuery === "" &&
+                selectedMinExperience === "all" &&
+                selectedCountry === "ALL" &&
+                selectedState === "ALL" &&
+                selectedCity === "all" &&
+                selectedWeeklyWorkDays === "all"
+            );
+
+            removeFilterButton.style.display = allFiltersAreDefault ? "none" : "block";
+        }
+    }
+
+
+        function resetFilters() {
+            let filterFields = [
+                "specialityFilter", "gender", "experience",
+                "country-select", "state-select", "city-select", "weekly-work-days", "typeFilter"
+            ];
+
+            filterFields.forEach(id => {
+                let element = document.getElementById(id);
+                if (element) {
+                    element.value = "all";
+                }
+            });
+
+            let searchInput = document.getElementById("myInput");
+            if (searchInput) {
+                searchInput.value = "";
+            }
+
+            filterDoctors();
+
+            // Remove query parameters from URL without reloading
+            let newUrl = window.location.pathname;
+            window.history.replaceState({}, document.title, newUrl);
+        }
+
+        function addEventListenerIfExists(id) {
+            let element = document.getElementById(id);
+            if (element) {
+                element.addEventListener("change", filterDoctors);
+            }
+        }
+
+        addEventListenerIfExists("specialityFilter");
+        addEventListenerIfExists("gender");
+        addEventListenerIfExists("experience");
+        addEventListenerIfExists("country-select");
+        addEventListenerIfExists("state-select");
+        addEventListenerIfExists("city-select");
+        addEventListenerIfExists("weekly-work-days");
+        addEventListenerIfExists("typeFilter");
+
+        let searchInput = document.getElementById("myInput");
+        if (searchInput) {
+            searchInput.addEventListener("input", filterDoctors);
+        }
+
+        filterDoctors();
+    });
+
+</script>
+
+
+
+<script>
+    const countrySelect = document.getElementById('country-select');
+       const currencyCodeInput = document.getElementById('currency-code');
+
+           const stateSelect = document.getElementById('state-select');
+           const citySelect = document.getElementById('city-select');
+
+              const countrySettings = {
+           async: true,
+           crossDomain: true,
+           url: 'https://country-state-city-search-rest-api.p.rapidapi.com/allcountries',
+           method: 'GET',
+           headers: {
+               // 'x-rapidapi-key': '3f03d9797emsh73ca4574bd5e4d8p18d1c3jsn45f14e7f6f51',
+               'x-rapidapi-key': '3fbd96ee15mshe59162a38569d83p1814edjsn198e19e99227',
+               // 'x-rapidapi-host': 'country-state-city-search-rest-api.p.rapidapi.com'
+               'x-rapidapi-host': 'country-state-city-search-rest-api.p.rapidapi.com'
+           }
+       };
+
+       $.ajax(countrySettings).done(function (response) {
+           if (Array.isArray(response)) {
+               response.forEach(country => {
+                   const option = document.createElement('option');
+                   option.value = country.isoCode;
+                   option.textContent = country.name;
+                   countrySelect.appendChild(option);
+               });
+           } else {
+               console.error('API response is not an array:', response);
+           }
+       });
+
+
+         // Fetch states based on selected country code
+            countrySelect.addEventListener('change', function () {
+                const selectedCountryCode = countrySelect.value;
+                const selectedCountryName = countrySelect.options[countrySelect.selectedIndex].text;
+
+
+
+                if (selectedCountryCode) {
+                    stateSelect.innerHTML = '<option disabled selected>Select your State</option>';
+
+                    const stateSettings = {
+                        async: true,
+                        crossDomain: true,
+                        url: `https://country-state-city-search-rest-api.p.rapidapi.com/states-by-countrycode?countrycode=${selectedCountryCode}`,
+                        method: 'GET',
+                        headers: {
+                             // 'x-rapidapi-key': '3f03d9797emsh73ca4574bd5e4d8p18d1c3jsn45f14e7f6f51',
+               'x-rapidapi-key': '3fbd96ee15mshe59162a38569d83p1814edjsn198e19e99227',
+               // 'x-rapidapi-host': 'country-state-city-search-rest-api.p.rapidapi.com'
+                            'x-rapidapi-host': 'country-state-city-search-rest-api.p.rapidapi.com'
+                        }
+                    };
+
+                    $.ajax(stateSettings).done(function (stateResponse) {
+                        if (Array.isArray(stateResponse)) {
+                            stateResponse.forEach(state => {
+                                const option = document.createElement('option');
+                                option.value = state.isoCode;
+                                option.textContent = state.name;
+                                stateSelect.appendChild(option);
+                            });
+                        } else {
+                            console.error('API response for states is not an array:', stateResponse);
+                        }
+                    });
+                }
+            });
+
+            // Fetch cities based on selected country and state code
+                   stateSelect.addEventListener('change', function () {
+                const selectedCountryCode = countrySelect.value;
+                const selectedStateCode = stateSelect.value;
+
+                const selectedStateName = stateSelect.options[stateSelect.selectedIndex].text;
+
+
+                if (selectedCountryCode && selectedStateCode) {
+                    citySelect.innerHTML = '<option disabled selected>Select your City</option>';
+
+                    const citySettings = {
+                        async: true,
+                        crossDomain: true,
+                        url: `https://country-state-city-search-rest-api.p.rapidapi.com/cities-by-countrycode-and-statecode?countrycode=${selectedCountryCode}&statecode=${selectedStateCode}`,
+                        method: 'GET',
+                        headers: {
+                              // 'x-rapidapi-key': '3f03d9797emsh73ca4574bd5e4d8p18d1c3jsn45f14e7f6f51',
+               'x-rapidapi-key': '3fbd96ee15mshe59162a38569d83p1814edjsn198e19e99227',
+               // 'x-rapidapi-host': 'country-state-city-search-rest-api.p.rapidapi.com'
+                            'x-rapidapi-host': 'country-state-city-search-rest-api.p.rapidapi.com'
+                        }
+                    };
+
+                    $.ajax(citySettings).done(function (cityResponse) {
+                        if (Array.isArray(cityResponse)) {
+                            cityResponse.forEach(city => {
+                                const option = document.createElement('option');
+                                option.value = city.name;
+                                option.textContent = city.name;
+                                citySelect.appendChild(option);
+                            });
+                        } else {
+                            console.error('API response for cities is not an array:', cityResponse);
+                        }
+                    });
+                }
+            });
+
+            // Display selected city name and its ISO code after selecting a city
+            citySelect.addEventListener('change', function () {
+                const selectedCityName = citySelect.options[citySelect.selectedIndex].text;
+                const selectedCityCode = citySelect.value;
+
+
+            });
+
+</script>

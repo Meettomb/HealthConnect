@@ -1,0 +1,492 @@
+﻿<!DOCTYPE html>
+
+<html>
+<head>
+
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width" />
+    <meta content="" name="keywords">
+    <meta content="" name="description">
+
+    <title>@ViewBag.Title - Health Connect</title>
+
+    <link rel="stylesheet" href="/css/Index.css" asp-append-version="true">
+    <link href="/images/HealthConnectTabLogo.png" rel="icon" />
+
+
+
+    @* <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css"> *@
+
+    <!--JQuery-->
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="/js/jQuery.js"></script>
+
+    <!--FONTS-->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@100..900&family=Sofia+Sans+Condensed:ital,wght@0,1..1000;1,1..1000&display=swap" rel="stylesheet">
+
+
+    <!--ICON-->
+    <link href="/Icon/fontawesome-free-6.7.2-web/css/fontawesome.css" rel="stylesheet" />
+    <link href="/Icon/fontawesome-free-6.7.2-web/css/brands.css" rel="stylesheet" />
+    <link href="/Icon/fontawesome-free-6.7.2-web/css/solid.css" rel="stylesheet" />
+    <link href="/Icon/fontawesome-free-6.7.2-web/css/sharp-thin.css" rel="stylesheet" />
+    <link href="/Icon/fontawesome-free-6.7.2-web/css/duotone-thin.css" rel="stylesheet" />
+    <link href="/Icon/fontawesome-free-6.7.2-web/css/sharp-duotone-thin.css" rel="stylesheet" />
+
+    <link rel="stylesheet" href="/assets/vendors/mdi/css/materialdesignicons.min.css">
+
+</head>
+<body>
+
+    @if (!string.IsNullOrEmpty(Model.ErrorMessage))
+    {
+        <div class="error_message" id="errorMessage">@Model.ErrorMessage</div>
+    }
+
+    @if (!string.IsNullOrEmpty(Model.SuccessMessage))
+    {
+        <p class="success_message" id="successMessage">@Model.SuccessMessage</p>
+    }
+
+    @if (TempData["SuccessMessage"] != null)
+    {
+        <div class="success_message" id="tempSuccessMessage">@TempData["SuccessMessage"]</div>
+    }
+
+    @if (TempData["ErrorMessage"] != null)
+    {
+        <div class="error_message" id="tempErrorMessage">@TempData["ErrorMessage"]</div>
+    }
+
+
+    <div class="loder" id="loder">
+        <img src="/Loder.gif" alt="Alternate Text" />
+    </div>
+
+
+
+    <header id="header">
+        <nav>
+
+            <img class="logo" src="/images/HealthConnectLogo.png" alt="Alternate Text" onclick="redirectToHomepage()" />
+
+            <div class="header_drop_down">
+
+                <p><a href="/">Home</a></p>
+
+                <p><a href="/User/Explore_doctors">Explore doctors</a></p>
+
+                <div class="Type_drop_down">
+                    <p>Search by types <i class="fa-solid fa-angle-down toggle-icon1"></i></p>
+                    <div class="Search_by_Type">
+                        <ul>
+                            @foreach (var item in Model.Types_of_doctor)
+                            {
+                                <a href="/User/Explore_doctors?Type=@item.type_of_doctor">
+                                <li>@item.type_of_doctor</li>
+                                </a>
+                            }
+
+                        </ul>
+
+                    </div>
+                </div>
+
+                <div class="Speciality_drop_down">
+                    <p>Search by Speciality <i class="fa-solid fa-angle-down toggle-icon1"></i></p>
+                    <div class="Search_by_Speciality">
+                        <ul>
+                            @foreach (var item in Model.doctorSpecialitiesList)
+                            {
+                                <a href="/User/Explore_doctors?Speciality=@item.doctor_specialitis">
+                                <li>@item.doctor_specialitis</li>
+                                </a>
+                            }
+
+                        </ul>
+
+                    </div>
+                </div>
+                <p><a href="/Blogs">Blog</a></p>
+                <p> <a href="/Pharmacy">Shop</a></p>
+
+                <div class="login_and_profile">
+
+                    @if (Model.UserId == null)
+                    {
+                        <a class="header_login_button" href="/User/Sign_in">Login</a>
+                    }
+                    else
+                    {
+                        <div class="header_user_icon_drop_down">
+                            @if (!string.IsNullOrEmpty(Model.ProfilePic))
+                            {
+                                <div class="header_user_image">
+                                    <img src="/documant/@Model.ProfilePic" />
+                                </div>
+                            }
+                            else
+                            {
+                                <div class="header_user_icon">
+                                    @Model.FirstName[0].ToString().ToUpper()
+                                </div>
+
+                            }
+                            <div class="header_user_services">
+                                <section>
+                                    <a href="/Account/Overview">
+                                        <i class="fa-solid fa-user"></i> Account
+                                    </a>
+
+                                    <a href="/Chatting/Chatting_page">
+                                        <i class="fa-solid fa-message"></i> Message
+                                    </a>
+
+                                    <a href="/User/AppointmentManage/All_appointment">
+                                        <i class="fa-solid fa-calendar-day"></i> Appointment
+                                    </a>
+
+                                    @if (Model.Role == "Pharmacist")
+                                    {
+                                        <a href="/User/Saler/Saler_Dashbord">
+                                            <i class="fa-solid fa-chart-line"></i> Your Dashbord
+                                        </a>
+                                    }
+
+                                    @if (Model.Role == "Admin")
+                                    {
+                                        <a href="/Admin/Admin_index">
+                                            <i class="fa-solid fa-user-tie"></i> Admin side
+                                        </a>
+                                    }
+                                    <a href="/User/Logout">
+                                        <i class="fa-solid fa-right-from-bracket"></i> Logout
+                                    </a>
+                                </section>
+                            </div>
+                        </div>
+                    }
+
+                </div>
+
+            </div>
+            <div class="hamburger_container">
+                <div class="baar">
+
+                    <i class="fa-solid fa-bars"></i>
+                </div>
+                <div class="hamburger_container_link" id="hamburger_container_link">
+                    <ul>
+                        <li><a href="/">Home</a></li>
+                        <li><a href="/User/Explore_doctors">Explor doctors</a></li>
+
+                        <li class="S_by_T">Search by Types of doctor <i class="fa-solid fa-angle-down toggle-icon1"></i></li>
+                    </ul>
+
+                    <div class="hamburgar_Search_by_Type" style="display: none;">
+                        <ul>
+                            @foreach (var item in Model.Types_of_doctor)
+                            {
+                                <a href="/User/Explore_doctors?Type=@item.type_of_doctor">
+                                <li>@item.type_of_doctor</li>
+                                </a>
+                            }
+
+                        </ul>
+                    </div>
+
+                    <ul>
+
+                        <li class="S_by_S">Search by Speciality <i class="fa-solid fa-angle-down toggle-icon1"></i></li>
+
+                    </ul>
+
+                    <div class="hamburgar_Search_by_Speciality" style="display: none;">
+                        <ul>
+                            @foreach (var item in Model.doctorSpecialitiesList)
+                            {
+                                <a href="/User/Explore_doctors?Speciality=@item.doctor_specialitis">
+                                <li>@item.doctor_specialitis</li>
+                                </a>
+                            }
+
+                        </ul>
+                    </div>
+                    <ul>
+
+                        <li><a href="/Blogs">Blog</a></li>
+                        <li><a href="/Pharmacy">Shop</a></li>
+                    </ul>
+                </div>
+
+                @if (Model.UserId == null)
+                {
+                    <a class="header_login_button" href="/User/Sign_in">Login</a>
+                }
+                else
+                {
+                    <div class="header_user_icon_drop_down">
+                        @if (!string.IsNullOrEmpty(Model.ProfilePic))
+                        {
+                            <div class="header_user_image2">
+                                <img src="/documant/@Model.ProfilePic" />
+                            </div>
+                        }
+                        else
+                        {
+
+                            <div class="header_user_icon2">
+                                @Model.FirstName[0].ToString().ToUpper()
+                            </div>
+                        }
+                        <div class="header_user_services2">
+                            <section>
+                                <a href="/Account/Overview">
+                                    <i class="fa-solid fa-user"></i> Account
+                                </a>
+                                <a href="/Chatting/Chatting_page">
+                                    <i class="fa-solid fa-message"></i> Message
+                                </a>
+
+                                <a href="/User/AppointmentManage/All_appointment">
+                                    <i class="fa-solid fa-calendar-day"></i> Appointment
+                                </a>
+
+                                @if (Model.Role == "Pharmacist")
+                                {
+                                    <a href="/User/Saler/Saler_Dashbord">
+                                        <i class="fa-solid fa-chart-line"></i> Your Dashbord
+                                    </a>
+                                }
+
+                                @if (Model.Role == "Admin")
+                                {
+                                    <a href="/Admin/Admin_index">
+                                        <i class="fa-solid fa-user-tie"></i> Admin side
+                                    </a>
+                                }
+
+                                <a href="/User/Logout">
+                                    <i class="fa-solid fa-right-from-bracket"></i> Logout
+                                </a>
+                            </section>
+                        </div>
+                    </div>
+                }
+            </div>
+
+
+        </nav>
+    </header>
+
+
+    <div>
+        @RenderBody()
+    </div>
+
+    <footer class="footer">
+        <div class="footer_container">
+            <section class="footer_section">
+                <h1>About Health Connect</h1>
+                <div class="footer_section_links">
+                    <a href="/About">About Us</a>
+                    <a href="">FAQs</a>
+                    <a href="/#ContactUs">Contact US</a>
+                    <a href="">Blogs</a>
+                    <a href="/Terms">Terms & Condition</a>
+                    <a href="/Return_And_Refund">Return & Refund</a>
+                    <a href="/Privacy">Privacy & policy</a>
+                </div>
+            </section>
+
+            <section class="footer_section">
+                <h1>Services</h1>
+                <div class="footer_section_links">
+                    <a href="/User/Explore_doctors">Find a doctor</a>
+                    <a href="/Pharmacy">Online pharmacy</a>
+                    <a href="">Health checkup</a>
+                    <a href="">Health insurance</a>
+                    <a href="/Blogs">Health blog</a>
+                </div>
+            </section>
+
+            @* <section class="footer_section"> *@
+            @*     <h1>Product Category</h1> *@
+            @*     <div class="footer_section_links"> *@
+            @*         <a href="Ecom/Filter?Filter=">View all Category</a> *@
+            @*         <a href="">View all Brands</a> *@
+            @*         <a href=""></a> *@
+            @*     </div> *@
+            @* </section> *@
+
+            <section class="footer_section">
+                <div class="footer_logo">
+                    <img src="/images/HealthConnectLogo.png" onclick="redirectToHomepage()" />
+                </div>
+                <div class="footer_social_links">
+                    <a href=""><i class="fab fa-facebook"></i></a>
+                    <a href=""><i class="fab fa-instagram"></i></a>
+                    <a href=""><i class="fa-brands fa-x-twitter"></i></a>
+                    <a href=""><i class="fa-brands fa-youtube"></i></a>
+                </div>
+            </section>
+
+        </div>
+    </footer>
+
+    <script src="/js/Script.js"></script>
+
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+
+
+    <script>
+        $(document).ready(function() {
+            // Toggle entire hamburger menu
+            $('.baar').click(function() {
+                $('.hamburger_container_link').slideToggle(300);
+                 $(".header_user_services2").slideUp();
+            });
+
+            // Toggle "Search by Speciality"
+            $('.S_by_S').click(function() {
+                $('.hamburgar_Search_by_Speciality').slideToggle(300);
+                 $(".hamburgar_Search_by_Type").slideUp();
+            });
+
+            // Toggle "Search by Condition"
+            $('.S_by_T').click(function() {
+                $('.hamburgar_Search_by_Type').slideToggle(300);
+                 $(".hamburgar_Search_by_Speciality").slideUp();
+            });
+
+            // Toggle "User section"
+            $('.header_user_icon2').click(function() {
+                $('.header_user_services2').slideToggle(300);
+                $('.hamburger_container_link').slideUp(300);
+            });
+            // Toggle "User section"
+            $('.header_user_image2').click(function() {
+                $('.header_user_services2').slideToggle(300);
+                $('.hamburger_container_link').slideUp(300);
+            });
+        });
+
+    </script>
+
+    <script>
+               $(document).ready(function () {
+            // Toggle Search by Speciality
+            $(".Speciality_drop_down p").on("click", function () {
+                $(".Search_by_Speciality").slideToggle();
+                const icon = $(this).find(".toggle-icon1");
+                const currentRotation = icon.data("rotation") || 0;
+                const newRotation = (currentRotation + 180) % 360;
+                icon.css("transform", `rotate(${newRotation}deg)`);
+                icon.data("rotation", newRotation);
+
+                // Close other dropdowns
+                $(".Search_by_Condition, .Search_by_Type, .Search_by_city, .header_user_services").slideUp();
+            });
+
+            // Toggle Search by Doctor Type
+            $(".Type_drop_down p").on("click", function () {
+                $(".Search_by_Type").slideToggle();
+                const icon = $(this).find(".toggle-icon2");
+                const currentRotation = icon.data("rotation") || 0;
+                const newRotation = (currentRotation + 180) % 360;
+                icon.css("transform", `rotate(${newRotation}deg)`);
+                icon.data("rotation", newRotation);
+
+                // Close other dropdowns
+                $(".Search_by_Speciality, .Search_by_city, .header_user_services").slideUp();
+            });
+
+            // Toggle Search by City
+            $(".City_drop_down p").on("click", function () {
+                $(".Search_by_city").slideToggle();
+                const icon = $(this).find(".toggle-icon3");
+                const currentRotation = icon.data("rotation") || 0;
+                const newRotation = (currentRotation + 180) % 360;
+                icon.css("transform", `rotate(${newRotation}deg)`);
+                icon.data("rotation", newRotation);
+
+                // Close other dropdowns
+                $(".Search_by_Speciality, .Search_by_Type, .Search_by_Condition, .header_user_services").slideUp();
+            });
+
+            // Toggle header_user_services
+            $(".header_user_icon").on("click", function () {
+                $(".header_user_services").slideToggle();
+
+                // Close other dropdowns
+                $(".Search_by_Speciality, .Search_by_Type, .Search_by_city").slideUp();
+            });
+              // Toggle header_user_services
+            $(".header_user_image").on("click", function () {
+                $(".header_user_services").slideToggle();
+
+                // Close other dropdowns
+                $(".Search_by_Speciality, .Search_by_Type, .Search_by_city").slideUp();
+            });
+
+
+            // Close dropdowns if clicked outside
+            $(document).on("click", function (e) {
+                if (!$(e.target).closest(".header_drop_down").length) {
+                    $(".Search_by_Speciality, .Search_by_Type, .Search_by_city, .header_user_services, header_user_image").slideUp();
+                    $(".toggle-icon").css("transform", "rotate(0deg)").data("rotation", 0);
+                }
+            });
+        });
+
+    </script>
+
+    <script>
+        $(document).ready(function () {
+            $("#myInput").on("keyup", function () {
+                var value = $(this).val().toLowerCase();
+                if (value.length > 0) {
+                    $(".explorer_doctor_section1").hide();
+                }
+                else {
+                    $(".explorer_doctor_section1").show();
+                }
+
+                $(".data").filter(function () {
+                    $(this).toggle($(this).text().toLowerCase().indexOf(value) > -1);
+                });
+            });
+
+
+            document.getElementById('myInput').addEventListener('keydown', function(event) {
+                if (event.key === 'Enter') {
+                    event.preventDefault();
+                }
+            });
+        });
+
+    </script>
+
+    <script>
+        document.addEventListener("DOMContentLoaded", function () {
+            function hideMessageAfterDelay(elementId) {
+                let element = document.getElementById(elementId);
+                if (element && element.innerText.trim() !== "") {
+                    element.style.display = "block";
+                    setTimeout(() => {
+                        element.style.display = "none";
+                    }, 5000);
+                }
+            }
+
+            hideMessageAfterDelay("errorMessage");
+            hideMessageAfterDelay("successMessage");
+            hideMessageAfterDelay("tempSuccessMessage");
+            hideMessageAfterDelay("tempErrorMessage");
+        });
+    </script>
+
+</body>
+</html>

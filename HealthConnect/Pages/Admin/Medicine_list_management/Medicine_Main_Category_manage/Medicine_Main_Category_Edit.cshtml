@@ -1,0 +1,41 @@
+﻿@page
+@model HealthConnect.Pages.Admin.Medicine_list_management.Medicine_Main_Category_manage.Medicine_Main_Category_EditModel
+@{
+    Layout = "_Admin_header";
+    ViewData["Title"] = "Medicine Main Category Edit";
+}
+
+
+
+<div class="col-md-6 grid-margin stretch-card">
+    <div class="card">
+        <div class="card-body">
+            <h4 class="card-title">Edit Doctor Type</h4>
+            <form method="post">
+                <div class="col-md-12">
+                    <div class="form-group row">
+                        <div class="col-sm-12">
+                            <input type="hidden" name="doctor_type_id" value="@Model.MedicineMainCategory.medicine_main_category_id" />
+
+                            <div class="form-group">
+                                <label for="type_of_doctor">Type of Doctor</label>
+                                <input type="text" class="form-control" name="medicine_main_category_name" id="type_of_doctor" value="@Model.MedicineMainCategory.medicine_main_category_name" placeholder="Medicine main category name">
+                            </div>
+                        </div>
+                    </div>
+
+                    <button type="submit" class="btn btn-primary mr-2">Submit</button>
+                    <button type="button" class="btn btn-dark" onclick="history.back()">Cancel</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+
+@if (TempData["ErrorMessage"] != null)
+{
+    <div class="success_message">
+        @TempData["ErrorMessage"]
+    </div>
+}

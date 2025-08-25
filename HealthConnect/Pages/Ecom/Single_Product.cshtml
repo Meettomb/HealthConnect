@@ -1,0 +1,541 @@
+﻿@page
+@model HealthConnect.Pages.Ecom.Single_ProductModel
+@{
+    Layout = "_Pharmacy_header2";
+    ViewData["Title"] = "Single Product";
+}
+
+<div class="single_product_container">
+    <main class="single_product_main">
+        <section class="single_product_section1">
+
+            <div class="left_side">
+                <div class="other_image_div">
+                    @if (!string.IsNullOrEmpty(Model.Product.product_image))
+                    {
+                        var images = Model.Product.product_image.Split(',');
+                        @foreach (var image in images)
+                        {
+                            <img src="/ProductImage/@image.Trim()"
+                                 alt="Product Image"
+                                 width="100"
+                                 onclick="changeMainImage(this)" />
+                        }
+                    }
+                </div>
+
+                <div class="main_image_div">
+                    <img id="mainImage" src="/ProductImage/@(Model.Product.product_image.Split(',').First().Trim())" />
+                    @if (Model.Product.product_qantity == 0)
+                    {
+                        <p>Out of stock</p>
+                    }
+                </div>
+            </div>
+
+            <div class="right_side">
+                <div class="product_little_info_div">
+                    <div class="product_little_info_section">
+                        <p class="product_name">@Model.Product.product_name</p>
+                        <p class="menufacturer">
+                            <h3>Menufacturer Compony</h3>
+                            <a href="">@Model.Product.Brand.pharmaceutical_brands_name</a>
+                        </p>
+                        <p class="seller">
+                            <h3>Sller shop name</h3>
+                            <span class="shop_adressh">@Model.Product.Seller.shop_name</span>
+                        </p>
+
+                        <p class="exp_date">
+                            <h3>Expires on or after</h3>
+                            <span>@Model.Product.product_exp_date</span>
+                        </p>
+
+                    </div>
+                </div>
+
+                <div class="billing_container">
+                    <div class="form_type_design">
+                        <div class="row">
+                            <h3>Price: </h3>
+                            <div class="row_content">
+                                @if (Model.Product.product_discount != null && Model.Product.product_discount > 0)
+                                {
+                                    <del>&#8377;@Model.Product.product_price</del>
+                                    <span class="dis_price">&#8377;@Model.Product.discounted_price</span>
+                                }
+                                else
+                                {
+                                    <span class="org_price">&#8377;@Model.Product.product_price</span>
+                                }
+                            </div>
+                        </div>
+
+                        <div class="row">
+                            <h3>Address: </h3>
+                            <div class="row_content">
+                                <p id="addre">@Model.House_number_and_Street_name @Model.City @Model.State @Model.Country - @Model.Pincode</p>
+                                <textarea rows="3" id="address" style="display: none;" placeholder="Enter new address here..."></textarea>
+                                <input type="checkbox" name="change-address" id="change-address" /> Change Address
+                            </div>
+                        </div>
+
+                        <div class="row">
+
+                            <div class="row_content last-row-contant">
+
+                                <select name="quantity" id="quantity_select">
+                                    <option disabled selected>Select Quantity</option>
+                                    <option value="1" selected>1</option>
+                                    <option value="2">2</option>
+                                    <option value="3">3</option>
+                                    <option value="4">4</option>
+                                    <option value="5">5</option>
+                                    <option value="6">6</option>
+                                </select>
+
+                                <form method="post">
+                                    <input type="hidden" name="user_id" value="@Model.UserId" />
+                                    <input type="hidden" name="product_id" value="@Model.Product?.product_id" />
+                                    <input type="hidden" name="quantity" id="cart_quantity" value="1" readonly />
+
+                                    <button type="submit" name="action" value="AddToCart" id="addCart">Add to cart</button>
+                                </form>
+
+                                <form method="post" id="Buy">
+                                    <input type="hidden" name="name" value="@Model.UserId" />
+                                    <input type="hidden" name="name" value="@Model.Product.product_id" />
+
+
+                                    @if (Model.Product.product_discount != null && Model.Product.product_discount > 0)
+                                    {
+                                        <input type="hidden" name="name" value="@Model.Product.discounted_price" />
+                                    }
+                                    else
+                                    {
+                                        <input type="hidden" name="name" value="@Model.Product.product_price" />
+                                    }
+
+                                    <button id="buyButton" class="buy" type="button" name="buy">Buy</button>
+                                </form>
+                            </div>
+
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+
+        </section>
+
+        <section class="single_product_section2">
+
+            <a href="#Description">Description</a>
+            @if (Model.Product.product_features != null)
+            {
+                <a href="#Features">Features</a>
+            }
+
+            <a href="#Benefits">Benefits</a>
+            <a href="#how_to_use">how to use</a>
+
+        </section>
+
+        <section class="single_product_section3">
+            <div class="dstail" id="Description">
+                <h1>Description</h1>
+                <p>@Model.Product.product_description</p>
+            </div>
+
+            @if (Model.Product.product_features != null)
+            {
+                <div class="dstail" id="Features">
+                    <h1>Features</h1>
+
+                    <ul>
+                        @foreach (var feature in Model.Product.product_features.Split(","))
+                        {
+                            <li>@feature.Trim()</li>
+                        }
+                    </ul>
+
+                </div>
+            }
+
+            <div class="dstail" id="Benefits">
+                <h1>Benefits</h1>
+
+                <ul>
+                    @foreach (var benefits in Model.Product.product_benefits.Split(","))
+                    {
+                        <li>@benefits.Trim()</li>
+                    }
+                </ul>
+
+            </div>
+
+            <div class="dstail" id="how_to_use">
+                <h1>How to use</h1>
+
+                <ul>
+                    @foreach (var product_how_to_use in Model.Product.product_how_to_use.Split(","))
+                    {
+                        <li>@product_how_to_use.Trim()</li>
+                    }
+                </ul>
+
+
+            </div>
+
+        </section>
+
+    </main>
+</div>
+
+
+<!-- Order Popup -->
+<div class="order_popup_container" id="orderPopup">
+    <div class="popup_content">
+        <i class="fa-solid fa-times" id="closePopup"></i>
+        <h2>Chack your details</h2>
+        <form method="post" id="Buy">
+            <div class="confiem_detail">
+                <div class="detail">
+                    <input type="hidden" name="user_id" value="@Model.UserId" readonly />
+                </div>
+                <div class="detail">
+                    <input type="hidden" name="product_id" value="@Model.Product.product_id" readonly />
+                </div> 
+                <div class="detail">
+                    <input type="hidden" name="seller_id" value="@Model.Product?.Seller.id" />
+                </div>
+                <div class="detail">
+                    <label>Quantity: </label>
+                    <input type="text" name="quantity" id="buying_quantity" value="1" readonly />
+                </div>
+                <div class="detail">
+                    <label>Address: </label>
+                    <input type="text" name="billing_address" id="hidden_address" value="@Model.House_number_and_Street_name @Model.City @Model.State @Model.Country - @Model.Pincode" readonly />
+                </div>
+                <div class="detail">
+                    <label>Total Price: </label>
+                    <input type="text" name="price" id="final-price-display" readonly />
+                </div>
+
+
+                <div class="detail">
+                    <label>Paymant methode: </label>
+                    <input type="text" name="paymant_methode" id="methode-display" readonly />
+                </div>
+
+                @if (Model.Product.product_discount != null && Model.Product.product_discount > 0)
+                {
+                    <span class="dis_price" style="display: none;" id="f-price">&#8377;@Model.Product.discounted_price</span>
+                }
+                else
+                {
+                    <span class="org_price" style="display: none;" id="f-price">&#8377;@Model.Product.product_price</span>
+                }
+
+            </div>
+
+            <h4>Choose your paymant methode</h4>
+            <div class="paymat_methode_options">
+                <img src="~/images/cash_paymant.png" id="Cash" data-methode="Cash" />
+                <img src="/images/upi_paymant.png" id="UPI" data-methode="UPI" />
+            </div>
+
+            <div class="upi_id" id="upi_id">
+                <input type="text" placeholder="Enter your upi id" />
+            </div>
+
+            <button id="buyButton" class="pay" type="submit" name="action" value="Pay" onclick="checkPaymentMethod()">Pay</button>
+        </form>
+
+    </div>
+</div>
+
+
+
+
+<div class="pharmacy_index_container">
+
+    <section class="pharmacy_index_container_section_1">
+        <h2>Recommended Products</h2>
+        <p class="slide_left mdi mdi-chevron-left" id="slide_left1"></p>
+        <p class="slide_right mdi mdi-chevron-right" id="slide_right1"></p>
+
+        <div class="slider_container">
+
+            @foreach (var recommendedproducts in Model.RecommendedProducts)
+            {
+                <div class="product_section">
+                    <a href="/Ecom/Single_Product?product_id=@recommendedproducts.product_id">
+
+                        <img src="/ProductImage/@recommendedproducts.product_image.Split(',')[0]" alt="medicine1" />
+
+                        <div class="priceing_div">
+                            <p class="product_name">@recommendedproducts.product_name</p>
+                            @if (recommendedproducts.product_discount != null && recommendedproducts.product_discount > 0)
+                            {
+                                <p class="price">
+                                    <del>&#8377;@recommendedproducts.product_price</del>
+                                    <span> &#8377;@recommendedproducts.discounted_price </span>
+                                </p>
+                            }
+                            else
+                            {
+                                <p class="price">
+                                    <span> &#8377;@recommendedproducts.product_price</span>
+                                </p>
+                            }
+
+                        </div>
+                    </a>
+
+                    <form id="cartForm" method="post">
+                        <input type="hidden" name="user_id" id="user_id" value="@Model.UserId" />
+                        <input type="hidden" name="product_id" id="product_id" value="@recommendedproducts.product_id" />
+                        <input type="hidden" name="quantity" id="cart_quantity" value="1" readonly />
+                        <button type="submit" name="action" value="AddToCart" id="addToCart">Add</button>
+                    </form>
+                </div>
+            }
+
+
+        </div>
+    </section>
+
+</div>
+
+@if (Model.UserId != null)
+{
+    <div class="pharmacy_index_container">
+
+        <section class="pharmacy_index_container_section_1">
+            <h2>Hot Seller In Your City</h2>
+            <p class="slide_left mdi mdi-chevron-left" id="slide_left2"></p>
+            <p class="slide_right mdi mdi-chevron-right" id="slide_right2"></p>
+
+            <div class="slider_container">
+
+                @foreach (var cityhotseller in Model.CityHotSeller)
+                {
+                    <div class="product_section">
+                        <a href="/Ecom/Single_Product?product_id=@cityhotseller.product_id">
+
+                            <img src="/ProductImage/@cityhotseller.product_image.Split(',')[0]" alt="medicine1" />
+
+                            <div class="priceing_div">
+                                <p class="product_name">@cityhotseller.product_name</p>
+                                @if (cityhotseller.product_discount != null && cityhotseller.product_discount > 0)
+                                {
+                                    <p class="price">
+                                        <del>&#8377;@cityhotseller.product_price</del>
+                                        <span> &#8377;@cityhotseller.discounted_price </span>
+                                    </p>
+                                }
+                                else
+                                {
+                                    <p class="price">
+                                        <span> &#8377;@cityhotseller.product_price</span>
+                                    </p>
+                                }
+
+                            </div>
+                        </a>
+
+                        <form id="cartForm" method="post">
+                            <input type="hidden" name="user_id" id="user_id" value="@Model.UserId" />
+                            <input type="hidden" name="product_id" id="product_id" value="@cityhotseller.product_id" />
+                            <input type="hidden" name="quantity" id="cart_quantity" value="1" readonly />
+                            <button type="submit" name="action" value="AddToCart" id="addToCart">Add</button>
+                        </form>
+                    </div>
+                }
+
+
+            </div>
+        </section>
+
+    </div>
+}
+
+else
+{
+    <div class="pharmacy_index_container">
+
+        <section class="pharmacy_index_container_section_1">
+            <h2>Hot Seller</h2>
+            <p class="slide_left mdi mdi-chevron-left" id="slide_left2"></p>
+            <p class="slide_right mdi mdi-chevron-right" id="slide_right2"></p>
+
+            <div class="slider_container">
+
+                @foreach (var hotseller in Model.HotSeller)
+                {
+                    <div class="product_section">
+                        <a href="/Ecom/Single_Product?product_id=@hotseller.product_id">
+
+                            <img src="/ProductImage/@hotseller.product_image.Split(',')[0]" alt="medicine1" />
+
+                            <div class="priceing_div">
+                                <p class="product_name">@hotseller.product_name</p>
+                                @if (hotseller.product_discount != null && hotseller.product_discount > 0)
+                                {
+                                    <p class="price">
+                                        <del>&#8377;@hotseller.product_price</del>
+                                        <span> &#8377;@hotseller.discounted_price </span>
+                                    </p>
+                                }
+                                else
+                                {
+                                    <p class="price">
+                                        <span> &#8377;@hotseller.product_price</span>
+                                    </p>
+                                }
+
+                            </div>
+                        </a>
+
+                        <form id="cartForm" method="post">
+                            <input type="hidden" name="user_id" id="user_id" value="@Model.UserId" />
+                            <input type="hidden" name="product_id" id="product_id" value="@hotseller.product_id" /> 
+                            <input type="hidden" name="quantity" id="cart_quantity" value="1" readonly />
+                            <button type="submit" name="action" value="AddToCart" id="addToCart">Add</button>
+                        </form>
+                    </div>
+                }
+
+
+            </div>
+        </section>
+
+    </div>
+}
+
+
+
+
+
+
+<script>
+    document.addEventListener("DOMContentLoaded", function () {
+        const sliders = document.querySelectorAll(".slider_container");
+
+        const configs = [
+            {
+                container: sliders[0],
+                leftButton: document.getElementById("slide_left1"),
+                rightButton: document.getElementById("slide_right1"),
+            },
+            {
+                container: sliders[1],
+                leftButton: document.getElementById("slide_left2"),
+                rightButton: document.getElementById("slide_right2"),
+            }
+        ];
+
+        configs.forEach(({ container, leftButton, rightButton }) => {
+            if (!container || !leftButton || !rightButton) return;
+
+            function toggleButtons() {
+                leftButton.style.display = container.scrollLeft > 0 ? "block" : "none";
+                rightButton.style.display = container.scrollWidth > container.clientWidth + container.scrollLeft ? "block" : "none";
+            }
+
+            rightButton.addEventListener("click", function () {
+                container.scrollBy({ left: 250, behavior: "smooth" });
+            });
+
+            leftButton.addEventListener("click", function () {
+                container.scrollBy({ left: -250, behavior: "smooth" });
+            });
+
+            container.addEventListener("scroll", toggleButtons);
+            window.addEventListener("resize", toggleButtons);
+
+            toggleButtons();
+        });
+    });
+</script>
+
+<script>
+       document.getElementById("UPI").addEventListener("click", function () {
+           var methode = document.getElementById("methode-display");
+        document.getElementById("upi_id").style.display = "block";
+        methode.value = this.getAttribute("data-methode");
+    });
+       document.getElementById("Cash").addEventListener("click", function () {
+           var methode = document.getElementById("methode-display");
+        document.getElementById("upi_id").style.display = "none";
+        methode.value = this.getAttribute("data-methode");
+    });
+
+</script>
+
+<script>
+    function updateFinalPrice() {
+        let quantity = parseInt(document.getElementById("quantity_select").value) || 1;
+        let priceText = document.getElementById("f-price").innerText.replace(/[^\d.]/g, '');
+        let price = parseFloat(priceText);
+
+        let finalPrice = quantity * price;
+        document.getElementById("final-price-display").value = `₹${finalPrice}`;
+    }
+
+    window.onload = updateFinalPrice;
+
+    document.getElementById("quantity_select").addEventListener("change", updateFinalPrice);
+</script>
+
+<script>
+        document.getElementById("buyButton").addEventListener("click", function () {
+        document.getElementById("orderPopup").style.display = "block";
+    });
+
+    document.getElementById("closePopup").addEventListener("click", function () {
+        document.getElementById("orderPopup").style.display = "none";
+    });
+
+    document.getElementById("confirmOrder").addEventListener("click", function () {
+        document.getElementById("Buy").submit();
+    });
+
+</script>
+
+<script>
+    function changeMainImage(element) {
+        document.getElementById("mainImage").src = element.src;
+    }
+</script>
+
+<script>
+    document.getElementById("change-address").addEventListener("change", function () {
+        var addressText = document.getElementById("addre");
+        var addressInput = document.getElementById("address");
+        var hiddenAddress = document.getElementById("hidden_address");
+
+        if (this.checked) {
+            addressText.style.display = "none";
+            addressInput.style.display = "block";
+            hiddenAddress.value = "";
+        } else {
+            addressText.style.display = "block";
+            addressInput.style.display = "none";
+            hiddenAddress.value = addressText.innerText;
+        }
+    });
+
+    document.getElementById("address").addEventListener("input", function () {
+        document.getElementById("hidden_address").value = this.value;
+    });
+</script>
+
+<script>
+    document.getElementById("quantity_select").addEventListener("change", function () {
+        let selectedValue = this.value;
+        document.getElementById("cart_quantity").value = selectedValue;
+        document.getElementById("buying_quantity").value = selectedValue;
+    });
+</script>

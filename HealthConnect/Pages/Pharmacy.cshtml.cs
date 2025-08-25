@@ -1,0 +1,698 @@
+using HealthConnect.Models;
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.RazorPages;
+using Microsoft.Data.SqlClient;
+using MimeKit.Encodings;
+using static HealthConnect.Pages.IndexModel;
+using System.Text.Json;
+
+
+namespace HealthConnect.Pages
+{
+    public class PharmacyModel : PageModel
+    {
+
+        private readonly ILogger<IndexModel> _logger;
+        private readonly IConfiguration _configuration;
+        private readonly string _connectionString;
+
+
+        public int? UserId { get; set; }
+        public string FirstName { get; set; }
+        public string LastName { get; set; }
+        public string ProfilePic { get; set; }
+        public string Role { get; set; }
+        public string Country { get; set; }
+        public string State { get; set; }
+        public string City { get; set; }
+        public string Pincode { get; set; }
+        public bool? DoctorProfileComplete { get; set; }
+        public string ErrorMessage { get; set; }
+        public string SuccessMessage { get; set; }
+
+
+        [BindProperty]
+        public User_Table User { get; set; }
+
+        public List<User_Table> User_TableList { get; set; } = new List<User_Table>();
+        public List<User_Table> User_TableIdList { get; set; } = new List<User_Table>();
+
+
+        [BindProperty]
+        public Medicine_Main_Category Medicine_Main_Category { get; set; }
+        public List<Medicine_Main_Category> Medicine_Main_CategoryList { get; set; } = new List<Medicine_Main_Category>();
+
+
+        [BindProperty]
+        public Medicine_Sub_Category Medicine_Sub_Category { get; set; }
+        public List<Medicine_Sub_Category> Medicine_Sub_CategoryList { get; set; } = new List<Medicine_Sub_Category>();
+
+
+        [BindProperty]
+        public Medicine_Finel_Category Medicine_Finel_Category { get; set; }
+        public List<Medicine_Finel_Category> Medicine_Finel_CategoryList { get; set; } = new List<Medicine_Finel_Category>();
+
+
+        [BindProperty]
+        public Product_Table Product_Table { get; set; }
+        public List<Product_Table> FifityDiscountProductList { get; set; } = new List<Product_Table>();
+        public List<Product_Table> AllProductList { get; set; } = new List<Product_Table>();
+        public List<Product_Table> CityHotSeller { get; set; } = new List<Product_Table>();
+        public List<Product_Table> HotSeller { get; set; } = new List<Product_Table>();
+
+        [BindProperty]
+        public Product_Table Product { get; set; }
+
+        [BindProperty]
+        public Cart Cart { get; set; }
+
+
+        [BindProperty]
+        public Pharmaceutical_Brands Pharmaceutical_Brands { get; set; }
+        public List<Pharmaceutical_Brands> PharmaceuticalBrandsList { get; set; } = new List<Pharmaceutical_Brands>();
+
+        public int CartCount { get; set; }
+
+        public PharmacyModel(ILogger<IndexModel> logger, IConfiguration configuration)
+        {
+            _logger = logger;
+            _configuration = configuration;
+            _connectionString = configuration.GetConnectionString("HealthConnect");
+        }
+        public IActionResult OnGet()
+        {
+            string roleInSession = HttpContext.Session.GetString("UserRole");
+            UserId = HttpContext.Session.GetInt32("Id");
+
+            if (UserId.HasValue)
+            {
+
+                OnGetLoginUserDetail();
+                OnCartGet(UserId.Value);
+                OnHotSellerInCity(UserId.Value);
+            }
+
+            OnGetPharmacyFiftyPercentDiscountedProducts();
+            OnGetPharmacyCategory();
+            OnGetPharmacyAllProducts();
+            OnGetBrandeData();
+            OnHotSellerGlobal();
+            return Page();
+        }
+
+        public void OnCartGet(int user_id)
+        {
+            int cartCount = 0;
+            using (SqlConnection connection = new SqlConnection(_connectionString))
+            {
+                connection.Open();
+
+                string getDoctorCount = "SELECT COUNT(*) FROM Cart WHERE user_id = @UserId";
+                using (SqlCommand command = new SqlCommand(getDoctorCount, connection))
+                {
+                    command.Parameters.AddWithValue("@UserId", user_id);
+                    CartCount = (int)command.ExecuteScalar();
+                }
+
+            }
+        }
+        public void OnGetLoginUserDetail()
+        {
+            UserId = HttpContext.Session.GetInt32("Id");
+            using (SqlConnection con = new SqlConnection(_connectionString))
+            {
+                if (UserId.HasValue)
+                {
+                    string query = "SELECT * FROM User_Table WHERE id = @UserId";
+                    using (SqlCommand cmd = new SqlCommand(query, con))
+                    {
+                        cmd.Parameters.AddWithValue("@UserId", UserId.Value);
+                        con.Open();
+                        using (SqlDataReader reader = cmd.ExecuteReader())
+                        {
+                            if (reader.Read())
+                            {
+                                FirstName = reader["first_name"].ToString();
+                                LastName = reader["last_name"].ToString();
+                                ProfilePic = reader["profile_pic"].ToString();
+                                Role = reader["role"].ToString();
+                                Country = reader["country"].ToString();
+                                State = reader["state"].ToString();
+                                City = reader["city"].ToString();
+                                Pincode = reader["pincode"].ToString();
+                                UserId = (int?)reader["id"];
+                                DoctorProfileComplete = reader["doctor_profile_complete"] != DBNull.Value ? (bool?)(Convert.ToInt32(reader["doctor_profile_complete"]) == 1) : null;
+
+
+                            }
+                        }
+                        con.Close();
+                    }
+                }
+            }
+
+        }
+        public void OnGetPharmacyCategory()
+        {
+            using (SqlConnection connection = new SqlConnection(_connectionString))
+            {
+                string query = @"
+                SELECT 
+                    MM.medicine_main_category_id,
+                    MM.medicine_main_category_name,
+                    MS.medicine_sub_category_id,
+                    MS.medicine_sub_category_name,
+                    MF.medicine_finel_category_id,
+                    MF.medicine_finel_category_name
+                FROM 
+                    Medicine_Main_Category MM
+                LEFT JOIN 
+                    Medicine_Sub_Category MS 
+                ON 
+                    MM.medicine_main_category_id = MS.medicine_main_category_id
+                LEFT JOIN 
+                    Medicine_Finel_Category MF 
+                ON 
+                    MS.medicine_sub_category_id = MF.medicine_sub_category_id
+                ORDER BY 
+                    MM.medicine_main_category_id, 
+                    MS.medicine_sub_category_id,
+                    MF.medicine_finel_category_id";
+
+                using (SqlCommand command = new SqlCommand(query, connection))
+                {
+                    connection.Open();
+                    using (SqlDataReader reader = command.ExecuteReader())
+                    {
+                        var mainCategoryDict = new Dictionary<int, Medicine_Main_Category>();
+
+                        while (reader.Read())
+                        {
+                            int mainId = reader.GetInt32(0);
+                            string mainName = reader.GetString(1);
+                            int subId = reader.IsDBNull(2) ? 0 : reader.GetInt32(2);
+                            string subName = reader.IsDBNull(3) ? null : reader.GetString(3);
+                            int finelId = reader.IsDBNull(4) ? 0 : reader.GetInt32(4);
+                            string finelName = reader.IsDBNull(5) ? null : reader.GetString(5);
+
+                            if (!mainCategoryDict.ContainsKey(mainId))
+                            {
+                                mainCategoryDict[mainId] = new Medicine_Main_Category
+                                {
+                                    medicine_main_category_id = mainId,
+                                    medicine_main_category_name = mainName,
+                                    medicineSubCategories = new List<Medicine_Sub_Category>()
+                                };
+                            }
+
+                            if (subId != 0)
+                            {
+                                var mainCategory = mainCategoryDict[mainId];
+                                var subCategory = mainCategory.medicineSubCategories.FirstOrDefault(s => s.medicine_sub_category_id == subId);
+
+                                if (subCategory == null)
+                                {
+                                    subCategory = new Medicine_Sub_Category
+                                    {
+                                        medicine_sub_category_id = subId,
+                                        medicine_sub_category_name = subName,
+                                        medicine_main_category_id = mainId,
+                                        Medicine_Finel_Categories = new List<Medicine_Finel_Category>()
+                                    };
+                                    mainCategory.medicineSubCategories.Add(subCategory);
+                                }
+
+                                if (finelId != 0)
+                                {
+                                    subCategory.Medicine_Finel_Categories ??= new List<Medicine_Finel_Category>();
+                                    subCategory.Medicine_Finel_Categories.Add(new Medicine_Finel_Category
+                                    {
+                                        medicine_finel_category_id = finelId,
+                                        medicine_finel_category_name = finelName,
+                                        medicine_main_category_id = mainId,
+                                        medicine_sub_category_id = subId
+                                    });
+                                }
+                            }
+                        }
+
+                        Medicine_Main_CategoryList = mainCategoryDict.Values.ToList();
+                    }
+                }
+            }
+        }
+        private void OnGetPharmacyFiftyPercentDiscountedProducts()
+        {
+            using (SqlConnection connection = new SqlConnection(_connectionString))
+            {
+                string query = @"SELECT PT.product_id, PT.saler_id, PT.brande_id, PT.product_image, PT.product_name,
+        PT.product_category_id, PT.product_price, PT.product_discount, PT.discounted_price, PT.product_qantity, 
+        PT.product_description, PT.product_features, PT.product_benefits, PT.product_how_to_use,
+        PT.product_exp_date, PT.product_add_date, PB.pharmaceutical_brands_id, PB.pharmaceutical_brands_name,
+        UT.id, UT.first_name, UT.last_name, UT.profile_pic, UT.shop_name, UT.shop_address,
+        MFC.medicine_finel_category_id, MFC.medicine_finel_category_name,
+        MSC.medicine_sub_category_id, MSC.medicine_sub_category_name, 
+        MMC.medicine_main_category_id, MMC.medicine_main_category_name
+        FROM Product_Table PT
+        LEFT JOIN Pharmaceutical_Brands PB ON PT.brande_id = PB.pharmaceutical_brands_id
+        LEFT JOIN User_Table UT ON PT.saler_id = UT.id
+        LEFT JOIN Medicine_Finel_Category MFC ON PT.product_category_id = MFC.medicine_finel_category_id
+        LEFT JOIN Medicine_Sub_Category MSC ON MFC.medicine_sub_category_id = MSC.medicine_sub_category_id
+        LEFT JOIN Medicine_Main_Category MMC ON MSC.medicine_main_category_id = MMC.medicine_main_category_id
+        WHERE PT.product_discount >= 50
+        ORDER BY PT.product_discount DESC";
+
+                using (SqlCommand command = new SqlCommand(query, connection))
+                {
+                    connection.Open();
+                    using (SqlDataReader reader = command.ExecuteReader())
+                    {
+                        while (reader.Read())
+                        {
+                            Product = new Product_Table
+                            {
+                                product_id = reader.GetInt32(0),
+                                saler_id = reader.GetInt32(1),
+                                brande_id = reader.GetInt32(2),
+                                product_image = reader.GetString(3),
+                                product_name = reader.GetString(4),
+                                product_category_id = reader.GetInt32(5),
+                                product_price = reader.GetInt32(6),
+                                product_discount = reader.IsDBNull(7) ? (int?)null : reader.GetInt32(7),
+                                discounted_price = reader.IsDBNull(8) ? (int?)null : reader.GetInt32(8),
+                                product_qantity = reader.GetInt32(9),
+                                product_description = reader.GetString(10),
+                                product_features = reader.IsDBNull(11) ? null : reader.GetString(11),
+                                product_benefits = reader.GetString(12),
+                                product_how_to_use = reader.GetString(13),
+                                product_exp_date = reader.GetString(14),
+                                product_add_date = DateOnly.FromDateTime(reader.GetDateTime(15)),
+
+                                Brand = new Pharmaceutical_Brands
+                                {
+                                    pharmaceutical_brands_id = reader.GetInt32(16),
+                                    pharmaceutical_brands_name = reader.GetString(17)
+                                },
+
+                                Seller = new User_Table
+                                {
+                                    id = reader.GetInt32(18),
+                                    first_name = reader.GetString(19),
+                                    last_name = reader.GetString(20),
+                                    profile_pic = reader.IsDBNull(21) ? null : reader.GetString(21),
+                                    shop_name = reader.IsDBNull(22) ? null : reader.GetString(22),
+                                    shop_address = reader.IsDBNull(23) ? null : reader.GetString(23)
+                                },
+
+                                FinelCategory = new Medicine_Finel_Category
+                                {
+                                    medicine_finel_category_id = reader.GetInt32(24),
+                                    medicine_finel_category_name = reader.GetString(25),
+
+                                    Medicine_Sub_Category = new Medicine_Sub_Category
+                                    {
+                                        medicine_sub_category_id = reader.GetInt32(26),
+                                        medicine_sub_category_name = reader.GetString(27)
+                                    },
+
+                                    Medicine_Main_Category = new Medicine_Main_Category
+                                    {
+                                        medicine_main_category_id = reader.GetInt32(28),
+                                        medicine_main_category_name = reader.GetString(29)
+                                    }
+                                }
+                            };
+                            FifityDiscountProductList.Add(Product);
+                        }
+                    }
+                }
+            }
+
+        }
+        private void OnGetPharmacyAllProducts()
+        {
+            using (SqlConnection connection = new SqlConnection(_connectionString))
+            {
+                string query = @"SELECT PT.product_id, PT.saler_id, PT.brande_id, PT.product_image, PT.product_name,
+        PT.product_category_id, PT.product_price, PT.product_discount, PT.discounted_price, PT.product_qantity, 
+        PT.product_description, PT.product_features, PT.product_benefits, PT.product_how_to_use,
+        PT.product_exp_date, PT.product_add_date, PB.pharmaceutical_brands_id, PB.pharmaceutical_brands_name,
+        UT.id, UT.first_name, UT.last_name, UT.profile_pic, UT.shop_name, UT.shop_address,
+        MFC.medicine_finel_category_id, MFC.medicine_finel_category_name,
+        MSC.medicine_sub_category_id, MSC.medicine_sub_category_name, 
+        MMC.medicine_main_category_id, MMC.medicine_main_category_name
+        FROM Product_Table PT
+        LEFT JOIN Pharmaceutical_Brands PB ON PT.brande_id = PB.pharmaceutical_brands_id
+        LEFT JOIN User_Table UT ON PT.saler_id = UT.id
+        LEFT JOIN Medicine_Finel_Category MFC ON PT.product_category_id = MFC.medicine_finel_category_id
+        LEFT JOIN Medicine_Sub_Category MSC ON MFC.medicine_sub_category_id = MSC.medicine_sub_category_id
+        LEFT JOIN Medicine_Main_Category MMC ON MSC.medicine_main_category_id = MMC.medicine_main_category_id
+        ORDER BY NEWID()";
+
+                using (SqlCommand command = new SqlCommand(query, connection))
+                {
+                    connection.Open();
+                    using (SqlDataReader reader = command.ExecuteReader())
+                    {
+                        while (reader.Read())
+                        {
+                            Product = new Product_Table
+                            {
+                                product_id = reader.IsDBNull(0) ? (int?)null : reader.GetInt32(0),
+                                saler_id = reader.IsDBNull(1) ? (int?)null : reader.GetInt32(1),
+                                brande_id = reader.IsDBNull(2) ? (int?)null : reader.GetInt32(2),
+                                product_image = reader.GetString(3),
+                                product_name = reader.GetString(4),
+                                product_category_id = reader.IsDBNull(5) ? (int?)null : reader.GetInt32(5),
+                                product_price = reader.IsDBNull(6) ? (int?)null : reader.GetInt32(6),
+                                product_discount = reader.IsDBNull(7) ? (int?)null : reader.GetInt32(7),
+                                discounted_price = reader.IsDBNull(8) ? (int?)null : reader.GetInt32(8),
+                                product_qantity = reader.IsDBNull(9) ? (int?)null : reader.GetInt32(9),
+                                product_description = reader.GetString(10),
+                                product_features = reader.IsDBNull(11) ? null : reader.GetString(11),
+                                product_benefits = reader.GetString(12),
+                                product_how_to_use = reader.GetString(13),
+                                product_exp_date = reader.GetString(14),
+                                product_add_date = DateOnly.FromDateTime(reader.GetDateTime(15)),
+
+                                Brand = new Pharmaceutical_Brands
+                                {
+                                    pharmaceutical_brands_id = reader.GetInt32(16),
+                                    pharmaceutical_brands_name = reader.GetString(17)
+                                },
+
+                                Seller = new User_Table
+                                {
+                                    id = reader.GetInt32(18),
+                                    first_name = reader.GetString(19),
+                                    last_name = reader.GetString(20),
+                                    profile_pic = reader.IsDBNull(21) ? null : reader.GetString(21),
+                                    shop_name = reader.IsDBNull(22) ? null : reader.GetString(22),
+                                    shop_address = reader.IsDBNull(23) ? null : reader.GetString(23)
+                                },
+
+                                FinelCategory = new Medicine_Finel_Category
+                                {
+                                    medicine_finel_category_id = reader.GetInt32(24),
+                                    medicine_finel_category_name = reader.GetString(25),
+
+                                    Medicine_Sub_Category = new Medicine_Sub_Category
+                                    {
+                                        medicine_sub_category_id = reader.GetInt32(26),
+                                        medicine_sub_category_name = reader.GetString(27)
+                                    },
+
+                                    Medicine_Main_Category = new Medicine_Main_Category
+                                    {
+                                        medicine_main_category_id = reader.GetInt32(28),
+                                        medicine_main_category_name = reader.GetString(29)
+                                    }
+                                }
+                            };
+                            AllProductList.Add(Product);
+                        }
+                    }
+                }
+            }
+        }
+        private void OnGetBrandeData()
+        {
+            using (SqlConnection connection = new SqlConnection(_connectionString))
+            {
+                string query = "SELECT * FROM Pharmaceutical_Brands";
+                using (SqlCommand command = new SqlCommand(query, connection))
+                {
+                    connection.Open();
+                    using (SqlDataReader reader = command.ExecuteReader())
+                    {
+                        while (reader.Read())
+                        {
+                            Pharmaceutical_Brands = new Pharmaceutical_Brands
+                            {
+                                pharmaceutical_brands_id = reader.GetInt32(0),
+                                pharmaceutical_brands_image = reader.GetString(1),
+                                pharmaceutical_brands_name = reader.GetString(2)
+                            };
+                            PharmaceuticalBrandsList.Add(Pharmaceutical_Brands);
+                        }
+                    }
+                }
+            }
+        }
+
+        private void OnHotSellerInCity(int user_id)
+        {
+            using (SqlConnection connection = new SqlConnection(_connectionString))
+            {
+                string query = @"
+                SELECT TOP 10 
+                    PT.product_id, PT.saler_id, PT.brande_id, PT.product_image, PT.product_name,
+                    PT.product_category_id, PT.product_price, PT.product_discount, PT.discounted_price, PT.product_qantity, 
+                    PT.product_description, PT.product_features, PT.product_benefits, PT.product_how_to_use,
+                    PT.product_exp_date, PT.product_add_date, 
+                    PB.pharmaceutical_brands_id, PB.pharmaceutical_brands_name,
+                    UT.id, UT.first_name, UT.last_name, UT.profile_pic, UT.shop_name, UT.shop_address,
+                    MFC.medicine_finel_category_id, MFC.medicine_finel_category_name,
+                    MSC.medicine_sub_category_id, MSC.medicine_sub_category_name, 
+                    MMC.medicine_main_category_id, MMC.medicine_main_category_name,
+                    OrderSummary.total_orders
+                FROM (
+                    SELECT TOP 10 
+                        OT.product_id,
+                        COUNT(*) AS total_orders
+                    FROM Order_Table OT
+                    JOIN User_Table CurrentUser ON CurrentUser.id = @UserId
+                    JOIN User_Table OtherUsers ON OT.user_id = OtherUsers.id
+                    WHERE OtherUsers.city = CurrentUser.city
+                    GROUP BY OT.product_id
+                    ORDER BY total_orders DESC
+                ) AS OrderSummary
+                JOIN Product_Table PT ON PT.product_id = OrderSummary.product_id
+                LEFT JOIN Pharmaceutical_Brands PB ON PT.brande_id = PB.pharmaceutical_brands_id
+                LEFT JOIN User_Table UT ON PT.saler_id = UT.id
+                LEFT JOIN Medicine_Finel_Category MFC ON PT.product_category_id = MFC.medicine_finel_category_id
+                LEFT JOIN Medicine_Sub_Category MSC ON MFC.medicine_sub_category_id = MSC.medicine_sub_category_id
+                LEFT JOIN Medicine_Main_Category MMC ON MSC.medicine_main_category_id = MMC.medicine_main_category_id
+                ORDER BY OrderSummary.total_orders DESC";
+
+                using (SqlCommand command = new SqlCommand(query, connection))
+                {
+                    command.Parameters.AddWithValue("@UserId", user_id);
+                    connection.Open();
+
+                    using (SqlDataReader reader = command.ExecuteReader())
+                    {
+                        while (reader.Read())
+                        {
+                            Product = new Product_Table
+                            {
+                                product_id = reader.GetInt32(0),
+                                saler_id = reader.GetInt32(1),
+                                brande_id = reader.GetInt32(2),
+                                product_image = reader.GetString(3),
+                                product_name = reader.GetString(4),
+                                product_category_id = reader.GetInt32(5),
+                                product_price = reader.GetInt32(6),
+                                product_discount = reader.IsDBNull(7) ? (int?)null : reader.GetInt32(7),
+                                discounted_price = reader.IsDBNull(8) ? (int?)null : reader.GetInt32(8),
+                                product_qantity = reader.GetInt32(9),
+                                product_description = reader.GetString(10),
+                                product_features = reader.IsDBNull(11) ? null : reader.GetString(11),
+                                product_benefits = reader.GetString(12),
+                                product_how_to_use = reader.GetString(13),
+                                product_exp_date = reader.GetString(14),
+                                product_add_date = DateOnly.FromDateTime(reader.GetDateTime(15)),
+
+                                Brand = new Pharmaceutical_Brands
+                                {
+                                    pharmaceutical_brands_id = reader.GetInt32(16),
+                                    pharmaceutical_brands_name = reader.GetString(17)
+                                },
+
+                                Seller = new User_Table
+                                {
+                                    id = reader.GetInt32(18),
+                                    first_name = reader.GetString(19),
+                                    last_name = reader.GetString(20),
+                                    profile_pic = reader.IsDBNull(21) ? null : reader.GetString(21),
+                                    shop_name = reader.IsDBNull(22) ? null : reader.GetString(22),
+                                    shop_address = reader.IsDBNull(23) ? null : reader.GetString(23)
+                                },
+
+                                FinelCategory = new Medicine_Finel_Category
+                                {
+                                    medicine_finel_category_id = reader.GetInt32(24),
+                                    medicine_finel_category_name = reader.GetString(25),
+
+                                    Medicine_Sub_Category = new Medicine_Sub_Category
+                                    {
+                                        medicine_sub_category_id = reader.GetInt32(26),
+                                        medicine_sub_category_name = reader.GetString(27)
+                                    },
+
+                                    Medicine_Main_Category = new Medicine_Main_Category
+                                    {
+                                        medicine_main_category_id = reader.GetInt32(28),
+                                        medicine_main_category_name = reader.GetString(29)
+                                    }
+                                }
+                            };
+                            CityHotSeller.Add(Product);
+
+                        }
+                    }
+                }
+            }
+        }
+
+        private void OnHotSellerGlobal()
+        {
+            using (SqlConnection connection = new SqlConnection(_connectionString))
+            {
+                string query = @"
+        SELECT TOP 10 
+            PT.product_id, PT.saler_id, PT.brande_id, PT.product_image, PT.product_name,
+            PT.product_category_id, PT.product_price, PT.product_discount, PT.discounted_price, PT.product_qantity, 
+            PT.product_description, PT.product_features, PT.product_benefits, PT.product_how_to_use,
+            PT.product_exp_date, PT.product_add_date, 
+            PB.pharmaceutical_brands_id, PB.pharmaceutical_brands_name,
+            UT.id, UT.first_name, UT.last_name, UT.profile_pic, UT.shop_name, UT.shop_address,
+            MFC.medicine_finel_category_id, MFC.medicine_finel_category_name,
+            MSC.medicine_sub_category_id, MSC.medicine_sub_category_name, 
+            MMC.medicine_main_category_id, MMC.medicine_main_category_name,
+            OrderSummary.total_orders
+        FROM (
+            SELECT TOP 10 
+                product_id,
+                COUNT(*) AS total_orders
+            FROM Order_Table
+            GROUP BY product_id
+            ORDER BY total_orders DESC
+        ) AS OrderSummary
+        JOIN Product_Table PT ON PT.product_id = OrderSummary.product_id
+        LEFT JOIN Pharmaceutical_Brands PB ON PT.brande_id = PB.pharmaceutical_brands_id
+        LEFT JOIN User_Table UT ON PT.saler_id = UT.id
+        LEFT JOIN Medicine_Finel_Category MFC ON PT.product_category_id = MFC.medicine_finel_category_id
+        LEFT JOIN Medicine_Sub_Category MSC ON MFC.medicine_sub_category_id = MSC.medicine_sub_category_id
+        LEFT JOIN Medicine_Main_Category MMC ON MSC.medicine_main_category_id = MMC.medicine_main_category_id
+        ORDER BY OrderSummary.total_orders DESC";
+
+                using (SqlCommand command = new SqlCommand(query, connection))
+                {
+                    connection.Open();
+
+                    using (SqlDataReader reader = command.ExecuteReader())
+                    {
+
+                        while (reader.Read())
+                        {
+                            Product = new Product_Table
+                            {
+                                product_id = reader.GetInt32(0),
+                                saler_id = reader.GetInt32(1),
+                                brande_id = reader.GetInt32(2),
+                                product_image = reader.GetString(3),
+                                product_name = reader.GetString(4),
+                                product_category_id = reader.GetInt32(5),
+                                product_price = reader.GetInt32(6),
+                                product_discount = reader.IsDBNull(7) ? (int?)null : reader.GetInt32(7),
+                                discounted_price = reader.IsDBNull(8) ? (int?)null : reader.GetInt32(8),
+                                product_qantity = reader.GetInt32(9),
+                                product_description = reader.GetString(10),
+                                product_features = reader.IsDBNull(11) ? null : reader.GetString(11),
+                                product_benefits = reader.GetString(12),
+                                product_how_to_use = reader.GetString(13),
+                                product_exp_date = reader.GetString(14),
+                                product_add_date = DateOnly.FromDateTime(reader.GetDateTime(15)),
+
+                                Brand = new Pharmaceutical_Brands
+                                {
+                                    pharmaceutical_brands_id = reader.GetInt32(16),
+                                    pharmaceutical_brands_name = reader.GetString(17)
+                                },
+
+                                Seller = new User_Table
+                                {
+                                    id = reader.GetInt32(18),
+                                    first_name = reader.GetString(19),
+                                    last_name = reader.GetString(20),
+                                    profile_pic = reader.IsDBNull(21) ? null : reader.GetString(21),
+                                    shop_name = reader.IsDBNull(22) ? null : reader.GetString(22),
+                                    shop_address = reader.IsDBNull(23) ? null : reader.GetString(23)
+                                },
+
+                                FinelCategory = new Medicine_Finel_Category
+                                {
+                                    medicine_finel_category_id = reader.GetInt32(24),
+                                    medicine_finel_category_name = reader.GetString(25),
+
+                                    Medicine_Sub_Category = new Medicine_Sub_Category
+                                    {
+                                        medicine_sub_category_id = reader.GetInt32(26),
+                                        medicine_sub_category_name = reader.GetString(27)
+                                    },
+
+                                    Medicine_Main_Category = new Medicine_Main_Category
+                                    {
+                                        medicine_main_category_id = reader.GetInt32(28),
+                                        medicine_main_category_name = reader.GetString(29)
+                                    }
+                                }
+                            };
+
+                            HotSeller.Add(Product);
+                        }
+                    }
+                }
+            }
+        }
+
+
+
+        public async Task<IActionResult> OnPost()
+        {
+            if (!int.TryParse(Request.Form["user_id"], out int userId) || !int.TryParse(Request.Form["product_id"], out int productId))
+            {
+                TempData["ErrorMessage"] = "Invalid user or product.";
+                return RedirectToPage("/Pharmacy");
+            }
+
+            using (SqlConnection connection = new SqlConnection(_connectionString))
+            {
+                await connection.OpenAsync();
+
+                string checkCartQuery = "SELECT COUNT(*) FROM Cart WHERE user_id = @UserId AND product_id = @ProductId";
+                using (SqlCommand checkCartCommand = new SqlCommand(checkCartQuery, connection))
+                {
+                    checkCartCommand.Parameters.AddWithValue("@UserId", userId);
+                    checkCartCommand.Parameters.AddWithValue("@ProductId", productId);
+
+                    int count = (int)await checkCartCommand.ExecuteScalarAsync();
+
+                    if (count > 0)
+                    {
+                        TempData["ErrorMessage"] = "Item is already in your cart.";
+                        return RedirectToPage("/Pharmacy");
+                    }
+                }
+
+                string insertQuery = "INSERT INTO Cart (user_id, product_id, quantity) VALUES (@UserId, @ProductId, @quantity)";
+                using (SqlCommand insertCommand = new SqlCommand(insertQuery, connection))
+                {
+                    insertCommand.Parameters.AddWithValue("@UserId", userId);
+                    insertCommand.Parameters.AddWithValue("@ProductId", productId);
+                    insertCommand.Parameters.AddWithValue("@quantity", 1);
+
+                    await insertCommand.ExecuteNonQueryAsync();
+                    TempData["SuccessMessage"] = "Item added to cart successfully.";
+                }
+            }
+
+            return RedirectToPage("/Pharmacy");
+        }
+
+
+
+
+    }
+}

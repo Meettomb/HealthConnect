@@ -1,0 +1,167 @@
+﻿@page
+@model HealthConnect.Pages.User.Saler.Manage_Products.Product_editModel
+@{
+    Layout = "_Saler_dashbord";
+    ViewData["Title"] = "Edit Product Details";
+}
+
+
+<div class="container-fluid pt-4 px-4">
+    <div class="row g-4">
+        <div class="col-sm-12 col-xl-8">
+            <div class="bg-light rounded h-100 p-4">
+                <h2 class="mb-4">Update product details</h2>
+                
+                
+                <form method="post" enctype="multipart/form-data" id="updateProductForm">
+                    <input type="hidden" name="saler_id" value="@Model.UserId" />
+                    <input type="hidden" name="product_id" value="@Model.Product.product_id" />
+
+                    <div class="mb-3">
+                        <label for="brande_id" class="form-label">Select brand</label>
+                        <select class="form-control" name="brande_id" id="brande_id">
+                            <option value="@Model.Product.Brand.pharmaceutical_brands_id">@Model.Product.Brand.pharmaceutical_brands_name</option>
+                            @foreach (var brand in Model.Pharmaceutical_BrandsList)
+                            {
+                                <option value="@brand.pharmaceutical_brands_id">
+                                    @brand.pharmaceutical_brands_name
+                                </option>
+                            }
+                        </select>
+                    </div>
+
+                    <div class="mb-3">
+                        <label for="product_image" class="form-label">Choose images for product</label>
+                        <input class="form-control" type="file" name="product_image" id="product_image" multiple>
+                    </div>
+
+                    <div class="mb-3">
+                        <label for="product_name" class="form-label">Product name</label>
+                        <input type="text" class="form-control" name="product_name" id="product_name" placeholder="Product name" value="@Model.Product.product_name">
+                    </div>
+
+                    <div class="mb-3">
+                        <label for="mainCategory" class="form-label">Select main category</label>
+                        <select id="mainCategory" class="form-control" name="main_category">
+                            <option value="@Model.Product.FinelCategory.Medicine_Main_Category.medicine_main_category_id">@Model.Product.FinelCategory.Medicine_Main_Category.medicine_main_category_name</option>
+                            @foreach (var main in Model.Medicine_Main_CategoryList)
+                            {
+                                <option value="@main.medicine_main_category_id">@main.medicine_main_category_name</option>
+                            }
+                        </select>
+                    </div>
+
+                    <div class="mb-3">
+                        <label for="subCategory" class="form-label">Select sub category</label>
+                        <select id="subCategory" class="form-control" name="sub_category">
+                            <option value="@Model.Product.FinelCategory.Medicine_Sub_Category.medicine_sub_category_id">@Model.Product.FinelCategory.Medicine_Sub_Category.medicine_sub_category_name</option>
+                        </select>
+                    </div>
+
+                    <div class="mb-3">
+                        <label for="finalCategory" class="form-label">Select final category</label>
+                        <select id="finalCategory" name="product_category_id" class="form-control">
+                            <option value="@Model.Product.FinelCategory.medicine_finel_category_id">@Model.Product.FinelCategory.medicine_finel_category_name</option>
+                        </select>
+                    </div>
+
+                    <div class="mb-3">
+                        <label for="product_price" class="form-label">Product price</label>
+                        <input type="number" class="form-control" name="product_price" value="@Model.Product.product_price" id="product_price">
+                    </div>
+
+                    <div class="mb-3">
+                        <label for="product_discount" class="form-label">Product discount (optional)</label>
+                        <input type="number" class="form-control" name="product_discount" id="product_discount" value="@Model.Product.product_discount">
+                    </div>
+
+                    <div class="mb-3">
+                        <label for="product_quantity" class="form-label">Product quantity</label>
+                        <input type="number" class="form-control" name="product_qantity" id="product_quantity" value="@Model.Product.product_qantity">
+                    </div>
+
+                    <div class="mb-3 form-floating">
+                        <textarea class="form-control" name="product_description" id="product_description" rows="6" style="resize: none; height: 150px;">@Model.Product.product_description</textarea>
+                        <label for="product_description" class="form-label">Product description</label>
+                    </div>
+
+                    <div class="mb-3 form-floating">
+                        <textarea class="form-control" name="product_features" id="product_features" rows="6" style="resize: none; height: 150px;">@Model.Product.product_features</textarea>
+                        <label for="product_features" class="form-label">Product features(sapate by comma(,)) (optional)</label>
+                    </div>
+
+                    <div class="mb-3 form-floating">
+                        <textarea class="form-control" name="product_benefits" id="product_benefits" rows="6" style="resize: none; height: 150px;">@Model.Product.product_benefits</textarea>
+                        <label for="product_benefits" class="form-label">Product benefits(sapate by comma(,))</label>
+                    </div>
+
+                    <div class="mb-3 form-floating">
+                        <textarea class="form-control" name="product_how_to_use" id="product_how_to_use" rows="6" style="resize: none; height: 150px;">@Model.Product.product_how_to_use</textarea>
+                        <label for="product_how_to_use" class="form-label">How to user product(sapate by comma(,))</label>
+                    </div>
+
+                    <div class="mb-3">
+                        <label for="product_exp_date" class="form-label">Product exp date</label>
+                        <input type="date" class="form-control" name="product_exp_date" id="product_exp_date" value="@Model.Product.product_exp_date">
+                    </div>
+
+                    <button type="submit" class="btn btn-primary">Add product</button>
+                </form>
+
+
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<script>
+    document.addEventListener("DOMContentLoaded", function () {
+        let categories = @Html.Raw(Json.Serialize(Model.Medicine_Main_CategoryList));
+
+        document.getElementById("mainCategory").addEventListener("change", function () {
+            let mainId = this.value;
+            let subCategory = document.getElementById("subCategory");
+            let finalCategory = document.getElementById("finalCategory");
+
+            subCategory.innerHTML = '<option value="">Select Sub Category</option>';
+            finalCategory.innerHTML = '<option value="">Select Final Category</option>';
+            subCategory.disabled = true;
+            finalCategory.disabled = true;
+
+            if (mainId) {
+                let selectedMain = categories.find(cat => cat.medicine_main_category_id == parseInt(mainId));
+                if (selectedMain && Array.isArray(selectedMain.medicineSubCategories) && selectedMain.medicineSubCategories.length > 0) {
+                    subCategory.disabled = false;
+                    selectedMain.medicineSubCategories.forEach(sub => {
+                        subCategory.innerHTML += `<option value="${sub.medicine_sub_category_id}">${sub.medicine_sub_category_name}</option>`;
+                    });
+                }
+            }
+        });
+
+        document.getElementById("subCategory").addEventListener("change", function () {
+            let subId = this.value;
+            let mainId = document.getElementById("mainCategory").value;
+            let finalCategory = document.getElementById("finalCategory");
+
+            finalCategory.innerHTML = '<option value="">Select Final Category</option>';
+            finalCategory.disabled = true;
+
+            if (subId) {
+                let selectedMain = categories.find(cat => cat.medicine_main_category_id == parseInt(mainId));
+                if (selectedMain) {
+                    let selectedSub = selectedMain.medicineSubCategories.find(sub => sub.medicine_sub_category_id == parseInt(subId));
+                    if (selectedSub && Array.isArray(selectedSub.medicine_Finel_Categories) && selectedSub.medicine_Finel_Categories.length > 0) {
+                        finalCategory.disabled = false;
+                        selectedSub.medicine_Finel_Categories.forEach(fin => {
+                            finalCategory.innerHTML += `<option value="${fin.medicine_finel_category_id}">${fin.medicine_finel_category_name}</option>`;
+                        });
+                    }
+                }
+            }
+        });
+    });
+</script>
+
+
